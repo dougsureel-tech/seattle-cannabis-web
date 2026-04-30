@@ -185,6 +185,25 @@ export default function AboutPage() {
             </div>
           </div>
         </section>
+
+        {/* Bottom CTA */}
+        <section className="rounded-3xl bg-indigo-950 text-white p-8 text-center space-y-4">
+          <p className="font-bold text-xl">Come see us in Rainier Valley</p>
+          <p className="text-indigo-300/70 text-sm max-w-sm mx-auto">
+            Open every day 8AM–11PM. No appointment needed. Walk-ins always welcome.
+          </p>
+          <div className="flex justify-center gap-3 flex-wrap">
+            <a href={STORE.shopUrl} target="_blank" rel="noopener noreferrer"
+              className="px-5 py-2.5 rounded-xl bg-indigo-300 hover:bg-indigo-200 text-indigo-950 text-sm font-bold transition-all shadow-md hover:-translate-y-0.5">
+              Order Online — 15% Off
+            </a>
+            <Link href="/contact"
+              className="px-5 py-2.5 rounded-xl border border-white/20 hover:border-white/40 hover:bg-white/10 text-white text-sm font-semibold transition-all">
+              Contact Us
+            </Link>
+          </div>
+        </section>
+
       </div>
     </>
   );
