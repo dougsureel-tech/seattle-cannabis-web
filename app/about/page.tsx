@@ -22,11 +22,13 @@ export default function AboutPage() {
         <section className="space-y-4">
           <h2 className="text-2xl font-bold text-stone-900">Who We Are</h2>
           <p className="text-stone-600 leading-relaxed">
-            Seattle Cannabis Co. is a locally owned and operated dispensary serving Seattle, Washington.
-            We believe that cannabis should be approachable, educational, and enjoyable — for everyone from first-time customers to seasoned enthusiasts.
+            Seattle Cannabis Co. is a veteran-owned cannabis dispensary rooted in the Rainier Valley. Since 2015 we&apos;ve been serving South Seattle — Rainier Valley, Seward Park, Beacon Hill, Rainier Beach, and beyond — with a carefully curated menu and a team that takes the time to actually help you find the right product.
           </p>
           <p className="text-stone-600 leading-relaxed">
-            Our knowledgeable budtenders take the time to understand what you&apos;re looking for and guide you toward the perfect product. Whether you&apos;re seeking relief, relaxation, creativity, or just exploring — we&apos;re here to help.
+            We believe cannabis should be approachable and educational for everyone, from first-time customers to long-time enthusiasts. Our budtenders know the products deeply — terpenes, effects, dosing, and what works for what lifestyle. Just ask.
+          </p>
+          <p className="text-stone-600 leading-relaxed">
+            We&apos;re conveniently located at 7266 Rainier Ave S, walking distance from the Othello Light Rail Station, with free parking in our lot. Open daily 8am–11pm, 365 days a year.
           </p>
         </section>
 
