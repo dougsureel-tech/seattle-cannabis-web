@@ -8,7 +8,7 @@ export default function Error({ reset }: { error: Error; reset: () => void }) {
       <p className="text-stone-500 text-sm max-w-xs">We hit an unexpected error. Try refreshing the page.</p>
       <button
         onClick={reset}
-        className="px-5 py-2.5 rounded-xl bg-green-700 hover:bg-green-600 text-white text-sm font-semibold transition-colors"
+        className="px-5 py-2.5 rounded-xl bg-indigo-700 hover:bg-indigo-600 text-white text-sm font-semibold transition-colors"
       >
         Try again
       </button>

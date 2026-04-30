@@ -18,7 +18,7 @@ const STATUS_LABEL: Record<string, string> = {
 const STATUS_COLOR: Record<string, string> = {
   pending:   "bg-amber-100 text-amber-800 border-amber-200",
   preparing: "bg-blue-100 text-blue-800 border-blue-200",
-  ready:     "bg-green-100 text-green-800 border-green-200",
+  ready:     "bg-indigo-100 text-indigo-800 border-indigo-200",
   picked_up: "bg-stone-100 text-stone-500 border-stone-200",
   cancelled: "bg-red-100 text-red-700 border-red-200",
 };
@@ -91,7 +91,7 @@ export default async function AccountPage() {
             const isReady = order.status === "ready";
             return (
               <div key={order.id}
-                className={`rounded-2xl border bg-white p-5 space-y-4 transition-all ${isReady ? "border-green-300 shadow-md shadow-green-100" : "border-stone-200"}`}>
+                className={`rounded-2xl border bg-white p-5 space-y-4 transition-all ${isReady ? "border-indigo-300 shadow-md shadow-indigo-100" : "border-stone-200"}`}>
                 <div className="flex items-center justify-between gap-2">
                   <span className={`inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full border ${STATUS_COLOR[order.status] ?? "bg-stone-100 text-stone-600 border-stone-200"}`}>
                     <span>{STATUS_ICON[order.status]}</span>
@@ -112,7 +112,7 @@ export default async function AccountPage() {
                   <span>${order.subtotal.toFixed(2)}</span>
                 </div>
                 {isReady && (
-                  <div className="rounded-xl bg-green-600 text-white px-4 py-3 text-sm font-bold text-center">
+                  <div className="rounded-xl bg-indigo-600 text-white px-4 py-3 text-sm font-bold text-center">
                     🎉 Your order is ready! Come in and pay cash at the counter.
                   </div>
                 )}
