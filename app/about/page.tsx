@@ -58,9 +58,7 @@ export default function AboutPage() {
                 <div className="text-stone-500 text-sm">{STORE.address.city}, {STORE.address.state} {STORE.address.zip}</div>
               </div>
             </div>
-            {STORE.phone !== "TODO — add phone" && (
-              <a href={`tel:${STORE.phoneTel}`} className="text-indigo-700 hover:underline font-medium">{STORE.phone}</a>
-            )}
+            <a href={`tel:${STORE.phoneTel}`} className="text-indigo-700 hover:underline font-medium">{STORE.phone}</a>
           </div>
           <div className="flex gap-3">
             <a href={STORE.googleMapsUrl} target="_blank" rel="noopener noreferrer"
