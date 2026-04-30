@@ -123,6 +123,44 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* ─── How Pickup Works ───────────────────────────────────────────────── */}
+      <section className="bg-stone-50 border-y border-stone-100">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-stone-900 tracking-tight">How Pickup Works</h2>
+            <p className="text-stone-400 mt-2 text-sm">Order online, skip the wait, save 15%</p>
+          </div>
+          <div className="relative grid grid-cols-1 sm:grid-cols-3 gap-8">
+            <div className="hidden sm:block absolute top-10 left-[calc(16.67%+1rem)] right-[calc(16.67%+1rem)] h-0.5 bg-indigo-100" />
+            {[
+              { icon: "📱", step: "1", title: "Browse & Order", body: "Shop our full menu online and place a pickup order — 15% off automatically applied." },
+              { icon: "✅", step: "2", title: "We Prepare It",  body: "Our team gets your order ready. You'll see the status update in your account." },
+              { icon: "💵", step: "3", title: "Pay Cash & Go",  body: "Head to the counter, pay cash, and you're out the door. Fast and easy." },
+            ].map(({ icon, step, title, body }) => (
+              <div key={step} className="flex flex-col items-center text-center gap-3 relative">
+                <div className="w-20 h-20 rounded-3xl bg-white border-2 border-indigo-100 flex items-center justify-center text-3xl shadow-sm z-10">
+                  {icon}
+                </div>
+                <div className="space-y-1">
+                  <div className="text-xs font-bold text-indigo-400 uppercase tracking-widest">Step {step}</div>
+                  <div className="font-bold text-stone-900 text-base">{title}</div>
+                  <p className="text-stone-500 text-sm leading-relaxed max-w-xs mx-auto">{body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-10">
+            <a href={STORE.shopUrl} target="_blank" rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-indigo-800 hover:bg-indigo-700 text-white font-bold text-sm transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5">
+              Order Online — 15% Off
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* ─── Featured products ──────────────────────────────────────────────── */}
       {featured.length > 0 && (
         <section className="bg-stone-50 border-y border-stone-100 py-16">

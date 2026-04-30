@@ -101,8 +101,10 @@ export default function FaqPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
-      <div className="bg-indigo-950 text-white py-14">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+      <div className="relative overflow-hidden bg-indigo-950 text-white py-14">
+        <div className="absolute inset-0 opacity-[0.07]" style={{ backgroundImage: "radial-gradient(circle, #fff 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
+        <div className="absolute inset-0 opacity-20" style={{ backgroundImage: "radial-gradient(ellipse 60% 50% at 80% 50%, #818cf8, transparent)" }} />
+        <div className="relative max-w-3xl mx-auto px-4 sm:px-6">
           <p className="text-indigo-400 text-xs font-bold uppercase tracking-widest mb-2">Help Center</p>
           <h1 className="text-4xl font-extrabold tracking-tight">Frequently Asked Questions</h1>
           <p className="text-indigo-300/70 mt-2">Everything you need to know before your visit</p>
