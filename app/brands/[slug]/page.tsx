@@ -19,19 +19,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!brand) return {};
   return {
     title: brand.name,
-    description: `Shop ${brand.name} cannabis products at ${STORE.name} in Seattle, WA. ${brand.activeSkus} products in stock.`,
+    description: `Shop ${brand.name} cannabis products at ${STORE.name} in Rainier Valley, Seattle WA. ${brand.activeSkus} products in stock.`,
     alternates: { canonical: `/brands/${slug}` },
     openGraph: {
       title: `${brand.name} | ${STORE.name}`,
+      description: `Browse ${brand.name} products available at Seattle Cannabis Co., Rainier Valley WA.`,
       ...(brand.logoUrl ? { images: [{ url: brand.logoUrl }] } : {}),
     },
   };
 }
 
-const STRAIN_COLORS: Record<string, string> = {
-  sativa: "bg-red-50 text-red-700 border-red-200",
-  indica: "bg-purple-50 text-purple-700 border-purple-200",
-  hybrid: "bg-indigo-50 text-indigo-700 border-indigo-200",
+const STRAIN_COLORS: Record<string, { badge: string }> = {
+  sativa: { badge: "bg-amber-100 text-amber-700 border-amber-200" },
+  indica: { badge: "bg-purple-100 text-purple-700 border-purple-200" },
+  hybrid: { badge: "bg-indigo-100 text-indigo-700 border-indigo-200" },
+};
+
+const CAT_ICONS: Record<string, string> = {
+  Flower: "🌿", "Pre-Rolls": "🫙", Vapes: "💨", Concentrates: "🧴",
+  Edibles: "🍬", Tinctures: "💊", Topicals: "🧼", Accessories: "🔧",
 };
 
 export default async function BrandPage({ params }: Props) {
@@ -40,74 +46,136 @@ export default async function BrandPage({ params }: Props) {
   if (!brand) notFound();
 
   const products = await getBrandProducts(brand.id).catch(() => []);
-  const categories = [...new Set(products.map((p) => p.category ?? "Other"))].sort();
+  const categories = [...new Set(products.map((p) => p.category ?? "Other"))]
+    .sort((a, b) => {
+      const order = ["Flower", "Pre-Rolls", "Vapes", "Concentrates", "Edibles", "Tinctures", "Topicals", "Accessories", "Other"];
+      return order.indexOf(a) - order.indexOf(b);
+    });
+
+  const brandSchema = {
+    "@context": "https://schema.org",
+    "@type": "Brand",
+    name: brand.name,
+    ...(brand.website ? { url: brand.website } : {}),
+    ...(brand.logoUrl ? { logo: brand.logoUrl } : {}),
+  };
 
   return (
     <>
-      <div className="bg-indigo-950 text-white py-10">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(brandSchema) }}
+      />
+
+      <div className="bg-indigo-950 text-white py-14">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center gap-6">
-          {brand.logoUrl && (
-            <div className="shrink-0 w-20 h-20 rounded-xl bg-white p-2 flex items-center justify-center">
+          {brand.logoUrl ? (
+            <div className="shrink-0 w-20 h-20 rounded-2xl bg-white p-2.5 flex items-center justify-center shadow-lg">
               <img src={brand.logoUrl} alt={brand.name} className="max-h-full max-w-full object-contain" />
+            </div>
+          ) : (
+            <div className="shrink-0 w-20 h-20 rounded-2xl bg-indigo-800 border border-indigo-700 flex items-center justify-center text-2xl">
+              🌿
             </div>
           )}
           <div>
-            <p className="text-indigo-400 text-xs font-semibold uppercase tracking-widest mb-1">
-              <Link href="/brands" className="hover:text-indigo-300 transition-colors">All Brands</Link> / {brand.name}
+            <p className="text-indigo-400 text-xs font-bold uppercase tracking-widest mb-1.5">
+              <Link href="/brands" className="hover:text-indigo-300 transition-colors">All Brands</Link>
+              <span className="mx-1.5 opacity-50">/</span>
+              {brand.name}
             </p>
-            <h1 className="text-3xl font-bold">{brand.name}</h1>
-            <p className="text-indigo-300/80 text-sm mt-1">
-              {brand.activeSkus} products at {STORE.address.city}, WA
+            <h1 className="text-3xl font-extrabold tracking-tight">{brand.name}</h1>
+            <p className="text-indigo-300/70 text-sm mt-1 flex flex-wrap items-center gap-3">
+              <span>{brand.activeSkus} product{brand.activeSkus !== 1 ? "s" : ""} in Seattle, WA</span>
               {brand.website && (
-                <> · <a href={brand.website.startsWith("http") ? brand.website : `https://${brand.website}`}
-                  target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Visit website ↗</a></>
+                <a href={brand.website.startsWith("http") ? brand.website : `https://${brand.website}`}
+                  target="_blank" rel="noopener noreferrer"
+                  className="hover:text-white transition-colors underline underline-offset-2 text-indigo-400">
+                  Visit website ↗
+                </a>
               )}
             </p>
           </div>
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 space-y-10">
-        <div className="flex items-center justify-between gap-4 p-4 rounded-2xl bg-indigo-50 border border-indigo-200">
-          <p className="text-indigo-900 text-sm font-medium">Want to order {brand.name}? Browse their products on our live menu.</p>
-          <Link href="/menu" className="shrink-0 px-4 py-2 rounded-xl bg-indigo-800 hover:bg-indigo-700 text-white text-sm font-semibold transition-colors">
-            Shop Menu →
-          </Link>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 space-y-12">
+        <div className="rounded-2xl bg-gradient-to-r from-indigo-800 to-indigo-700 text-white px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div>
+            <p className="font-bold text-base">Want to order {brand.name}?</p>
+            <p className="text-indigo-200/80 text-sm">Place a pickup order — save 15% online.</p>
+          </div>
+          <a href={STORE.shopUrl} target="_blank" rel="noopener noreferrer"
+            className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-500 hover:bg-indigo-400 text-white text-sm font-bold transition-all shadow-md hover:-translate-y-0.5">
+            Order Online — 15% Off →
+          </a>
         </div>
 
         {products.length === 0 ? (
-          <p className="text-stone-400 text-sm text-center py-8">No products currently in stock.</p>
+          <div className="text-center py-16 space-y-3">
+            <div className="text-4xl">🌿</div>
+            <p className="text-stone-500 font-medium">No products currently in stock</p>
+            <a href={STORE.shopUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-indigo-700 font-semibold hover:underline">Browse full menu →</a>
+          </div>
         ) : (
           categories.map((cat) => {
             const catProducts = products.filter((p) => (p.category ?? "Other") === cat);
             return (
-              <section key={cat} className="space-y-4">
-                <h2 className="text-lg font-semibold text-stone-800 border-b border-stone-200 pb-2">{cat}</h2>
+              <section key={cat}>
+                <div className="flex items-center gap-3 mb-5">
+                  <span className="text-2xl">{CAT_ICONS[cat] ?? "🌱"}</span>
+                  <h2 className="text-xl font-extrabold text-stone-900 tracking-tight">{cat}</h2>
+                  <span className="text-xs font-medium text-stone-400 bg-stone-100 px-2 py-0.5 rounded-full">{catProducts.length}</span>
+                </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {catProducts.map((p) => {
-                    const strainCls = STRAIN_COLORS[(p.strain_type ?? "").toLowerCase()] ?? "bg-stone-50 text-stone-600 border-stone-200";
+                    const strainKey = (p.strain_type ?? "").toLowerCase();
+                    const strain = STRAIN_COLORS[strainKey];
                     return (
-                      <div key={p.id} className="rounded-xl border border-stone-200 bg-white p-4 space-y-3 hover:border-indigo-300 hover:shadow-sm transition-all">
-                        {p.image_url && (
-                          <div className="h-36 rounded-lg overflow-hidden bg-stone-50 flex items-center justify-center">
-                            <img src={p.image_url} alt={p.name} className="max-h-full max-w-full object-contain" />
+                      <div key={p.id}
+                        className="rounded-2xl border border-stone-100 bg-white overflow-hidden hover:border-indigo-300 hover:shadow-md transition-all group">
+                        {p.image_url ? (
+                          <div className="h-44 bg-stone-100 overflow-hidden">
+                            <img src={p.image_url} alt={p.name}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                          </div>
+                        ) : (
+                          <div className="h-32 bg-gradient-to-br from-stone-50 to-stone-100 flex items-center justify-center text-4xl">
+                            {CAT_ICONS[cat] ?? "🌱"}
                           </div>
                         )}
-                        <div>
-                          <div className="flex items-start justify-between gap-2">
-                            <h3 className="font-semibold text-stone-900 text-sm leading-tight">{p.name}</h3>
-                            {p.unit_price != null && (
-                              <span className="shrink-0 font-bold text-indigo-700 text-sm">${p.unit_price.toFixed(0)}</span>
-                            )}
-                          </div>
-                          <div className="flex items-center gap-2 mt-1.5 flex-wrap">
-                            {p.strain_type && (
-                              <span className={`text-xs px-2 py-0.5 rounded-full border font-medium capitalize ${strainCls}`}>
+                        <div className="p-4 space-y-3">
+                          <h3 className="font-bold text-stone-900 text-sm leading-snug">{p.name}</h3>
+                          <div className="flex flex-wrap gap-1.5">
+                            {p.strain_type && strain && (
+                              <span className={`text-xs px-2.5 py-0.5 rounded-full border font-semibold capitalize ${strain.badge}`}>
                                 {p.strain_type}
                               </span>
                             )}
-                            {p.thc_pct != null && <span className="text-xs text-stone-500">THC {p.thc_pct.toFixed(1)}%</span>}
-                            {p.cbd_pct != null && p.cbd_pct > 0 && <span className="text-xs text-stone-500">CBD {p.cbd_pct.toFixed(1)}%</span>}
+                            {p.thc_pct != null && (
+                              <span className="text-xs px-2 py-0.5 rounded-full bg-stone-100 text-stone-600 font-medium">
+                                THC {p.thc_pct.toFixed(1)}%
+                              </span>
+                            )}
+                            {p.cbd_pct != null && p.cbd_pct > 0 && (
+                              <span className="text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-medium">
+                                CBD {p.cbd_pct.toFixed(1)}%
+                              </span>
+                            )}
+                          </div>
+                          {p.effects && (
+                            <p className="text-xs text-stone-400 line-clamp-1">✨ {p.effects}</p>
+                          )}
+                          <div className="flex items-center justify-between pt-1 border-t border-stone-50">
+                            {p.unit_price != null ? (
+                              <span className="font-extrabold text-stone-900">${p.unit_price.toFixed(2)}</span>
+                            ) : (
+                              <span className="text-stone-300">—</span>
+                            )}
+                            <a href={STORE.shopUrl} target="_blank" rel="noopener noreferrer"
+                              className="text-xs font-bold text-indigo-700 hover:text-indigo-600 transition-colors">
+                              Order →
+                            </a>
                           </div>
                         </div>
                       </div>
@@ -118,6 +186,12 @@ export default async function BrandPage({ params }: Props) {
             );
           })
         )}
+
+        <div className="pt-4 border-t border-stone-100">
+          <Link href="/brands" className="text-sm text-stone-500 hover:text-indigo-700 font-semibold transition-colors">
+            ← All Brands
+          </Link>
+        </div>
       </div>
     </>
   );
