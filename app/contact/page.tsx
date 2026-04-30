@@ -21,8 +21,7 @@ export default function ContactPage() {
         <div className="space-y-8">
           <h2 className="text-xl font-bold text-stone-900">Get in Touch</h2>
           <div className="space-y-3">
-            {STORE.phone !== "TODO — add phone" && (
-              <a href={`tel:${STORE.phoneTel}`}
+            <a href={`tel:${STORE.phoneTel}`}
                 className="flex items-center gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 bg-white hover:bg-indigo-50 transition-all group">
                 <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center shrink-0">
                   <svg className="w-5 h-5 text-indigo-700" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -34,7 +33,6 @@ export default function ContactPage() {
                   <div className="font-semibold text-stone-800 group-hover:text-indigo-700 transition-colors">{STORE.phone}</div>
                 </div>
               </a>
-            )}
             <a href={`mailto:${STORE.email}`}
               className="flex items-center gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 bg-white hover:bg-indigo-50 transition-all group">
               <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center shrink-0">

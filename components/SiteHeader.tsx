@@ -44,11 +44,9 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden md:flex items-center gap-3">
-          {STORE.phone !== "TODO — add phone" && (
-            <a href={`tel:${STORE.phoneTel}`} className="text-sm text-stone-500 hover:text-indigo-700 transition-colors">
-              {STORE.phone}
-            </a>
-          )}
+          <a href={`tel:${STORE.phoneTel}`} className="text-sm text-stone-500 hover:text-indigo-700 transition-colors">
+            {STORE.phone}
+          </a>
           <Link href="/menu" className="px-4 py-2 rounded-xl bg-indigo-800 hover:bg-indigo-700 text-white text-sm font-semibold transition-colors">
             Shop Menu
           </Link>

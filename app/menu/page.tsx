@@ -24,11 +24,9 @@ export default function MenuPage() {
       ) : (
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-20 text-center space-y-4">
           <p className="text-stone-500">Menu coming soon — call us for today&apos;s selection.</p>
-          {STORE.phone !== "TODO — add phone" && (
-            <a href={`tel:${STORE.phoneTel}`} className="inline-block px-5 py-2.5 rounded-xl bg-indigo-800 text-white font-medium text-sm hover:bg-indigo-700 transition-colors">
-              Call {STORE.phone}
-            </a>
-          )}
+          <a href={`tel:${STORE.phoneTel}`} className="inline-block px-5 py-2.5 rounded-xl bg-indigo-800 text-white font-medium text-sm hover:bg-indigo-700 transition-colors">
+            Call {STORE.phone}
+          </a>
         </div>
       )}
     </div>

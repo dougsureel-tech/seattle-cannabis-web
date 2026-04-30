@@ -13,9 +13,7 @@ export function SiteFooter() {
           <address className="not-italic text-sm text-indigo-300 space-y-1">
             <p>{STORE.address.street}</p>
             <p>{STORE.address.city}, {STORE.address.state} {STORE.address.zip}</p>
-            {STORE.phone !== "TODO — add phone" && (
-              <a href={`tel:${STORE.phoneTel}`} className="block hover:text-white transition-colors">{STORE.phone}</a>
-            )}
+            <a href={`tel:${STORE.phoneTel}`} className="block hover:text-white transition-colors">{STORE.phone}</a>
             <a href={`mailto:${STORE.email}`} className="block hover:text-white transition-colors">{STORE.email}</a>
           </address>
         </div>
