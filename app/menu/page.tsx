@@ -3,6 +3,7 @@ import Link from "next/link";
 import { STORE } from "@/lib/store";
 import { getMenuProducts, type MenuProduct } from "@/lib/db";
 import { MenuSearch } from "./MenuSearch";
+import { StashButton } from "@/components/StashButton";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -34,11 +35,19 @@ function ProductCard({ product, categorySlug }: { product: MenuProduct; category
   const icon = CAT_ICONS[product.category ?? ""] ?? "🌱";
   const search = [product.name, product.brand, product.category, product.strainType, product.effects, product.terpenes].filter(Boolean).join(" ");
 
+  const priceBucket = product.unitPrice == null ? "" : product.unitPrice < 20 ? "u20" : product.unitPrice < 40 ? "20-40" : "40p";
+  const thcBucket = product.thcPct == null ? "" : product.thcPct < 15 ? "low" : product.thcPct < 25 ? "mid" : "high";
+
   return (
     <article
       data-product-card
       data-search={search}
       data-category={categorySlug}
+      data-strain={(product.strainType ?? "").toLowerCase()}
+      data-price-bucket={priceBucket}
+      data-thc-bucket={thcBucket}
+      data-vibe={(product.effects ?? "").toLowerCase()}
+      data-isnew={product.isNew ? "1" : ""}
       className="group rounded-2xl border border-stone-100 bg-white overflow-hidden hover:border-indigo-300 hover:shadow-lg transition-all"
     >
       <div className="aspect-square bg-stone-100 overflow-hidden relative">
@@ -55,11 +64,19 @@ function ProductCard({ product, categorySlug }: { product: MenuProduct; category
             {icon}
           </div>
         )}
-        {product.strainType && STRAIN_BADGE[product.strainType] && (
-          <span className={`absolute top-2 left-2 text-[10px] px-2 py-0.5 rounded-full font-bold border ${STRAIN_BADGE[product.strainType]}`}>
-            {product.strainType}
-          </span>
-        )}
+        <StashButton productId={product.id} />
+        <div className="absolute top-2 left-2 flex flex-col gap-1 items-start">
+          {product.isNew && (
+            <span className="text-[10px] px-2 py-0.5 rounded-full font-bold border bg-indigo-500 text-white border-indigo-600 shadow-sm">
+              ✨ Just In
+            </span>
+          )}
+          {product.strainType && STRAIN_BADGE[product.strainType] && (
+            <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold border ${STRAIN_BADGE[product.strainType]}`}>
+              {product.strainType}
+            </span>
+          )}
+        </div>
       </div>
       <div className="p-3 space-y-1.5">
         {product.brand && (
