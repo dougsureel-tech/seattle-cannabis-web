@@ -21,7 +21,7 @@ function isCanonicalOrLocal(host: string): boolean {
   if (h === CANONICAL_HOST.toLowerCase()) return true;
   if (h === "localhost" || h.endsWith(".localhost")) return true;
   if (h === "127.0.0.1" || h === "[::1]") return true;
-  if (h === "www.seattlecannabis.com" || h === "seattlecannabis.com") return true;
+  if (h === "www.seattlecannabis.co" || h === "seattlecannabis.co") return true;
   return false;
 }
 
