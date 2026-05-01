@@ -13,7 +13,7 @@ export default function FindYourStrainPage() {
   return (
     <div className="min-h-screen bg-stone-50">
       <section className="border-b border-stone-200 bg-white">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-12 text-center">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-12 text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-[11px] font-bold uppercase tracking-[0.18em] text-indigo-700">
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
             3 questions · live menu
