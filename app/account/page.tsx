@@ -27,6 +27,21 @@ const STATUS_ICON: Record<string, string> = {
   pending: "⏳", preparing: "👨‍🍳", ready: "✅", picked_up: "🎉", cancelled: "✕",
 };
 
+const TZ = "America/Los_Angeles";
+
+function fmtTime(iso: string): string {
+  return new Date(iso).toLocaleTimeString("en-US", { timeZone: TZ, hour: "numeric", minute: "2-digit" });
+}
+function fmtRelativeDay(iso: string): string {
+  const today = new Intl.DateTimeFormat("en-CA", { timeZone: TZ }).format(new Date());
+  const day = new Intl.DateTimeFormat("en-CA", { timeZone: TZ }).format(new Date(iso));
+  if (today === day) return "today";
+  const tomorrow = new Date();
+  tomorrow.setUTCDate(tomorrow.getUTCDate() + 1);
+  if (day === new Intl.DateTimeFormat("en-CA", { timeZone: TZ }).format(tomorrow)) return "tomorrow";
+  return new Date(iso).toLocaleDateString("en-US", { timeZone: TZ, weekday: "short", month: "short", day: "numeric" });
+}
+
 type Props = { searchParams: Promise<{ ordered?: string }> };
 
 export default async function AccountPage({ searchParams }: Props) {
@@ -83,14 +98,14 @@ export default async function AccountPage({ searchParams }: Props) {
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-700 via-indigo-800 to-indigo-900" />
         <div className="absolute inset-0 opacity-20"
           style={{ backgroundImage: "radial-gradient(ellipse at 80% 0%, #818cf8, transparent 60%)" }} />
-        <div className="relative px-6 py-7 flex items-center justify-between gap-4">
-          <div className="space-y-1">
+        <div className="relative px-5 sm:px-6 py-6 sm:py-7 flex items-center justify-between gap-4">
+          <div className="space-y-1 min-w-0">
             <div className="text-indigo-200 text-xs font-bold uppercase tracking-widest">Loyalty Points</div>
-            <div className="text-6xl font-extrabold text-white leading-none">{portalUser.loyaltyPoints.toLocaleString()}</div>
-            <div className="text-indigo-300 text-sm font-medium">points earned at {STORE.name}</div>
+            <div className="text-5xl sm:text-6xl font-extrabold text-white leading-none tabular-nums">{portalUser.loyaltyPoints.toLocaleString()}</div>
+            <div className="text-indigo-300 text-xs sm:text-sm font-medium">points earned at {STORE.name}</div>
           </div>
           <div className="text-right space-y-1 shrink-0">
-            <div className="text-5xl opacity-20 select-none">🌿</div>
+            <div className="text-4xl sm:text-5xl opacity-20 select-none">🌿</div>
             {portalUser.name && (
               <div className="text-indigo-300/80 text-xs font-medium">{portalUser.name}</div>
             )}
@@ -110,15 +125,22 @@ export default async function AccountPage({ searchParams }: Props) {
           </h2>
           {activeOrders.map((order) => {
             const isReady = order.status === "ready";
+            const pickupLabel = order.pickupTime ? `${fmtRelativeDay(order.pickupTime)} at ${fmtTime(order.pickupTime)}` : null;
             return (
               <div key={order.id}
                 className={`rounded-2xl border bg-white p-5 space-y-4 transition-all ${isReady ? "border-indigo-300 shadow-md shadow-indigo-100" : "border-stone-200"}`}>
-                <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center justify-between gap-2 flex-wrap">
                   <span className={`inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full border ${STATUS_COLOR[order.status] ?? "bg-stone-100 text-stone-600 border-stone-200"}`}>
                     <span>{STATUS_ICON[order.status]}</span>
                     {STATUS_LABEL[order.status] ?? order.status}
                   </span>
-                  <span className="text-xs text-stone-400">{new Date(order.placedAt).toLocaleString()}</span>
+                  {pickupLabel ? (
+                    <span className="text-xs text-stone-500">
+                      Pickup <span className="font-bold text-stone-800">{pickupLabel}</span>
+                    </span>
+                  ) : (
+                    <span className="text-xs text-stone-400">{new Date(order.placedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })}</span>
+                  )}
                 </div>
                 <div className="space-y-1">
                   {order.items.map((item) => (
