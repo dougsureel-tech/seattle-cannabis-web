@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 // from git history and the matching redirect at /order/page.tsx.
 const IHEARTJANE_URL = "https://www.iheartjane.com/stores/5295/seattle-cannabis-co";
 
-export const dynamic = "force-static";
+export const dynamic = "force-dynamic";
 
 export default function MenuPage() {
   redirect(IHEARTJANE_URL);
