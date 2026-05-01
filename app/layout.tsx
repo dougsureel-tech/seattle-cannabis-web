@@ -5,6 +5,7 @@ import { AgeGate } from "@/components/AgeGate";
 import { AnnouncementBar } from "@/components/AnnouncementBar";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 import { STORE } from "@/lib/store";
 import "./globals.css";
 
@@ -34,7 +35,18 @@ export const metadata: Metadata = {
     siteName: STORE.name,
   },
   robots: { index: true, follow: true },
-  other: { rating: "adult" },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Seattle Cannabis",
+  },
+  other: { rating: "adult", "mobile-web-app-capable": "yes" },
+};
+
+export const viewport = {
+  themeColor: "#1e1b4b",
+  width: "device-width",
+  initialScale: 1,
 };
 
 const localBusinessSchema = {
@@ -115,6 +127,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <SiteHeader />
           <main className="flex-1">{children}</main>
           <SiteFooter />
+          <ServiceWorkerRegister />
         </body>
       </html>
     </ClerkProvider>
