@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { STORE, isOpenNow } from "@/lib/store";
+import { STORE, isOpenNow, nextOpenLabel } from "@/lib/store";
 import { getActiveBrands, getFeaturedProducts } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -34,6 +34,7 @@ export default async function HomePage() {
   ]);
   const featuredBrands = brands.filter((b) => b.logoUrl).slice(0, 10);
   const open = isOpenNow();
+  const statusLabel = nextOpenLabel();
   const today = new Date().toLocaleDateString("en-US", { weekday: "long", timeZone: "America/Los_Angeles" });
   const todayHours = STORE.hours.find((h) => h.day === today);
 
@@ -110,8 +111,8 @@ export default async function HomePage() {
                 <div className="flex items-center gap-3">
                   <span className={`w-3 h-3 rounded-full shrink-0 ${open ? "bg-green-400 shadow-[0_0_8px_#4ade80] animate-pulse" : "bg-red-400"}`} />
                   <div>
-                    <div className="text-white font-bold text-sm">{open ? "Open Now" : "Currently Closed"}</div>
-                    {todayHours && <div className="text-indigo-300/70 text-xs">{todayHours.open} – {todayHours.close} today</div>}
+                    <div className="text-white font-bold text-sm">{statusLabel || (open ? "Open today" : "Closed today")}</div>
+                    {todayHours && <div className="text-indigo-300/70 text-xs">Today {todayHours.open} – {todayHours.close}</div>}
                   </div>
                 </div>
                 <div className="h-px bg-white/10" />
@@ -262,7 +263,9 @@ export default async function HomePage() {
                     {p.brand && <div className="text-xs text-stone-400 font-medium uppercase tracking-wide truncate">{p.brand}</div>}
                     <div className="font-semibold text-stone-900 text-sm leading-tight line-clamp-2">{p.name}</div>
                     <div className="flex items-center justify-between pt-1">
-                      <span className="font-bold text-indigo-800">${p.unitPrice?.toFixed(2)}</span>
+                      <span className="font-bold text-indigo-800">
+                        {p.unitPrice != null && p.unitPrice > 0 ? `$${p.unitPrice.toFixed(2)}` : <span className="text-stone-400 font-medium">In store</span>}
+                      </span>
                       {p.thcPct != null && <span className="text-xs text-stone-400">THC {p.thcPct.toFixed(1)}%</span>}
                     </div>
                   </div>

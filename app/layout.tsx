@@ -40,7 +40,12 @@ export const metadata: Metadata = {
 const localBusinessSchema = {
   "@context": "https://schema.org",
   "@type": ["LocalBusiness", "Store"],
+  "@id": `${STORE.website}/#dispensary`,
   name: STORE.name,
+  legalName: STORE.name,
+  alternateName: ["Seattle Cannabis Co", "SCC Rainier", "Seattle Cannabis Company"],
+  description: `Veteran-owned cannabis dispensary in ${STORE.neighborhood}, Seattle. Premium flower, pre-rolls, vapes, concentrates, edibles, tinctures and topicals. Open daily 8 AM–11 PM. Cash only, 21+ with valid ID.`,
+  slogan: STORE.tagline,
   url: STORE.website,
   telephone: STORE.phoneTel,
   email: STORE.email,
@@ -53,6 +58,14 @@ const localBusinessSchema = {
     addressCountry: "US",
   },
   geo: { "@type": "GeoCoordinates", latitude: STORE.geo.lat, longitude: STORE.geo.lng },
+  areaServed: [
+    { "@type": "City", name: "Seattle", containedInPlace: { "@type": "State", name: "Washington" } },
+    ...[STORE.neighborhood, ...STORE.nearbyNeighborhoods].map((name) => ({
+      "@type": "Place",
+      name,
+      containedInPlace: { "@type": "City", name: "Seattle" },
+    })),
+  ],
   openingHoursSpecification: STORE.hours.map((h) => ({
     "@type": "OpeningHoursSpecification",
     dayOfWeek: `https://schema.org/${h.day}`,
@@ -60,7 +73,30 @@ const localBusinessSchema = {
     closes: h.close,
   })),
   priceRange: "$$",
+  currenciesAccepted: "USD",
   paymentAccepted: "Cash",
+  hasMap: STORE.googleMapsUrl,
+  identifier: {
+    "@type": "PropertyValue",
+    propertyID: "WSLCB License",
+    value: STORE.wslcbLicense,
+  },
+  knowsAbout: [
+    "Cannabis flower", "Pre-rolls", "Cannabis concentrates", "Cannabis vapes",
+    "Cannabis edibles", "Tinctures", "Topicals", "Terpenes", "Cannabinoids",
+    "Indica", "Sativa", "Hybrid", "Washington State cannabis law",
+  ],
+  amenityFeature: STORE.amenities.map((name) => ({ "@type": "LocationFeatureSpecification", name, value: true })),
+  publicAccess: true,
+  smokingAllowed: false,
+  isAccessibleForFree: true,
+  hasMenu: `${STORE.website}/menu`,
+  potentialAction: {
+    "@type": "OrderAction",
+    target: STORE.shopUrl,
+    deliveryMethod: "http://purl.org/goodrelations/v1#DeliveryModePickUp",
+  },
+  sameAs: [STORE.social.instagram, STORE.social.facebook].filter(Boolean),
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
