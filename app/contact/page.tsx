@@ -7,9 +7,26 @@ export const metadata: Metadata = {
   alternates: { canonical: "/contact" },
 };
 
+const contactSchema = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  "@id": `${STORE.website}/contact#page`,
+  name: `Contact ${STORE.name}`,
+  url: `${STORE.website}/contact`,
+  mainEntity: { "@id": `${STORE.website}/#dispensary` },
+  breadcrumb: {
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: STORE.website },
+      { "@type": "ListItem", position: 2, name: "Contact", item: `${STORE.website}/contact` },
+    ],
+  },
+};
+
 export default function ContactPage() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(contactSchema) }} />
       <div className="relative overflow-hidden bg-indigo-950 text-white py-14">
         <div className="absolute inset-0 opacity-[0.07]" style={{ backgroundImage: "radial-gradient(circle, #fff 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
         <div className="absolute inset-0 opacity-20" style={{ backgroundImage: "radial-gradient(ellipse 60% 50% at 80% 50%, #818cf8, transparent)" }} />
