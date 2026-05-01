@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { STORE } from "@/lib/store";
-import { getMenuProducts, type MenuProduct } from "@/lib/db";
+import { getMenuProducts, getActiveDeals, type MenuProduct } from "@/lib/db";
 import { MenuSearch } from "./MenuSearch";
 import { StashButton } from "@/components/StashButton";
+import { DealBanner } from "@/components/DealBanner";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -110,7 +111,10 @@ function ProductCard({ product, categorySlug }: { product: MenuProduct; category
 }
 
 export default async function MenuPage() {
-  const products = await getMenuProducts().catch(() => [] as MenuProduct[]);
+  const [products, deals] = await Promise.all([
+    getMenuProducts().catch(() => [] as MenuProduct[]),
+    getActiveDeals().catch(() => []),
+  ]);
 
   const grouped = new Map<string, MenuProduct[]>();
   for (const p of products) {
@@ -184,6 +188,8 @@ export default async function MenuPage() {
       {productSchemas.length > 0 && (
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchemas) }} />
       )}
+
+      <DealBanner deals={deals} accent="indigo" />
 
       {/* Header */}
       <div className="relative overflow-hidden bg-indigo-950 text-white py-12 sm:py-14">
