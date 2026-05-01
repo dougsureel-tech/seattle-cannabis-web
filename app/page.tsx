@@ -227,7 +227,7 @@ export default async function HomePage() {
 
       {/* ─── Featured products ──────────────────────────────────────────────── */}
       {featured.length > 0 && (
-        <section className="py-16">
+        <section className="py-12 sm:py-16">
           <div className="max-w-6xl mx-auto px-4 sm:px-6">
             <div className="flex items-end justify-between mb-8 gap-4">
               <div>
