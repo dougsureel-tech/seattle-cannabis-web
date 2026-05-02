@@ -3,9 +3,14 @@ import { STORE } from "@/lib/store";
 
 export function SiteFooter() {
   return (
-    <footer className="bg-indigo-950 text-indigo-200">
-      {/* Pre-footer CTA strip */}
-      <div className="border-b border-indigo-900/60 bg-indigo-900/30">
+    // Footer — gradient indigo-950 base with a subtle violet wash through the
+    // middle so the bottom of the page reads as depth instead of a flat slab.
+    // Matches the AnnouncementBar at the top — bookends the page in the same
+    // indigo→violet gradient identity.
+    <footer className="bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-indigo-200">
+      {/* Pre-footer CTA strip — subtle gradient overlay so the strip stands
+          out from the main footer body. */}
+      <div className="border-b border-indigo-900/60 bg-gradient-to-r from-indigo-900/40 via-violet-900/30 to-indigo-900/40">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
             <p className="font-bold text-white text-sm">Ready to order?</p>
@@ -35,7 +40,9 @@ export function SiteFooter() {
         {/* Brand + contact */}
         <div className="lg:col-span-2 space-y-5">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-indigo-700 flex items-center justify-center shrink-0">
+            {/* Footer SC badge — same gradient identity as the SiteHeader
+                badge so the brand mark is consistent top-to-bottom. */}
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-600 via-violet-600 to-indigo-700 flex items-center justify-center shrink-0 shadow-sm shadow-violet-900/30">
               <span className="text-white font-bold text-sm tracking-tight">SC</span>
             </div>
             <div>
