@@ -149,9 +149,6 @@ details[open] > summary ~ * {
   background: linear-gradient(to bottom right, #1e1b4b, #2e1065, #1e1b4b);
 }
 
-.hero-bg__pool {
-  will-change: transform;
-}
 .hero-bg__pool--indigo-wash {
   background: radial-gradient(ellipse 70% 80% at 15% 50%, #1e1b4b55, transparent);
 }
@@ -170,7 +167,6 @@ details[open] > summary ~ * {
 
 .hero-bg__blob {
   border-radius: 9999px;
-  will-change: transform;
 }
 .hero-bg__blob--tr {
   top: 0;
@@ -195,7 +191,6 @@ details[open] > summary ~ * {
   width: 240px;
   height: 240px;
   border-radius: 9999px;
-  will-change: transform;
 }
 .hero-bg__particle--a {
   top: 10%;
@@ -217,6 +212,14 @@ details[open] > summary ~ * {
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  /* Promote animated layers to GPU compositor only when motion will actually
+     run — otherwise reduced-motion users pay layer-allocation cost for nothing. */
+  .hero-bg__pool,
+  .hero-bg__blob,
+  .hero-bg__particle {
+    will-change: transform;
+  }
+
   @keyframes hero-pool-a {
     0%,
     100% {
