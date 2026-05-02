@@ -1,4 +1,5 @@
 import { isOpenNow, nextOpenLabel, STORE, minutesUntilClose, getOrderingStatus } from "@/lib/store";
+import { getActiveDeals } from "@/lib/db";
 
 // Within this window before close, swap the static hours line for a live
 // "Closes in X min" countdown. When the visitor arrives late this is the
@@ -6,7 +7,7 @@ import { isOpenNow, nextOpenLabel, STORE, minutesUntilClose, getOrderingStatus }
 // remaining minutes is more useful than restating the schedule.
 const CLOSING_SOON_WINDOW_MIN = 90;
 
-export function AnnouncementBar() {
+export async function AnnouncementBar() {
   const open = isOpenNow();
   const status = nextOpenLabel();
   const today = new Date().toLocaleDateString("en-US", { weekday: "long", timeZone: "America/Los_Angeles" });
@@ -14,6 +15,23 @@ export function AnnouncementBar() {
   const minsLeft = minutesUntilClose();
   const orderingStatus = getOrderingStatus();
   const closingSoon = open && minsLeft !== null && minsLeft <= CLOSING_SOON_WINDOW_MIN;
+
+  // Most-urgent deal — first row from getActiveDeals (sorted by end-date
+  // NULLS LAST) ending today or tomorrow. Skipped when a more urgent
+  // time-driven mode (closing-soon / last-call / closed) is owning the
+  // bar — "do I have time" beats "should I redeem".
+  const deals = open && !closingSoon && orderingStatus.state !== "after_last_call" ? await getActiveDeals().catch(() => []) : [];
+  const urgentDeal = (() => {
+    if (deals.length === 0) return null;
+    const todayMs = Date.now();
+    for (const d of deals) {
+      if (!d.endDate) continue;
+      const endMs = new Date(`${d.endDate}T23:59:59`).getTime();
+      const days = Math.ceil((endMs - todayMs) / 86400000);
+      if (days <= 1) return { deal: d, endsToday: days <= 0 };
+    }
+    return null;
+  })();
 
   // Three banner shapes, escalating urgency:
   //   normal       — indigo/violet gradient, "Open · 8 AM-11 PM"
@@ -50,6 +68,15 @@ export function AnnouncementBar() {
       <>
         <strong className="font-bold">Closes in {minsLeft} min</strong>
         <span className="opacity-80">· order ahead for fast pickup</span>
+      </>
+    );
+  } else if (urgentDeal) {
+    statusLine = (
+      <>
+        Open Now <span className="opacity-80">·</span>{" "}
+        <span aria-hidden="true">🎟️</span>{" "}
+        <strong className="font-bold">{urgentDeal.deal.short}</strong>{" "}
+        <span className="opacity-80">{urgentDeal.endsToday ? "ends today" : "ends tomorrow"}</span>
       </>
     );
   } else {

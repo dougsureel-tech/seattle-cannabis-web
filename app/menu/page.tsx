@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { STORE } from "@/lib/store";
+import { getActiveDeals } from "@/lib/db";
 import { JaneMenu } from "./JaneMenu";
 import { MenuFallback } from "./MenuFallback";
 
@@ -14,7 +15,10 @@ import { MenuFallback } from "./MenuFallback";
 // migration to Boost; storeId 5295 + embedConfigId 222 authorizes this
 // store under the current Boost runtime.
 
-export const dynamic = "force-static";
+// Was force-static (embed config is static), now ISR 60s so MenuFallback
+// can show the most-urgent active deal without losing the cache benefit.
+// One getActiveDeals() call per minute per region — negligible.
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Cannabis Menu — Live Inventory",
@@ -38,7 +42,10 @@ export const metadata: Metadata = {
 const IHEARTJANE_STORE_ID = 5295;
 const IHEARTJANE_EMBED_CONFIG_ID = 222;
 
-export default function MenuPage() {
+export default async function MenuPage() {
+  const deals = await getActiveDeals().catch(() => []);
+  const featuredDeal = deals[0] ?? null;
+
   return (
     <div className="bg-stone-50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-3">
@@ -49,7 +56,7 @@ export default function MenuPage() {
         </p>
       </div>
       <JaneMenu storeId={IHEARTJANE_STORE_ID} embedConfigId={IHEARTJANE_EMBED_CONFIG_ID} />
-      <MenuFallback />
+      <MenuFallback featuredDeal={featuredDeal} />
     </div>
   );
 }
