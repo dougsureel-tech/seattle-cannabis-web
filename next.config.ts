@@ -8,7 +8,11 @@ import type { NextConfig } from "next";
 const SECURITY_HEADERS = [
   { key: "X-Frame-Options", value: "SAMEORIGIN" },
   { key: "X-Content-Type-Options", value: "nosniff" },
-  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  // `no-referrer-when-downgrade` (not `strict-origin-when-cross-origin`) —
+  // iHeartJane's Boost API uses the Referer for partner allowlisting and
+  // silently CORS-rejects requests where Referer was truncated. See
+  // greenlife-web/next.config.ts for the full rationale. MENU_LOG hypothesis #4.
+  { key: "Referrer-Policy", value: "no-referrer-when-downgrade" },
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(self), payment=()" },
 ];
 
