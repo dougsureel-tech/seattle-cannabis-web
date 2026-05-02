@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const FOUNDED_YEAR = "2023";
+const FOUNDED_YEAR = "2010";
 const PRESS_EMAIL = STORE.email;
 
 const FACTS: { label: string; value: string }[] = [
@@ -26,7 +26,7 @@ const FACTS: { label: string; value: string }[] = [
   { label: "Hours", value: "8 AM – 11 PM daily" },
   { label: "WSLCB License", value: STORE.wslcbLicense },
   { label: "Founded", value: FOUNDED_YEAR },
-  { label: "Owner", value: "Doug Sureel (veteran-owned)" },
+  { label: "Owner", value: "Doug Sureel · locally owned, independent" },
   {
     label: "Region",
     value: `${STORE.neighborhood}, plus ${STORE.nearbyNeighborhoods.slice(0, 3).join(", ")}`,
@@ -111,7 +111,7 @@ export default function PressPage() {
           <div className="prose prose-stone max-w-none text-stone-700 text-base leading-relaxed">
             <p>
               {STORE.name} sits on Rainier Avenue in the heart of {STORE.neighborhood} — the corridor between
-              Seward Park and Othello Station. Veteran-owned, neighborhood-staffed, stocked from
+              Seward Park and Othello Station. Locally owned, neighborhood-staffed, stocked from
               Washington-state farms with an emphasis on smaller cultivators most chains skip. We stay open
               until 11 every night because South Seattle deserves more than the same three big-chain shops on
               MLK.

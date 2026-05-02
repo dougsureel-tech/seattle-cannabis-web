@@ -4,7 +4,7 @@ import { STORE } from "@/lib/store";
 
 export const metadata: Metadata = {
   title: "About Us",
-  description: `Learn about ${STORE.name} — Rainier Valley's veteran-owned cannabis dispensary serving South Seattle with expert staff and carefully curated products.`,
+  description: `Learn about ${STORE.name} — Rainier Valley's neighborhood cannabis dispensary. Founded 2010, in Rainier Valley since 2018. Expert staff and carefully curated products.`,
   alternates: { canonical: "/about" },
 };
 
@@ -28,7 +28,7 @@ export default function AboutPage() {
           <p className="text-indigo-400 text-xs font-bold uppercase tracking-widest mb-2">Our Story</p>
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">About Seattle Cannabis Co.</h1>
           <p className="text-indigo-300/70 mt-2 text-sm sm:text-base">
-            Veteran-owned · Rainier Valley&apos;s community dispensary
+            Locally owned · Rainier Valley&apos;s community dispensary
           </p>
         </div>
       </div>
@@ -39,9 +39,9 @@ export default function AboutPage() {
           <div className="space-y-5">
             <h2 className="text-3xl font-extrabold text-stone-900 tracking-tight">Who We Are</h2>
             <p className="text-stone-600 leading-relaxed">
-              Seattle Cannabis Co. is a veteran-owned cannabis dispensary rooted in Rainier Valley. We&apos;re
-              proud to serve South Seattle&apos;s diverse community — from first-time visitors to longtime
-              enthusiasts.
+              Seattle Cannabis Co. is a locally owned, independent cannabis dispensary — founded in 2010
+              and rooted in Rainier Valley since 2018. We&apos;re proud to serve South Seattle&apos;s
+              diverse community — from first-time visitors to longtime enthusiasts.
             </p>
             <p className="text-stone-600 leading-relaxed">
               Our team of knowledgeable budtenders takes time to understand what you&apos;re looking for and
@@ -81,9 +81,9 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
             {[
               {
-                icon: "🎖️",
-                title: "Veteran-Owned",
-                body: "Proud to be a veteran-owned small business. We offer discounts to active duty military, veterans, and first responders — just show your ID.",
+                icon: "🏡",
+                title: "Locally Owned",
+                body: "An independent, neighborhood small business — not a chain. Founded 2010, in Rainier Valley since 2018. We offer service discounts to active military, veterans, first responders, healthcare workers, and teachers — just show your ID.",
                 color: "bg-indigo-50 border-indigo-200",
               },
               {

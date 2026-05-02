@@ -53,7 +53,7 @@ export const STORE = {
     "Walk-ins welcome",
     "Online ordering",
   ],
-  perks: ["Veteran-owned", "Military discounts", "Loyalty rewards", "15% off online orders"],
+  perks: ["Open since 2010", "Service discounts", "Loyalty rewards", "15% off online orders"],
 } as const;
 
 const TZ = "America/Los_Angeles";

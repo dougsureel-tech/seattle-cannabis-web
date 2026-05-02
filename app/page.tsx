@@ -19,7 +19,7 @@ const NEIGHBORHOOD_NAMES = NEIGHBORHOODS.map((n) => n.name).join(", ");
 
 export const metadata: Metadata = {
   title: `${STORE.name} | South Seattle's Cannabis Dispensary — Rainier Valley`,
-  description: `${STORE.name} at ${STORE.address.full}. Closest shop to ${NEIGHBORHOOD_NAMES}. Five min from Othello Light Rail. Open since 2014, daily 8am–11pm.`,
+  description: `${STORE.name} at ${STORE.address.full}. Closest shop to ${NEIGHBORHOOD_NAMES}. Five min from Othello Light Rail. Founded 2010 · Rainier Valley since 2018, daily 8am–11pm.`,
   alternates: { canonical: "/" },
   other: {
     "geo.region": "US-WA",
@@ -87,7 +87,7 @@ const CATEGORIES = [
 const STATS = [
   { val: "Open Daily", label: "8 AM – 11 PM" },
   { val: "Free Parking", label: "On-site lot" },
-  { val: "Since 2014", label: "Rooted in Rainier Valley" },
+  { val: "Since 2010", label: "Rainier Valley since 2018" },
   { val: "15% Off", label: "Online orders" },
 ];
 
@@ -175,7 +175,7 @@ export default async function HomePage() {
                   <span className="text-indigo-100/70 font-light">Shop.</span>
                 </h1>
                 <p className="text-indigo-100/60 text-lg sm:text-xl leading-relaxed max-w-lg mt-5">
-                  Rainier Valley to Seward Park to Alki — pull up, pick what fits the day. Open since 2014, WA
+                  Rainier Valley to Seward Park to Alki — pull up, pick what fits the day. Open since 2010, WA
                   brands deep, real budtenders, no rush.
                 </p>
               </div>
@@ -327,7 +327,7 @@ export default async function HomePage() {
                     { icon: "🅿️", text: "Free Parking" },
                     { icon: "💵", text: "Cash Only" },
                     { icon: "🏧", text: "ATM On-Site" },
-                    { icon: "📅", text: "Since 2014" },
+                    { icon: "📅", text: "Since 2010" },
                   ].map(({ icon, text }) => (
                     <div key={text} className="flex items-center gap-2 text-white/65 text-xs">
                       <span className="text-base leading-none">{icon}</span>
@@ -833,8 +833,8 @@ export default async function HomePage() {
             {[
               {
                 icon: "📅",
-                title: "Open Since 2014",
-                body: "Rooted in Rainier Valley a decade and counting. Same building, same neighborhood, real staff who know the products and remember regulars.",
+                title: "Open Since 2010",
+                body: "Founded in 2010, in Rainier Valley since 2018. Same neighborhood, real staff who know the products and remember regulars — longer-tenured than every chain.",
                 // Card accents bumped from flat pastel-50 to a subtle gradient
                 // wash + a slightly stronger border. Icon tile gets a matching
                 // gradient so the pastel tone has a focal point. Same shape

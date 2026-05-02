@@ -61,7 +61,7 @@ export default function OG() {
       <div style={{ display: "flex", flexDirection: "column", gap: 16, position: "relative" }}>
         <div style={{ fontSize: 96, fontWeight: 900, lineHeight: 1.05, letterSpacing: -2 }}>{STORE.name}</div>
         <div style={{ fontSize: 36, color: "#c7d2fe", fontWeight: 500, maxWidth: 900 }}>
-          Veteran-owned · 8 AM–11 PM daily
+          Locally owned · Open since 2010 · 8 AM–11 PM daily
         </div>
       </div>
 

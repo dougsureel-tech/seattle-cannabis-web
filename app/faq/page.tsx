@@ -31,8 +31,8 @@ const FAQS: { q: string; a: string; tag?: string }[] = [
   },
   {
     tag: "Discounts",
-    q: "Do you offer veteran or military discounts?",
-    a: "Yes — we're a veteran-owned business and proud of it. Active duty military, veterans, and first responders receive a discount. Just show your valid military ID or DD-214.",
+    q: "Do you offer service discounts?",
+    a: "Yes — we run a Heroes service discount for active military, veterans, first responders (police, fire, EMS), healthcare workers, and K-12 teachers. Show valid ID or service credential at the register. The discount can't combine with other %-off promos — you get whichever is bigger.",
   },
   {
     tag: "First Visit",
@@ -62,7 +62,7 @@ const FAQS: { q: string; a: string; tag?: string }[] = [
   {
     tag: "Ordering",
     q: "Can I order online for pickup?",
-    a: "Yes — browse our menu at shop.seattlecannabis.co and place a pickup order to save 15% automatically.",
+    a: "Yes — browse our menu at seattlecannabis.co/menu and place a pickup order to save 15% automatically.",
   },
   {
     tag: "Education",

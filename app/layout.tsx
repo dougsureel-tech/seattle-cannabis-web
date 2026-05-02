@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     default: `${STORE.name} | Cannabis Dispensary Seattle, WA`,
     template: `%s | ${STORE.name}`,
   },
-  description: `${STORE.name} — ${STORE.neighborhood} cannabis dispensary at ${STORE.address.full}. Open daily 8am–11pm. Veteran-owned. Serving Rainier Valley, Seward Park, Beacon Hill & South Seattle.`,
+  description: `${STORE.name} — ${STORE.neighborhood} cannabis dispensary at ${STORE.address.full}. Open daily 8am–11pm. Founded 2010, rooted in Rainier Valley since 2018. Serving Rainier Valley, Seward Park, Beacon Hill & South Seattle.`,
   keywords: [
     "cannabis dispensary Seattle",
     "cannabis dispensary Rainier Valley",
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     "dispensary near Othello Station",
     "cannabis Seward Park",
     "cannabis Beacon Hill Seattle",
-    "veteran owned dispensary Seattle",
+    "Rainier Valley dispensary since 2018",
   ],
   openGraph: {
     type: "website",
@@ -57,7 +57,7 @@ const localBusinessSchema = {
   name: STORE.name,
   legalName: STORE.name,
   alternateName: ["Seattle Cannabis Co", "SCC Rainier", "Seattle Cannabis Company"],
-  description: `Veteran-owned cannabis dispensary in ${STORE.neighborhood}, Seattle. Premium flower, pre-rolls, vapes, concentrates, edibles, tinctures and topicals. Open daily 8 AM–11 PM. Cash only, 21+ with valid ID.`,
+  description: `Cannabis dispensary in ${STORE.neighborhood}, Seattle — founded 2010, in Rainier Valley since 2018. Premium flower, pre-rolls, vapes, concentrates, edibles, tinctures and topicals. Open daily 8 AM–11 PM. Cash only, 21+ with valid ID.`,
   slogan: STORE.tagline,
   url: STORE.website,
   telephone: STORE.phoneTel,
