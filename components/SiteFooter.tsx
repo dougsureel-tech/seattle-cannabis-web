@@ -175,6 +175,33 @@ export function SiteFooter() {
             ))}
           </ul>
         </div>
+
+        {/* Nearby neighborhoods — internal-link / local-SEO juice for
+            "cannabis dispensary in <neighborhood>" queries. Mirror of
+            greenlife-web's footer structure. */}
+        <div className="space-y-3">
+          <h3 className="text-white font-semibold text-xs uppercase tracking-widest">We serve</h3>
+          <ul className="space-y-2">
+            {[
+              "Rainier Valley",
+              "Seward Park",
+              "Columbia City",
+              "Beacon Hill",
+              "Mount Baker",
+              "Othello",
+              "Hillman City",
+              "Rainier Beach",
+            ].map((hood) => (
+              <li key={hood} className="text-xs text-indigo-300/80">
+                <span className="text-indigo-400/40 mr-1">·</span>
+                {hood}, Seattle
+              </li>
+            ))}
+          </ul>
+          <p className="text-[10px] text-indigo-400/40 leading-relaxed pt-1">
+            5 min off I-5 via Columbia City exit. Othello Light Rail walk-up.
+          </p>
+        </div>
       </div>
 
       {/* Bottom bar */}
