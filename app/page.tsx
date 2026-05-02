@@ -5,6 +5,7 @@ import { getActiveBrands, getActiveDeals, getFeaturedProducts } from "@/lib/db";
 import { PrimaryCTA } from "@/components/PrimaryCTA";
 import { SectionHeading } from "@/components/SectionHeading";
 import { ReviewsSection } from "@/components/Reviews";
+import { RecentlyViewedAutoStrip } from "@/components/RecentlyViewedAutoStrip";
 
 export const dynamic = "force-dynamic";
 
@@ -302,6 +303,12 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ─── Recently-viewed auto-strip — returning visitors get a fast-lane
+            back to products they were looking at. Hidden when empty (no
+            localStorage history) so it doesn't take page real-estate from
+            first-timers. Indigo accent matches the Seattle theme. */}
+      <RecentlyViewedAutoStrip accent="indigo" />
 
       {/* ─── First-time 4-tap flow — sits between stats and deals so a new
             visitor sees the literal "what do I do?" answer before the
