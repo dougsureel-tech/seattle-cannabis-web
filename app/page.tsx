@@ -3,6 +3,7 @@ import Link from "next/link";
 import { STORE, isOpenNow, nextOpenLabel } from "@/lib/store";
 import { getActiveBrands, getFeaturedProducts } from "@/lib/db";
 import { PrimaryCTA } from "@/components/PrimaryCTA";
+import { SectionHeading } from "@/components/SectionHeading";
 
 export const dynamic = "force-dynamic";
 
@@ -292,12 +293,12 @@ export default async function HomePage() {
 
       {/* ─── Category grid ──────────────────────────────────────────────────── */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
-        <div className="text-center mb-10">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-stone-900 tracking-tight">What We Carry</h2>
-          <p className="text-stone-400 mt-2 text-sm">
-            Premium products from the Pacific Northwest&apos;s top producers
-          </p>
-        </div>
+        <SectionHeading
+          className="mb-10"
+          kicker="Premium products from the Pacific Northwest's top producers"
+        >
+          What We Carry
+        </SectionHeading>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
           {CATEGORIES.map(({ icon, label, desc, href, color }) => (
             <Link
@@ -425,12 +426,9 @@ export default async function HomePage() {
       {/* ─── How Pickup Works ───────────────────────────────────────────────── */}
       <section className="bg-stone-50 border-y border-stone-100">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-stone-900 tracking-tight">
-              How Pickup Works
-            </h2>
-            <p className="text-stone-400 mt-2 text-sm">Order online, skip the wait, save 15%</p>
-          </div>
+          <SectionHeading className="mb-10" kicker="Order online, skip the wait, save 15%">
+            How Pickup Works
+          </SectionHeading>
           <div className="relative grid grid-cols-1 sm:grid-cols-3 gap-8">
             <div className="hidden sm:block absolute top-10 left-[calc(16.67%+1rem)] right-[calc(16.67%+1rem)] h-0.5 bg-indigo-100" />
             {[
@@ -571,40 +569,45 @@ export default async function HomePage() {
       {/* ─── Why Seattle Cannabis Co. ───────────────────────────────────────── */}
       <section className="bg-stone-50 border-y border-stone-100">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-stone-900 tracking-tight text-center mb-10">
-            Why Seattle Cannabis Co.?
-          </h2>
+          <SectionHeading className="mb-10">Why Seattle Cannabis Co.?</SectionHeading>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
             {[
               {
                 icon: "🎖️",
                 title: "Veteran-Owned",
                 body: "Proud to serve those who served. Active duty, veterans, and first responders get a discount — just show your ID.",
-                accent: "bg-indigo-50 border-indigo-200",
-                iconBg: "bg-indigo-100",
+                // Card accents bumped from flat pastel-50 to a subtle gradient
+                // wash + a slightly stronger border. Icon tile gets a matching
+                // gradient so the pastel tone has a focal point. Same shape
+                // for all three cards.
+                cardCls: "bg-gradient-to-br from-indigo-50 to-violet-50 border-indigo-200/80",
+                iconCls: "bg-gradient-to-br from-indigo-100 to-violet-100",
               },
               {
                 icon: "🌿",
                 title: "Curated Selection",
                 body: "We handpick every product for quality and value. Washington-grown producers, expertly selected.",
-                accent: "bg-purple-50 border-purple-200",
-                iconBg: "bg-purple-100",
+                cardCls: "bg-gradient-to-br from-purple-50 to-fuchsia-50 border-purple-200/80",
+                iconCls: "bg-gradient-to-br from-purple-100 to-fuchsia-100",
               },
               {
                 icon: "🚊",
                 title: "Easy to Reach",
                 body: "Walking distance from Othello Light Rail. Free parking in our lot. Serving Rainier Valley and all of South Seattle.",
-                accent: "bg-blue-50 border-blue-200",
-                iconBg: "bg-blue-100",
+                cardCls: "bg-gradient-to-br from-sky-50 to-cyan-50 border-sky-200/80",
+                iconCls: "bg-gradient-to-br from-sky-100 to-cyan-100",
               },
-            ].map(({ icon, title, body, accent, iconBg }) => (
-              <div key={title} className={`rounded-2xl border p-6 space-y-4 ${accent}`}>
-                <div className={`w-12 h-12 rounded-2xl ${iconBg} flex items-center justify-center text-2xl`}>
+            ].map(({ icon, title, body, cardCls, iconCls }) => (
+              <div
+                key={title}
+                className={`rounded-2xl border p-6 space-y-4 ${cardCls} hover:-translate-y-0.5 hover:shadow-md transition-all`}
+              >
+                <div className={`w-12 h-12 rounded-2xl ${iconCls} flex items-center justify-center text-2xl shadow-sm`}>
                   {icon}
                 </div>
                 <div>
                   <h3 className="font-bold text-stone-900 text-base">{title}</h3>
-                  <p className="text-stone-500 text-sm leading-relaxed mt-1">{body}</p>
+                  <p className="text-stone-600 text-sm leading-relaxed mt-1">{body}</p>
                 </div>
               </div>
             ))}
