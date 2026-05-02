@@ -165,6 +165,7 @@ export function SiteFooter() {
               { href: "/faq", label: "FAQ" },
               { href: "/about", label: "About Us" },
               { href: "/contact", label: "Contact" },
+              { href: "/press", label: "Press" },
               { href: "/account", label: "My Account" },
             ].map(({ href, label }) => (
               <li key={href}>
