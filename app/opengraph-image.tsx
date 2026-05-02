@@ -21,6 +21,9 @@ export default function OG() {
         position: "relative",
       }}
     >
+      {/* Match the homepage hero radial mesh — indigo top-right + fuchsia
+          bottom-left so the OG card carries the same depth identity as the
+          live site instead of a flat gradient. */}
       <div
         style={{
           position: "absolute",
@@ -28,7 +31,8 @@ export default function OG() {
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundImage: "radial-gradient(circle at 80% 20%, rgba(129,140,248,0.25), transparent 60%)",
+          backgroundImage:
+            "radial-gradient(circle at 80% 20%, rgba(129,140,248,0.30), transparent 60%), radial-gradient(circle at 15% 90%, rgba(232,121,249,0.18), transparent 55%)",
         }}
       />
       <div style={{ display: "flex", alignItems: "center", gap: 16, position: "relative" }}>
@@ -73,6 +77,8 @@ export default function OG() {
           <span>Cash only</span>
           <span style={{ color: "#818cf8" }}>·</span>
           <span>21+</span>
+          <span style={{ color: "#818cf8" }}>·</span>
+          <span>ATM on site</span>
           <span style={{ color: "#818cf8" }}>·</span>
           <span>Free parking</span>
         </div>
