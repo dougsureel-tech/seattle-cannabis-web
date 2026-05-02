@@ -85,8 +85,15 @@ export function SiteHeader() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 shrink-0">
+            {/* SC badge — gradient indigo→violet on light, brighter wash on
+                dark. Same brand pop on every page since this header rides
+                across the whole site. */}
             <div
-              className={`w-8 h-8 rounded-xl flex items-center justify-center transition-all duration-300 ${dark ? "bg-white/15" : "bg-indigo-800"}`}
+              className={`w-8 h-8 rounded-xl flex items-center justify-center transition-all duration-300 ${
+                dark
+                  ? "bg-gradient-to-br from-white/20 to-indigo-300/20"
+                  : "bg-gradient-to-br from-indigo-700 via-violet-700 to-indigo-800 shadow-sm shadow-violet-900/20"
+              }`}
             >
               <span className="text-white font-bold text-xs tracking-tight">SC</span>
             </div>

@@ -127,6 +127,26 @@ export default async function HomePage() {
                     </span>
                   )}
                 </div>
+                {/* Pickup ETA pill — concrete time expectation next to the
+                    Open-Now indicator. ~5 min covers online order → arrive
+                    → cash → out the door during open hours; goes quiet
+                    when the store is closed. */}
+                {open && (
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-amber-300/15 border border-amber-300/30 text-amber-200">
+                    <svg
+                      className="w-3 h-3"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4 2" />
+                      <circle cx="12" cy="12" r="9" />
+                    </svg>
+                    ~5 min pickup
+                  </span>
+                )}
                 <span className="text-indigo-400/60 text-xs font-medium uppercase tracking-widest">
                   Rainier Valley, Seattle
                 </span>
@@ -442,7 +462,9 @@ export default async function HomePage() {
                   {icon}
                 </div>
                 <div className="space-y-1">
-                  <div className="text-xs font-bold text-indigo-400 uppercase tracking-widest">
+                  {/* Step label — gradient indigo→violet for richer accent
+                      than the previous flat indigo-400. */}
+                  <div className="text-xs font-bold uppercase tracking-widest bg-gradient-to-r from-indigo-500 to-violet-500 bg-clip-text text-transparent">
                     Step {step}
                   </div>
                   <div className="font-bold text-stone-900 text-base">{title}</div>
@@ -454,7 +476,10 @@ export default async function HomePage() {
           <div className="text-center mt-10">
             <a
               href={STORE.shopUrl}
-              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-indigo-800 hover:bg-indigo-700 text-white font-bold text-sm transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
+              // CTA — gradient indigo→violet on the most-visible
+              // conversion button on this section, with a soft violet glow
+              // shadow on hover that picks up the new color identity.
+              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-gradient-to-r from-indigo-800 via-violet-700 to-indigo-800 hover:from-indigo-700 hover:via-violet-600 hover:to-indigo-700 text-white font-bold text-sm transition-all shadow-md shadow-violet-900/20 hover:shadow-lg hover:shadow-violet-700/30 hover:-translate-y-0.5"
             >
               Order Online — 15% Off →
             </a>
@@ -551,7 +576,9 @@ export default async function HomePage() {
             <div className="text-center mt-10">
               <a
                 href={STORE.shopUrl}
-                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-indigo-800 hover:bg-indigo-700 text-white font-bold text-sm transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
+                // Matches the How-Pickup-Works CTA gradient — same conversion
+                // action, same visual treatment.
+                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-gradient-to-r from-indigo-800 via-violet-700 to-indigo-800 hover:from-indigo-700 hover:via-violet-600 hover:to-indigo-700 text-white font-bold text-sm transition-all shadow-md shadow-violet-900/20 hover:shadow-lg hover:shadow-violet-700/30 hover:-translate-y-0.5"
               >
                 Order Online — 15% Off →
               </a>
