@@ -2,15 +2,16 @@ import type { Metadata } from "next";
 import { STORE } from "@/lib/store";
 import { JaneMenu } from "./JaneMenu";
 
-// /menu = iHeartJane embedded menu. Customer stays on seattlecannabis.co/menu,
-// the iHeartJane SDK injects the live store at iheartjane.com/stores/5295.
+// /menu = iHeartJane Jane Boost (iframeless) embed. Customer stays on
+// seattlecannabis.co — the Boost JS module hydrates the menu inline.
+// Naive iframe is blocked (iHeartJane sets X-Frame-Options: SAMEORIGIN).
 //
-// A naive <iframe> can't be used because iHeartJane sets X-Frame-Options:
-// SAMEORIGIN on every URL — the browser refuses to render. The official
-// embed.js SDK is the only path that actually works.
-//
-// Future: when the in-house menu + checkout are ready, swap this back to
-// the live-inventory page (preserved in seattle-cannabis-web git history).
+// Config + script tags live in JaneMenu.tsx. NOTE: Seattle (storeId 5295)
+// currently shares Wenatchee's embedConfigId 234 as a placeholder. Seattle
+// was never on the WordPress site so iHeartJane never provisioned a
+// dedicated Boost config. If the menu fails to render here, Doug needs
+// to email iHeartJane partner support for a per-store embedConfigId.
+// See INCIDENTS.md (2026-05-01 entry).
 
 export const dynamic = "force-static";
 
@@ -27,6 +28,9 @@ export const metadata: Metadata = {
 };
 
 const IHEARTJANE_STORE_ID = 5295;
+// PLACEHOLDER: same as Wenatchee until iHeartJane provisions a Seattle-specific
+// Boost config. Doug to email partner support.
+const IHEARTJANE_EMBED_CONFIG_ID = 234;
 
 export default function MenuPage() {
   return (
@@ -37,7 +41,7 @@ export default function MenuPage() {
           Real-time inventory from {STORE.name}. Pickup orders open daily 8 AM–{STORE.hours[0]?.close ?? "11 PM"}. Cash only at the counter, 21+ with valid ID.
         </p>
       </div>
-      <JaneMenu storeId={IHEARTJANE_STORE_ID} />
+      <JaneMenu storeId={IHEARTJANE_STORE_ID} embedConfigId={IHEARTJANE_EMBED_CONFIG_ID} />
     </div>
   );
 }
