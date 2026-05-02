@@ -167,7 +167,7 @@ export function StashClient({ products }: { products: MenuProduct[] }) {
                         )}
                       </span>
                       <Link
-                        href="/order"
+                        href="/menu"
                         className="text-[11px] font-bold text-indigo-700 hover:text-indigo-600 transition-colors"
                       >
                         Order →
