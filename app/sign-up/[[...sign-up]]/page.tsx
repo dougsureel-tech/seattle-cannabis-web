@@ -2,7 +2,8 @@ import Link from "next/link";
 import { SignUp } from "@clerk/nextjs";
 
 export const metadata = {
-  title: "Create Account | Seattle Cannabis Co.",
+  // Root layout's title.template appends " | Seattle Cannabis Co." automatically.
+  title: "Create Account",
   robots: { index: false },
 };
 
