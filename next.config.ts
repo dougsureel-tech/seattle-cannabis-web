@@ -6,17 +6,18 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "**" },
     ],
   },
-  // TEMPORARY workaround: Jane Boost embed at /menu renders blank because
-  // iHeartJane hasn't provisioned a working Boost config for store 5295
-  // (current `embedConfigId: 222` in app/menu/page.tsx appears to be wrong
-  // or unactivated — Wenatchee with config 234 hydrates fine, Seattle with
-  // 222 silently fails). Customers were getting a blank menu page.
+  // TEMPORARY: redirect /menu to iHeartJane direct because Jane Boost is
+  // not provisioned for store 5295 yet. We tried embedConfigId 234
+  // (Wenatchee's), 222 (a guess) — both result in a blank page because
+  // iHeartJane hasn't activated Boost for this store on their side.
   //
-  // Bouncing /menu to iheartjane.com directly so customers can shop until
-  // iHeartJane partner support gives us the real Boost config for 5295.
-  // When that lands: update embedConfigId in app/menu/page.tsx, smoke-test
-  // the embed, then DELETE this redirects() block. The JaneMenu component
-  // is intentionally left in place so swapping back is a 1-line config diff.
+  // ACTION ITEM: Doug must email iHeartJane partner support requesting
+  // Boost embed activation for store 5295 (Seattle Cannabis Co). They
+  // will reply with a real embedConfigId.
+  //
+  // When that arrives: paste it into IHEARTJANE_EMBED_CONFIG_ID at
+  // app/menu/page.tsx, smoke-test the embed, then DELETE this redirects()
+  // block. JaneMenu.tsx + page.tsx are intact so the swap-back is one line.
   async redirects() {
     return [
       {
