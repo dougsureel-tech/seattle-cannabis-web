@@ -155,8 +155,13 @@ export function SiteFooter() {
           <ul className="space-y-2">
             {[
               { href: "/menu", label: "Shop Menu" },
-              { href: "/order", label: "Place an Order" },
+              { href: "/order", label: "Order for Pickup" },
+              { href: "/deals", label: "Deals & Specials" },
+              { href: "/visit", label: "Visit Us" },
+              { href: "/find-your-strain", label: "Find your strain" },
               { href: "/brands", label: "Our Brands" },
+              { href: "/blog", label: "Guides" },
+              { href: "/learn", label: "Cannabis 101" },
               { href: "/faq", label: "FAQ" },
               { href: "/about", label: "About Us" },
               { href: "/contact", label: "Contact" },
