@@ -134,8 +134,8 @@ export default async function HomePage() {
                   <span className="text-indigo-100/70 font-light">Shop.</span>
                 </h1>
                 <p className="text-indigo-100/60 text-lg sm:text-xl leading-relaxed max-w-lg mt-5">
-                  Veteran-owned and community-rooted. Premium cannabis, expert budtenders — open daily in the
-                  heart of Rainier Valley.
+                  Rainier Valley to Seward Park to Alki — pull up, pick what fits the day. Veteran-owned, WA
+                  brands deep, real budtenders, no rush.
                 </p>
               </div>
 
@@ -288,6 +288,103 @@ export default async function HomePage() {
               </svg>
             </Link>
           ))}
+        </div>
+      </section>
+
+      {/* ─── Where you headed? — pick-the-trip vibe section. Seward Park is
+              literally next door (Lake Washington swim spot, ~5 min walk).
+              Alki is the westside sunset cruise. Discovery / Hurricane / Tiger
+              are the trail moves. Rainier weekend is the longer haul. Sunset
+              over water gradient + soft horizon SVG. Always-on for now. */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-sky-50 via-amber-50/60 to-rose-50 border-y border-stone-100">
+        <svg
+          className="absolute inset-x-0 bottom-0 w-full h-24 sm:h-32 text-sky-100/60 pointer-events-none"
+          viewBox="0 0 1200 120"
+          preserveAspectRatio="none"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path d="M0 80 C 200 40, 400 100, 600 70 C 800 40, 1000 90, 1200 60 L1200 120 L0 120 Z" />
+        </svg>
+        <svg
+          className="absolute inset-x-0 top-12 w-full h-16 text-stone-200/50 pointer-events-none"
+          viewBox="0 0 1200 60"
+          preserveAspectRatio="none"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path d="M0 40 L150 10 L260 25 L380 5 L520 30 L660 12 L820 35 L960 15 L1080 28 L1200 18 L1200 60 L0 60 Z" />
+        </svg>
+
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
+          <div className="text-center mb-10 sm:mb-12">
+            <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-amber-700/80 mb-3">
+              <span className="text-sm">☀️</span> Where you headed?
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-stone-900 tracking-tight">
+              Pick the move. We&apos;ll cover the rest.
+            </h2>
+            <p className="text-stone-600 mt-2 text-sm sm:text-base max-w-xl mx-auto">
+              Five minutes off Rainier — pull up, grab what fits the day, walk back out. Seward Park&apos;s
+              right around the corner; the rest of the city&apos;s a short drive.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            {[
+              {
+                emoji: "🌊",
+                label: "Seward & the lake",
+                pitch: "Pre-rolls — five-min walk to the water, no grinder needed",
+                href: "/menu",
+                ring: "ring-sky-200/80 hover:ring-sky-400",
+                accent: "text-sky-700",
+              },
+              {
+                emoji: "🌅",
+                label: "Alki cruise",
+                pitch: "Edibles & drinks — drive west, sunset over the sound, easy",
+                href: "/menu",
+                ring: "ring-amber-200/80 hover:ring-amber-400",
+                accent: "text-amber-700",
+              },
+              {
+                emoji: "🥾",
+                label: "Trail day",
+                pitch: "Vapes & carts — Discovery, Tiger, Hurricane Ridge, pocket-sized",
+                href: "/menu",
+                ring: "ring-emerald-200/80 hover:ring-emerald-400",
+                accent: "text-emerald-700",
+              },
+              {
+                emoji: "🏔",
+                label: "Rainier weekend",
+                pitch: "Sealed flower — long drive, longer view, stays fresh",
+                href: "/menu",
+                ring: "ring-indigo-200/80 hover:ring-indigo-400",
+                accent: "text-indigo-700",
+              },
+            ].map((v) => (
+              <Link
+                key={v.label}
+                href={v.href}
+                className={`group flex flex-col rounded-2xl bg-white/85 backdrop-blur-sm p-5 sm:p-6 ring-1 ${v.ring} shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200`}
+              >
+                <span className="text-3xl mb-3" aria-hidden="true">
+                  {v.emoji}
+                </span>
+                <div className={`text-[11px] font-bold uppercase tracking-widest ${v.accent}`}>{v.label}</div>
+                <p className="text-sm text-stone-700 leading-snug mt-1.5 flex-1">{v.pitch}</p>
+                <span className="text-xs text-stone-500 group-hover:text-stone-800 mt-3 transition-colors">
+                  Browse menu →
+                </span>
+              </Link>
+            ))}
+          </div>
+
+          <p className="text-center text-xs text-stone-500 mt-8 sm:mt-10">
+            21+ with the ID · cash at the counter · keep it sealed in the ride · drive sober, every time
+          </p>
         </div>
       </section>
 
