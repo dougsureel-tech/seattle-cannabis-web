@@ -13,6 +13,12 @@ import OoweeBrandPage from "./_brands/oowee";
 import Brand2727Page from "./_brands/2727";
 import SungrownBrandPage from "./_brands/sungrown";
 import RedbirdBrandPage from "./_brands/redbird-cannabis";
+import DeweyCannabisCoBrandPage from "./_brands/dewey-cannabis-co";
+import SeattleBubbleWorksBrandPage from "./_brands/seattle-bubble-works";
+import AgroCoutureBrandPage from "./_brands/agro-couture";
+import GreenRevolutionBrandPage from "./_brands/green-revolution";
+import FiftyFoldBrandPage from "./_brands/fifty-fold";
+import MinglewoodBrandPage from "./_brands/minglewood-brands";
 
 export const dynamic = "force-dynamic";
 
@@ -35,6 +41,12 @@ const BRAND_OVERRIDES: Record<string, React.ComponentType<BrandComponentProps>> 
   "2727": Brand2727Page,
   "edgemont-group-dba-sungrown": SungrownBrandPage,
   "redbird-cannabis": RedbirdBrandPage,
+  "dewey-cannabis-co": DeweyCannabisCoBrandPage,
+  "seattle-bubble-works": SeattleBubbleWorksBrandPage,
+  "agro-couture": AgroCoutureBrandPage,
+  "green-revolution": GreenRevolutionBrandPage,
+  "fifty-fold": FiftyFoldBrandPage,
+  "minglewood-brands": MinglewoodBrandPage,
 };
 
 // Slug aliases — friendly customer-facing URLs that map to the actual
@@ -46,6 +58,9 @@ const SLUG_ALIASES: Record<string, string> = {
   "phat-panda": "grow-op-farms",
   "sungrown": "edgemont-group-dba-sungrown",
   "leafwerx": "edgemont-group-dba-sungrown",
+  "dewey-botanicals": "dewey-cannabis-co",
+  "dewey-botanicals-llc": "dewey-cannabis-co",
+  "slab-mechanix": "agro-couture",
 };
 
 type Props = { params: Promise<{ slug: string }> };
