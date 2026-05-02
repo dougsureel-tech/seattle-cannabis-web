@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { STORE } from "@/lib/store";
 import { getActiveDeals } from "@/lib/db";
+import { DealArt } from "@/components/DealArt";
+import { matchDealVendor } from "@/lib/deal-vendor-match";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -108,58 +110,93 @@ export default async function DealsPage() {
           </div>
         </section>
       ) : (
-        <section className="max-w-3xl mx-auto px-4 sm:px-6 py-12 space-y-4">
+        <section className="max-w-3xl mx-auto px-4 sm:px-6 py-12 space-y-5">
           {deals.map((d, i) => {
-            // Deep-link to the per-deal page so the card shares an SMS-friendly
-            // URL (one tap → focused landing → /menu). Was previously a direct
-            // /menu link, which lost the share path entirely.
-            const linkHref = `/deals/${d.id}`;
+            const vendor = matchDealVendor(d.name, d.description);
             const isFirst = i === 0;
             return (
-              <Link
+              <article
                 key={d.id}
-                href={linkHref}
-                className={`block rounded-2xl border bg-white p-5 sm:p-6 hover:shadow-lg transition-all ${
+                className={`group rounded-2xl border bg-white overflow-hidden transition-all hover:shadow-xl hover:-translate-y-0.5 ${
                   isFirst
                     ? "border-indigo-300 shadow-md ring-1 ring-indigo-100"
                     : "border-stone-200 hover:border-indigo-300"
                 }`}
               >
-                <div className="flex items-start gap-4">
-                  <div
-                    className={`shrink-0 w-12 h-12 rounded-xl flex items-center justify-center text-2xl ${
-                      isFirst ? "bg-indigo-100" : "bg-stone-100"
-                    }`}
-                  >
-                    🔥
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-baseline gap-3 flex-wrap">
-                      <h2 className="text-lg sm:text-xl font-bold text-stone-900">{d.name}</h2>
-                      {isFirst && (
-                        <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-indigo-600 text-white uppercase tracking-wide">
-                          Ending Soonest
-                        </span>
-                      )}
-                    </div>
-                    <p className="mt-1 text-stone-600 text-sm">{d.description ?? d.short}</p>
-                    <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
-                      <span className="font-bold text-indigo-700">{d.short}</span>
-                      <span className="text-stone-500">
-                        Ends: <span className="font-semibold text-stone-700">{fmtEndDate(d.endDate)}</span>
+                {/* Wide bud-art hero strip — vendor photo + logo card when
+                    we recognize the brand, category-themed gradient when
+                    we don't. Mirrors the dialed-in /brands/[slug] pages. */}
+                <DealArt
+                  vendor={vendor}
+                  appliesTo={d.appliesTo}
+                  short={d.short}
+                  paletteAccent="indigo"
+                />
+
+                <div className="p-5 sm:p-6">
+                  <div className="flex items-baseline gap-3 flex-wrap">
+                    <h2 className="text-xl sm:text-2xl font-extrabold text-stone-900 tracking-tight leading-tight">
+                      <Link
+                        href={`/deals/${d.id}`}
+                        className="hover:text-indigo-800 transition-colors"
+                      >
+                        {d.name}
+                      </Link>
+                    </h2>
+                    {isFirst && (
+                      <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-indigo-600 text-white uppercase tracking-wide">
+                        Ending Soonest
                       </span>
-                      {d.appliesTo && d.appliesTo !== "all" && (
-                        <span className="text-stone-500 capitalize">
-                          On: <span className="font-semibold text-stone-700">{d.appliesTo}</span>
-                        </span>
-                      )}
-                    </div>
+                    )}
                   </div>
-                  <span className="hidden sm:inline shrink-0 text-indigo-700 font-bold text-sm">
-                    Browse →
-                  </span>
+
+                  <p className="mt-2 text-stone-600 text-sm leading-relaxed">
+                    {d.description ?? d.short}
+                  </p>
+
+                  <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
+                    <span className="text-stone-500">
+                      Ends:{" "}
+                      <span className="font-semibold text-stone-700">{fmtEndDate(d.endDate)}</span>
+                    </span>
+                    {d.appliesTo && d.appliesTo !== "all" && (
+                      <span className="text-stone-500 capitalize">
+                        On:{" "}
+                        <span className="font-semibold text-stone-700">{d.appliesTo}</span>
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="mt-3 flex flex-wrap items-center gap-1.5 text-[11px]">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md font-semibold bg-indigo-50 text-indigo-800 ring-1 ring-indigo-200">
+                      Stacks with loyalty
+                    </span>
+                    {vendor && (
+                      <Link
+                        href={`/brands/${vendor.slug}`}
+                        className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md font-semibold bg-stone-900 text-white hover:bg-stone-700 transition-colors"
+                      >
+                        Shop {vendor.displayName} →
+                      </Link>
+                    )}
+                  </div>
+
+                  <div className="mt-4 flex flex-wrap items-center gap-3">
+                    <Link
+                      href="/menu"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-700 hover:bg-indigo-600 text-white font-bold text-sm transition-colors shadow-sm"
+                    >
+                      View on menu →
+                    </Link>
+                    <Link
+                      href={`/deals/${d.id}`}
+                      className="text-sm font-semibold text-indigo-800 hover:text-indigo-600 transition-colors"
+                    >
+                      Deal details →
+                    </Link>
+                  </div>
                 </div>
-              </Link>
+              </article>
             );
           })}
 
