@@ -3,8 +3,21 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getBrandBySlug, getBrandProducts, getActiveBrands } from "@/lib/db";
 import { STORE } from "@/lib/store";
+import NWCSBrandPage from "./_brands/northwest-cannabis-solutions";
 
 export const dynamic = "force-dynamic";
+
+// Per-brand custom page overrides. Add a new entry when a brand graduates
+// from the generic template to a boutique layout. The component receives
+// `{ brand, products }` and renders below the JSON-LD scripts so SEO stays
+// consistent across templated and custom pages.
+type BrandComponentProps = {
+  brand: NonNullable<Awaited<ReturnType<typeof getBrandBySlug>>>;
+  products: Awaited<ReturnType<typeof getBrandProducts>>;
+};
+const BRAND_OVERRIDES: Record<string, React.ComponentType<BrandComponentProps>> = {
+  "northwest-cannabis-solutions": NWCSBrandPage,
+};
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -140,6 +153,29 @@ export default async function BrandPage({ params }: Props) {
       ],
     },
   };
+
+  const Override = BRAND_OVERRIDES[slug];
+  if (Override) {
+    return (
+      <>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(brandSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
+        />
+        {productSchemas.length > 0 && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchemas) }}
+          />
+        )}
+        <Override brand={brand} products={products} />
+      </>
+    );
+  }
 
   return (
     <>
