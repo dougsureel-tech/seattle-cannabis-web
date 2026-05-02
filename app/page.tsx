@@ -7,13 +7,26 @@ import { SectionHeading } from "@/components/SectionHeading";
 import { ReviewsSection } from "@/components/Reviews";
 import { RecentlyViewedAutoStrip } from "@/components/RecentlyViewedAutoStrip";
 import { HeroBackground } from "@/components/HeroBackground";
+import { NeighborhoodMap } from "@/components/NeighborhoodMap";
+import { NEIGHBORHOODS } from "@/lib/neighborhoods";
 
 export const dynamic = "force-dynamic";
 
+// Geo SEO meta — used by paid display + CRM ad networks (Meta/Google Ads/
+// Klaviyo) to anchor location-targeted creative. ICBM + geo.position duplicate
+// each other on purpose; different crawlers prefer different conventions.
+const NEIGHBORHOOD_NAMES = NEIGHBORHOODS.map((n) => n.name).join(", ");
+
 export const metadata: Metadata = {
-  title: `${STORE.name} | Cannabis Dispensary Rainier Valley, Seattle WA`,
-  description: `${STORE.name} at ${STORE.address.full}. Serving ${STORE.nearbyNeighborhoods.join(", ")} and all of South Seattle. Open daily 8am–11pm.`,
+  title: `${STORE.name} | South Seattle's Cannabis Dispensary — Rainier Valley`,
+  description: `${STORE.name} at ${STORE.address.full}. Closest shop to ${NEIGHBORHOOD_NAMES}. Five min from Othello Light Rail. Veteran-owned, open daily 8am–11pm.`,
   alternates: { canonical: "/" },
+  other: {
+    "geo.region": "US-WA",
+    "geo.placename": "Seattle, Rainier Valley",
+    "geo.position": `${STORE.geo.lat};${STORE.geo.lng}`,
+    ICBM: `${STORE.geo.lat}, ${STORE.geo.lng}`,
+  },
 };
 
 // Each category gets a base gradient + a matching `glow` shadow class so the
@@ -197,62 +210,137 @@ export default async function HomePage() {
               </div>
             </div>
 
-            {/* Right: store info card (desktop only) */}
+            {/* Right: store info card (desktop only). Roughly 2× the visual
+                weight of the previous version — now an honest-to-god hero
+                card, not an aside. New blocks added in 2026-05-02 hero
+                refresh: live open/closes-at status, "closest shop to"
+                neighborhood pill cluster, transit pill (Othello Link),
+                and the existing chips kept for parity. */}
             <div className="hidden lg:block shrink-0">
               <div
-                className="rounded-3xl border border-white/15 p-6 w-72 space-y-5"
-                style={{ background: "rgba(255,255,255,0.06)", backdropFilter: "blur(12px)" }}
+                className="rounded-3xl border border-white/15 p-7 w-[360px] space-y-5"
+                style={{ background: "rgba(255,255,255,0.07)", backdropFilter: "blur(14px)" }}
               >
+                {/* Status block — live "Open · Closes 11 PM" up top. Bigger
+                    than the previous version because this is the primary
+                    "should I bother right now?" answer. */}
                 <div className="flex items-center gap-3">
                   <span
-                    className={`w-3 h-3 rounded-full shrink-0 ${open ? "bg-green-400 shadow-[0_0_8px_#4ade80] animate-pulse" : "bg-red-400"}`}
+                    className={`w-3.5 h-3.5 rounded-full shrink-0 ${open ? "bg-green-400 shadow-[0_0_10px_#4ade80] animate-pulse" : "bg-red-400"}`}
                   />
                   <div>
-                    <div className="text-white font-bold text-sm">
-                      {statusLabel || (open ? "Open today" : "Closed today")}
+                    <div className="text-white font-extrabold text-base leading-tight">
+                      {open ? "Open Now" : "Closed"}
+                      {statusLabel && (
+                        <span className="text-indigo-200/80 font-semibold">
+                          {" · "}
+                          {statusLabel}
+                        </span>
+                      )}
                     </div>
                     {todayHours && (
-                      <div className="text-indigo-300/70 text-xs">
-                        Today {todayHours.open} – {todayHours.close}
+                      <div className="text-indigo-300/70 text-xs mt-0.5">
+                        Today {todayHours.open} – {todayHours.close} · 365 days a year
                       </div>
                     )}
                   </div>
                 </div>
+
                 <div className="h-px bg-white/10" />
-                <div className="flex items-start gap-3">
-                  <svg
-                    className="w-4 h-4 mt-0.5 text-indigo-400 shrink-0"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
-                  </svg>
-                  <div>
-                    <div className="text-white text-sm font-medium">{STORE.address.street}</div>
-                    <div className="text-white/50 text-xs">
-                      {STORE.address.city}, WA {STORE.address.zip}
+
+                {/* Address + transit pill row. Address gets the bigger
+                    treatment; the Othello Link pill sits beside it as the
+                    "and here's how you actually get here" answer. */}
+                <div>
+                  <div className="flex items-start gap-3">
+                    <svg
+                      className="w-5 h-5 mt-0.5 text-fuchsia-300 shrink-0"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                    </svg>
+                    <div>
+                      <div className="text-white text-base font-bold leading-tight">
+                        {STORE.address.street}
+                      </div>
+                      <div className="text-white/50 text-xs mt-0.5">
+                        {STORE.address.city}, WA {STORE.address.zip}
+                      </div>
                     </div>
                   </div>
+                  {/* Transit pill — the Link Light Rail walk. Spelled out
+                      because "Othello Station" isn't obvious branding to a
+                      visitor who's not already South Seattle. */}
+                  <div className="mt-3 inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-amber-300/10 border border-amber-300/30 text-amber-200 text-[11px] font-bold">
+                    <svg
+                      className="w-3 h-3"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.2"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
+                      <rect x="6" y="3" width="12" height="14" rx="2" />
+                      <path strokeLinecap="round" d="M9 21l1-3m4 3l-1-3M9 8h6" />
+                    </svg>
+                    5 min walk from Othello Light Rail
+                  </div>
                 </div>
+
                 <div className="h-px bg-white/10" />
-                <div className="grid grid-cols-2 gap-y-3 gap-x-3">
+
+                {/* Closest-shop neighborhood pills — Doug's headline ask.
+                    Tight cluster, not a marketing wall. Each pill is the
+                    name only, no extra text — visual rhythm beats density. */}
+                <div>
+                  <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300/80 mb-2">
+                    Closest shop to
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {[
+                      "Rainier Valley",
+                      "Seward Park",
+                      "Columbia City",
+                      "Beacon Hill",
+                      "Mount Baker",
+                      "Othello",
+                      "Hillman City",
+                      "Rainier Beach",
+                    ].map((n) => (
+                      <span
+                        key={n}
+                        className="text-[11px] px-2.5 py-1 rounded-full bg-white/8 border border-white/15 text-white/85 font-semibold"
+                      >
+                        {n}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="h-px bg-white/10" />
+
+                {/* Existing amenity chips kept. */}
+                <div className="grid grid-cols-2 gap-y-2.5 gap-x-3">
                   {[
                     { icon: "🅿️", text: "Free Parking" },
                     { icon: "💵", text: "Cash Only" },
                     { icon: "🏧", text: "ATM On-Site" },
                     { icon: "🎖️", text: "Veteran-Owned" },
                   ].map(({ icon, text }) => (
-                    <div key={text} className="flex items-center gap-2 text-white/60 text-xs">
+                    <div key={text} className="flex items-center gap-2 text-white/65 text-xs">
                       <span className="text-base leading-none">{icon}</span>
                       {text}
                     </div>
                   ))}
                 </div>
+
                 <a
                   href={STORE.googleMapsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-white text-xs font-semibold transition-all"
+                  className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-white text-sm font-bold transition-all"
                 >
                   Get Directions ↗
                 </a>
@@ -282,6 +370,19 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ─── Neighborhood map — South Seattle anchor. Eight neighborhoods
+            (Rainier Valley, Seward Park, Columbia City, Beacon Hill, Mt
+            Baker, Othello, Hillman City, Rainier Beach) plus the shop pin
+            on a stylized SVG. Tap a pin → drive/walk/transit time + the
+            neighborhood's deal-of-the-day + Get-directions deep-link.
+            Mobile degrades to a stacked card list. See
+            components/NeighborhoodMap.tsx for the analytics + retargeting
+            seam (data-neighborhood + localStorage.sc_last_neighborhood). */}
+      <NeighborhoodMap
+        destinationAddress={STORE.address.full}
+        fallbackDealShort={deals[0]?.short ?? null}
+      />
 
       {/* ─── Recently-viewed auto-strip — returning visitors get a fast-lane
             back to products they were looking at. Hidden when empty (no

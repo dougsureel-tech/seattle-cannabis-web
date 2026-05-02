@@ -16,7 +16,19 @@ export const STORE = {
   googleMapsUrl: "https://maps.google.com/?q=7266+Rainier+Ave+S+Seattle+WA+98118",
   googleMapsEmbed: "",
   neighborhood: "Rainier Valley",
-  nearbyNeighborhoods: ["Seward Park", "Rainier Beach", "Beacon Hill", "Mount Baker", "Columbia City"],
+  // Eight South-Seattle neighborhoods we're the closest shop to. Used by the
+  // homepage hero pill cluster + the LocalBusiness JSON-LD `areaServed` graph
+  // + the metadata description, so geo-targeted ads + organic SEO have a
+  // consistent footprint. NeighborhoodMap.tsx mirrors this set.
+  nearbyNeighborhoods: [
+    "Seward Park",
+    "Rainier Beach",
+    "Beacon Hill",
+    "Mount Baker",
+    "Columbia City",
+    "Othello",
+    "Hillman City",
+  ],
   hours: [
     { day: "Monday", open: "8:00 AM", close: "11:00 PM" },
     { day: "Tuesday", open: "8:00 AM", close: "11:00 PM" },
