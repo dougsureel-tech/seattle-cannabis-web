@@ -183,8 +183,8 @@ export function SiteHeader() {
                 PrimaryCTA, with the slow drift animation. Light variant on
                 dark/hero pages, primary on light pages. The site's most-tapped
                 CTA on every page now wears the consistent brand gradient. */}
-            <a
-              href={STORE.shopUrl}
+            <Link
+              href="/order"
               className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-200 shadow-sm animate-gradient bg-[length:200%_auto] ${
                 dark
                   ? "bg-gradient-to-r from-indigo-300 via-fuchsia-200 to-indigo-300 text-indigo-950 hover:from-indigo-200 hover:via-fuchsia-100 hover:to-indigo-200 shadow-black/20"
@@ -192,7 +192,7 @@ export function SiteHeader() {
               }`}
             >
               Order Now
-            </a>
+            </Link>
           </div>
 
           {/* Mobile hamburger */}
@@ -331,12 +331,13 @@ export function SiteHeader() {
           </Link>
           {/* Mobile drawer Order Now — same gradient treatment as the
               header desktop button so the brand mark is consistent. */}
-          <a
-            href={STORE.shopUrl}
+          <Link
+            href="/order"
+            onClick={() => setOpen(false)}
             className="flex items-center justify-center px-4 py-3 rounded-xl bg-gradient-to-r from-indigo-800 via-violet-700 to-indigo-800 hover:from-indigo-700 hover:via-violet-600 hover:to-indigo-700 text-white text-sm font-bold transition-all shadow-md shadow-violet-900/20 animate-gradient bg-[length:200%_auto]"
           >
             Order Now — 15% Off →
-          </a>
+          </Link>
         </div>
       </div>
     </>
