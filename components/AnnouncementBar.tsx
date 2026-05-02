@@ -26,7 +26,7 @@ export function AnnouncementBar() {
         Order Online — Save 15% ↗
       </a>
       <span className="hidden sm:block opacity-40">|</span>
-      <span className="opacity-75">Cash only · 21+ · Veteran-owned</span>
+      <span className="opacity-75">Cash only · 21+ · ATM on site</span>
     </div>
   );
 }
