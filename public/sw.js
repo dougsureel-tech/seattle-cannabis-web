@@ -3,7 +3,7 @@
 // notification, click opens-or-focuses the relevant tab. No offline caching
 // to avoid stale-data risk on a live menu.
 
-self.addEventListener("install", (event) => {
+self.addEventListener("install", () => {
   self.skipWaiting();
 });
 
@@ -16,7 +16,7 @@ self.addEventListener("push", (event) => {
   if (event.data) {
     try {
       payload = { ...payload, ...event.data.json() };
-    } catch (_) {
+    } catch {
       payload.body = event.data.text();
     }
   }
@@ -46,7 +46,7 @@ self.addEventListener("notificationclick", (event) => {
             client.navigate(targetUrl).catch(() => {});
             return client.focus();
           }
-        } catch (_) {}
+        } catch {}
       }
       if (self.clients.openWindow) {
         return self.clients.openWindow(targetUrl);
