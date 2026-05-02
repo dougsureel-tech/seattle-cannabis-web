@@ -124,7 +124,7 @@ export function ReviewsSection() {
 
   return (
     <section className="bg-white border-y border-stone-100">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
         {/* Heading: bigger star + rating treatment than the original Wenatchee
             version — gives the social-proof block a real focal point above
             the fold of this section. */}

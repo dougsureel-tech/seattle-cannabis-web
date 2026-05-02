@@ -157,7 +157,7 @@ export default async function BrandPage({ params }: Props) {
 
       {/* Hero — gradient bookend matching the rest of the site. */}
       <div className="bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white py-10 sm:py-14">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center gap-4 sm:gap-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center gap-4 sm:gap-6">
           {brand.logoUrl ? (
             <div className="shrink-0 w-20 h-20 rounded-2xl bg-white p-2.5 flex items-center justify-center shadow-lg">
               <img src={brand.logoUrl} alt={brand.name} className="max-h-full max-w-full object-contain" />
@@ -195,7 +195,7 @@ export default async function BrandPage({ params }: Props) {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 space-y-10 sm:space-y-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 space-y-10 sm:space-y-12">
         <div className="rounded-2xl bg-gradient-to-r from-indigo-800 to-indigo-700 text-white px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
             <p className="font-bold text-base">Want to order {brand.name}?</p>

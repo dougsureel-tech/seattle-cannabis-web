@@ -120,7 +120,7 @@ export default async function HomePage() {
           style={{ background: "radial-gradient(circle, #e879f9, transparent 70%)" }}
         />
 
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-20 sm:py-28 lg:py-32">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-20 sm:py-28 lg:py-32">
           <div className="flex flex-col lg:flex-row lg:items-center gap-12 lg:gap-16">
             {/* Left: content */}
             <div className="flex-1 space-y-7">
@@ -287,7 +287,7 @@ export default async function HomePage() {
 
       {/* ─── Stats strip ────────────────────────────────────────────────────── */}
       <section className="bg-white border-b border-stone-100">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-2 sm:grid-cols-4 divide-x divide-stone-100">
             {STATS.map(({ val, label }) => (
               <div key={val} className="py-5 px-4 sm:px-6 text-center">
@@ -315,7 +315,7 @@ export default async function HomePage() {
             marketing-heavy sections. Numbered tiles with the same shape as
             the greenlife version, indigo theming. */}
       <section className="bg-white border-b border-stone-100">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
           <div className="text-center mb-7">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-indigo-700">First time?</p>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight mt-1.5">
@@ -390,7 +390,7 @@ export default async function HomePage() {
             of needing to dig into /deals. */}
       {deals.length > 0 && (
         <section className="bg-gradient-to-b from-amber-50/70 via-white to-white border-b border-stone-100">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
             <div className="flex items-end justify-between gap-3 mb-5 flex-wrap">
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-700">Live now</p>
@@ -462,7 +462,7 @@ export default async function HomePage() {
       )}
 
       {/* ─── Category grid ──────────────────────────────────────────────────── */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
         <SectionHeading
           className="mb-10"
           kicker="Premium products from the Pacific Northwest's top producers"
@@ -524,7 +524,7 @@ export default async function HomePage() {
           <path d="M0 40 L150 10 L260 25 L380 5 L520 30 L660 12 L820 35 L960 15 L1080 28 L1200 18 L1200 60 L0 60 Z" />
         </svg>
 
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
           <SectionHeading
             className="mb-10 sm:mb-12"
             eyebrow={
@@ -603,7 +603,7 @@ export default async function HomePage() {
 
       {/* ─── How Pickup Works ───────────────────────────────────────────────── */}
       <section className="bg-stone-50 border-y border-stone-100">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
           <SectionHeading className="mb-10" kicker="Order online, skip the wait, save 15%">
             How Pickup Works
           </SectionHeading>
@@ -654,7 +654,7 @@ export default async function HomePage() {
       {/* ─── Featured products ──────────────────────────────────────────────── */}
       {featured.length > 0 && (
         <section className="py-12 sm:py-16">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <div className="flex items-end justify-between mb-8 gap-4">
               <SectionHeading align="left" kicker="Fresh arrivals & staff favorites">
                 Today&apos;s Picks
@@ -747,7 +747,7 @@ export default async function HomePage() {
 
       {/* ─── Why Seattle Cannabis Co. ───────────────────────────────────────── */}
       <section className="bg-stone-50 border-y border-stone-100">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
           <SectionHeading className="mb-10">Why Seattle Cannabis Co.?</SectionHeading>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
             {[
@@ -799,7 +799,7 @@ export default async function HomePage() {
 
       {/* ─── Hours + Map ────────────────────────────────────────────────────── */}
       <section className="bg-white border-b border-stone-100">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           <div className="space-y-6">
             <div>
               <h2 className="text-3xl font-extrabold text-stone-900 tracking-tight">Visit Us</h2>
@@ -908,7 +908,7 @@ export default async function HomePage() {
 
       {/* ─── Brands ─────────────────────────────────────────────────────────── */}
       {brands.length > 0 && (
-        <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
           <div className="flex items-end justify-between mb-8 gap-4">
             <SectionHeading align="left" kicker="Washington's finest producers, on our shelves">
               Top Brands
@@ -968,7 +968,7 @@ export default async function HomePage() {
           AnnouncementBar / footer / hours card. Page bookends in matching
           depth instead of a flat indigo slab. */}
       <section className="bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 flex flex-col sm:flex-row items-center justify-between gap-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 flex flex-col sm:flex-row items-center justify-between gap-8">
           <div className="space-y-2 text-center sm:text-left">
             <h2 className="text-2xl sm:text-3xl font-extrabold">Ready to order?</h2>
             <p className="text-indigo-300/80 text-sm">

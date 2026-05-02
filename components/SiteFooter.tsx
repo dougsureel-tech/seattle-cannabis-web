@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { STORE } from "@/lib/store";
+import { BUILD_VERSION, BUILD_SHA } from "@/lib/version";
 import { PrimaryCTA } from "./PrimaryCTA";
 
 export function SiteFooter() {
@@ -12,7 +13,7 @@ export function SiteFooter() {
       {/* Pre-footer CTA strip — subtle gradient overlay so the strip stands
           out from the main footer body. */}
       <div className="border-b border-indigo-900/60 bg-gradient-to-r from-indigo-900/40 via-violet-900/30 to-indigo-900/40">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
             <p className="font-bold text-white text-sm">Ready to order?</p>
             <p className="text-indigo-400/70 text-xs mt-0.5">
@@ -31,7 +32,7 @@ export function SiteFooter() {
       </div>
 
       {/* Main footer grid */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10">
         {/* Brand + contact */}
         <div className="lg:col-span-2 space-y-5">
           <div className="flex items-center gap-3">
@@ -207,7 +208,7 @@ export function SiteFooter() {
 
       {/* Bottom bar */}
       <div className="border-t border-indigo-900/60 py-5 px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-indigo-500/70">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-indigo-500/70">
           <p>
             © {new Date().getFullYear()} {STORE.name}. All rights reserved. Must be 21+ to purchase.
           </p>
@@ -216,6 +217,12 @@ export function SiteFooter() {
             {STORE.wslcbLicense && <span className="font-mono">#{STORE.wslcbLicense}</span>}
           </p>
         </div>
+        {/* Build identity — intentionally subtle. Doug's at-a-glance "did the
+            deploy land" signal. SHA comes from Vercel; v# is hand-bumped for
+            major releases. */}
+        <p className="max-w-7xl mx-auto mt-2 text-[9px] font-mono tabular-nums text-indigo-500/30 text-right select-all">
+          v{BUILD_VERSION} · {BUILD_SHA}
+        </p>
       </div>
     </footer>
   );
