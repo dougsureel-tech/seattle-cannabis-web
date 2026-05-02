@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { STORE } from "@/lib/store";
 import { JaneMenu } from "./JaneMenu";
+import { MenuFallback } from "./MenuFallback";
 
 // /menu = iHeartJane Jane Boost (iframeless) embed. Customer stays on
 // seattlecannabis.co — the Boost JS module hydrates the menu inline.
@@ -47,6 +48,7 @@ export default function MenuPage() {
         </p>
       </div>
       <JaneMenu storeId={IHEARTJANE_STORE_ID} embedConfigId={IHEARTJANE_EMBED_CONFIG_ID} />
+      <MenuFallback />
     </div>
   );
 }
