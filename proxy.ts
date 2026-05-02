@@ -1,5 +1,6 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse, type NextRequest } from "next/server";
+import { ATTR_COOKIE, ATTR_TTL_DAYS, validateAttrValue } from "@/lib/attribution";
 
 // Routes where Clerk's middleware runs (so its UI components can hydrate
 // session state) — includes the auth pages themselves so <SignIn /> renders.
@@ -76,6 +77,24 @@ export default async function middleware(req: NextRequest) {
   }
   if (isClerkRoute(req)) {
     return (clerk as unknown as (req: NextRequest) => Promise<Response> | Response)(req);
+  }
+
+  // Marketing attribution capture — last-touch wins. Mirrors greenlife-web
+  // proxy. See lib/attribution.ts for the source-kind allowlist.
+  const fromParam = url.searchParams.get("from");
+  if (fromParam) {
+    const validated = validateAttrValue(fromParam);
+    if (validated) {
+      const res = NextResponse.next();
+      res.cookies.set(ATTR_COOKIE, validated, {
+        maxAge: 60 * 60 * 24 * ATTR_TTL_DAYS,
+        path: "/",
+        sameSite: "lax",
+        httpOnly: false,
+        secure: url.protocol === "https:",
+      });
+      return res;
+    }
   }
   return NextResponse.next();
 }
