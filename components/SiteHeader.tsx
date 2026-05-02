@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { STORE, isOpenNow, nextOpenLabel } from "@/lib/store";
 import { StashHeaderLink } from "./StashHeaderLink";
+import { withAttr } from "@/lib/attribution";
 
 // Live "Open · Closes 11 PM" / "Closed · Opens 8 AM" indicator.
 // useEffect-mounted so SSR doesn't lock in a wrong status; refreshes every
@@ -186,7 +187,7 @@ export function SiteHeader() {
                 dark/hero pages, primary on light pages. The site's most-tapped
                 CTA on every page now wears the consistent brand gradient. */}
             <Link
-              href="/menu"
+              href={withAttr("/menu", "header", "order-now")}
               className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-200 shadow-sm animate-gradient bg-[length:200%_auto] ${
                 dark
                   ? "bg-gradient-to-r from-indigo-300 via-fuchsia-200 to-indigo-300 text-indigo-950 hover:from-indigo-200 hover:via-fuchsia-100 hover:to-indigo-200 shadow-black/20"
@@ -336,7 +337,7 @@ export function SiteHeader() {
           {/* Mobile drawer Order Now — same gradient treatment as the
               header desktop button so the brand mark is consistent. */}
           <Link
-            href="/menu"
+            href={withAttr("/menu", "header", "mobile-order")}
             onClick={() => setOpen(false)}
             className="flex items-center justify-center px-4 py-3 rounded-xl bg-gradient-to-r from-indigo-800 via-violet-700 to-indigo-800 hover:from-indigo-700 hover:via-violet-600 hover:to-indigo-700 text-white text-sm font-bold transition-all shadow-md shadow-violet-900/20 animate-gradient bg-[length:200%_auto]"
           >

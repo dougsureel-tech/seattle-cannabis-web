@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { STORE } from "@/lib/store";
+import { withAttr } from "@/lib/attribution";
 
 // Sticky bottom-of-screen CTA bar for mobile only. Slides up after the user
 // has scrolled past the hero so it doesn't compete with the in-hero buttons,
@@ -108,7 +109,7 @@ export function MobileStickyCta() {
     switch (mode.kind) {
       case "open-normal":
         return {
-          primaryHref: "/menu" as const,
+          primaryHref: withAttr("/menu", "sticky", "open-normal"),
           primaryLabel: "Order for Pickup",
           primaryClass: "bg-indigo-700 hover:bg-indigo-600 text-white",
           secondaryClass: "border border-stone-200 bg-white text-stone-800 hover:bg-stone-50",
@@ -117,7 +118,7 @@ export function MobileStickyCta() {
         };
       case "open-with-deal":
         return {
-          primaryHref: `/deals/${mode.deal.id}` as const,
+          primaryHref: withAttr(`/deals/${mode.deal.id}`, "sticky", `deal-${mode.deal.id}`),
           primaryLabel: `${mode.deal.short} →`,
           primaryClass: "bg-violet-700 hover:bg-violet-600 text-white",
           secondaryClass: "border border-violet-200 bg-white text-violet-900 hover:bg-violet-50",
@@ -126,7 +127,7 @@ export function MobileStickyCta() {
         };
       case "open-closing":
         return {
-          primaryHref: "/menu" as const,
+          primaryHref: withAttr("/menu", "sticky", "closing"),
           primaryLabel: `Order now · closes in ${mode.minsLeft}m`,
           primaryClass: "bg-amber-600 hover:bg-amber-500 text-white",
           secondaryClass: "border border-amber-300 bg-amber-50 text-amber-900 hover:bg-amber-100",
@@ -211,7 +212,7 @@ export function MobileStickyCta() {
           )}
           {isCallPrimary ? (
             <Link
-              href="/menu"
+              href={withAttr("/menu", "sticky", "menu")}
               aria-label="Browse menu"
               className={`inline-flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl font-semibold text-sm transition-colors ${conf.secondaryClass}`}
             >
