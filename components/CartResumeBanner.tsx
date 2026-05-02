@@ -32,9 +32,20 @@ function readCart(): CartItem[] {
   }
 }
 
+// Disabled until /order ships publicly. The banner links to /order, but
+// /order is a dev-only surface for now — public CTAs all route to /menu.
+// See feedback memory `feedback_customer_ctas_point_to_menu_only.md`. When
+// /order goes live, drop this short-circuit. Constant is checked BEFORE any
+// hooks so React sees a stable "no hooks" render path while it's false.
+const PUBLIC_ORDER_ROUTE_LIVE = false;
+
 export function CartResumeBanner() {
+  if (!PUBLIC_ORDER_ROUTE_LIVE) return null;
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const pathname = usePathname();
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [cart, setCart] = useState<CartItem[]>([]);
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
