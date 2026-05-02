@@ -43,8 +43,16 @@ const PARKING_NEARBY = [
 ];
 
 const WHAT_TO_BRING = [
-  { emoji: "🪪", label: "Valid government ID", note: "21+ to enter — passports + out-of-state DLs both work" },
-  { emoji: "💵", label: "Cash for the order", note: "Cannabis is federally illegal so banks won't process card payments" },
+  {
+    emoji: "🪪",
+    label: "Valid government ID",
+    note: "21+ to enter — passports + out-of-state DLs both work",
+  },
+  {
+    emoji: "💵",
+    label: "Cash for the order",
+    note: "Cannabis is federally illegal so banks won't process card payments",
+  },
   { emoji: "🏧", label: "Or use our on-site ATM", note: "If you forgot — no judgment, happens daily" },
   { emoji: "📱", label: "Your phone", note: "For order pickup, loyalty lookup, and the menu" },
 ];
@@ -65,27 +73,43 @@ export default function VisitPage() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(visitSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
 
       {/* Hero */}
       <section className="relative bg-indigo-950 text-white overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: "radial-gradient(circle, #fff 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
-        <div className="absolute inset-0" style={{ backgroundImage: "radial-gradient(ellipse 60% 50% at 80% 50%, #818cf833, transparent)" }} />
+        <div
+          className="absolute inset-0 opacity-[0.05]"
+          style={{
+            backgroundImage: "radial-gradient(circle, #fff 1px, transparent 1px)",
+            backgroundSize: "28px 28px",
+          }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{ backgroundImage: "radial-gradient(ellipse 60% 50% at 80% 50%, #818cf833, transparent)" }}
+        />
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14 sm:py-20">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-indigo-300">Visit Us</p>
-          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mt-2">
-            {STORE.address.street}
-          </h1>
+          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mt-2">{STORE.address.street}</h1>
           <p className="text-indigo-300/80 mt-2">
             {STORE.address.city}, {STORE.address.state} {STORE.address.zip}
           </p>
 
           <div className="mt-5 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold border bg-white/5 border-white/15">
-            <span className={`w-1.5 h-1.5 rounded-full ${open ? "bg-indigo-300 animate-pulse shadow-[0_0_6px_#a5b4fc]" : "bg-red-400"}`} />
+            <span
+              className={`w-1.5 h-1.5 rounded-full ${open ? "bg-indigo-300 animate-pulse shadow-[0_0_6px_#a5b4fc]" : "bg-red-400"}`}
+            />
             <span className={open ? "text-indigo-200" : "text-red-300"}>
               {statusLabel || (open ? "Open today" : "Closed today")}
             </span>
-            {todayHours && <span className="text-indigo-300/60 font-normal">· {todayHours.open}–{todayHours.close}</span>}
+            {todayHours && (
+              <span className="text-indigo-300/60 font-normal">
+                · {todayHours.open}–{todayHours.close}
+              </span>
+            )}
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3 mt-7">
@@ -130,9 +154,15 @@ export default function VisitPage() {
                     <tr key={h.day} className={isToday ? "bg-indigo-50" : ""}>
                       <td className={`py-3 font-semibold ${isToday ? "text-indigo-800" : "text-stone-700"}`}>
                         {h.day}
-                        {isToday && <span className="ml-2 text-[10px] font-bold uppercase tracking-wider text-indigo-700">today</span>}
+                        {isToday && (
+                          <span className="ml-2 text-[10px] font-bold uppercase tracking-wider text-indigo-700">
+                            today
+                          </span>
+                        )}
                       </td>
-                      <td className={`py-3 text-right tabular-nums ${isToday ? "text-indigo-800 font-semibold" : "text-stone-600"}`}>
+                      <td
+                        className={`py-3 text-right tabular-nums ${isToday ? "text-indigo-800 font-semibold" : "text-stone-600"}`}
+                      >
                         {h.open}–{h.close}
                       </td>
                     </tr>
@@ -144,12 +174,20 @@ export default function VisitPage() {
 
           <div>
             <h2 className="text-2xl font-extrabold text-stone-900 tracking-tight">On-site amenities</h2>
-            <p className="text-stone-600 text-sm mt-1">Everything you&apos;d expect from a neighborhood shop.</p>
+            <p className="text-stone-600 text-sm mt-1">
+              Everything you&apos;d expect from a neighborhood shop.
+            </p>
             <ul className="mt-5 space-y-2.5">
               {STORE.amenities.map((a) => (
                 <li key={a} className="flex items-start gap-2.5 text-sm text-stone-700">
                   <span className="text-indigo-600 shrink-0 mt-0.5">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      viewBox="0 0 24 24"
+                    >
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
                   </span>
@@ -175,7 +213,9 @@ export default function VisitPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
           <div className="text-center mb-8">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-indigo-700">First time?</p>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight mt-1.5">What to bring</h2>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight mt-1.5">
+              What to bring
+            </h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {WHAT_TO_BRING.map((b) => (
@@ -219,7 +259,8 @@ export default function VisitPage() {
               ))}
             </ul>
             <p className="text-[11px] text-stone-500 leading-relaxed mt-5">
-              On Rainier Ave S in the heart of {STORE.neighborhood}, walking distance from Othello Light Rail. Easy stop off I-5 via Columbia City or by the 1 Line southbound.
+              On Rainier Ave S in the heart of {STORE.neighborhood}, walking distance from Othello Light Rail.
+              Easy stop off I-5 via Columbia City or by the 1 Line southbound.
             </p>
           </div>
         </div>

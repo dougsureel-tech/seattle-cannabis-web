@@ -15,7 +15,8 @@ export const POSTS: Post[] = [
   {
     slug: "complete-guide-cannabis-rainier-valley",
     title: "The Complete Guide to Cannabis in Rainier Valley & South Seattle",
-    description: "Everything you need to know about buying cannabis in Rainier Valley and South Seattle — laws, products, dispensaries, what to look for, and how to make sense of the menu.",
+    description:
+      "Everything you need to know about buying cannabis in Rainier Valley and South Seattle — laws, products, dispensaries, what to look for, and how to make sense of the menu.",
     category: "Guide",
     publishedAt: "2026-04-30",
     readingMinutes: 14,
@@ -111,7 +112,8 @@ If you have questions we didn't cover, [come ask us](/contact) or [give us a cal
   {
     slug: "vendor-spotlight-template",
     title: "How We Pick Our Producers — A Vendor Spotlight",
-    description: "Behind the scenes on how we evaluate and choose the Washington cannabis producers we carry on our shelves.",
+    description:
+      "Behind the scenes on how we evaluate and choose the Washington cannabis producers we carry on our shelves.",
     category: "Vendor Spotlight",
     publishedAt: "2026-04-29",
     readingMinutes: 6,

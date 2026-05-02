@@ -55,8 +55,17 @@ export default async function BrandsPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
       />
       <div className="relative overflow-hidden bg-indigo-950 text-white py-10 sm:py-14">
-        <div className="absolute inset-0 opacity-[0.07]" style={{ backgroundImage: "radial-gradient(circle, #fff 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
-        <div className="absolute inset-0 opacity-20" style={{ backgroundImage: "radial-gradient(ellipse 60% 50% at 80% 50%, #818cf8, transparent)" }} />
+        <div
+          className="absolute inset-0 opacity-[0.07]"
+          style={{
+            backgroundImage: "radial-gradient(circle, #fff 1px, transparent 1px)",
+            backgroundSize: "24px 24px",
+          }}
+        />
+        <div
+          className="absolute inset-0 opacity-20"
+          style={{ backgroundImage: "radial-gradient(ellipse 60% 50% at 80% 50%, #818cf8, transparent)" }}
+        />
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
           <p className="text-indigo-400 text-xs font-bold uppercase tracking-widest mb-2">Our Shelves</p>
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">Brands We Carry</h1>
@@ -74,8 +83,10 @@ export default async function BrandsPage() {
             <div className="text-5xl">🌿</div>
             <p className="text-xl font-semibold text-stone-700">Brands loading soon</p>
             <p className="text-stone-400 text-sm">Check back or browse our full menu</p>
-            <a href={STORE.shopUrl}
-              className="mt-2 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-700 hover:bg-indigo-600 text-white text-sm font-semibold transition-colors">
+            <a
+              href={STORE.shopUrl}
+              className="mt-2 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-700 hover:bg-indigo-600 text-white text-sm font-semibold transition-colors"
+            >
               Shop Menu →
             </a>
           </div>
@@ -84,11 +95,17 @@ export default async function BrandsPage() {
             {withLogo.length > 0 && (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                 {withLogo.map((brand) => (
-                  <Link key={brand.id} href={`/brands/${brand.slug}`}
-                    className="group flex flex-col items-center gap-3 p-5 rounded-2xl border border-stone-100 bg-white hover:border-indigo-300 hover:shadow-md transition-all text-center">
+                  <Link
+                    key={brand.id}
+                    href={`/brands/${brand.slug}`}
+                    className="group flex flex-col items-center gap-3 p-5 rounded-2xl border border-stone-100 bg-white hover:border-indigo-300 hover:shadow-md transition-all text-center"
+                  >
                     <div className="h-14 w-full flex items-center justify-center">
-                      <img src={brand.logoUrl!} alt={brand.name}
-                        className="max-h-14 max-w-full object-contain group-hover:scale-105 transition-transform duration-200" />
+                      <img
+                        src={brand.logoUrl!}
+                        alt={brand.name}
+                        className="max-h-14 max-w-full object-contain group-hover:scale-105 transition-transform duration-200"
+                      />
                     </div>
                     <div>
                       <div className="font-bold text-stone-800 group-hover:text-indigo-800 text-sm transition-colors leading-tight">
@@ -108,14 +125,19 @@ export default async function BrandsPage() {
                 {withLogo.length > 0 && (
                   <div className="flex items-center gap-3 mb-5">
                     <div className="h-px flex-1 bg-stone-200" />
-                    <span className="text-xs text-stone-400 font-medium uppercase tracking-widest">More Brands</span>
+                    <span className="text-xs text-stone-400 font-medium uppercase tracking-widest">
+                      More Brands
+                    </span>
                     <div className="h-px flex-1 bg-stone-200" />
                   </div>
                 )}
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
                   {withoutLogo.map((brand) => (
-                    <Link key={brand.id} href={`/brands/${brand.slug}`}
-                      className="group flex flex-col items-center gap-2 p-4 rounded-2xl border border-stone-100 bg-white hover:border-indigo-300 hover:shadow-sm transition-all text-center">
+                    <Link
+                      key={brand.id}
+                      href={`/brands/${brand.slug}`}
+                      className="group flex flex-col items-center gap-2 p-4 rounded-2xl border border-stone-100 bg-white hover:border-indigo-300 hover:shadow-sm transition-all text-center"
+                    >
                       <div className="h-12 w-full flex items-center justify-center rounded-xl bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-100">
                         <span className="text-indigo-800 font-bold text-xs leading-tight px-2 text-center line-clamp-2">
                           {brand.name}
@@ -131,8 +153,10 @@ export default async function BrandsPage() {
             )}
 
             <div className="text-center pt-4">
-              <a href={STORE.shopUrl}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50 text-sm font-semibold text-stone-700 hover:text-indigo-800 transition-all">
+              <a
+                href={STORE.shopUrl}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50 text-sm font-semibold text-stone-700 hover:text-indigo-800 transition-all"
+              >
                 Browse All Products Online →
               </a>
             </div>

@@ -15,8 +15,8 @@ export default function FindYourStrainPage() {
       <section className="border-b border-stone-200 bg-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-12 text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-[11px] font-bold uppercase tracking-[0.18em] text-indigo-700">
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
-            3 questions · live menu
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />3 questions
+            · live menu
           </div>
           <h1 className="mt-4 text-4xl sm:text-5xl font-extrabold text-stone-900 tracking-tight leading-tight">
             Find your <span className="text-indigo-700">strain.</span>
@@ -35,7 +35,9 @@ export default function FindYourStrainPage() {
         <p className="text-xs text-stone-400">
           Not legal advice. 21+. {STORE.name}, {STORE.address.city} WA.
           {" · "}
-          <Link href="/menu" className="hover:text-indigo-700 transition-colors">Skip and browse all →</Link>
+          <Link href="/menu" className="hover:text-indigo-700 transition-colors">
+            Skip and browse all →
+          </Link>
         </p>
       </section>
     </div>

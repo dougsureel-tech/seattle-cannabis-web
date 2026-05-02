@@ -18,13 +18,13 @@ export const STORE = {
   neighborhood: "Rainier Valley",
   nearbyNeighborhoods: ["Seward Park", "Rainier Beach", "Beacon Hill", "Mount Baker", "Columbia City"],
   hours: [
-    { day: "Monday",    open: "8:00 AM", close: "11:00 PM" },
-    { day: "Tuesday",   open: "8:00 AM", close: "11:00 PM" },
+    { day: "Monday", open: "8:00 AM", close: "11:00 PM" },
+    { day: "Tuesday", open: "8:00 AM", close: "11:00 PM" },
     { day: "Wednesday", open: "8:00 AM", close: "11:00 PM" },
-    { day: "Thursday",  open: "8:00 AM", close: "11:00 PM" },
-    { day: "Friday",    open: "8:00 AM", close: "11:00 PM" },
-    { day: "Saturday",  open: "8:00 AM", close: "11:00 PM" },
-    { day: "Sunday",    open: "8:00 AM", close: "11:00 PM" },
+    { day: "Thursday", open: "8:00 AM", close: "11:00 PM" },
+    { day: "Friday", open: "8:00 AM", close: "11:00 PM" },
+    { day: "Saturday", open: "8:00 AM", close: "11:00 PM" },
+    { day: "Sunday", open: "8:00 AM", close: "11:00 PM" },
   ],
   iheartjaneStoreId: 5295,
   shopUrl: "/menu",
@@ -33,7 +33,14 @@ export const STORE = {
     instagram: "https://www.instagram.com/scc_rainier/",
     facebook: "https://www.facebook.com/seattleccrainier/",
   },
-  amenities: ["Free parking", "ATM on-site", "ADA accessible", "Dogs welcome", "Walk-ins welcome", "Online ordering"],
+  amenities: [
+    "Free parking",
+    "ATM on-site",
+    "ADA accessible",
+    "Dogs welcome",
+    "Walk-ins welcome",
+    "Online ordering",
+  ],
   perks: ["Veteran-owned", "Military discounts", "Loyalty rewards", "15% off online orders"],
 } as const;
 
@@ -46,7 +53,12 @@ function toMin(t: string): number {
 }
 
 function nowMin(): number {
-  const parts = new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false, timeZone: TZ });
+  const parts = new Date().toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    timeZone: TZ,
+  });
   const [h, m] = parts.split(":").map(Number);
   return h * 60 + m;
 }
@@ -190,14 +202,18 @@ export function validatePickupTime(hhmm: string): string | null {
 export function pickupTimeToISO(hhmm: string): string {
   const [h, m] = hhmm.split(":").map(Number);
   const now = new Date();
-  const dateParts = new Intl.DateTimeFormat("en-CA", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit" })
-    .formatToParts(now);
+  const dateParts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: TZ,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(now);
   const yyyy = dateParts.find((p) => p.type === "year")!.value;
   const mm = dateParts.find((p) => p.type === "month")!.value;
   const dd = dateParts.find((p) => p.type === "day")!.value;
   const tzOffsetMin = getTzOffsetMin(now, TZ);
   const utcMin = h * 60 + m - tzOffsetMin;
-  const utcH = Math.floor(((utcMin % (24 * 60)) + 24 * 60) % (24 * 60) / 60);
+  const utcH = Math.floor((((utcMin % (24 * 60)) + 24 * 60) % (24 * 60)) / 60);
   const utcM = ((utcMin % 60) + 60) % 60;
   const dayShift = Math.floor(utcMin / (24 * 60));
   const baseDate = new Date(`${yyyy}-${mm}-${dd}T00:00:00Z`);
@@ -208,17 +224,26 @@ export function pickupTimeToISO(hhmm: string): string {
 
 function getTzOffsetMin(date: Date, tz: string): number {
   const dtf = new Intl.DateTimeFormat("en-US", {
-    timeZone: tz, hour12: false,
-    year: "numeric", month: "2-digit", day: "2-digit",
-    hour: "2-digit", minute: "2-digit", second: "2-digit",
+    timeZone: tz,
+    hour12: false,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
   });
   const parts = dtf.formatToParts(date).reduce<Record<string, string>>((acc, p) => {
     if (p.type !== "literal") acc[p.type] = p.value;
     return acc;
   }, {});
   const asUTC = Date.UTC(
-    Number(parts.year), Number(parts.month) - 1, Number(parts.day),
-    Number(parts.hour), Number(parts.minute), Number(parts.second),
+    Number(parts.year),
+    Number(parts.month) - 1,
+    Number(parts.day),
+    Number(parts.hour),
+    Number(parts.minute),
+    Number(parts.second),
   );
   return Math.round((asUTC - date.getTime()) / 60000);
 }

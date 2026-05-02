@@ -36,7 +36,11 @@ export type OrderItem = {
   lineTotal: number;
 };
 
-export async function getOrCreatePortalUser(clerkUserId: string, email?: string | null, name?: string | null): Promise<PortalUser> {
+export async function getOrCreatePortalUser(
+  clerkUserId: string,
+  email?: string | null,
+  name?: string | null,
+): Promise<PortalUser> {
   const sql = getClient();
   const existing = await sql`
     SELECT id, clerk_user_id, name, email, phone, loyalty_points, sms_opt_in
@@ -57,7 +61,10 @@ export async function getOrCreatePortalUser(clerkUserId: string, email?: string 
   return mapPortalUser(rows[0]);
 }
 
-export async function updatePortalUser(id: string, data: { name?: string; phone?: string; smsOptIn?: boolean }) {
+export async function updatePortalUser(
+  id: string,
+  data: { name?: string; phone?: string; smsOptIn?: boolean },
+) {
   const sql = getClient();
   await sql`
     UPDATE portal_users SET
@@ -148,24 +155,51 @@ export async function checkAvailability(
     if (!item.productId) continue;
     const row = byId.get(item.productId);
     if (!row) {
-      issues.push({ productId: item.productId, productName: item.productName, requested: item.quantity, onHand: 0, reason: "unknown" });
+      issues.push({
+        productId: item.productId,
+        productName: item.productName,
+        requested: item.quantity,
+        onHand: 0,
+        reason: "unknown",
+      });
       continue;
     }
     if ((row.carry_status as string) === "discontinued") {
-      issues.push({ productId: item.productId, productName: item.productName, requested: item.quantity, onHand: 0, reason: "discontinued" });
+      issues.push({
+        productId: item.productId,
+        productName: item.productName,
+        requested: item.quantity,
+        onHand: 0,
+        reason: "discontinued",
+      });
       continue;
     }
     const onHand = row.on_hand as number;
     if (onHand <= 0) {
-      issues.push({ productId: item.productId, productName: row.name as string, requested: item.quantity, onHand: 0, reason: "out_of_stock" });
+      issues.push({
+        productId: item.productId,
+        productName: row.name as string,
+        requested: item.quantity,
+        onHand: 0,
+        reason: "out_of_stock",
+      });
     } else if (onHand < item.quantity) {
-      issues.push({ productId: item.productId, productName: row.name as string, requested: item.quantity, onHand, reason: "insufficient" });
+      issues.push({
+        productId: item.productId,
+        productName: row.name as string,
+        requested: item.quantity,
+        onHand,
+        reason: "insufficient",
+      });
     }
   }
   return issues;
 }
 
-export async function getOrder(orderId: string, portalUserId: string): Promise<(OnlineOrder & { pickupTime: string | null }) | null> {
+export async function getOrder(
+  orderId: string,
+  portalUserId: string,
+): Promise<(OnlineOrder & { pickupTime: string | null }) | null> {
   const sql = getClient();
   const rows = await sql`
     SELECT o.id, o.status,
@@ -200,7 +234,15 @@ export async function getOrder(orderId: string, portalUserId: string): Promise<(
 
 export async function placeOrder(
   portalUserId: string,
-  items: Array<{ productId?: string; productName: string; brand?: string; category?: string; strainType?: string; unitPrice: number; quantity: number }>,
+  items: Array<{
+    productId?: string;
+    productName: string;
+    brand?: string;
+    category?: string;
+    strainType?: string;
+    unitPrice: number;
+    quantity: number;
+  }>,
   notes?: string,
   pickupTimeISO?: string,
 ): Promise<string> {

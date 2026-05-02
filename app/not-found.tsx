@@ -5,10 +5,14 @@ export default function NotFound() {
     <div className="min-h-[70vh] flex flex-col items-center justify-center px-4 text-center">
       <div className="space-y-8 max-w-sm">
         <div className="relative inline-flex items-center justify-center">
-          <span className="text-[120px] font-extrabold text-stone-100 leading-none select-none tracking-tight">404</span>
+          <span className="text-[120px] font-extrabold text-stone-100 leading-none select-none tracking-tight">
+            404
+          </span>
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="w-16 h-16 rounded-2xl bg-indigo-50 border-2 border-indigo-100 flex items-center justify-center shadow-sm">
-              <span className="text-white font-bold text-xl bg-indigo-700 rounded-xl w-full h-full flex items-center justify-center">SC</span>
+              <span className="text-white font-bold text-xl bg-indigo-700 rounded-xl w-full h-full flex items-center justify-center">
+                SC
+              </span>
             </div>
           </div>
         </div>
@@ -21,12 +25,16 @@ export default function NotFound() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Link href="/"
-            className="px-5 py-2.5 rounded-xl border border-stone-200 hover:border-indigo-300 text-sm font-semibold text-stone-700 hover:text-indigo-700 transition-all">
+          <Link
+            href="/"
+            className="px-5 py-2.5 rounded-xl border border-stone-200 hover:border-indigo-300 text-sm font-semibold text-stone-700 hover:text-indigo-700 transition-all"
+          >
             Back to Home
           </Link>
-          <Link href="/menu"
-            className="px-5 py-2.5 rounded-xl bg-indigo-800 hover:bg-indigo-700 text-white text-sm font-bold transition-all shadow-md hover:-translate-y-0.5">
+          <Link
+            href="/menu"
+            className="px-5 py-2.5 rounded-xl bg-indigo-800 hover:bg-indigo-700 text-white text-sm font-bold transition-all shadow-md hover:-translate-y-0.5"
+          >
             Browse Menu →
           </Link>
         </div>
