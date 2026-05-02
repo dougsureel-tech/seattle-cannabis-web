@@ -133,6 +133,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${geistSans.variable} h-full`}>
       <head>
+        {/* Resource hints — DNS + TLS prewarm for vendor-image CDNs we hit
+            on home, /brands, /menu, /order. Browsers open the TCP + TLS
+            connection in parallel with HTML parse instead of sequentially
+            after first reference. Real Core Web Vitals win on mobile.
+            Clerk hosts NOT preconnected here — ClerkProvider is scoped to
+            /sign-in, /sign-up, /account via per-route layouts. */}
+        <link rel="preconnect" href="https://images.squarespace-cdn.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://static.wixstatic.com" crossOrigin="anonymous" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
