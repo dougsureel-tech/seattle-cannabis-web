@@ -13,6 +13,10 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
+// Each category gets a base gradient + a matching `glow` shadow class so the
+// hover state lights up in the card's own color identity instead of a generic
+// gray shadow. Keeping `color` and `glow` paired here so a future "add a new
+// category" change is one row, not two scattered places.
 const CATEGORIES = [
   {
     icon: "🌿",
@@ -20,6 +24,7 @@ const CATEGORIES = [
     desc: "Indoor, outdoor & greenhouse",
     href: "/menu",
     color: "from-green-600 to-emerald-800",
+    glow: "hover:shadow-emerald-700/40",
   },
   {
     icon: "🍬",
@@ -27,6 +32,7 @@ const CATEGORIES = [
     desc: "Gummies, chocolates & more",
     href: "/menu",
     color: "from-orange-500 to-rose-700",
+    glow: "hover:shadow-rose-700/40",
   },
   {
     icon: "💨",
@@ -34,6 +40,7 @@ const CATEGORIES = [
     desc: "Carts & all-in-ones",
     href: "/menu",
     color: "from-indigo-500 to-blue-800",
+    glow: "hover:shadow-blue-700/40",
   },
   {
     icon: "🧴",
@@ -41,6 +48,7 @@ const CATEGORIES = [
     desc: "Wax, live resin & shatter",
     href: "/menu",
     color: "from-purple-500 to-violet-800",
+    glow: "hover:shadow-violet-700/40",
   },
   {
     icon: "🫙",
@@ -48,6 +56,7 @@ const CATEGORIES = [
     desc: "Singles & multi-packs",
     href: "/menu",
     color: "from-amber-500 to-orange-700",
+    glow: "hover:shadow-orange-700/40",
   },
   {
     icon: "💧",
@@ -55,6 +64,7 @@ const CATEGORIES = [
     desc: "Oils & capsules",
     href: "/menu",
     color: "from-teal-500 to-indigo-700",
+    glow: "hover:shadow-indigo-700/40",
   },
 ];
 
@@ -300,11 +310,14 @@ export default async function HomePage() {
           What We Carry
         </SectionHeading>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
-          {CATEGORIES.map(({ icon, label, desc, href, color }) => (
+          {CATEGORIES.map(({ icon, label, desc, href, color, glow }) => (
             <Link
               key={label}
               href={href}
-              className={`group relative flex flex-col gap-3 p-5 rounded-2xl bg-gradient-to-br ${color} hover:scale-[1.03] hover:shadow-xl transition-all duration-200 overflow-hidden`}
+              // Each card lights up in its own color identity on hover —
+              // shadow-2xl size + per-card glow color (Flower=emerald,
+              // Edibles=rose, etc.) instead of a generic gray shadow.
+              className={`group relative flex flex-col gap-3 p-5 rounded-2xl bg-gradient-to-br ${color} hover:scale-[1.03] hover:shadow-2xl ${glow} transition-all duration-200 overflow-hidden`}
             >
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-white/10" />
               <span className="text-3xl relative">{icon}</span>
@@ -478,12 +491,9 @@ export default async function HomePage() {
         <section className="py-12 sm:py-16">
           <div className="max-w-6xl mx-auto px-4 sm:px-6">
             <div className="flex items-end justify-between mb-8 gap-4">
-              <div>
-                <h2 className="text-3xl sm:text-4xl font-extrabold text-stone-900 tracking-tight">
-                  Today&apos;s Picks
-                </h2>
-                <p className="text-stone-400 mt-1 text-sm">Fresh arrivals &amp; staff favorites</p>
-              </div>
+              <SectionHeading align="left" kicker="Fresh arrivals & staff favorites">
+                Today&apos;s Picks
+              </SectionHeading>
               <Link
                 href="/menu"
                 className="shrink-0 text-sm font-semibold text-indigo-700 hover:text-indigo-600 transition-colors"
@@ -728,14 +738,9 @@ export default async function HomePage() {
       {brands.length > 0 && (
         <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
           <div className="flex items-end justify-between mb-8 gap-4">
-            <div>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-stone-900 tracking-tight">
-                Top Brands
-              </h2>
-              <p className="text-stone-400 mt-1 text-sm">
-                Washington&apos;s finest producers, on our shelves
-              </p>
-            </div>
+            <SectionHeading align="left" kicker="Washington's finest producers, on our shelves">
+              Top Brands
+            </SectionHeading>
             <Link
               href="/brands"
               className="shrink-0 text-sm font-semibold text-indigo-700 hover:text-indigo-600 transition-colors"
