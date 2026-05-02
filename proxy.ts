@@ -51,6 +51,22 @@ const clerk = clerkMiddleware(async (auth, req) => {
 
 export default async function middleware(req: NextRequest) {
   const url = new URL(req.url);
+
+  // /menu must be served from www, not apex. iHeartJane's CORS allowlist
+  // for embedConfigId 222 (Seattle) was registered against the WP origin
+  // www.seattlecannabis.co when the partnership was set up — the bare
+  // apex (seattlecannabis.co) is NOT on the allowlist, so Boost's
+  // cross-origin XHR to api.iheartjane.com gets CORS-rejected when the
+  // page is served from apex. Confirmed via WP DB dump of
+  // wp_jane_store_menu_config: WP /menu/ ran under www. Match that exact
+  // origin. Scoped to /menu* only so /account etc. keep their existing
+  // Clerk session-cookie scope on apex.
+  if (url.hostname === "seattlecannabis.co" && url.pathname.startsWith("/menu")) {
+    const target = new URL(req.url);
+    target.hostname = "www.seattlecannabis.co";
+    return NextResponse.redirect(target.toString(), 308);
+  }
+
   if (!isCanonicalOrLocal(url.hostname)) {
     const target = new URL(req.url);
     target.hostname = CANONICAL_HOST;
