@@ -11,6 +11,8 @@ import SparkIndustriesBrandPage from "./_brands/spark-industries";
 import BondiFarmsBrandPage from "./_brands/bondi-farms";
 import OoweeBrandPage from "./_brands/oowee";
 import Brand2727Page from "./_brands/2727";
+import SungrownBrandPage from "./_brands/sungrown";
+import RedbirdBrandPage from "./_brands/redbird-cannabis";
 
 export const dynamic = "force-dynamic";
 
@@ -31,6 +33,8 @@ const BRAND_OVERRIDES: Record<string, React.ComponentType<BrandComponentProps>> 
   "bondi-farms": BondiFarmsBrandPage,
   "oowee": OoweeBrandPage,
   "2727": Brand2727Page,
+  "edgemont-group-dba-sungrown": SungrownBrandPage,
+  "redbird-cannabis": RedbirdBrandPage,
 };
 
 // Slug aliases — friendly customer-facing URLs that map to the actual
@@ -40,6 +44,8 @@ const BRAND_OVERRIDES: Record<string, React.ComponentType<BrandComponentProps>> 
 const SLUG_ALIASES: Record<string, string> = {
   "plaid-jacket": "spark-industries",
   "phat-panda": "grow-op-farms",
+  "sungrown": "edgemont-group-dba-sungrown",
+  "leafwerx": "edgemont-group-dba-sungrown",
 };
 
 type Props = { params: Promise<{ slug: string }> };
