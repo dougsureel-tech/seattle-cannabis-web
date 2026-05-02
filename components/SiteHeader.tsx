@@ -9,31 +9,6 @@ import { StashHeaderLink } from "./StashHeaderLink";
 // Live "Open · Closes 11 PM" / "Closed · Opens 8 AM" indicator.
 // useEffect-mounted so SSR doesn't lock in a wrong status; refreshes every
 // 60s so the pill flips correctly as the store opens/closes.
-// Small pulsing dot rendered next to nav items when something live is
-// happening at that destination. Currently used by the Deals nav entry —
-// fetches /api/deals/top once on mount (60s edge cache) and lights up
-// when any deal is active. Silent failure: dot just stays off.
-function LiveDot() {
-  const [live, setLive] = useState(false);
-  useEffect(() => {
-    const ctrl = new AbortController();
-    fetch("/api/deals/top", { signal: ctrl.signal })
-      .then((r) => (r.ok ? r.json() : null))
-      .then((d: { deal: unknown } | null) => {
-        if (d?.deal) setLive(true);
-      })
-      .catch(() => {});
-    return () => ctrl.abort();
-  }, []);
-  if (!live) return null;
-  return (
-    <span
-      aria-label="Live deal"
-      className="ml-1.5 inline-block w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_6px_#ef4444]"
-    />
-  );
-}
-
 function StatusPill({ dark }: { dark: boolean }) {
   const [status, setStatus] = useState<{ open: boolean; label: string } | null>(null);
   useEffect(() => {
@@ -173,7 +148,6 @@ export function SiteHeader() {
                   }`}
                 >
                   {label}
-                  {href === "/deals" && <LiveDot />}
                 </Link>
               );
             })}
@@ -295,7 +269,6 @@ export function SiteHeader() {
               >
                 <span className="inline-flex items-center">
                   {label}
-                  {href === "/deals" && <LiveDot />}
                 </span>
                 {active && <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 shrink-0" />}
               </Link>
