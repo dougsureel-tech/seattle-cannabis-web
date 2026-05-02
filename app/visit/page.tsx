@@ -13,6 +13,7 @@ export const metadata: Metadata = {
     description: `${STORE.address.full} · ${STORE.phone} · Free parking, near Othello Light Rail.`,
     url: `${STORE.website}/visit`,
     type: "website",
+    images: ["/opengraph-image"],
   },
 };
 
