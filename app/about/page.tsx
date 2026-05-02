@@ -11,7 +11,8 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <>
-      <div className="relative overflow-hidden bg-indigo-950 text-white py-10 sm:py-14">
+      {/* Hero — gradient bookend matching homepage / visit / footer. */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white py-10 sm:py-14">
         <div
           className="absolute inset-0 opacity-[0.07]"
           style={{
@@ -221,7 +222,7 @@ export default function AboutPage() {
             </div>
 
             <div className="rounded-2xl border border-stone-100 bg-white overflow-hidden">
-              <div className="px-5 py-3 bg-indigo-950 text-white">
+              <div className="px-5 py-3 bg-gradient-to-r from-indigo-950 via-violet-950 to-indigo-950 text-white">
                 <span className="font-bold text-sm">Store Hours</span>
               </div>
               {STORE.hours.map((h) => {
@@ -256,8 +257,8 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Bottom CTA */}
-        <section className="rounded-3xl bg-indigo-950 text-white p-8 text-center space-y-4">
+        {/* Bottom CTA — gradient bookend matching hero. */}
+        <section className="rounded-3xl bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white p-8 text-center space-y-4">
           <p className="font-bold text-xl">Come see us in Rainier Valley</p>
           <p className="text-indigo-300/70 text-sm max-w-sm mx-auto">
             Open every day 8AM–11PM. No appointment needed. Walk-ins always welcome.

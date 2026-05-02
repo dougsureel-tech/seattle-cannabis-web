@@ -79,8 +79,9 @@ export default function VisitPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
-      {/* Hero */}
-      <section className="relative bg-indigo-950 text-white overflow-hidden">
+      {/* Hero — gradient bookend matches the homepage hero / footer / bottom
+          CTAs. Same indigo→violet identity across every page. */}
+      <section className="relative bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white overflow-hidden">
         <div
           className="absolute inset-0 opacity-[0.05]"
           style={{
@@ -90,7 +91,12 @@ export default function VisitPage() {
         />
         <div
           className="absolute inset-0"
-          style={{ backgroundImage: "radial-gradient(ellipse 60% 50% at 80% 50%, #818cf833, transparent)" }}
+          style={{
+            // Two radial pools — indigo on the right, fuchsia on the bottom-
+            // left — matching the homepage hero's mesh.
+            backgroundImage:
+              "radial-gradient(ellipse 60% 50% at 80% 50%, #818cf833, transparent), radial-gradient(ellipse 50% 60% at 20% 100%, #c026d322, transparent)",
+          }}
         />
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14 sm:py-20">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-indigo-300">Visit Us</p>
@@ -267,8 +273,9 @@ export default function VisitPage() {
         </div>
       </section>
 
-      {/* Bottom CTA */}
-      <section className="bg-indigo-950 text-white">
+      {/* Bottom CTA — same gradient bookend as the hero. Page bookends in
+          matching depth, just like the homepage. */}
+      <section className="bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-12 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div>
             <h2 className="text-xl font-extrabold">See you soon.</h2>
