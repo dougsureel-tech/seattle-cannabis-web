@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getActiveBrands } from "@/lib/db";
 import { STORE } from "@/lib/store";
+import { withAttr } from "@/lib/attribution";
 
 export const dynamic = "force-dynamic";
 
@@ -98,7 +99,7 @@ export default async function BrandsPage() {
                 {withLogo.map((brand) => (
                   <Link
                     key={brand.id}
-                    href={`/brands/${brand.slug}`}
+                    href={withAttr(`/brands/${brand.slug}`, "brand", `grid-${brand.slug}`)}
                     className="group flex flex-col items-center gap-3 p-5 rounded-2xl border border-stone-100 bg-white hover:border-indigo-300 hover:shadow-md transition-all text-center"
                   >
                     <div className="h-14 w-full flex items-center justify-center">
@@ -136,7 +137,7 @@ export default async function BrandsPage() {
                   {withoutLogo.map((brand) => (
                     <Link
                       key={brand.id}
-                      href={`/brands/${brand.slug}`}
+                      href={withAttr(`/brands/${brand.slug}`, "brand", `grid-${brand.slug}`)}
                       className="group flex flex-col items-center gap-2 p-4 rounded-2xl border border-stone-100 bg-white hover:border-indigo-300 hover:shadow-sm transition-all text-center"
                     >
                       <div className="h-12 w-full flex items-center justify-center rounded-xl bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-100">

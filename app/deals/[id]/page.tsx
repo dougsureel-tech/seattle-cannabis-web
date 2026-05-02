@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { STORE } from "@/lib/store";
 import { getDealById, getPickupEta, getCategoryPreviewProducts } from "@/lib/db";
+import { withAttr } from "@/lib/attribution";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -70,9 +71,13 @@ export default async function DealDetailPage({ params }: Params) {
   //    and pre-filters; Boost (/menu) ignores them, so a category deal-CTA
   //    pointing at /menu would land on the unfiltered embed.
   //  - appliesTo "all" / null: keep /menu (Boost) — full inventory browse.
-  const linkHref = isScoped
-    ? `/order?category=${encodeURIComponent(deal.appliesTo as string)}`
-    : "/menu";
+  const linkHref = withAttr(
+    isScoped
+      ? `/order?category=${encodeURIComponent(deal.appliesTo as string)}`
+      : "/menu",
+    "deal",
+    deal.id,
+  );
 
   const dealSchema = {
     "@context": "https://schema.org",
