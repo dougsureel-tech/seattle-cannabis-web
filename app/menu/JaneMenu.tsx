@@ -22,7 +22,13 @@
 // See ~/Documents/CODE/INCIDENTS.md (2026-05-01 entry) and
 // memory/reference_iheartjane_jane_boost.md.
 
-const BOOST_SCRIPT_URL = "https://boost-assets.iheartjane.com/assets/index-OXKNBWov.js";
+// Hash rotates when iHeartJane redeploys Boost. Pulled live from the prior
+// WordPress origin (208.109.64.51) — both Wenatchee and Seattle WP sites
+// emit the same DvMyfNDN bundle pointer (2026-05-01). The previous
+// `OXKNBWov` hash had been rotated by iHeartJane and was 404'ing, which
+// is what produced the "blank menu" that the redirect-to-iheartjane.com
+// workaround was papering over.
+const BOOST_SCRIPT_URL = "https://boost-assets.iheartjane.com/assets/index-DvMyfNDN.js";
 
 // Public iHeartJane client-side keys — same for every partner. Safe to ship.
 const JANE_APP_SECRETS = {
