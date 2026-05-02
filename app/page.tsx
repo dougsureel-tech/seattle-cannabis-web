@@ -640,7 +640,9 @@ export default async function HomePage() {
               <p className="text-stone-400 text-sm mt-1">{STORE.address.full}</p>
             </div>
             <div className="rounded-2xl border border-stone-100 overflow-hidden bg-indigo-50/50">
-              <div className="px-5 py-4 bg-indigo-950 text-white flex justify-between items-center">
+              {/* Hours card header — gradient indigo→violet→indigo matches
+                  the AnnouncementBar + footer. Same identity, three places. */}
+              <div className="px-5 py-4 bg-gradient-to-r from-indigo-950 via-violet-950 to-indigo-950 text-white flex justify-between items-center">
                 <span className="font-bold text-sm">Store Hours</span>
                 <div
                   className={`inline-flex items-center gap-1.5 text-xs font-semibold ${open ? "text-green-300" : "text-red-300"}`}
