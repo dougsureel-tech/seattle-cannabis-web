@@ -1,40 +1,155 @@
 "use client";
 
-import { useState, useMemo, useRef, useEffect } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import Image from "next/image";
 import type { MenuProduct } from "@/lib/db";
 import { STORE, getOrderingStatus, getPickupSlots, type OrderingStatus, type PickupSlot } from "@/lib/store";
 
 type CartItem = MenuProduct & { quantity: number };
+type SortKey = "default" | "price-asc" | "price-desc" | "thc-desc" | "name";
 
-const CATEGORIES = [
+// Preferred sidebar order. Categories not on this list are appended at the
+// end in alphabetical order, so the sidebar always reflects what's actually
+// in the data without needing a code change for new categories.
+const CATEGORY_ORDER = [
   "Flower",
   "Pre-Rolls",
+  "Pre-Roll",
   "Vapes",
+  "Cartridge",
+  "Cartridges",
+  "Disposable",
+  "Disposables",
+  "Pod",
+  "Pods",
   "Concentrates",
+  "Concentrate",
   "Edibles",
+  "Edible",
+  "Beverages",
+  "Beverage",
+  "Capsules",
+  "Capsule",
   "Tinctures",
+  "Tincture",
   "Topicals",
+  "Topical",
+  "CBD",
   "Accessories",
+  "Accessory",
 ];
 
+// DB-name → label shown in UI. Falls back to the raw category name.
+const CAT_DISPLAY: Record<string, string> = {
+  Cartridge: "Cartridges",
+  Disposable: "Disposables",
+  Pod: "Pods",
+  Concentrate: "Concentrates",
+  Edible: "Edibles",
+  Beverage: "Beverages",
+  Capsule: "Capsules",
+  Tincture: "Tinctures",
+  Topical: "Topicals",
+  Accessory: "Accessories",
+  "Pre-Roll": "Pre-Rolls",
+};
+
+// Hybrid uses emerald — the brand is indigo so a contrasting hue keeps the
+// strain pill from disappearing into the page chrome.
 const STRAIN_COLORS: Record<string, { badge: string; dot: string }> = {
   Sativa: { badge: "bg-amber-100 text-amber-700 border-amber-200", dot: "bg-amber-400" },
   Indica: { badge: "bg-purple-100 text-purple-700 border-purple-200", dot: "bg-purple-400" },
-  Hybrid: { badge: "bg-indigo-100 text-indigo-700 border-indigo-200", dot: "bg-indigo-400" },
+  Hybrid: { badge: "bg-emerald-100 text-emerald-700 border-emerald-200", dot: "bg-emerald-400" },
+  CBD: { badge: "bg-sky-100 text-sky-700 border-sky-200", dot: "bg-sky-400" },
 };
 
 const CAT_ICONS: Record<string, string> = {
   Flower: "🌿",
   "Pre-Rolls": "🫙",
+  "Pre-Roll": "🫙",
   Vapes: "💨",
-  Concentrates: "🧴",
+  Cartridge: "💨",
+  Cartridges: "💨",
+  Disposable: "💨",
+  Disposables: "💨",
+  Pod: "💨",
+  Pods: "💨",
+  Concentrates: "💎",
+  Concentrate: "💎",
   Edibles: "🍬",
-  Tinctures: "💊",
-  Topicals: "🧼",
+  Edible: "🍬",
+  Beverages: "🥤",
+  Beverage: "🥤",
+  Capsules: "💊",
+  Capsule: "💊",
+  Tinctures: "💧",
+  Tincture: "💧",
+  Topicals: "🧴",
+  Topical: "🧴",
+  CBD: "🌱",
   Accessories: "🔧",
+  Accessory: "🔧",
 };
+
+function displayCategory(c: string): string {
+  return CAT_DISPLAY[c] ?? c;
+}
+
+// The DB has 30+ category strings — DOH-prefixed copies, plural/singular
+// variants, "Edible (Liquid)" subforms, "Paraphernalia", etc. Customers
+// should see one clean bucket per product type. Returning null filters
+// the product out (e.g. internal "Sample" SKUs).
+function normalizeCategory(raw: string | null): string | null {
+  if (!raw) return null;
+  // Strip the WSLCB "DOH " medical-endorsement prefix — these are sold to
+  // all adults at retail, just tax-free for medical patients.
+  const s = raw
+    .trim()
+    .replace(/^DOH\s+/i, "")
+    .trim();
+  const lower = s.toLowerCase().replace(/\s+/g, " ");
+  if (lower === "sample") return null; // internal trade samples — never sold
+  if (/^cartridges?$/.test(lower)) return "Cartridges";
+  if (/^concentrates?$/.test(lower)) return "Concentrates";
+  if (lower === "flower") return "Flower";
+  if (/^(infused )?pre[-]?rolls?$/.test(lower)) return "Pre-Rolls";
+  if (/^topicals?$/.test(lower)) return "Topicals";
+  if (lower === "paraphernalia") return "Accessories";
+  if (/^edibles? \(tincture\)$/.test(lower)) return "Tinctures";
+  if (/^edibles? \(capsule\)$/.test(lower)) return "Capsules";
+  if (/^(edibles? \(liquid\)|infused drinks?)$/.test(lower)) return "Beverages";
+  if (/^edibles?( \(solid\))?$/.test(lower)) return "Edibles";
+  return s;
+}
+
+// Strip duplicated brand / category / strain-type tokens from the SKU-shaped
+// title and pull out a weight chip. e.g. "1g - Blueberry Pancakes - 2727 -
+// Cartridge - H" with brand="2727", category="Cartridge", strainType="Hybrid"
+// → { name: "Blueberry Pancakes", weight: "1g" }.
+const STRAIN_TOKENS = new Set(["H", "I", "S", "C", "CBD", "Hybrid", "Indica", "Sativa"]);
+const WEIGHT_RX = /^\d+(?:\.\d+)?\s*(?:g|mg|ml|oz)$/i;
+
+function parseProductName(p: MenuProduct): { name: string; weight: string | null } {
+  const parts = p.name
+    .split(/\s+-\s+/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+  let weight: string | null = null;
+  const kept: string[] = [];
+  for (const part of parts) {
+    if (WEIGHT_RX.test(part)) {
+      if (!weight) weight = part.toLowerCase().replace(/\s+/g, "");
+      continue;
+    }
+    if (p.brand && part.toLowerCase() === p.brand.toLowerCase()) continue;
+    if (p.category && part.toLowerCase() === p.category.toLowerCase()) continue;
+    if (STRAIN_TOKENS.has(part)) continue;
+    kept.push(part);
+  }
+  return { name: kept.join(" — ") || p.name, weight };
+}
 
 function ProductImage({ src, alt, category }: { src: string | null; alt: string; category: string | null }) {
   const [loaded, setLoaded] = useState(false);
@@ -65,7 +180,7 @@ function ProductImage({ src, alt, category }: { src: string | null; alt: string;
   );
 }
 
-export function OrderMenu({ products }: { products: MenuProduct[] }) {
+export function OrderMenu({ products, signedIn = false }: { products: MenuProduct[]; signedIn?: boolean }) {
   const router = useRouter();
   const [cart, setCart] = useState<CartItem[]>(() => {
     if (typeof window === "undefined") return [];
@@ -78,6 +193,9 @@ export function OrderMenu({ products }: { products: MenuProduct[] }) {
   });
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [strainFilter, setStrainFilter] = useState<string | null>(null);
+  const [brandFilter, setBrandFilter] = useState<string | null>(null);
+  const [sortBy, setSortBy] = useState<SortKey>("default");
   const [cartOpen, setCartOpen] = useState(false);
   const [placing, setPlacing] = useState(false);
   const [orderError, setOrderError] = useState<string | null>(null);
@@ -90,6 +208,8 @@ export function OrderMenu({ products }: { products: MenuProduct[] }) {
     localStorage.setItem("sc_cart", JSON.stringify(cart));
   }, [cart]);
 
+  // Refresh pickup window while the cart drawer is open so slots shrink as
+  // close approaches and the closed-state message updates at the cutoff.
   useEffect(() => {
     if (!cartOpen) return;
     function refresh() {
@@ -103,17 +223,60 @@ export function OrderMenu({ products }: { products: MenuProduct[] }) {
     const id = setInterval(refresh, 60_000);
     return () => clearInterval(id);
   }, [cartOpen]);
-  const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
 
-  const categories = useMemo(() => {
-    const seen = new Set<string>();
-    for (const p of products) if (p.category) seen.add(p.category);
-    return CATEGORIES.filter((c) => seen.has(c));
+  // Normalize raw DB categories to clean buckets ("DOH Cartridge" → "Cartridges",
+  // "Edible (Liquid)" → "Beverages") and drop products with no displayable
+  // category (e.g. internal "Sample" SKUs that aren't for sale).
+  const visibleProducts = useMemo(() => {
+    return products.flatMap((p) => {
+      const cat = normalizeCategory(p.category);
+      if (!cat) return [];
+      return [{ ...p, category: cat }];
+    });
   }, [products]);
 
+  // Real categories from data, ordered by CATEGORY_ORDER first, then any
+  // unknowns appended alphabetically. The sidebar always reflects what's
+  // actually in stock — no whitelist drift.
+  const categories = useMemo(() => {
+    const seen = new Set<string>();
+    for (const p of visibleProducts) if (p.category) seen.add(p.category);
+    const orderIndex = new Map(CATEGORY_ORDER.map((c, i) => [c, i]));
+    return [...seen].sort((a, b) => {
+      const ai = orderIndex.get(a) ?? Number.MAX_SAFE_INTEGER;
+      const bi = orderIndex.get(b) ?? Number.MAX_SAFE_INTEGER;
+      if (ai !== bi) return ai - bi;
+      return a.localeCompare(b);
+    });
+  }, [visibleProducts]);
+
+  // Brands available within the currently-selected category, so the brand
+  // dropdown narrows as you drill in.
+  const availableBrands = useMemo(() => {
+    const set = new Set<string>();
+    for (const p of visibleProducts) {
+      if (activeCategory && p.category !== activeCategory) continue;
+      if (p.brand) set.add(p.brand);
+    }
+    return [...set].sort((a, b) => a.localeCompare(b));
+  }, [visibleProducts, activeCategory]);
+
+  // Strain types present after category narrowing — hide pills that wouldn't
+  // match anything (e.g. CBD when there's no CBD product in this category).
+  const availableStrains = useMemo(() => {
+    const set = new Set<string>();
+    for (const p of visibleProducts) {
+      if (activeCategory && p.category !== activeCategory) continue;
+      if (p.strainType) set.add(p.strainType);
+    }
+    return [...set];
+  }, [visibleProducts, activeCategory]);
+
   const filtered = useMemo(() => {
-    return products.filter((p) => {
+    const result = visibleProducts.filter((p) => {
       if (activeCategory && p.category !== activeCategory) return false;
+      if (strainFilter && p.strainType !== strainFilter) return false;
+      if (brandFilter && p.brand !== brandFilter) return false;
       if (search) {
         const q = search.toLowerCase();
         return (p.name + (p.brand ?? "") + (p.category ?? "") + (p.strainType ?? ""))
@@ -122,7 +285,22 @@ export function OrderMenu({ products }: { products: MenuProduct[] }) {
       }
       return true;
     });
-  }, [products, search, activeCategory]);
+    switch (sortBy) {
+      case "price-asc":
+        result.sort((a, b) => (a.unitPrice ?? Infinity) - (b.unitPrice ?? Infinity));
+        break;
+      case "price-desc":
+        result.sort((a, b) => (b.unitPrice ?? -Infinity) - (a.unitPrice ?? -Infinity));
+        break;
+      case "thc-desc":
+        result.sort((a, b) => (b.thcPct ?? -Infinity) - (a.thcPct ?? -Infinity));
+        break;
+      case "name":
+        result.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+    }
+    return result;
+  }, [visibleProducts, search, activeCategory, strainFilter, brandFilter, sortBy]);
 
   const grouped = useMemo(() => {
     const map = new Map<string, MenuProduct[]>();
@@ -153,11 +331,15 @@ export function OrderMenu({ products }: { products: MenuProduct[] }) {
     );
   }
 
-  function scrollTo(cat: string) {
-    setActiveCategory(null);
-    setTimeout(() => {
-      sectionRefs.current[cat]?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 50);
+  function selectCategory(cat: string | null) {
+    setActiveCategory(cat);
+    setSearch("");
+    // Clear stale brand/strain filters that won't match anything in the new
+    // category. We do it here instead of in an effect to avoid the
+    // setState-in-effect lint rule and a cascading re-render.
+    setBrandFilter(null);
+    setStrainFilter(null);
+    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   async function placeOrder() {
@@ -194,6 +376,8 @@ export function OrderMenu({ products }: { products: MenuProduct[] }) {
           router.push("/account?ordered=1");
         }
       } else if (res.status === 409) {
+        // Inventory mismatch — strip the unavailable items from the cart and
+        // tell the customer what changed so they can try again.
         const body = (await res.json().catch(() => null)) as {
           issues?: Array<{ productId: string; productName: string; reason: string; onHand: number }>;
         } | null;
@@ -235,6 +419,46 @@ export function OrderMenu({ products }: { products: MenuProduct[] }) {
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 pb-32">
+      {/* Sign-in nudge — saves customers from finding out at the place-order
+          step that they need an account. Cart already persists in localStorage,
+          so signing in mid-browse doesn't lose the in-progress cart. */}
+      {!signedIn && (
+        <Link
+          href="/sign-in?redirect_url=/order"
+          className="mb-4 flex items-center justify-between gap-3 rounded-2xl bg-gradient-to-r from-indigo-50 via-violet-50 to-indigo-50 border border-indigo-200 px-4 py-3 text-sm hover:border-indigo-300 hover:from-indigo-100 hover:to-indigo-100 transition-colors"
+        >
+          <span className="flex items-center gap-2.5 min-w-0">
+            <svg
+              className="w-4 h-4 shrink-0 text-indigo-600"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+            </svg>
+            <span className="truncate">
+              <strong className="text-indigo-900 font-bold">Sign in</strong>
+              <span className="text-indigo-800/80"> to save your cart and earn loyalty points</span>
+            </span>
+          </span>
+          <span className="shrink-0 inline-flex items-center gap-1 text-indigo-700 font-bold text-xs whitespace-nowrap">
+            Sign in
+            <svg
+              className="w-3 h-3"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          </span>
+        </Link>
+      )}
+
       {/* Search bar */}
       <div className="relative mb-4">
         <svg
@@ -272,34 +496,37 @@ export function OrderMenu({ products }: { products: MenuProduct[] }) {
 
       <div className="flex gap-6 items-start">
         {/* Sticky category sidebar (desktop) */}
-        <aside className="hidden lg:block w-44 shrink-0 sticky top-20 space-y-1">
+        <aside className="hidden lg:block w-48 shrink-0 sticky top-20 space-y-1">
           <button
-            onClick={() => setActiveCategory(null)}
+            onClick={() => selectCategory(null)}
             className={`w-full text-left flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-colors ${activeCategory === null && !search ? "bg-indigo-100 text-indigo-800" : "text-stone-500 hover:bg-stone-100"}`}
           >
             <span className="text-base">🛒</span> All Items
+            <span className="ml-auto text-[11px] text-stone-400">{visibleProducts.length}</span>
           </button>
-          {categories.map((c) => (
-            <button
-              key={c}
-              onClick={() => scrollTo(c)}
-              className={`w-full text-left flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-colors ${activeCategory === c ? "bg-indigo-100 text-indigo-800" : "text-stone-500 hover:bg-stone-100"}`}
-            >
-              <span className="text-base">{CAT_ICONS[c] ?? "•"}</span> {c}
-            </button>
-          ))}
+          {categories.map((c) => {
+            const count = visibleProducts.reduce((n, p) => n + (p.category === c ? 1 : 0), 0);
+            return (
+              <button
+                key={c}
+                onClick={() => selectCategory(c)}
+                className={`w-full text-left flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-colors ${activeCategory === c ? "bg-indigo-100 text-indigo-800" : "text-stone-500 hover:bg-stone-100"}`}
+              >
+                <span className="text-base">{CAT_ICONS[c] ?? "•"}</span>
+                <span className="truncate">{displayCategory(c)}</span>
+                <span className="ml-auto text-[11px] text-stone-400">{count}</span>
+              </button>
+            );
+          })}
         </aside>
 
         {/* Main content */}
         <div className="flex-1 min-w-0">
-          {/* Mobile category pills — sticky at the top of the viewport so the
-              user can switch sections without scrolling back up. SiteHeader
-              is sticky at top:0 with h-16 (64px); these pills sit at top:16
-              just below it. Backdrop-blur + translucent white so the row
-              still feels like part of the page, not an opaque overlay. */}
+          {/* Mobile category pills — sticky just below SiteHeader so the user
+              can switch sections without scrolling back up. */}
           <div className="lg:hidden sticky top-16 z-20 -mx-4 sm:-mx-6 px-4 sm:px-6 py-2 mb-4 bg-stone-50/85 backdrop-blur-md border-b border-stone-200/60 flex gap-2 overflow-x-auto">
             <button
-              onClick={() => setActiveCategory(null)}
+              onClick={() => selectCategory(null)}
               className={`shrink-0 px-3.5 py-2 rounded-full text-xs font-semibold transition-colors ${activeCategory === null ? "bg-indigo-800 text-white" : "bg-stone-100 text-stone-600 hover:bg-stone-200"}`}
             >
               All
@@ -307,159 +534,231 @@ export function OrderMenu({ products }: { products: MenuProduct[] }) {
             {categories.map((c) => (
               <button
                 key={c}
-                onClick={() => setActiveCategory(activeCategory === c ? null : c)}
+                onClick={() => selectCategory(activeCategory === c ? null : c)}
                 className={`shrink-0 flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-semibold transition-colors ${activeCategory === c ? "bg-indigo-800 text-white" : "bg-stone-100 text-stone-600 hover:bg-stone-200"}`}
               >
                 <span>{CAT_ICONS[c] ?? "•"}</span>
-                {c}
+                {displayCategory(c)}
               </button>
             ))}
           </div>
+
+          {/* Filter rail — strain pills, brand dropdown, sort dropdown.
+              Hidden when no products would benefit (≤6 results). */}
+          {filtered.length > 6 && (
+            <div className="flex flex-wrap items-center gap-2 mb-5 pb-4 border-b border-stone-100">
+              {availableStrains.length > 1 && (
+                <div className="flex gap-1.5">
+                  {availableStrains.map((s) => {
+                    const colors = STRAIN_COLORS[s];
+                    const active = strainFilter === s;
+                    return (
+                      <button
+                        key={s}
+                        onClick={() => setStrainFilter(active ? null : s)}
+                        className={`text-xs font-semibold px-3 py-1.5 rounded-full border transition-colors ${active ? `${colors?.badge ?? "bg-indigo-100 text-indigo-800 border-indigo-200"} ring-2 ring-offset-1 ring-stone-300` : "bg-white text-stone-600 border-stone-200 hover:border-stone-300"}`}
+                      >
+                        {colors && (
+                          <span className={`inline-block w-1.5 h-1.5 rounded-full mr-1 ${colors.dot}`} />
+                        )}
+                        {s}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+
+              {availableBrands.length > 1 && (
+                <select
+                  value={brandFilter ?? ""}
+                  onChange={(e) => setBrandFilter(e.target.value || null)}
+                  className="text-xs font-semibold px-3 py-1.5 rounded-full border border-stone-200 bg-white text-stone-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                >
+                  <option value="">All brands ({availableBrands.length})</option>
+                  {availableBrands.map((b) => (
+                    <option key={b} value={b}>
+                      {b}
+                    </option>
+                  ))}
+                </select>
+              )}
+
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as SortKey)}
+                className="text-xs font-semibold px-3 py-1.5 rounded-full border border-stone-200 bg-white text-stone-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 ml-auto"
+              >
+                <option value="default">Sort: Featured</option>
+                <option value="price-asc">Price: Low → High</option>
+                <option value="price-desc">Price: High → Low</option>
+                <option value="thc-desc">THC %: High → Low</option>
+                <option value="name">A → Z</option>
+              </select>
+
+              {(strainFilter || brandFilter || sortBy !== "default") && (
+                <button
+                  onClick={() => {
+                    setStrainFilter(null);
+                    setBrandFilter(null);
+                    setSortBy("default");
+                  }}
+                  className="text-xs font-semibold text-stone-500 hover:text-stone-700 px-2 py-1.5"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+          )}
 
           {/* Product grid by category */}
           <div className="space-y-12">
             {[...grouped.entries()].map(([category, items]) => {
               // All-Items view is a teaser strip — 6 cards per category, then
               // a "Show all N flower →" button that scopes the view to that
-              // category and renders every match. The previous 24-per-category
-              // cap was technically OK for HTML weight but produced a wall of
-              // ~150 cards on the All-Items landing that scrolled "way too
-              // far" before the customer found anything. 6 is roughly one
-              // phone screen per category — sample, tap, browse.
-              //
-              // When a category is already selected or the user has searched,
-              // render every match (no cap).
-              const isCapped = activeCategory === null && !search;
+              // category and renders every match. When a category is selected
+              // or any filter (search/strain/brand) is active, render every
+              // match (no cap).
+              const isCapped = activeCategory === null && !search && !strainFilter && !brandFilter;
               const visibleItems = isCapped ? items.slice(0, 6) : items;
               const hiddenCount = items.length - visibleItems.length;
               return (
-              <section
-                key={category}
-                ref={(el) => {
-                  sectionRefs.current[category] = el;
-                }}
-              >
-                <div className="flex items-center gap-3 mb-5">
-                  <span className="text-2xl">{CAT_ICONS[category] ?? "🌱"}</span>
-                  <h2 className="text-xl font-extrabold text-stone-900 tracking-tight">{category}</h2>
-                  <span className="text-xs font-medium text-stone-400 bg-stone-100 px-2 py-0.5 rounded-full">
-                    {items.length}
-                  </span>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-                  {visibleItems.map((product) => {
-                    const cartItem = cart.find((i) => i.id === product.id);
-                    const strain = product.strainType ? STRAIN_COLORS[product.strainType] : null;
-                    return (
-                      <div
-                        key={product.id}
-                        className="group rounded-2xl border border-stone-100 bg-white overflow-hidden hover:border-indigo-300 hover:shadow-lg transition-all duration-200"
-                      >
-                        {/* Image */}
-                        <div className="relative w-full h-44 overflow-hidden bg-stone-100">
-                          <ProductImage
-                            src={product.imageUrl}
-                            alt={product.name}
-                            category={product.category}
-                          />
-                          {strain && (
-                            <span
-                              className={`absolute top-2.5 left-2.5 text-xs px-2.5 py-1 rounded-full font-semibold border ${strain.badge}`}
-                            >
-                              <span className={`inline-block w-1.5 h-1.5 rounded-full mr-1 ${strain.dot}`} />
-                              {product.strainType}
-                            </span>
-                          )}
-                          {cartItem && (
-                            <span className="absolute top-2.5 right-2.5 bg-indigo-700 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shadow-md">
-                              {cartItem.quantity}
-                            </span>
-                          )}
-                        </div>
-
-                        {/* Info */}
-                        <div className="p-4 space-y-3">
-                          <div>
-                            {product.brand && (
-                              <div className="text-xs text-stone-400 font-semibold uppercase tracking-widest mb-0.5">
-                                {product.brand}
-                              </div>
-                            )}
-                            <div className="font-bold text-stone-900 text-sm leading-snug">
-                              {product.name}
-                            </div>
-                          </div>
-
-                          {/* Potency badges */}
-                          {(product.thcPct != null || product.cbdPct != null) && (
-                            <div className="flex flex-wrap gap-1.5">
-                              {product.thcPct != null && (
-                                <span className="text-xs px-2 py-0.5 rounded-full bg-stone-100 text-stone-600 font-medium">
-                                  THC {product.thcPct.toFixed(1)}%
-                                </span>
-                              )}
-                              {product.cbdPct != null && product.cbdPct > 0 && (
-                                <span className="text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-medium">
-                                  CBD {product.cbdPct.toFixed(1)}%
-                                </span>
-                              )}
-                            </div>
-                          )}
-
-                          {/* Effects */}
-                          {product.effects && (
-                            <p className="text-xs text-stone-400 leading-relaxed line-clamp-1">
-                              ✨ {product.effects}
-                            </p>
-                          )}
-
-                          {/* Price + Add */}
-                          <div className="flex items-center justify-between pt-1 border-t border-stone-50">
-                            <div className="font-extrabold text-stone-900 text-base">
-                              {product.unitPrice != null ? `$${product.unitPrice.toFixed(2)}` : "—"}
-                            </div>
-                            {cartItem ? (
-                              <div className="flex items-center gap-2">
-                                <button
-                                  onClick={() => updateQty(product.id, -1)}
-                                  className="w-8 h-8 rounded-full border-2 border-stone-200 flex items-center justify-center text-stone-600 hover:bg-stone-100 hover:border-stone-300 text-sm font-bold transition-colors"
-                                >
-                                  −
-                                </button>
-                                <span className="w-6 text-center text-sm font-extrabold text-stone-900">
-                                  {cartItem.quantity}
-                                </span>
-                                <button
-                                  onClick={() => updateQty(product.id, 1)}
-                                  className="w-8 h-8 rounded-full bg-indigo-700 flex items-center justify-center text-white hover:bg-indigo-600 text-sm font-bold transition-colors shadow-md shadow-indigo-900/20"
-                                >
-                                  +
-                                </button>
-                              </div>
-                            ) : (
-                              <button
-                                onClick={() => addToCart(product)}
-                                disabled={product.unitPrice == null}
-                                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-700 hover:bg-indigo-600 active:bg-indigo-800 text-white text-xs font-bold transition-all shadow-md shadow-indigo-900/20 disabled:opacity-40 disabled:cursor-not-allowed hover:-translate-y-0.5"
+                <section key={category}>
+                  <div className="flex items-center gap-3 mb-5">
+                    <span className="text-2xl">{CAT_ICONS[category] ?? "🌱"}</span>
+                    <h2 className="text-xl font-extrabold text-stone-900 tracking-tight">
+                      {displayCategory(category)}
+                    </h2>
+                    <span className="text-xs font-medium text-stone-400 bg-stone-100 px-2 py-0.5 rounded-full">
+                      {items.length}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                    {visibleItems.map((product) => {
+                      const cartItem = cart.find((i) => i.id === product.id);
+                      const strain = product.strainType ? STRAIN_COLORS[product.strainType] : null;
+                      const parsed = parseProductName(product);
+                      return (
+                        <div
+                          key={product.id}
+                          className="group rounded-2xl border border-stone-100 bg-white overflow-hidden hover:border-indigo-300 hover:shadow-lg transition-all duration-200"
+                        >
+                          {/* Image */}
+                          <div className="relative w-full h-44 overflow-hidden bg-stone-100">
+                            <ProductImage
+                              src={product.imageUrl}
+                              alt={product.name}
+                              category={product.category}
+                            />
+                            {strain && (
+                              <span
+                                className={`absolute top-2.5 left-2.5 text-xs px-2.5 py-1 rounded-full font-semibold border ${strain.badge}`}
                               >
-                                + Add
-                              </button>
+                                <span
+                                  className={`inline-block w-1.5 h-1.5 rounded-full mr-1 ${strain.dot}`}
+                                />
+                                {product.strainType}
+                              </span>
+                            )}
+                            {parsed.weight && (
+                              <span className="absolute bottom-2.5 left-2.5 text-[11px] px-2 py-0.5 rounded-full font-bold bg-white/90 text-stone-700 border border-stone-200 shadow-sm">
+                                {parsed.weight}
+                              </span>
+                            )}
+                            {product.isNew && (
+                              <span className="absolute top-2.5 right-2.5 text-[10px] px-2 py-0.5 rounded-full font-bold bg-indigo-700 text-white shadow-md uppercase tracking-wide">
+                                New
+                              </span>
+                            )}
+                            {cartItem && !product.isNew && (
+                              <span className="absolute top-2.5 right-2.5 bg-indigo-700 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shadow-md">
+                                {cartItem.quantity}
+                              </span>
                             )}
                           </div>
+
+                          {/* Info */}
+                          <div className="p-4 space-y-3">
+                            <div>
+                              {product.brand && (
+                                <div className="text-xs text-stone-400 font-semibold uppercase tracking-widest mb-0.5">
+                                  {product.brand}
+                                </div>
+                              )}
+                              <div className="font-bold text-stone-900 text-sm leading-snug">
+                                {parsed.name}
+                              </div>
+                            </div>
+
+                            {/* Potency badges */}
+                            {(product.thcPct != null || product.cbdPct != null) && (
+                              <div className="flex flex-wrap gap-1.5">
+                                {product.thcPct != null && (
+                                  <span className="text-xs px-2 py-0.5 rounded-full bg-stone-100 text-stone-600 font-medium">
+                                    THC {product.thcPct.toFixed(1)}%
+                                  </span>
+                                )}
+                                {product.cbdPct != null && product.cbdPct > 0 && (
+                                  <span className="text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-medium">
+                                    CBD {product.cbdPct.toFixed(1)}%
+                                  </span>
+                                )}
+                              </div>
+                            )}
+
+                            {/* Effects / terpenes */}
+                            {product.effects && (
+                              <p className="text-xs text-stone-400 leading-relaxed line-clamp-1">
+                                ✨ {product.effects}
+                              </p>
+                            )}
+
+                            {/* Price + Add */}
+                            <div className="flex items-center justify-between pt-1 border-t border-stone-50">
+                              <div className="font-extrabold text-stone-900 text-base">
+                                {product.unitPrice != null ? `$${product.unitPrice.toFixed(2)}` : "—"}
+                              </div>
+                              {cartItem ? (
+                                <div className="flex items-center gap-2">
+                                  <button
+                                    onClick={() => updateQty(product.id, -1)}
+                                    className="w-8 h-8 rounded-full border-2 border-stone-200 flex items-center justify-center text-stone-600 hover:bg-stone-100 hover:border-stone-300 text-sm font-bold transition-colors"
+                                  >
+                                    −
+                                  </button>
+                                  <span className="w-6 text-center text-sm font-extrabold text-stone-900">
+                                    {cartItem.quantity}
+                                  </span>
+                                  <button
+                                    onClick={() => updateQty(product.id, 1)}
+                                    className="w-8 h-8 rounded-full bg-indigo-700 flex items-center justify-center text-white hover:bg-indigo-600 text-sm font-bold transition-colors shadow-md shadow-indigo-900/20"
+                                  >
+                                    +
+                                  </button>
+                                </div>
+                              ) : (
+                                <button
+                                  onClick={() => addToCart(product)}
+                                  disabled={product.unitPrice == null}
+                                  className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-700 hover:bg-indigo-600 active:bg-indigo-800 text-white text-xs font-bold transition-all shadow-md shadow-indigo-900/20 disabled:opacity-40 disabled:cursor-not-allowed hover:-translate-y-0.5"
+                                >
+                                  + Add
+                                </button>
+                              )}
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    );
-                  })}
-                </div>
-                {hiddenCount > 0 && (
-                  <button
-                    onClick={() => setActiveCategory(category)}
-                    className="mt-5 w-full text-center text-sm font-bold text-indigo-700 hover:text-indigo-600 py-3 rounded-xl border border-stone-100 hover:border-indigo-200 hover:bg-indigo-50/50 transition-colors"
-                  >
-                    Show all {items.length} {category.toLowerCase()} →
-                  </button>
-                )}
-              </section>
+                      );
+                    })}
+                  </div>
+                  {hiddenCount > 0 && (
+                    <button
+                      onClick={() => selectCategory(category)}
+                      className="mt-5 w-full text-center text-sm font-bold text-indigo-700 hover:text-indigo-600 py-3 rounded-xl border border-stone-100 hover:border-indigo-200 hover:bg-indigo-50/50 transition-colors"
+                    >
+                      Show all {items.length} {displayCategory(category).toLowerCase()} →
+                    </button>
+                  )}
+                </section>
               );
             })}
           </div>
