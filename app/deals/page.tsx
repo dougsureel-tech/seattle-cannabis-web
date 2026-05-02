@@ -81,18 +81,31 @@ export default async function DealsPage() {
       </section>
 
       {deals.length === 0 ? (
-        <section className="max-w-2xl mx-auto px-4 sm:px-6 py-16 text-center">
-          <div className="text-5xl mb-4">🌿</div>
-          <h2 className="text-xl font-bold text-stone-900">No active deals right now.</h2>
-          <p className="text-stone-600 mt-2">
-            Check back soon — or browse our everyday-low prices on the menu.
-          </p>
-          <Link
-            href="/menu"
-            className="mt-6 inline-flex items-center gap-1.5 px-5 py-3 rounded-xl bg-indigo-700 hover:bg-indigo-600 text-white font-bold transition-colors shadow-sm"
-          >
-            Browse the menu →
-          </Link>
+        <section className="max-w-2xl mx-auto px-4 sm:px-6 py-16">
+          {/* Empty state — calm, not apologetic. Loyalty + everyday-value
+              framing so a customer who lands here without a running deal
+              still has somewhere to go. */}
+          <div className="rounded-3xl border border-stone-200 bg-white p-8 sm:p-10 text-center shadow-sm">
+            <div className="text-4xl mb-4" aria-hidden>
+              🌿
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight">
+              No deals today — but loyalty stacks every day.
+            </h2>
+            <p className="text-stone-600 mt-3 max-w-md mx-auto leading-relaxed">
+              100 points = $1 off at the counter, on top of any everyday-low pricing. Browse the
+              live menu — we&apos;ll have what you&apos;re after.
+            </p>
+            <Link
+              href="/menu"
+              className="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-indigo-700 hover:bg-indigo-600 text-white font-bold transition-colors shadow-sm"
+            >
+              Browse the menu →
+            </Link>
+            <p className="text-xs text-stone-500 mt-5">
+              Cash only · 21+ with valid ID · {STORE.address.full}
+            </p>
+          </div>
         </section>
       ) : (
         <section className="max-w-3xl mx-auto px-4 sm:px-6 py-12 space-y-4">
