@@ -1,61 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { computeDealCountdown, type DealCountdownState } from "@/lib/deal-countdown";
 
 // Live "ends in" chip used on the /deals card list. Refreshes on a 60s
-// interval so the urgency window stays honest as time ticks past — same
-// pattern as SiteHeader's StatusPill. Hydration-safe: returns the same
-// label the server rendered until the first client tick fires.
+// interval so the urgency window stays honest as time ticks past. Hydration-
+// safe: returns the same label the server rendered until the first client
+// tick fires.
 //
-// Output bands:
-//   • null endDate            → "Ongoing"
-//   • >  7 days remaining     → "Ends Tue, May 13"
-//   • 2–7 days remaining      → "Ends in N days"
-//   • 1 day remaining         → "Ends tomorrow"
-//   • same day remaining      → "Ends today"
-//   • already past            → "Ended"
-//
-// `urgent` returns true on tomorrow / today / past so the parent can flip
-// to the rose accent.
-export type DealCountdownState = {
-  label: string;
-  urgent: boolean;
-};
-
-function compute(endDate: string | null): DealCountdownState {
-  if (!endDate) return { label: "Ongoing", urgent: false };
-  const end = new Date(`${endDate}T23:59:59-08:00`).getTime();
-  const now = Date.now();
-  const ms = end - now;
-  if (ms <= 0) return { label: "Ended", urgent: true };
-  const days = Math.ceil(ms / 86_400_000);
-  if (days === 1) {
-    const hours = Math.ceil(ms / 3_600_000);
-    if (hours <= 24 && hours > 0) {
-      const todayPt = new Date(
-        new Date().toLocaleString("en-US", { timeZone: "America/Los_Angeles" }),
-      );
-      const endPt = new Date(
-        new Date(end).toLocaleString("en-US", { timeZone: "America/Los_Angeles" }),
-      );
-      const sameDay =
-        todayPt.getFullYear() === endPt.getFullYear() &&
-        todayPt.getMonth() === endPt.getMonth() &&
-        todayPt.getDate() === endPt.getDate();
-      return { label: sameDay ? "Ends today" : "Ends tomorrow", urgent: true };
-    }
-    return { label: "Ends tomorrow", urgent: true };
-  }
-  if (days <= 7) return { label: `Ends in ${days} days`, urgent: false };
-  return {
-    label: `Ends ${new Date(`${endDate}T12:00:00`).toLocaleDateString("en-US", {
-      weekday: "short",
-      month: "short",
-      day: "numeric",
-    })}`,
-    urgent: false,
-  };
-}
+// Pure label logic lives in `lib/deal-countdown.ts` so the server-rendered
+// /deals page can compute the SSR initial without importing this client
+// module (Next 16 / React 19 errors when a server component imports
+// anything from a "use client" file).
 
 export function DealCountdown({
   endDate,
@@ -72,8 +28,8 @@ export function DealCountdown({
   });
 
   useEffect(() => {
-    setState(compute(endDate));
-    const id = setInterval(() => setState(compute(endDate)), 60_000);
+    setState(computeDealCountdown(endDate));
+    const id = setInterval(() => setState(computeDealCountdown(endDate)), 60_000);
     return () => clearInterval(id);
   }, [endDate]);
 
@@ -99,8 +55,4 @@ export function DealCountdown({
       {state.label}
     </span>
   );
-}
-
-export function computeServer(endDate: string | null): DealCountdownState {
-  return compute(endDate);
 }
