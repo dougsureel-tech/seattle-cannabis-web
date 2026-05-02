@@ -26,8 +26,8 @@ export const STORE = {
     { day: "Saturday",  open: "8:00 AM", close: "11:00 PM" },
     { day: "Sunday",    open: "8:00 AM", close: "11:00 PM" },
   ],
-  iheartjaneStoreId: 0, // uses shop.seattlecannabis.co — confirm platform before wiring
-  shopUrl: "https://shop.seattlecannabis.co/south-seattle",
+  iheartjaneStoreId: 5295,
+  shopUrl: "/menu",
   wslcbLicense: "426199",
   social: {
     instagram: "https://www.instagram.com/scc_rainier/",
