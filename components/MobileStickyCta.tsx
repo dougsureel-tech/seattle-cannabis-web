@@ -9,8 +9,10 @@ import { STORE } from "@/lib/store";
 // has scrolled past the hero so it doesn't compete with the in-hero buttons,
 // then stays visible for the rest of the page.
 //
-// Three modes (each affects copy + colors + which CTA is primary):
+// Five modes (each affects copy + colors + which CTA is primary):
 //   open + normal      — indigo "Order for Pickup" + Call
+//   open + with-deal   — violet "20% off flower today →" + Call (when a
+//                         deal is active and the store isn't urgent)
 //   open + closing     — amber "Closes in X · order now" + Call
 //   open + last-call   — rose "Online ordering done · in-store still open" with Call as primary
 //   closed             — stone "Opens at 8 AM" with Call as primary
@@ -19,18 +21,22 @@ import { STORE } from "@/lib/store";
 // - /menu — Boost has its own bottom-sticky cart drawer; ours would stack.
 // - /sign-in, /sign-up — focus belongs on the form.
 // - /account — already-authenticated flows have their own actions.
-const HIDE_ON = ["/menu", "/sign-in", "/sign-up", "/account"];
+// - /deals/* — deal landing pages already have a giant deal-CTA.
+const HIDE_ON = ["/menu", "/sign-in", "/sign-up", "/account", "/deals"];
 
 const CLOSING_SOON_WINDOW_MIN = 90;
 const LAST_CALL_BEFORE_CLOSE = 15;
 
+type TopDeal = { id: string; short: string; endDate: string | null };
+
 type Mode =
   | { kind: "open-normal" }
+  | { kind: "open-with-deal"; deal: TopDeal }
   | { kind: "open-closing"; minsLeft: number }
   | { kind: "open-last-call" }
   | { kind: "closed" };
 
-function computeMode(): Mode {
+function computeMode(deal: TopDeal | null): Mode {
   const day = new Date().toLocaleDateString("en-US", {
     weekday: "long",
     timeZone: "America/Los_Angeles",
@@ -57,12 +63,14 @@ function computeMode(): Mode {
   if (cur < openMin || cur >= closeMin) return { kind: "closed" };
   if (cur >= lastCallMin) return { kind: "open-last-call" };
   if (closeMin - cur <= CLOSING_SOON_WINDOW_MIN) return { kind: "open-closing", minsLeft: closeMin - cur };
+  if (deal) return { kind: "open-with-deal", deal };
   return { kind: "open-normal" };
 }
 
 export function MobileStickyCta() {
   const pathname = usePathname();
   const [show, setShow] = useState(false);
+  const [deal, setDeal] = useState<TopDeal | null>(null);
   const [mode, setMode] = useState<Mode>({ kind: "open-normal" });
 
   useEffect(() => {
@@ -73,10 +81,26 @@ export function MobileStickyCta() {
   }, []);
 
   useEffect(() => {
-    setMode(computeMode());
-    const id = window.setInterval(() => setMode(computeMode()), 60_000);
-    return () => window.clearInterval(id);
+    const ctrl = new AbortController();
+    fetch("/api/deals/top", { signal: ctrl.signal })
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`status ${r.status}`))))
+      .then((d: { deal: TopDeal | null }) => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setDeal(d.deal);
+      })
+      .catch((e) => {
+        if (e.name !== "AbortError") {
+          console.error("[mobile-cta] deal fetch failed", e);
+        }
+      });
+    return () => ctrl.abort();
   }, []);
+
+  useEffect(() => {
+    setMode(computeMode(deal));
+    const id = window.setInterval(() => setMode(computeMode(deal)), 60_000);
+    return () => window.clearInterval(id);
+  }, [deal]);
 
   if (HIDE_ON.some((p) => pathname.startsWith(p))) return null;
 
@@ -90,6 +114,15 @@ export function MobileStickyCta() {
           secondaryClass: "border border-stone-200 bg-white text-stone-800 hover:bg-stone-50",
           urgency: null as string | null,
           urgencyClass: "",
+        };
+      case "open-with-deal":
+        return {
+          primaryHref: `/deals/${mode.deal.id}` as const,
+          primaryLabel: `${mode.deal.short} →`,
+          primaryClass: "bg-violet-700 hover:bg-violet-600 text-white",
+          secondaryClass: "border border-violet-200 bg-white text-violet-900 hover:bg-violet-50",
+          urgency: "🔥 Live deal — tap to see what's on sale",
+          urgencyClass: "text-violet-800",
         };
       case "open-closing":
         return {
