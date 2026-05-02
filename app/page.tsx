@@ -19,7 +19,7 @@ const NEIGHBORHOOD_NAMES = NEIGHBORHOODS.map((n) => n.name).join(", ");
 
 export const metadata: Metadata = {
   title: `${STORE.name} | South Seattle's Cannabis Dispensary — Rainier Valley`,
-  description: `${STORE.name} at ${STORE.address.full}. Closest shop to ${NEIGHBORHOOD_NAMES}. Five min from Othello Light Rail. Veteran-owned, open daily 8am–11pm.`,
+  description: `${STORE.name} at ${STORE.address.full}. Closest shop to ${NEIGHBORHOOD_NAMES}. Five min from Othello Light Rail. Open since 2014, daily 8am–11pm.`,
   alternates: { canonical: "/" },
   other: {
     "geo.region": "US-WA",
@@ -87,7 +87,7 @@ const CATEGORIES = [
 const STATS = [
   { val: "Open Daily", label: "8 AM – 11 PM" },
   { val: "Free Parking", label: "On-site lot" },
-  { val: "Veteran-Owned", label: "Military discounts" },
+  { val: "Since 2014", label: "Rooted in Rainier Valley" },
   { val: "15% Off", label: "Online orders" },
 ];
 
@@ -112,8 +112,8 @@ export default async function HomePage() {
       <section className="relative bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white overflow-hidden">
         <HeroBackground />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-20 sm:py-28 lg:py-32">
-          <div className="flex flex-col lg:flex-row lg:items-center gap-12 lg:gap-16">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-14 lg:py-20">
+          <div className="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-10">
             {/* Left: content */}
             <div className="flex-1 space-y-7">
               <div className="flex items-center gap-3 flex-wrap">
@@ -175,7 +175,7 @@ export default async function HomePage() {
                   <span className="text-indigo-100/70 font-light">Shop.</span>
                 </h1>
                 <p className="text-indigo-100/60 text-lg sm:text-xl leading-relaxed max-w-lg mt-5">
-                  Rainier Valley to Seward Park to Alki — pull up, pick what fits the day. Veteran-owned, WA
+                  Rainier Valley to Seward Park to Alki — pull up, pick what fits the day. Open since 2014, WA
                   brands deep, real budtenders, no rush.
                 </p>
               </div>
@@ -327,7 +327,7 @@ export default async function HomePage() {
                     { icon: "🅿️", text: "Free Parking" },
                     { icon: "💵", text: "Cash Only" },
                     { icon: "🏧", text: "ATM On-Site" },
-                    { icon: "🎖️", text: "Veteran-Owned" },
+                    { icon: "📅", text: "Since 2014" },
                   ].map(({ icon, text }) => (
                     <div key={text} className="flex items-center gap-2 text-white/65 text-xs">
                       <span className="text-base leading-none">{icon}</span>
@@ -832,9 +832,9 @@ export default async function HomePage() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
             {[
               {
-                icon: "🎖️",
-                title: "Veteran-Owned",
-                body: "Proud to serve those who served. Active duty, veterans, and first responders get a discount — just show your ID.",
+                icon: "📅",
+                title: "Open Since 2014",
+                body: "Rooted in Rainier Valley a decade and counting. Same building, same neighborhood, real staff who know the products and remember regulars.",
                 // Card accents bumped from flat pastel-50 to a subtle gradient
                 // wash + a slightly stronger border. Icon tile gets a matching
                 // gradient so the pastel tone has a focal point. Same shape
