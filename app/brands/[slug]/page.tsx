@@ -155,7 +155,8 @@ export default async function BrandPage({ params }: Props) {
         />
       )}
 
-      <div className="bg-indigo-950 text-white py-10 sm:py-14">
+      {/* Hero — gradient bookend matching the rest of the site. */}
+      <div className="bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white py-10 sm:py-14">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center gap-4 sm:gap-6">
           {brand.logoUrl ? (
             <div className="shrink-0 w-20 h-20 rounded-2xl bg-white p-2.5 flex items-center justify-center shadow-lg">

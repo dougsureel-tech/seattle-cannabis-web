@@ -54,7 +54,8 @@ export default async function BrandsPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
       />
-      <div className="relative overflow-hidden bg-indigo-950 text-white py-10 sm:py-14">
+      {/* Hero — gradient bookend matching the rest of the site. */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white py-10 sm:py-14">
         <div
           className="absolute inset-0 opacity-[0.07]"
           style={{

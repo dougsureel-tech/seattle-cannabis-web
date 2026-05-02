@@ -4,6 +4,7 @@ import { STORE, isOpenNow, nextOpenLabel } from "@/lib/store";
 import { getActiveBrands, getFeaturedProducts } from "@/lib/db";
 import { PrimaryCTA } from "@/components/PrimaryCTA";
 import { SectionHeading } from "@/components/SectionHeading";
+import { ReviewsSection } from "@/components/Reviews";
 
 export const dynamic = "force-dynamic";
 
@@ -89,7 +90,7 @@ export default async function HomePage() {
   return (
     <>
       {/* ─── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="relative bg-indigo-950 text-white overflow-hidden">
+      <section className="relative bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white overflow-hidden">
         <div
           className="absolute inset-0 opacity-[0.04]"
           style={{
@@ -629,6 +630,9 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ─── Reviews + AggregateRating schema ───────────────────────────────── */}
+      <ReviewsSection />
 
       {/* ─── Hours + Map ────────────────────────────────────────────────────── */}
       <section className="bg-white border-b border-stone-100">

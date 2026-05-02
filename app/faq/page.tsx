@@ -98,7 +98,8 @@ export default function FaqPage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
 
-      <div className="relative overflow-hidden bg-indigo-950 text-white py-10 sm:py-14">
+      {/* Hero — gradient bookend matching the rest of the site. */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white py-10 sm:py-14">
         <div
           className="absolute inset-0 opacity-[0.07]"
           style={{
@@ -154,7 +155,7 @@ export default function FaqPage() {
           </details>
         ))}
 
-        <div className="pt-8 rounded-2xl bg-indigo-950 text-white p-7 text-center space-y-4">
+        <div className="pt-8 rounded-2xl bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white p-7 text-center space-y-4">
           <p className="font-bold text-lg">Still have questions?</p>
           <p className="text-indigo-300/80 text-sm max-w-sm mx-auto">
             Our budtenders are happy to help — call us or stop by and ask anything.

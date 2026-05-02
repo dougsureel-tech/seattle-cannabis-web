@@ -164,7 +164,8 @@ export default async function BlogPost({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
-      <div className="relative overflow-hidden bg-indigo-950 text-white py-10 sm:py-14">
+      {/* Hero — gradient bookend matching the rest of the site. */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white py-10 sm:py-14">
         <div
           className="absolute inset-0 opacity-[0.07]"
           style={{
@@ -206,7 +207,7 @@ export default async function BlogPost({ params }: Props) {
       </article>
 
       <div className="max-w-3xl mx-auto px-4 sm:px-6 pb-16">
-        <div className="rounded-2xl bg-indigo-950 text-white p-6 text-center space-y-3">
+        <div className="rounded-2xl bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white p-6 text-center space-y-3">
           <p className="font-bold text-lg">Come visit us in {STORE.neighborhood}</p>
           <p className="text-indigo-300/70 text-sm max-w-sm mx-auto">
             {STORE.address.full} · Open daily 8 AM–11 PM · Cash only · 21+ with valid ID
