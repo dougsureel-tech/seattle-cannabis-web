@@ -1,13 +1,23 @@
 import { auth } from "@clerk/nextjs/server";
+import { after } from "next/server";
 import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
+import { Fragment } from "react";
 import type { Metadata } from "next";
-import { getOrCreatePortalUser, getOrder } from "@/lib/portal";
+import { getOrCreatePortalUser, getOrder, notifyReadyOrders } from "@/lib/portal";
 import { STORE } from "@/lib/store";
 import { OrderStatusRefresh } from "@/components/OrderStatusRefresh";
+import { NotifyMeButton } from "@/components/NotifyMeButton";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Order confirmed" };
+
+const STAGES = [
+  { key: "pending", label: "Placed" },
+  { key: "preparing", label: "Preparing" },
+  { key: "ready", label: "Ready" },
+  { key: "picked_up", label: "Picked up" },
+] as const;
 
 const TZ = "America/Los_Angeles";
 
@@ -43,6 +53,21 @@ export default async function OrderConfirmationPage({ params }: { params: Promis
   const pickupDay = order.pickupTime ? fmtPickupDay(order.pickupTime) : null;
   const isActive =
     order.status === "pending" || order.status === "preparing" || order.status === "ready";
+  const cancelled = order.status === "cancelled";
+  const stageIdx = STAGES.findIndex((s) => s.key === order.status);
+  const currentIdx = cancelled ? -1 : Math.max(0, stageIdx);
+  const inFlight =
+    order.status === "pending" || order.status === "preparing";
+
+  // Same push trigger as /account/orders — fires for any of this user's
+  // orders that just flipped to "ready". Browser tag dedupes display.
+  after(async () => {
+    try {
+      await notifyReadyOrders(portalUser.id);
+    } catch (e) {
+      console.error("[order-confirmation] notifyReadyOrders failed", e);
+    }
+  });
 
   return (
     <div className="min-h-screen bg-stone-50">
@@ -51,29 +76,95 @@ export default async function OrderConfirmationPage({ params }: { params: Promis
       <OrderStatusRefresh active={isActive} />
       <div className="max-w-xl mx-auto px-4 sm:px-6 py-10 space-y-6">
         {/* Hero confirmation */}
-        <div className="rounded-3xl bg-gradient-to-br from-green-900 to-green-800 text-white p-8 shadow-xl space-y-4">
+        <div className="rounded-3xl bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-900 text-white p-8 shadow-xl space-y-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-white/15 flex items-center justify-center text-2xl">
               ✓
             </div>
             <div>
-              <p className="text-xs uppercase tracking-widest text-green-300/80 font-bold">Order placed</p>
+              <p className="text-xs uppercase tracking-widest text-indigo-300/80 font-bold">Order placed</p>
               <h1 className="text-2xl font-extrabold tracking-tight">You&rsquo;re all set</h1>
             </div>
           </div>
           {pickupLabel && pickupDay && (
             <div className="rounded-2xl bg-white/10 px-5 py-4">
-              <p className="text-xs text-green-300/80 font-bold uppercase tracking-widest">
+              <p className="text-xs text-indigo-300/80 font-bold uppercase tracking-widest">
                 Ready for pickup
               </p>
               <p className="text-3xl font-black mt-1">{pickupLabel}</p>
-              <p className="text-sm text-green-200/90 mt-0.5">{pickupDay}</p>
+              <p className="text-sm text-indigo-200/90 mt-0.5">{pickupDay}</p>
             </div>
           )}
-          <p className="text-sm text-green-100/90 leading-relaxed">
-            Bring your ID and cash. We&rsquo;ll have your order packed and waiting.
+          <p className="text-sm text-indigo-100/90 leading-relaxed">
+            We&rsquo;ll text you the moment it&rsquo;s ready. Bring your ID and cash — that&rsquo;s it.
           </p>
+          {/* Web push subscribe — bonus channel on top of SMS. Server fires
+              push when order flips to "ready" via lib/portal.notifyReadyOrders.
+              Component self-hides if the customer is already subscribed or the
+              browser doesn't support push. Only shown while order is in flight
+              — once picked up there's nothing to notify about. */}
+          {inFlight && (
+            <div className="rounded-2xl bg-white/10 px-4 py-3 inline-block">
+              <NotifyMeButton />
+            </div>
+          )}
         </div>
+
+        {/* Status timeline — 4 dots tracking pending → preparing → ready →
+            picked_up. The "Ready" dot pulses when the customer should
+            actually walk in. Cancelled orders short-circuit to a red
+            banner above instead of rendering this strip. */}
+        {!cancelled && (
+          <div className="rounded-2xl bg-white border border-stone-200 px-5 py-5">
+            <p className="text-xs font-bold text-stone-500 uppercase tracking-widest mb-4">Status</p>
+            <div className="flex items-center">
+              {STAGES.map((stage, i) => {
+                const reached = currentIdx >= i;
+                const isCurrent = currentIdx === i;
+                const isReady = isCurrent && stage.key === "ready";
+                return (
+                  <Fragment key={stage.key}>
+                    <div className="flex flex-col items-center gap-2 shrink-0">
+                      <div
+                        className={`w-4 h-4 rounded-full transition-colors ${
+                          reached ? "bg-indigo-700" : "bg-stone-200"
+                        } ${isReady ? "animate-pulse ring-4 ring-indigo-200" : ""}`}
+                        aria-current={isCurrent ? "step" : undefined}
+                      />
+                      <span
+                        className={`text-[10px] font-bold whitespace-nowrap ${
+                          reached ? "text-indigo-800" : "text-stone-400"
+                        }`}
+                      >
+                        {stage.label}
+                      </span>
+                    </div>
+                    {i < STAGES.length - 1 && (
+                      <div
+                        className={`flex-1 h-0.5 mx-2 mb-5 transition-colors ${
+                          currentIdx > i ? "bg-indigo-700" : "bg-stone-200"
+                        }`}
+                      />
+                    )}
+                  </Fragment>
+                );
+              })}
+            </div>
+          </div>
+        )}
+        {cancelled && (
+          <div className="rounded-2xl bg-red-50 border border-red-200 px-5 py-4 text-sm text-red-900">
+            <p className="font-bold">This order was cancelled.</p>
+            <p className="text-red-800/80 mt-1">
+              No charge — you&rsquo;ll just need to place a new order if you still want it. Call us if this
+              looks wrong:{" "}
+              <a href={`tel:${STORE.phoneTel}`} className="font-semibold underline">
+                {STORE.phone}
+              </a>
+              .
+            </p>
+          </div>
+        )}
 
         {/* Items */}
         <div className="rounded-2xl bg-white border border-stone-200 overflow-hidden">
@@ -103,10 +194,46 @@ export default async function OrderConfirmationPage({ params }: { params: Promis
           </div>
         </div>
 
+        {/* Bring this — concrete checklist, replaces the one-liner buried in
+            the hero. Cannabis is cash-only and ID-required (WSLCB) so there
+            is real customer benefit in surfacing it explicitly. */}
+        <div className="rounded-2xl bg-white border border-stone-200 px-5 py-4 space-y-3">
+          <p className="text-xs font-bold text-stone-500 uppercase tracking-widest">Bring this</p>
+          <ul className="space-y-2 text-sm">
+            <li className="flex items-start gap-3">
+              <span className="text-base shrink-0" aria-hidden="true">🪪</span>
+              <div>
+                <p className="font-semibold text-stone-900">Valid government ID, 21+</p>
+                <p className="text-xs text-stone-500">
+                  Driver&rsquo;s license, passport, or out-of-state DL. Required by WA law.
+                </p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-base shrink-0" aria-hidden="true">💵</span>
+              <div>
+                <p className="font-semibold text-stone-900">
+                  Cash <span className="text-stone-500 font-normal">(${order.subtotal.toFixed(2)} + tax)</span>
+                </p>
+                <p className="text-xs text-stone-500">
+                  Cards aren&rsquo;t accepted. ATM on-site if you forgot.
+                </p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-base shrink-0" aria-hidden="true">📱</span>
+              <div>
+                <p className="font-semibold text-stone-900">Your phone</p>
+                <p className="text-xs text-stone-500">For your order number — first 8: <span className="font-mono">#{order.id.slice(0, 8)}</span></p>
+              </div>
+            </li>
+          </ul>
+        </div>
+
         {/* Pickup details */}
         <div className="rounded-2xl bg-white border border-stone-200 px-5 py-4 space-y-3 text-sm">
           <div>
-            <p className="text-xs font-bold text-stone-500 uppercase tracking-wide">Pick up at</p>
+            <p className="text-xs font-bold text-stone-500 uppercase tracking-widest">Pick up at</p>
             <p className="text-stone-900 font-semibold mt-0.5">{STORE.name}</p>
             <p className="text-stone-500 text-xs">{STORE.address.full}</p>
           </div>
@@ -115,18 +242,33 @@ export default async function OrderConfirmationPage({ params }: { params: Promis
               href={STORE.googleMapsUrl}
               target="_blank"
               rel="noopener"
-              className="text-xs font-semibold text-green-700 hover:text-green-600"
+              className="text-xs font-semibold text-indigo-700 hover:text-indigo-600"
             >
               Get directions →
             </a>
             <a
               href={`tel:${STORE.phoneTel}`}
-              className="text-xs font-semibold text-green-700 hover:text-green-600"
+              className="text-xs font-semibold text-indigo-700 hover:text-indigo-600"
             >
               {STORE.phone}
             </a>
           </div>
         </div>
+
+        {/* Running late / need to change. */}
+        {!cancelled && (
+          <div className="rounded-2xl bg-stone-100 px-5 py-3.5 text-xs text-stone-600 flex items-center justify-between gap-3 flex-wrap">
+            <span>
+              Running late or need to change something? Just give us a call — we&rsquo;ll hold it.
+            </span>
+            <a
+              href={`tel:${STORE.phoneTel}`}
+              className="shrink-0 font-bold text-indigo-700 hover:text-indigo-600 whitespace-nowrap"
+            >
+              📞 {STORE.phone}
+            </a>
+          </div>
+        )}
 
         {order.notes && (
           <div className="rounded-2xl bg-amber-50 border border-amber-200 px-5 py-4">
@@ -144,7 +286,7 @@ export default async function OrderConfirmationPage({ params }: { params: Promis
           </Link>
           <Link
             href="/order"
-            className="flex-1 text-center px-5 py-3 rounded-2xl bg-green-700 hover:bg-green-600 text-white font-bold text-sm transition-colors"
+            className="flex-1 text-center px-5 py-3 rounded-2xl bg-indigo-700 hover:bg-indigo-600 text-white font-bold text-sm transition-colors"
           >
             Order more
           </Link>
