@@ -303,6 +303,80 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* ─── First-time 4-tap flow — sits between stats and deals so a new
+            visitor sees the literal "what do I do?" answer before the
+            marketing-heavy sections. Numbered tiles with the same shape as
+            the greenlife version, indigo theming. */}
+      <section className="bg-white border-b border-stone-100">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
+          <div className="text-center mb-7">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-indigo-700">First time?</p>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight mt-1.5">
+              4 taps, you&apos;re out the door.
+            </h2>
+            <p className="text-stone-600 mt-1.5 text-sm">
+              No judgment. Same flow whether it&apos;s your first time or your fiftieth.
+            </p>
+          </div>
+          <ol className="grid grid-cols-1 sm:grid-cols-4 gap-2 sm:gap-3" aria-label="How to order">
+            {[
+              {
+                emoji: "🌿",
+                step: "Browse",
+                detail: "Tap the menu, see live inventory + prices",
+                href: "/menu",
+              },
+              {
+                emoji: "📲",
+                step: "Order ahead",
+                detail: "Pick your products, choose pickup time",
+                href: "/menu",
+              },
+              {
+                emoji: "🪪",
+                step: "Walk in",
+                detail: "Bring cash + valid ID. Counter has it ready",
+                href: null,
+              },
+              {
+                emoji: "🚪",
+                step: "Out in 5",
+                detail: "Pay cash, grab the bag, you're done",
+                href: null,
+              },
+            ].map((s, i) => {
+              const inner = (
+                <div className="relative h-full rounded-2xl border border-stone-200 bg-stone-50 group-hover:border-indigo-300 group-hover:bg-white transition-all p-4 sm:p-5">
+                  <span className="absolute -top-2.5 left-4 text-[10px] font-bold uppercase tracking-widest text-white bg-indigo-700 px-2 py-0.5 rounded-full">
+                    Step {i + 1}
+                  </span>
+                  <div className="flex items-start gap-3 sm:flex-col sm:gap-2">
+                    <span className="text-2xl shrink-0" aria-hidden="true">
+                      {s.emoji}
+                    </span>
+                    <div className="min-w-0">
+                      <p className="font-bold text-stone-900 text-sm">{s.step}</p>
+                      <p className="text-xs text-stone-600 leading-snug mt-0.5">{s.detail}</p>
+                    </div>
+                  </div>
+                </div>
+              );
+              return (
+                <li key={s.step} className="group">
+                  {s.href ? (
+                    <Link href={s.href} className="block h-full">
+                      {inner}
+                    </Link>
+                  ) : (
+                    inner
+                  )}
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+      </section>
+
       {/* ─── Active deals strip — only renders when something's actually
             running. Surfaces savings before the category grid so a customer
             sees "20% off Flower today" alongside "what's good?", instead
@@ -317,7 +391,8 @@ export default async function HomePage() {
                   Today&apos;s deals
                 </h2>
                 <p className="text-stone-600 mt-1 text-sm">
-                  Stack with your loyalty points at the counter — cash savings on the way out.
+                  Stackable with your loyalty points at the counter — 100 pts = $1 off — cash savings on the
+                  way out.
                 </p>
               </div>
               <Link
