@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { STORE, isOpenNow, nextOpenLabel } from "@/lib/store";
+import { withAttr } from "@/lib/attribution";
 import { getActiveBrands, getActiveDeals, getFeaturedProducts } from "@/lib/db";
 import { PrimaryCTA } from "@/components/PrimaryCTA";
 import { SectionHeading } from "@/components/SectionHeading";
@@ -181,7 +182,7 @@ export default async function HomePage() {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3">
-                <PrimaryCTA href={STORE.shopUrl} variant="light">
+                <PrimaryCTA href={withAttr(STORE.shopUrl, "home", "hero-order")} variant="light">
                   Order Online — 15% Off
                   <svg
                     className="w-4 h-4"
@@ -189,11 +190,12 @@ export default async function HomePage() {
                     stroke="currentColor"
                     strokeWidth="2.5"
                     viewBox="0 0 24 24"
+                    aria-hidden="true"
                   >
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
                 </PrimaryCTA>
-                <PrimaryCTA href="/menu" variant="secondary">
+                <PrimaryCTA href={withAttr("/menu", "home", "hero-browse")} variant="secondary">
                   Browse Menu
                 </PrimaryCTA>
               </div>
@@ -1056,10 +1058,10 @@ export default async function HomePage() {
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 shrink-0">
-            <PrimaryCTA href={STORE.shopUrl} variant="light">
+            <PrimaryCTA href={withAttr(STORE.shopUrl, "home", "bottom-order")} variant="light">
               Order Online — 15% Off
             </PrimaryCTA>
-            <PrimaryCTA href="/menu" variant="secondary">
+            <PrimaryCTA href={withAttr("/menu", "home", "bottom-browse")} variant="secondary">
               Browse Menu
             </PrimaryCTA>
           </div>

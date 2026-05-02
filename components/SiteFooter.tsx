@@ -2,6 +2,7 @@ import Link from "next/link";
 import { STORE } from "@/lib/store";
 import { BUILD_VERSION, BUILD_SHA } from "@/lib/version";
 import { PrimaryCTA } from "./PrimaryCTA";
+import { withAttr } from "@/lib/attribution";
 
 export function SiteFooter() {
   return (
@@ -21,10 +22,10 @@ export function SiteFooter() {
             </p>
           </div>
           <div className="flex gap-3 shrink-0">
-            <PrimaryCTA href={STORE.shopUrl} variant="light" size="sm">
+            <PrimaryCTA href={withAttr(STORE.shopUrl, "footer", "order")} variant="light" size="sm">
               Order Online — 15% Off
             </PrimaryCTA>
-            <PrimaryCTA href="/menu" variant="secondary" size="sm">
+            <PrimaryCTA href={withAttr("/menu", "footer", "browse")} variant="secondary" size="sm">
               Browse Menu
             </PrimaryCTA>
           </div>
