@@ -9,22 +9,34 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const staticPages: MetadataRoute.Sitemap = [
     { url: STORE.website, lastModified: new Date(), changeFrequency: "daily", priority: 1 },
-    { url: `${STORE.website}/menu`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
+    { url: `${STORE.website}/menu`, lastModified: new Date(), changeFrequency: "daily", priority: 0.95 },
+    { url: `${STORE.website}/order`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
+    { url: `${STORE.website}/find-your-strain`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
     { url: `${STORE.website}/brands`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
     { url: `${STORE.website}/blog`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
     { url: `${STORE.website}/about`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
-    { url: `${STORE.website}/visit`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
+    { url: `${STORE.website}/visit`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.85 },
     { url: `${STORE.website}/contact`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
     { url: `${STORE.website}/faq`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
     { url: `${STORE.website}/learn`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.75 },
   ];
 
-  const brandPages: MetadataRoute.Sitemap = brands.map((b) => ({
-    url: `${STORE.website}/brands/${b.slug}`,
-    lastModified: new Date(),
-    changeFrequency: "weekly" as const,
-    priority: 0.7,
-  }));
+  // Dedupe brand slugs — `getActiveBrands` groups by `v.id` but the slug is
+  // derived from `v.name`, so two vendor rows with the same name produce
+  // the same slug. Mirror of greenlife-web/app/sitemap.ts.
+  const seenBrandSlugs = new Set<string>();
+  const brandPages: MetadataRoute.Sitemap = brands
+    .filter((b) => {
+      if (seenBrandSlugs.has(b.slug)) return false;
+      seenBrandSlugs.add(b.slug);
+      return true;
+    })
+    .map((b) => ({
+      url: `${STORE.website}/brands/${b.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.7,
+    }));
 
   const postPages: MetadataRoute.Sitemap = posts.map((p) => ({
     url: `${STORE.website}/blog/${p.slug}`,
