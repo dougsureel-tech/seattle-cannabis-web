@@ -512,7 +512,11 @@ export default async function HomePage() {
                 <a
                   key={p.id}
                   href={STORE.shopUrl}
-                  className="group bg-white rounded-2xl border border-stone-100 overflow-hidden hover:border-indigo-300 hover:shadow-lg transition-all"
+                  // Featured product card — violet-tinted glow on hover (matches
+                  // the brand identity used by PrimaryCTA + footer + hero) plus
+                  // a subtle lift. Lights up like the homepage actually wants
+                  // you to click instead of just shifting borders.
+                  className="group bg-white rounded-2xl border border-stone-100 overflow-hidden hover:border-violet-300 hover:shadow-xl hover:shadow-violet-500/15 hover:-translate-y-0.5 transition-all duration-200"
                 >
                   <div className="aspect-square bg-stone-100 overflow-hidden relative">
                     {p.imageUrl ? (
@@ -763,7 +767,7 @@ export default async function HomePage() {
                 <Link
                   key={brand.id}
                   href={`/brands/${brand.slug}`}
-                  className="group flex flex-col items-center justify-center gap-2 p-4 rounded-2xl border border-stone-100 bg-white hover:border-indigo-300 hover:shadow-md transition-all aspect-square"
+                  className="group flex flex-col items-center justify-center gap-2 p-4 rounded-2xl border border-stone-100 bg-white hover:border-violet-300 hover:shadow-lg hover:shadow-violet-500/15 hover:-translate-y-0.5 transition-all duration-200 aspect-square"
                 >
                   <img
                     src={brand.logoUrl!}
