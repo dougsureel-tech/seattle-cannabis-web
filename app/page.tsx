@@ -175,10 +175,7 @@ export default async function HomePage() {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3">
-                <a
-                  href={STORE.shopUrl}
-                  className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-2xl bg-indigo-300 hover:bg-indigo-200 active:bg-indigo-400 text-indigo-950 font-bold text-base transition-all shadow-lg shadow-indigo-900/40 hover:-translate-y-0.5"
-                >
+                <PrimaryCTA href={STORE.shopUrl} variant="light">
                   Order Online — 15% Off
                   <svg
                     className="w-4 h-4"
@@ -189,13 +186,10 @@ export default async function HomePage() {
                   >
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
-                </a>
-                <Link
-                  href="/menu"
-                  className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-2xl border border-white/20 hover:border-white/40 hover:bg-white/10 text-white font-semibold text-base transition-all"
-                >
+                </PrimaryCTA>
+                <PrimaryCTA href="/menu" variant="secondary">
                   Browse Menu
-                </Link>
+                </PrimaryCTA>
               </div>
 
               <div className="flex items-center gap-5 text-xs text-indigo-400/55 font-medium pt-1 flex-wrap">
@@ -790,7 +784,10 @@ export default async function HomePage() {
       )}
 
       {/* ─── CTA band ───────────────────────────────────────────────────────── */}
-      <section className="bg-indigo-950 text-white">
+      {/* Bottom-of-page CTA — same indigo→violet gradient identity as the
+          AnnouncementBar / footer / hours card. Page bookends in matching
+          depth instead of a flat indigo slab. */}
+      <section className="bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 flex flex-col sm:flex-row items-center justify-between gap-8">
           <div className="space-y-2 text-center sm:text-left">
             <h2 className="text-2xl sm:text-3xl font-extrabold">Ready to order?</h2>
@@ -799,18 +796,12 @@ export default async function HomePage() {
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 shrink-0">
-            <a
-              href={STORE.shopUrl}
-              className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-2xl bg-indigo-300 hover:bg-indigo-200 text-indigo-950 font-bold text-base transition-all shadow-lg hover:-translate-y-0.5"
-            >
+            <PrimaryCTA href={STORE.shopUrl} variant="light">
               Order Online — 15% Off
-            </a>
-            <Link
-              href="/menu"
-              className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-2xl border border-white/20 hover:border-white/40 hover:bg-white/10 text-white font-semibold text-base transition-all"
-            >
+            </PrimaryCTA>
+            <PrimaryCTA href="/menu" variant="secondary">
               Browse Menu
-            </Link>
+            </PrimaryCTA>
           </div>
         </div>
       </section>

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { STORE } from "@/lib/store";
+import { PrimaryCTA } from "./PrimaryCTA";
 
 export function SiteFooter() {
   return (
@@ -19,18 +20,12 @@ export function SiteFooter() {
             </p>
           </div>
           <div className="flex gap-3 shrink-0">
-            <a
-              href={STORE.shopUrl}
-              className="px-4 py-2 rounded-xl bg-indigo-300 hover:bg-indigo-200 text-indigo-950 text-sm font-bold transition-colors"
-            >
+            <PrimaryCTA href={STORE.shopUrl} variant="light" size="sm">
               Order Online — 15% Off
-            </a>
-            <Link
-              href="/menu"
-              className="px-4 py-2 rounded-xl border border-white/15 hover:border-white/30 hover:bg-white/5 text-white text-sm font-medium transition-all"
-            >
+            </PrimaryCTA>
+            <PrimaryCTA href="/menu" variant="secondary" size="sm">
               Browse Menu
-            </Link>
+            </PrimaryCTA>
           </div>
         </div>
       </div>
