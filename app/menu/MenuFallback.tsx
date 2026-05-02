@@ -7,11 +7,14 @@ import { STORE } from "@/lib/store";
 // `<div id="app">` mount point still hasn't loaded any actual product
 // content, the embed silently failed (Cloudflare bot-block on the API,
 // ad-blocker, mobile-emulation fingerprint, hash rotation we missed, etc.)
-// — show a graceful fallback pointing the customer at the phone + address
-// instead of a stuck loading spinner.
+// — show a graceful fallback so the customer can still order today.
 //
-// Per Doug's pin: don't bounce customers off-domain. The fallback keeps
-// them on seattlecannabis.co with an actionable next step (call the store).
+// Per Doug's pin: don't AUTO-redirect off-domain (no `next.config.ts`
+// redirects() block). But on a confirmed-broken embed, an explicit
+// click-to-iHeartJane button is the only path that keeps revenue alive
+// while we untangle the CORS issue. Default actions stay on-domain (call
+// the store, get directions); iHeartJane is offered as the loud primary
+// CTA because that's what the customer came here to do.
 //
 // "Stuck" detection: textContent length. Boost's loading squiggle is a few
 // dozen characters of SVG/skeleton; a loaded menu has thousands of chars
@@ -22,6 +25,7 @@ import { STORE } from "@/lib/store";
 
 const WAIT_MS = 10_000;
 const LOADED_MIN_CHARS = 500;
+const IHEARTJANE_URL = "https://www.iheartjane.com/stores/5295/seattle-cannabis-co";
 
 export function MenuFallback() {
   const [show, setShow] = useState(false);
@@ -65,10 +69,18 @@ export function MenuFallback() {
           <div className="flex-1 min-w-0">
             <h2 className="font-bold text-base sm:text-lg">Our live menu is taking a moment to load.</h2>
             <p className="text-sm mt-1 text-amber-900/90">
-              If you keep seeing this, give the page a hard refresh, try a different browser, or call us — we
-              have everything ready and can take your order over the phone.
+              You can browse and order on iHeartJane while we get the embedded menu back, or give us a call —
+              we have everything ready and can take your order over the phone.
             </p>
             <div className="flex flex-wrap gap-2 mt-4">
+              <a
+                href={IHEARTJANE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-700 text-white text-sm font-bold hover:bg-indigo-600 transition-colors shadow-sm"
+              >
+                Order on iHeartJane →
+              </a>
               <a
                 href={`tel:${STORE.phoneTel}`}
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-900 text-white text-sm font-semibold hover:bg-amber-800 transition-colors"
