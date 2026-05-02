@@ -95,3 +95,46 @@ details[open] > summary ~ * {
     background-position: -200% 0;
   }
 }
+
+/* Slow color drift across a 200% gradient — used for hero "Premier" text +
+   primary CTAs. Subtle (8s loop) so it reads as alive, not flashy. Pairs
+   with `bg-[length:200%_auto]` on the element. */
+@keyframes gradient-drift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+.animate-gradient {
+  background-size: 200% auto;
+  animation: gradient-drift 8s ease-in-out infinite;
+}
+
+/* Soft pulsing halo for the Open Now / Live indicators — bigger + more
+   visually present than Tailwind's default animate-pulse, but still
+   restrained. */
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.15);
+  }
+}
+.animate-glow {
+  animation: glow-pulse 2.4s ease-in-out infinite;
+}
+
+/* Respect prefers-reduced-motion for both new animations. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-gradient,
+  .animate-glow {
+    animation: none;
+  }
+}

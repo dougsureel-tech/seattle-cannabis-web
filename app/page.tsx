@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { STORE, isOpenNow, nextOpenLabel } from "@/lib/store";
 import { getActiveBrands, getFeaturedProducts } from "@/lib/db";
+import { PrimaryCTA } from "@/components/PrimaryCTA";
 
 export const dynamic = "force-dynamic";
 
@@ -156,10 +157,11 @@ export default async function HomePage() {
                 <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-[1.05] tracking-tight">
                   Rainier Valley&apos;s
                   <br />
-                  {/* "Premier" — gradient text indigo→fuchsia→indigo gives the
-                      hero a real focal point without changing the brand color
-                      identity (still indigo-anchored on both ends). */}
-                  <span className="bg-gradient-to-r from-indigo-300 via-fuchsia-300 to-indigo-300 bg-clip-text text-transparent">
+                  {/* "Premier" — gradient text indigo→fuchsia→indigo with a
+                      slow gradient drift (animate-gradient, 8s loop) so the
+                      hero focal point reads as alive instead of static.
+                      Brand-coherent — indigo-anchored on both ends. */}
+                  <span className="animate-gradient bg-gradient-to-r from-indigo-300 via-fuchsia-300 to-indigo-300 bg-clip-text text-transparent">
                     Premier
                   </span>{" "}
                   <span className="text-white/90">Cannabis</span>
@@ -474,15 +476,7 @@ export default async function HomePage() {
             ))}
           </div>
           <div className="text-center mt-10">
-            <a
-              href={STORE.shopUrl}
-              // CTA — gradient indigo→violet on the most-visible
-              // conversion button on this section, with a soft violet glow
-              // shadow on hover that picks up the new color identity.
-              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-gradient-to-r from-indigo-800 via-violet-700 to-indigo-800 hover:from-indigo-700 hover:via-violet-600 hover:to-indigo-700 text-white font-bold text-sm transition-all shadow-md shadow-violet-900/20 hover:shadow-lg hover:shadow-violet-700/30 hover:-translate-y-0.5"
-            >
-              Order Online — 15% Off →
-            </a>
+            <PrimaryCTA href={STORE.shopUrl}>Order Online — 15% Off →</PrimaryCTA>
           </div>
         </div>
       </section>
@@ -574,14 +568,7 @@ export default async function HomePage() {
               ))}
             </div>
             <div className="text-center mt-10">
-              <a
-                href={STORE.shopUrl}
-                // Matches the How-Pickup-Works CTA gradient — same conversion
-                // action, same visual treatment.
-                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-gradient-to-r from-indigo-800 via-violet-700 to-indigo-800 hover:from-indigo-700 hover:via-violet-600 hover:to-indigo-700 text-white font-bold text-sm transition-all shadow-md shadow-violet-900/20 hover:shadow-lg hover:shadow-violet-700/30 hover:-translate-y-0.5"
-              >
-                Order Online — 15% Off →
-              </a>
+              <PrimaryCTA href={STORE.shopUrl}>Order Online — 15% Off →</PrimaryCTA>
             </div>
           </div>
         </section>
