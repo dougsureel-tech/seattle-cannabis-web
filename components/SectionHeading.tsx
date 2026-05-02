@@ -23,6 +23,10 @@ type Align = "left" | "center";
 export function SectionHeading({
   children,
   eyebrow,
+  // Defaults to indigo to match the rest of the site identity. Override per-
+  // section when the surrounding palette is different (e.g. amber on the
+  // sunset "Where you headed?" section).
+  eyebrowClassName = "text-indigo-600",
   kicker,
   variant = "solid",
   align = "center",
@@ -30,6 +34,7 @@ export function SectionHeading({
 }: {
   children: ReactNode;
   eyebrow?: ReactNode;
+  eyebrowClassName?: string;
   kicker?: ReactNode;
   variant?: "solid" | "gradient";
   align?: Align;
@@ -43,7 +48,9 @@ export function SectionHeading({
   return (
     <div className={`${alignCls} ${className}`}>
       {eyebrow && (
-        <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-indigo-600 mb-3">
+        <span
+          className={`inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest mb-3 ${eyebrowClassName}`}
+        >
           {eyebrow}
         </span>
       )}

@@ -365,18 +365,23 @@ export default async function HomePage() {
         </svg>
 
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
-          <div className="text-center mb-10 sm:mb-12">
-            <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-amber-700/80 mb-3">
-              <span className="text-sm">☀️</span> Where you headed?
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-stone-900 tracking-tight">
-              Pick the move. We&apos;ll cover the rest.
-            </h2>
-            <p className="text-stone-600 mt-2 text-sm sm:text-base max-w-xl mx-auto">
-              Five minutes off Rainier — pull up, grab what fits the day, walk back out. Seward Park&apos;s
-              right around the corner; the rest of the city&apos;s a short drive.
-            </p>
-          </div>
+          <SectionHeading
+            className="mb-10 sm:mb-12"
+            eyebrow={
+              <>
+                <span className="text-sm">☀️</span> Where you headed?
+              </>
+            }
+            eyebrowClassName="text-amber-700/80"
+            kicker={
+              <>
+                Five minutes off Rainier — pull up, grab what fits the day, walk back out. Seward
+                Park&apos;s right around the corner; the rest of the city&apos;s a short drive.
+              </>
+            }
+          >
+            Pick the move. We&apos;ll cover the rest.
+          </SectionHeading>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             {[

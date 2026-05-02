@@ -179,12 +179,16 @@ export function SiteHeader() {
                 Sign in
               </Link>
             }
+            {/* Header "Order Now" — same indigo→violet gradient identity as
+                PrimaryCTA, with the slow drift animation. Light variant on
+                dark/hero pages, primary on light pages. The site's most-tapped
+                CTA on every page now wears the consistent brand gradient. */}
             <a
               href={STORE.shopUrl}
-              className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-200 shadow-sm ${
+              className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-200 shadow-sm animate-gradient bg-[length:200%_auto] ${
                 dark
-                  ? "bg-indigo-300 text-indigo-950 hover:bg-indigo-200 shadow-black/20"
-                  : "bg-indigo-700 hover:bg-indigo-600 text-white"
+                  ? "bg-gradient-to-r from-indigo-300 via-fuchsia-200 to-indigo-300 text-indigo-950 hover:from-indigo-200 hover:via-fuchsia-100 hover:to-indigo-200 shadow-black/20"
+                  : "bg-gradient-to-r from-indigo-800 via-violet-700 to-indigo-800 hover:from-indigo-700 hover:via-violet-600 hover:to-indigo-700 text-white shadow-violet-900/20"
               }`}
             >
               Order Now
@@ -325,9 +329,11 @@ export function SiteHeader() {
           >
             ✨ Create Account · 15% off first order
           </Link>
+          {/* Mobile drawer Order Now — same gradient treatment as the
+              header desktop button so the brand mark is consistent. */}
           <a
             href={STORE.shopUrl}
-            className="flex items-center justify-center px-4 py-3 rounded-xl bg-indigo-700 hover:bg-indigo-600 text-white text-sm font-bold transition-colors shadow-md"
+            className="flex items-center justify-center px-4 py-3 rounded-xl bg-gradient-to-r from-indigo-800 via-violet-700 to-indigo-800 hover:from-indigo-700 hover:via-violet-600 hover:to-indigo-700 text-white text-sm font-bold transition-all shadow-md shadow-violet-900/20 animate-gradient bg-[length:200%_auto]"
           >
             Order Now — 15% Off →
           </a>
