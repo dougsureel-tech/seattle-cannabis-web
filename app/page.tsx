@@ -6,6 +6,7 @@ import { PrimaryCTA } from "@/components/PrimaryCTA";
 import { SectionHeading } from "@/components/SectionHeading";
 import { ReviewsSection } from "@/components/Reviews";
 import { RecentlyViewedAutoStrip } from "@/components/RecentlyViewedAutoStrip";
+import { HeroBackground } from "@/components/HeroBackground";
 
 export const dynamic = "force-dynamic";
 
@@ -92,33 +93,11 @@ export default async function HomePage() {
   return (
     <>
       {/* ─── Hero ─────────────────────────────────────────────────────────── */}
+      {/* bg-gradient on the section is the static fallback that paints
+          identically to HeroBackground's Layer 1; the component then renders
+          the full multi-layer animated composition over it. */}
       <section className="relative bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white overflow-hidden">
-        <div
-          className="absolute inset-0 opacity-[0.04]"
-          style={{
-            backgroundImage: "radial-gradient(circle, #fff 1px, transparent 1px)",
-            backgroundSize: "28px 28px",
-          }}
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            // Three radial pools instead of two — left indigo wash, top-right
-            // indigo, plus a new bottom-right fuchsia/magenta pool that breaks
-            // the flat-indigo monotony without screaming. Bumped opacity hex
-            // values from 22/44 to 33/55 so the depth actually reads.
-            backgroundImage:
-              "radial-gradient(ellipse 70% 80% at 15% 50%, #1e1b4b55, transparent), radial-gradient(ellipse 50% 60% at 90% 20%, #4338ca33, transparent), radial-gradient(ellipse 60% 70% at 80% 90%, #c026d322, transparent)",
-          }}
-        />
-        <div
-          className="absolute top-0 right-0 w-[600px] h-[600px] opacity-10 translate-x-1/4 -translate-y-1/4 pointer-events-none"
-          style={{ background: "radial-gradient(circle, #818cf8, transparent 70%)" }}
-        />
-        <div
-          className="absolute bottom-0 left-0 w-[500px] h-[500px] opacity-[0.08] -translate-x-1/3 translate-y-1/3 pointer-events-none"
-          style={{ background: "radial-gradient(circle, #e879f9, transparent 70%)" }}
-        />
+        <HeroBackground />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-20 sm:py-28 lg:py-32">
           <div className="flex flex-col lg:flex-row lg:items-center gap-12 lg:gap-16">
