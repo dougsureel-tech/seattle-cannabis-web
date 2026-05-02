@@ -112,7 +112,7 @@ export default async function HomePage() {
       <section className="relative bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white overflow-hidden">
         <HeroBackground />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-14 lg:py-20">
+        <div className="relative max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 py-10 sm:py-14 lg:py-20">
           <div className="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-10">
             {/* Left: content */}
             <div className="flex-1 space-y-7">
