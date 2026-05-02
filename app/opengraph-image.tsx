@@ -60,7 +60,7 @@ export default function OG() {
             <span>Free parking</span>
           </div>
           <div style={{ fontSize: 20, color: "#c7d2fe", fontWeight: 500 }}>
-            seattlecannabis.com
+            seattlecannabis.co
           </div>
         </div>
       </div>

@@ -11,7 +11,7 @@ export const STORE = {
   phone: "(206) 420-1042",
   phoneTel: "+12064201042",
   email: "rainier@seattlecannabis.co",
-  website: "https://www.seattlecannabis.com",
+  website: "https://seattlecannabis.co",
   geo: { lat: 47.5345, lng: -122.2773 },
   googleMapsUrl: "https://maps.google.com/?q=7266+Rainier+Ave+S+Seattle+WA+98118",
   googleMapsEmbed: "",
