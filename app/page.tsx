@@ -88,13 +88,21 @@ export default async function HomePage() {
         <div
           className="absolute inset-0"
           style={{
+            // Three radial pools instead of two — left indigo wash, top-right
+            // indigo, plus a new bottom-right fuchsia/magenta pool that breaks
+            // the flat-indigo monotony without screaming. Bumped opacity hex
+            // values from 22/44 to 33/55 so the depth actually reads.
             backgroundImage:
-              "radial-gradient(ellipse 70% 80% at 15% 50%, #1e1b4b44, transparent), radial-gradient(ellipse 50% 60% at 90% 20%, #4338ca22, transparent)",
+              "radial-gradient(ellipse 70% 80% at 15% 50%, #1e1b4b55, transparent), radial-gradient(ellipse 50% 60% at 90% 20%, #4338ca33, transparent), radial-gradient(ellipse 60% 70% at 80% 90%, #c026d322, transparent)",
           }}
         />
         <div
           className="absolute top-0 right-0 w-[600px] h-[600px] opacity-10 translate-x-1/4 -translate-y-1/4 pointer-events-none"
           style={{ background: "radial-gradient(circle, #818cf8, transparent 70%)" }}
+        />
+        <div
+          className="absolute bottom-0 left-0 w-[500px] h-[500px] opacity-[0.08] -translate-x-1/3 translate-y-1/3 pointer-events-none"
+          style={{ background: "radial-gradient(circle, #e879f9, transparent 70%)" }}
         />
 
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-20 sm:py-28 lg:py-32">
@@ -128,7 +136,12 @@ export default async function HomePage() {
                 <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-[1.05] tracking-tight">
                   Rainier Valley&apos;s
                   <br />
-                  <span className="text-indigo-300">Premier</span>{" "}
+                  {/* "Premier" — gradient text indigo→fuchsia→indigo gives the
+                      hero a real focal point without changing the brand color
+                      identity (still indigo-anchored on both ends). */}
+                  <span className="bg-gradient-to-r from-indigo-300 via-fuchsia-300 to-indigo-300 bg-clip-text text-transparent">
+                    Premier
+                  </span>{" "}
                   <span className="text-white/90">Cannabis</span>
                   <br />
                   <span className="text-indigo-100/70 font-light">Shop.</span>
@@ -248,7 +261,12 @@ export default async function HomePage() {
           <div className="grid grid-cols-2 sm:grid-cols-4 divide-x divide-stone-100">
             {STATS.map(({ val, label }) => (
               <div key={val} className="py-5 px-4 sm:px-6 text-center">
-                <div className="text-sm sm:text-base font-extrabold text-indigo-900 leading-tight">{val}</div>
+                {/* Gradient text indigo→violet on the bold value gives the
+                    strip a richer feel than flat indigo-900 — depth without
+                    competing with the deep-indigo hero above. */}
+                <div className="text-sm sm:text-base font-extrabold leading-tight bg-gradient-to-r from-indigo-900 to-violet-800 bg-clip-text text-transparent">
+                  {val}
+                </div>
                 <div className="text-xs text-stone-400 mt-0.5">{label}</div>
               </div>
             ))}

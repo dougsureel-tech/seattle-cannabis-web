@@ -8,7 +8,14 @@ export function AnnouncementBar() {
 
   return (
     <div
-      className={`text-xs font-medium py-1.5 px-4 text-center flex items-center justify-center gap-3 flex-wrap ${open ? "bg-indigo-900 text-indigo-100" : "bg-stone-800 text-stone-300"}`}
+      // Open: deep-indigo → violet gradient gives the bar real depth instead of
+      // a flat slab. Closed: warm-stone gradient (still distinct from open
+      // state, but quieter — matches the "we're not serving you right now" vibe).
+      className={`text-xs font-medium py-1.5 px-4 text-center flex items-center justify-center gap-3 flex-wrap ${
+        open
+          ? "bg-gradient-to-r from-indigo-900 via-violet-900 to-indigo-900 text-indigo-100"
+          : "bg-gradient-to-r from-stone-800 via-stone-700 to-stone-800 text-stone-300"
+      }`}
     >
       <span className="flex items-center gap-1.5">
         <span
