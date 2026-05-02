@@ -213,7 +213,7 @@ export default async function AccountPage({ searchParams }: Props) {
       {/* Quick actions */}
       <div className="grid grid-cols-2 gap-3">
         <Link
-          href="/order"
+          href="/menu"
           className="group flex flex-col items-center gap-2.5 p-5 rounded-2xl bg-indigo-800 hover:bg-indigo-700 text-white transition-all text-center hover:-translate-y-0.5 shadow-md shadow-indigo-900/20"
         >
           <span className="text-2xl">🛒</span>
@@ -272,7 +272,7 @@ export default async function AccountPage({ searchParams }: Props) {
             <p className="text-stone-400 text-sm mt-1">Browse our menu and place your first order</p>
           </div>
           <Link
-            href="/order"
+            href="/menu"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-indigo-700 hover:bg-indigo-600 text-white text-sm font-bold transition-all shadow-md hover:-translate-y-0.5"
           >
             Shop Menu →

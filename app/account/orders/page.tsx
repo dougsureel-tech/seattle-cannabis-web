@@ -116,7 +116,7 @@ export default async function OrderHistoryPage() {
             <p className="text-sm text-stone-400 mt-1">Your pickup order history will appear here</p>
           </div>
           <Link
-            href="/order"
+            href="/menu"
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-indigo-700 text-white text-sm font-semibold hover:bg-indigo-600 transition-all hover:-translate-y-0.5 shadow-sm"
           >
             Browse Menu →

@@ -146,7 +146,7 @@ export default async function DealsPage() {
 
           <div className="pt-6 text-center">
             <Link
-              href="/order"
+              href="/menu"
               className="inline-flex items-center gap-1.5 px-6 py-3 rounded-xl bg-indigo-700 hover:bg-indigo-600 text-white font-bold transition-colors shadow-sm"
             >
               Order for pickup →
