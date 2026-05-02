@@ -492,7 +492,7 @@ export default async function HomePage() {
               </Link>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-              {featured.map((p, i) => (
+              {featured.map((p) => (
                 <a
                   key={p.id}
                   href={STORE.shopUrl}
@@ -503,11 +503,6 @@ export default async function HomePage() {
                       <img
                         src={p.imageUrl}
                         alt={p.name}
-                        // First card is above-the-fold and typically the LCP element on
-                        // mobile (single column). Explicit fetchPriority="high" + eager
-                        // load skips the auto-defer and improves Core Web Vitals.
-                        loading={i === 0 ? "eager" : "lazy"}
-                        fetchPriority={i === 0 ? "high" : "auto"}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                     ) : (
