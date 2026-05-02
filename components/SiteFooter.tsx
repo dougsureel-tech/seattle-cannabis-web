@@ -168,6 +168,7 @@ export function SiteFooter() {
               { href: "/contact", label: "Contact" },
               { href: "/press", label: "Press" },
               { href: "/account", label: "My Account" },
+              { href: "/accessibility", label: "Accessibility" },
             ].map(({ href, label }) => (
               <li key={href}>
                 <Link href={href} className="text-xs text-indigo-300/80 hover:text-white transition-colors">
