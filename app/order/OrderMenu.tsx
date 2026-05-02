@@ -311,7 +311,17 @@ export function OrderMenu({ products }: { products: MenuProduct[] }) {
 
           {/* Product grid by category */}
           <div className="space-y-12">
-            {[...grouped.entries()].map(([category, items]) => (
+            {[...grouped.entries()].map(([category, items]) => {
+              // In the All-Items view, cap each category at 24 cards so the
+              // initial render isn't 8MB+ of HTML on a Seattle catalog. The
+              // "Show all" button switches to that category, which then
+              // renders the full list. When a category is already selected
+              // or the user has searched, render every match.
+              // Mirrors greenlife-web/app/order/OrderMenu.tsx (commit 2e5aab8).
+              const isCapped = activeCategory === null && !search;
+              const visibleItems = isCapped ? items.slice(0, 24) : items;
+              const hiddenCount = items.length - visibleItems.length;
+              return (
               <section
                 key={category}
                 ref={(el) => {
@@ -326,7 +336,7 @@ export function OrderMenu({ products }: { products: MenuProduct[] }) {
                   </span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-                  {items.map((product) => {
+                  {visibleItems.map((product) => {
                     const cartItem = cart.find((i) => i.id === product.id);
                     const strain = product.strainType ? STRAIN_COLORS[product.strainType] : null;
                     return (
@@ -430,8 +440,17 @@ export function OrderMenu({ products }: { products: MenuProduct[] }) {
                     );
                   })}
                 </div>
+                {hiddenCount > 0 && (
+                  <button
+                    onClick={() => setActiveCategory(category)}
+                    className="mt-5 w-full text-center text-sm font-bold text-indigo-700 hover:text-indigo-600 py-3 rounded-xl border border-stone-100 hover:border-indigo-200 hover:bg-indigo-50/50 transition-colors"
+                  >
+                    Show all {items.length} {category.toLowerCase()} →
+                  </button>
+                )}
               </section>
-            ))}
+              );
+            })}
           </div>
 
           {filtered.length === 0 && (
