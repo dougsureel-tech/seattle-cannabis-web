@@ -6,12 +6,12 @@ import { JaneMenu } from "./JaneMenu";
 // seattlecannabis.co — the Boost JS module hydrates the menu inline.
 // Naive iframe is blocked (iHeartJane sets X-Frame-Options: SAMEORIGIN).
 //
-// Config + script tags live in JaneMenu.tsx. NOTE: Seattle (storeId 5295)
-// currently shares Wenatchee's embedConfigId 234 as a placeholder. Seattle
-// was never on the WordPress site so iHeartJane never provisioned a
-// dedicated Boost config. If the menu fails to render here, Doug needs
-// to email iHeartJane partner support for a per-store embedConfigId.
-// See INCIDENTS.md (2026-05-01 entry).
+// Config + script tags live in JaneMenu.tsx. Seattle's embedConfigId 222
+// was recovered from a 2023-09-21 web.archive.org snapshot of
+// www.seattlecannabis.co/menu (back when the site ran on the older
+// `frameless_embeds` runtime). The numeric ID survived iHeartJane's
+// migration to Boost; storeId 5295 + embedConfigId 222 authorizes this
+// store under the current Boost runtime.
 
 export const dynamic = "force-static";
 
@@ -28,9 +28,7 @@ export const metadata: Metadata = {
 };
 
 const IHEARTJANE_STORE_ID = 5295;
-// PLACEHOLDER: same as Wenatchee until iHeartJane provisions a Seattle-specific
-// Boost config. Doug to email partner support.
-const IHEARTJANE_EMBED_CONFIG_ID = 234;
+const IHEARTJANE_EMBED_CONFIG_ID = 222;
 
 export default function MenuPage() {
   return (
