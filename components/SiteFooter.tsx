@@ -13,7 +13,7 @@ export function SiteFooter() {
             <p className="text-indigo-400/70 text-xs mt-0.5">Save 15% online · {STORE.neighborhood}, Seattle</p>
           </div>
           <div className="flex gap-3 shrink-0">
-            <a href={STORE.shopUrl} target="_blank" rel="noopener noreferrer"
+            <a href={STORE.shopUrl}
               className="px-4 py-2 rounded-xl bg-indigo-300 hover:bg-indigo-200 text-indigo-950 text-sm font-bold transition-colors">
               Order Online — 15% Off
             </a>

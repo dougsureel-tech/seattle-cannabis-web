@@ -101,7 +101,7 @@ export function SiteHeader() {
                 Sign in
               </Link>
             )}
-            <a href={STORE.shopUrl} target="_blank" rel="noopener noreferrer"
+            <a href={STORE.shopUrl}
               className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-200 shadow-sm ${
                 dark
                   ? "bg-indigo-300 text-indigo-950 hover:bg-indigo-200 shadow-black/20"
@@ -201,7 +201,7 @@ export function SiteHeader() {
               </Link>
             </>
           )}
-          <a href={STORE.shopUrl} target="_blank" rel="noopener noreferrer"
+          <a href={STORE.shopUrl}
             className="flex items-center justify-center px-4 py-3 rounded-xl bg-indigo-700 hover:bg-indigo-600 text-white text-sm font-bold transition-colors shadow-md">
             Order Now — 15% Off →
           </a>

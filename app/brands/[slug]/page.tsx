@@ -173,7 +173,7 @@ export default async function BrandPage({ params }: Props) {
             <p className="font-bold text-base">Want to order {brand.name}?</p>
             <p className="text-indigo-200/80 text-sm">Place a pickup order — save 15% online.</p>
           </div>
-          <a href={STORE.shopUrl} target="_blank" rel="noopener noreferrer"
+          <a href={STORE.shopUrl}
             className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-500 hover:bg-indigo-400 text-white text-sm font-bold transition-all shadow-md hover:-translate-y-0.5">
             Order Online — 15% Off →
           </a>
@@ -183,7 +183,7 @@ export default async function BrandPage({ params }: Props) {
           <div className="text-center py-16 space-y-3">
             <div className="text-4xl">🌿</div>
             <p className="text-stone-500 font-medium">No products currently in stock</p>
-            <a href={STORE.shopUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-indigo-700 font-semibold hover:underline">Browse full menu →</a>
+            <a href={STORE.shopUrl} className="text-sm text-indigo-700 font-semibold hover:underline">Browse full menu →</a>
           </div>
         ) : (
           categories.map((cat) => {
@@ -240,7 +240,7 @@ export default async function BrandPage({ params }: Props) {
                             ) : (
                               <span className="text-stone-300">—</span>
                             )}
-                            <a href={STORE.shopUrl} target="_blank" rel="noopener noreferrer"
+                            <a href={STORE.shopUrl}
                               className="text-xs font-bold text-indigo-700 hover:text-indigo-600 transition-colors">
                               Order →
                             </a>

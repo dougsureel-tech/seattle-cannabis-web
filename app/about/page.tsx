@@ -193,7 +193,7 @@ export default function AboutPage() {
             Open every day 8AM–11PM. No appointment needed. Walk-ins always welcome.
           </p>
           <div className="flex justify-center gap-3 flex-wrap">
-            <a href={STORE.shopUrl} target="_blank" rel="noopener noreferrer"
+            <a href={STORE.shopUrl}
               className="px-5 py-2.5 rounded-xl bg-indigo-300 hover:bg-indigo-200 text-indigo-950 text-sm font-bold transition-all shadow-md hover:-translate-y-0.5">
               Order Online — 15% Off
             </a>

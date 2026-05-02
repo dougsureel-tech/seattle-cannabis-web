@@ -80,7 +80,7 @@ export default async function HomePage() {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3">
-                <a href={STORE.shopUrl} target="_blank" rel="noopener noreferrer"
+                <a href={STORE.shopUrl}
                   className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-2xl bg-indigo-300 hover:bg-indigo-200 active:bg-indigo-400 text-indigo-950 font-bold text-base transition-all shadow-lg shadow-indigo-900/40 hover:-translate-y-0.5">
                   Order Online — 15% Off
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
@@ -217,7 +217,7 @@ export default async function HomePage() {
             ))}
           </div>
           <div className="text-center mt-10">
-            <a href={STORE.shopUrl} target="_blank" rel="noopener noreferrer"
+            <a href={STORE.shopUrl}
               className="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-indigo-800 hover:bg-indigo-700 text-white font-bold text-sm transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5">
               Order Online — 15% Off →
             </a>
@@ -240,7 +240,7 @@ export default async function HomePage() {
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
               {featured.map((p) => (
-                <a key={p.id} href={STORE.shopUrl} target="_blank" rel="noopener noreferrer"
+                <a key={p.id} href={STORE.shopUrl}
                   className="group bg-white rounded-2xl border border-stone-100 overflow-hidden hover:border-indigo-300 hover:shadow-lg transition-all">
                   <div className="aspect-square bg-stone-100 overflow-hidden relative">
                     {p.imageUrl ? (
@@ -273,7 +273,7 @@ export default async function HomePage() {
               ))}
             </div>
             <div className="text-center mt-10">
-              <a href={STORE.shopUrl} target="_blank" rel="noopener noreferrer"
+              <a href={STORE.shopUrl}
                 className="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-indigo-800 hover:bg-indigo-700 text-white font-bold text-sm transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5">
                 Order Online — 15% Off →
               </a>
@@ -435,7 +435,7 @@ export default async function HomePage() {
             <p className="text-indigo-300/80 text-sm">Order online and save 15% — pick up in store on Rainier Ave S.</p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 shrink-0">
-            <a href={STORE.shopUrl} target="_blank" rel="noopener noreferrer"
+            <a href={STORE.shopUrl}
               className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-2xl bg-indigo-300 hover:bg-indigo-200 text-indigo-950 font-bold text-base transition-all shadow-lg hover:-translate-y-0.5">
               Order Online — 15% Off
             </a>

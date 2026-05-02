@@ -15,7 +15,7 @@ export function AnnouncementBar() {
           : `Closed · ${status}`}
       </span>
       <span className="hidden sm:block opacity-40">|</span>
-      <a href={STORE.shopUrl} target="_blank" rel="noopener noreferrer"
+      <a href={STORE.shopUrl}
         className="opacity-75 hover:opacity-100 transition-opacity hidden sm:block font-semibold">
         Order Online — Save 15% ↗
       </a>

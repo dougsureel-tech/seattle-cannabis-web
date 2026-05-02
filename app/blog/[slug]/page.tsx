@@ -169,7 +169,7 @@ export default async function BlogPost({ params }: Props) {
             <Link href="/menu" className="px-4 py-2 rounded-xl bg-indigo-300 hover:bg-indigo-200 text-indigo-950 text-sm font-bold transition-colors">
               Browse Menu
             </Link>
-            <a href={STORE.shopUrl} target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-xl border border-white/20 hover:border-white/40 hover:bg-white/10 text-white text-sm font-semibold transition-colors">
+            <a href={STORE.shopUrl} className="px-4 py-2 rounded-xl border border-white/20 hover:border-white/40 hover:bg-white/10 text-white text-sm font-semibold transition-colors">
               Order Online — 15% Off
             </a>
           </div>

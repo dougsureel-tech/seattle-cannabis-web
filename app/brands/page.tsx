@@ -74,7 +74,7 @@ export default async function BrandsPage() {
             <div className="text-5xl">🌿</div>
             <p className="text-xl font-semibold text-stone-700">Brands loading soon</p>
             <p className="text-stone-400 text-sm">Check back or browse our full menu</p>
-            <a href={STORE.shopUrl} target="_blank" rel="noopener noreferrer"
+            <a href={STORE.shopUrl}
               className="mt-2 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-700 hover:bg-indigo-600 text-white text-sm font-semibold transition-colors">
               Shop Menu →
             </a>
@@ -131,7 +131,7 @@ export default async function BrandsPage() {
             )}
 
             <div className="text-center pt-4">
-              <a href={STORE.shopUrl} target="_blank" rel="noopener noreferrer"
+              <a href={STORE.shopUrl}
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50 text-sm font-semibold text-stone-700 hover:text-indigo-800 transition-all">
                 Browse All Products Online →
               </a>
