@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
-import { ClerkProvider } from "@clerk/nextjs";
 import { AgeGate } from "@/components/AgeGate";
 import { AnnouncementBar } from "@/components/AnnouncementBar";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -126,24 +125,26 @@ const localBusinessSchema = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  // ClerkProvider deliberately NOT here — see app/layout.tsx in greenlife-web
+  // for the full rationale. tl;dr: Clerk SDK preload on every page interferes
+  // with the iHeartJane Boost embed's cross-origin XHR. Provider is now
+  // scoped to /account, /sign-in, /sign-up via per-route layout.tsx.
   return (
-    <ClerkProvider>
-      <html lang="en" className={`${geistSans.variable} h-full`}>
-        <head>
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
-          />
-        </head>
-        <body className="min-h-full flex flex-col bg-stone-50 text-stone-900">
-          <AgeGate />
-          <AnnouncementBar />
-          <SiteHeader />
-          <main className="flex-1">{children}</main>
-          <SiteFooter />
-          <ServiceWorkerRegister />
-        </body>
-      </html>
-    </ClerkProvider>
+    <html lang="en" className={`${geistSans.variable} h-full`}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+        />
+      </head>
+      <body className="min-h-full flex flex-col bg-stone-50 text-stone-900">
+        <AgeGate />
+        <AnnouncementBar />
+        <SiteHeader />
+        <main className="flex-1">{children}</main>
+        <SiteFooter />
+        <ServiceWorkerRegister />
+      </body>
+    </html>
   );
 }
