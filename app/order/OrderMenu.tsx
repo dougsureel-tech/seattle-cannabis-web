@@ -266,6 +266,8 @@ export function OrderMenu({
   // never re-prompts in this session. (UX_AUDIT P1-2 closure.)
   const STALE_CART_THRESHOLD_MS = 48 * 60 * 60 * 1000;
   const [staleCartDismissed, setStaleCartDismissed] = useState(false);
+  // Keyboard shortcuts overlay (UX_AUDIT P2-6) — wired in useEffect below.
+  const [shortcutsOpen, setShortcutsOpen] = useState(false);
   // URL params can pre-fill filters — currently the only producer is
   // /find-your-strain which redirects here with ?category=Flower&strain=hybrid.
   // Reading once at mount; subsequent param changes don't re-key state since
@@ -327,6 +329,34 @@ export function OrderMenu({
     url.searchParams.delete("cart");
     window.history.replaceState(null, "", url.toString());
   }, []);
+
+  // Keyboard shortcuts (UX_AUDIT P2-6). Mirrors greenlife-web v3.88.
+  // ? opens overlay · c toggles cart · Esc closes. Skips when typing in inputs.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    function onKey(e: KeyboardEvent) {
+      const t = e.target as HTMLElement | null;
+      if (
+        t &&
+        (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)
+      ) {
+        return;
+      }
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.key === "?" || (e.shiftKey && e.key === "/")) {
+        e.preventDefault();
+        setShortcutsOpen((p) => !p);
+      } else if (e.key === "c" || e.key === "C") {
+        e.preventDefault();
+        setCartOpen((p) => !p);
+      } else if (e.key === "Escape") {
+        if (shortcutsOpen) setShortcutsOpen(false);
+        else if (cartOpen) setCartOpen(false);
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [cartOpen, shortcutsOpen]);
 
   // Refresh pickup window while the cart drawer is open so slots shrink as
   // close approaches and the closed-state message updates at the cutoff.
@@ -1449,6 +1479,49 @@ export function OrderMenu({
                 </div>
               </button>
             )}
+          </div>
+        </div>
+      )}
+      {/* Keyboard-shortcuts overlay (UX_AUDIT P2-6). Mirrors greenlife-web. */}
+      {shortcutsOpen && (
+        <div
+          onClick={() => setShortcutsOpen(false)}
+          className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center px-4 animate-pop"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Keyboard shortcuts"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white rounded-2xl border border-stone-200 shadow-2xl max-w-sm w-full px-6 py-5"
+          >
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="font-bold text-stone-900">Keyboard shortcuts</h2>
+              <button
+                onClick={() => setShortcutsOpen(false)}
+                className="w-7 h-7 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-600 text-lg leading-none"
+                aria-label="Close shortcuts"
+              >
+                ×
+              </button>
+            </div>
+            <ul className="space-y-2 text-sm text-stone-700">
+              <li className="flex items-center justify-between">
+                <span>Open this overlay</span>
+                <kbd className="font-mono text-xs bg-stone-100 border border-stone-300 rounded px-2 py-0.5">?</kbd>
+              </li>
+              <li className="flex items-center justify-between">
+                <span>Toggle cart</span>
+                <kbd className="font-mono text-xs bg-stone-100 border border-stone-300 rounded px-2 py-0.5">C</kbd>
+              </li>
+              <li className="flex items-center justify-between">
+                <span>Close cart / overlay</span>
+                <kbd className="font-mono text-xs bg-stone-100 border border-stone-300 rounded px-2 py-0.5">Esc</kbd>
+              </li>
+            </ul>
+            <p className="text-[11px] text-stone-500 mt-4">
+              Shortcuts skip while you&apos;re typing in the search bar.
+            </p>
           </div>
         </div>
       )}
