@@ -7,6 +7,7 @@ import Image from "next/image";
 import type { MenuProduct, ActiveDeal } from "@/lib/db";
 import { STORE, getOrderingStatus, getPickupSlots, type OrderingStatus, type PickupSlot } from "@/lib/store";
 import { withAttr } from "@/lib/attribution";
+import { CURRENT_TEAM, initialOf } from "@/lib/team";
 
 // Map a product to a running deal it qualifies for. Mirror of the
 // helper in greenlife-web — keep in sync. Stem-match against the
@@ -1020,12 +1021,12 @@ export function OrderMenu({
 
       {/* Crew + walk-in CTA — closing strip so the menu doesn't end with a
           pile of products and nothing else. Locally-owned-since-2010 framing
-          per project_seattle_founding. Named-crew chips deliberately omitted
-          on the seattle repo: there's no `lib/team.ts` here yet (greenlife
-          has one, seattle's still pending). When that's seeded — Jensine,
-          Abram, Austin et al. per the May-2026 roster — wire chips here the
-          same shape as `app/order/OrderMenu.tsx` in greenlife-web and lift
-          the "ask the team lead" copy back to named-budtender voice. */}
+          per project_seattle_founding. Names + role chips pull from
+          `lib/team.ts` so this row stays in sync with the team page rather
+          than drifting into fake budtender names. We feature the
+          customer-facing managers + leads — the constants regulars know.
+          Owner row in team.ts deliberately filtered out so the chips stay
+          "people you'll actually see at the counter". */}
       <section className="mt-12 max-w-3xl mx-auto">
         <div className="rounded-3xl bg-gradient-to-br from-indigo-950 via-violet-900 to-indigo-900 text-white p-6 sm:p-8 relative overflow-hidden">
           <div
@@ -1042,12 +1043,51 @@ export function OrderMenu({
             <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight mb-2">
               Locally owned since 2010.
             </h2>
-            <p className="text-indigo-100/85 text-sm leading-relaxed mb-5 max-w-xl">
+            <p className="text-indigo-100/85 text-sm leading-relaxed mb-4 max-w-xl">
               The menu is a starting point. We&apos;ve been here longer than legal weed in Washington —
               tell us what you liked, what you didn&apos;t, what you&apos;re trying to do tonight,
-              we&apos;ll dial it from there. Ask for the team lead at the counter if you want a hand
-              walking the case.
+              we&apos;ll dial it from there.
             </p>
+            {/* Named-crew chips — currents-only, owner deliberately excluded so
+                customers see the floor-runners they'll actually meet at the
+                counter. Photo placeholder uses initials when team.ts photoSrc
+                is null (today: every Seattle entry is placeholderless until
+                Doug ships portraits). */}
+            {(() => {
+              const featured = CURRENT_TEAM.filter((m) => m.role !== "Owner").slice(0, 3);
+              if (featured.length === 0) return null;
+              return (
+                <div className="mb-5 flex flex-wrap gap-2.5">
+                  {featured.map((m) => (
+                    <div
+                      key={m.name}
+                      className="inline-flex items-center gap-2 rounded-2xl bg-white/10 border border-white/15 px-3 py-1.5"
+                    >
+                      {m.photoSrc ? (
+                        <Image
+                          src={m.photoSrc}
+                          alt=""
+                          width={28}
+                          height={28}
+                          className="w-7 h-7 rounded-full object-cover border border-white/25"
+                        />
+                      ) : (
+                        <span
+                          aria-hidden
+                          className="w-7 h-7 rounded-full bg-violet-700/70 flex items-center justify-center text-white text-xs font-extrabold tracking-tight"
+                        >
+                          {initialOf(m.name)}
+                        </span>
+                      )}
+                      <span className="leading-tight">
+                        <span className="block text-sm font-bold text-white">{m.name}</span>
+                        <span className="block text-[11px] text-indigo-200/85 font-medium">{m.role}</span>
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              );
+            })()}
             <div className="flex flex-wrap gap-2.5">
               <Link
                 href={withAttr("/visit", "order", "bottom-visit")}
