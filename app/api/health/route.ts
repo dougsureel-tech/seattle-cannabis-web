@@ -40,9 +40,39 @@ async function checkDb(): Promise<CheckResult> {
   }
 }
 
+// Content-level signal — counts of customer-visible surfaces (active
+// products + active deals). A deploy can pass DB connectivity but
+// break a query that returns the customer-facing content; this surfaces
+// that failure mode to external monitors without auth. Mirrors greenlife-web.
+async function checkContent(): Promise<{
+  productsActive: number;
+  dealsActive: number;
+  error: string | null;
+}> {
+  try {
+    const sql = getClient();
+    const [productRows, dealRows] = await Promise.all([
+      sql`SELECT COUNT(*)::int AS n FROM products WHERE carry_status = 'active'`,
+      sql`SELECT COUNT(*)::int AS n FROM deals
+          WHERE active = true
+            AND (starts_at IS NULL OR starts_at <= NOW())
+            AND (ends_at IS NULL OR ends_at > NOW())`,
+    ]);
+    const products = (productRows as Array<{ n: number }>)[0]?.n ?? 0;
+    const deals = (dealRows as Array<{ n: number }>)[0]?.n ?? 0;
+    return { productsActive: products, dealsActive: deals, error: null };
+  } catch (err) {
+    return {
+      productsActive: 0,
+      dealsActive: 0,
+      error: err instanceof Error ? err.message.slice(0, 200) : "unknown content error",
+    };
+  }
+}
+
 export async function GET() {
   const startedAt = Date.now();
-  const db = await checkDb();
+  const [db, content] = await Promise.all([checkDb(), checkContent()]);
   const elapsedMs = Date.now() - startedAt;
 
   const allOk = db.ok;
@@ -52,7 +82,7 @@ export async function GET() {
     sha: BUILD_SHA,
     ts: new Date().toISOString(),
     elapsedMs,
-    checks: { db },
+    checks: { db, content },
   };
 
   return NextResponse.json(body, {
