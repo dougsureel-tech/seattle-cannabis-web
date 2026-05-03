@@ -33,6 +33,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # pnpm before Node so setup-node can use the corepack-style cache
+      # if it wants. Pinned to v10 to match pnpm-lock.yaml's lockfile
+      # version (Vercel autodetects v10 based on project creation date).
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
       - name: Setup Node 24
         uses: actions/setup-node@v4
         with:
