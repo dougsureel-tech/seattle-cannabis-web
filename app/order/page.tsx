@@ -8,6 +8,13 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Order for Pickup",
   description: `Order cannabis online for pickup at ${STORE.name}. Browse flower, edibles, vapes, concentrates and more. Pay cash in store.`,
+  alternates: { canonical: "/order" },
+  openGraph: {
+    title: `Order for Pickup | ${STORE.name}`,
+    description: `Pickup-ready cannabis menu in ${STORE.neighborhood}, Seattle. Cash in store, points on every order.`,
+    url: `${STORE.website}/order`,
+    type: "website",
+  },
 };
 
 function minToLabel(min: number): string {
@@ -49,6 +56,13 @@ export default async function OrderPage() {
             <h1 className="text-3xl font-extrabold tracking-tight">Order for Pickup</h1>
             <p className="text-indigo-300/70 text-sm">
               Browse · Add to cart · Pick up &amp; pay cash · Earn points
+            </p>
+            {/* Locally-owned-since-2010 positioning per project memory
+                project_seattle_founding (founded 2010, Rainier Valley since
+                2018). Single line under the pickup-flow recap so the page
+                doesn't read as a faceless e-com surface. */}
+            <p className="text-indigo-200/70 text-xs">
+              Locally owned since 2010 — walk in or call us if you want backup picking.
             </p>
           </div>
           <div className="flex flex-col items-start sm:items-end gap-2 text-xs">
