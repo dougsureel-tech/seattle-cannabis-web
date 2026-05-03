@@ -3,6 +3,8 @@ import { STORE } from "@/lib/store";
 import { getActiveDeals } from "@/lib/db";
 import { JaneMenu } from "./JaneMenu";
 import { MenuFallback } from "./MenuFallback";
+import { MenuLocalStrip } from "@/components/MenuLocalStrip";
+import { MenuActiveDealsStrip } from "@/components/MenuActiveDealsStrip";
 
 // /menu = iHeartJane Jane Boost (iframeless) embed. Customer stays on
 // seattlecannabis.co — the Boost JS module hydrates the menu inline.
@@ -56,7 +58,9 @@ export default async function MenuPage() {
         </p>
       </div>
       <JaneMenu storeId={IHEARTJANE_STORE_ID} embedConfigId={IHEARTJANE_EMBED_CONFIG_ID} />
+      <MenuActiveDealsStrip deals={deals} />
       <MenuFallback featuredDeal={featuredDeal} />
+      <MenuLocalStrip />
     </div>
   );
 }
