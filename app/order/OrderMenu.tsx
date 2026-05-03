@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import type { MenuProduct, ActiveDeal } from "@/lib/db";
 import { STORE, getOrderingStatus, getPickupSlots, type OrderingStatus, type PickupSlot } from "@/lib/store";
+import { withAttr } from "@/lib/attribution";
 
 // Map a product to a running deal it qualifies for. Mirror of the
 // helper in greenlife-web — keep in sync. Stem-match against the
@@ -487,7 +488,11 @@ export function OrderMenu({
           so signing in mid-browse doesn't lose the in-progress cart. */}
       {!signedIn && (
         <Link
-          href="/sign-in?redirect_url=/order"
+          // sign-in nudge is the highest-leverage cookie-stamp surface on /order:
+          // any unsigned customer who clicks-through here is then identifiable
+          // when they place an order. attribution lets us trace which page sent
+          // them through the sign-in funnel later.
+          href={withAttr("/sign-in?redirect_url=/order", "order", "sign-in-nudge")}
           className="mb-4 flex items-center justify-between gap-3 rounded-2xl bg-gradient-to-r from-indigo-50 via-violet-50 to-indigo-50 border border-indigo-200 px-4 py-3 text-sm hover:border-indigo-300 hover:from-indigo-100 hover:to-indigo-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
         >
           <span className="flex items-center gap-2.5 min-w-0">
@@ -1015,7 +1020,12 @@ export function OrderMenu({
 
       {/* Crew + walk-in CTA — closing strip so the menu doesn't end with a
           pile of products and nothing else. Locally-owned-since-2010 framing
-          per project_seattle_founding. */}
+          per project_seattle_founding. Named-crew chips deliberately omitted
+          on the seattle repo: there's no `lib/team.ts` here yet (greenlife
+          has one, seattle's still pending). When that's seeded — Jensine,
+          Abram, Austin et al. per the May-2026 roster — wire chips here the
+          same shape as `app/order/OrderMenu.tsx` in greenlife-web and lift
+          the "ask the team lead" copy back to named-budtender voice. */}
       <section className="mt-12 max-w-3xl mx-auto">
         <div className="rounded-3xl bg-gradient-to-br from-indigo-950 via-violet-900 to-indigo-900 text-white p-6 sm:p-8 relative overflow-hidden">
           <div
@@ -1034,16 +1044,20 @@ export function OrderMenu({
             </h2>
             <p className="text-indigo-100/85 text-sm leading-relaxed mb-5 max-w-xl">
               The menu is a starting point. We&apos;ve been here longer than legal weed in Washington —
-              tell our crew what you liked, what you didn&apos;t, what you&apos;re trying to do tonight,
-              they&apos;ll dial it from there.
+              tell us what you liked, what you didn&apos;t, what you&apos;re trying to do tonight,
+              we&apos;ll dial it from there. Ask for the team lead at the counter if you want a hand
+              walking the case.
             </p>
             <div className="flex flex-wrap gap-2.5">
               <Link
-                href="/visit"
+                href={withAttr("/visit", "order", "bottom-visit")}
                 className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white text-indigo-900 text-sm font-bold hover:bg-indigo-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-indigo-900"
               >
                 📍 Visit us
               </Link>
+              {/* tel: links are no-op'd by withAttr (cookie carries the
+                  breadcrumb on return visits anyway) — kept call-through in
+                  voice with the rest of the row but skipping the wrap. */}
               <a
                 href={`tel:${STORE.phoneTel}`}
                 className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-white text-sm font-semibold border border-white/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-indigo-900"
@@ -1051,7 +1065,7 @@ export function OrderMenu({
                 📞 {STORE.phone}
               </a>
               <Link
-                href="/find-your-strain"
+                href={withAttr("/find-your-strain", "order", "bottom-quiz")}
                 className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-white text-sm font-semibold border border-white/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-indigo-900"
               >
                 🌿 Take the strain quiz
