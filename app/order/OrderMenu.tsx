@@ -25,6 +25,41 @@ function findDealForProduct(p: MenuProduct, deals: ActiveDeal[]): ActiveDeal | n
 }
 
 type CartItem = MenuProduct & { quantity: number };
+
+// Versioned cart payload — wraps items so a future schema change to
+// MenuProduct can drop incompatible carts cleanly instead of silently
+// rendering broken rows. Backward-compat: legacy carts (bare `CartItem[]`
+// arrays from before v1) still load — treated as items with no savedAt.
+// Per UX_AUDIT_2026_05_03 P1-2.
+type CartPayloadV1 = { v: 1; savedAt: number; items: CartItem[] };
+type LoadedCart = { items: CartItem[]; savedAt: number | null };
+
+function loadCart(): LoadedCart {
+  if (typeof window === "undefined") return { items: [], savedAt: null };
+  try {
+    const saved = localStorage.getItem("sc_cart");
+    if (!saved) return { items: [], savedAt: null };
+    const parsed = JSON.parse(saved);
+    if (Array.isArray(parsed)) {
+      // Legacy: bare array. Migrate-on-next-save (the useEffect below will
+      // wrap into v1 the next time the cart changes).
+      return { items: parsed as CartItem[], savedAt: null };
+    }
+    if (parsed && typeof parsed === "object" && parsed.v === 1 && Array.isArray(parsed.items)) {
+      const p = parsed as CartPayloadV1;
+      return { items: p.items, savedAt: typeof p.savedAt === "number" ? p.savedAt : null };
+    }
+    return { items: [], savedAt: null };
+  } catch {
+    return { items: [], savedAt: null };
+  }
+}
+
+function saveCart(items: CartItem[]): void {
+  if (typeof window === "undefined") return;
+  const payload: CartPayloadV1 = { v: 1, savedAt: Date.now(), items };
+  localStorage.setItem("sc_cart", JSON.stringify(payload));
+}
 type SortKey = "default" | "price-asc" | "price-desc" | "thc-desc" | "name";
 type PriceTier = "all" | "under15" | "15to30" | "over30";
 type ThcTier = "all" | "under10" | "10to20" | "over20";
@@ -223,15 +258,9 @@ export function OrderMenu({
   activeDeals?: ActiveDeal[];
 }) {
   const router = useRouter();
-  const [cart, setCart] = useState<CartItem[]>(() => {
-    if (typeof window === "undefined") return [];
-    try {
-      const saved = localStorage.getItem("sc_cart");
-      return saved ? (JSON.parse(saved) as CartItem[]) : [];
-    } catch {
-      return [];
-    }
-  });
+  const initialCart = useMemo(() => loadCart(), []);
+  const [cart, setCart] = useState<CartItem[]>(() => initialCart.items);
+  const [cartSavedAt] = useState<number | null>(initialCart.savedAt);
   // URL params can pre-fill filters — currently the only producer is
   // /find-your-strain which redirects here with ?category=Flower&strain=hybrid.
   // Reading once at mount; subsequent param changes don't re-key state since
@@ -264,13 +293,7 @@ export function OrderMenu({
     if (typeof window === "undefined") return false;
     const params = new URLSearchParams(window.location.search);
     if (params.get("cart") !== "open") return false;
-    try {
-      const saved = localStorage.getItem("sc_cart");
-      const parsed = saved ? (JSON.parse(saved) as CartItem[]) : [];
-      return Array.isArray(parsed) && parsed.length > 0;
-    } catch {
-      return false;
-    }
+    return loadCart().items.length > 0;
   });
   const [placing, setPlacing] = useState(false);
   const [orderError, setOrderError] = useState<string | null>(null);
@@ -280,7 +303,7 @@ export function OrderMenu({
   const [orderingStatus, setOrderingStatus] = useState<OrderingStatus | null>(null);
 
   useEffect(() => {
-    localStorage.setItem("sc_cart", JSON.stringify(cart));
+    saveCart(cart);
   }, [cart]);
 
   // One-shot URL hygiene: strip `?cart=open` after the lazy initializer above
@@ -672,7 +695,12 @@ export function OrderMenu({
 
           {/* Filter rail — strain pills, brand dropdown, sort dropdown.
               Hidden when no products would benefit (≤6 results). */}
-          {filtered.length > 6 && (
+          {(filtered.length > 6 ||
+            strainFilter ||
+            brandFilter ||
+            priceTier !== "all" ||
+            thcTier !== "all" ||
+            sortBy !== "default") && (
             <div className="flex flex-wrap items-center gap-2 mb-5 pb-4 border-b border-stone-100">
               {availableStrains.length > 1 && (
                 <div className="flex gap-1.5">
@@ -750,7 +778,10 @@ export function OrderMenu({
                     <button
                       key={t.key}
                       onClick={() => setThcTier(active ? "all" : t.key)}
-                      className={`text-xs font-semibold px-3 py-1.5 min-h-[44px] sm:min-h-0 inline-flex items-center rounded-full border transition-colors ${active ? "bg-violet-700 text-white border-violet-700" : "bg-white text-stone-600 border-stone-200 hover:border-stone-300"}`}
+                      // THC pill active = amber-600 (potency / "heat" semantic).
+                      // Differentiates from price pill in the same row.
+                      // Per UX_AUDIT_2026_05_03 P2-2.
+                      className={`text-xs font-semibold px-3 py-1.5 min-h-[44px] sm:min-h-0 inline-flex items-center rounded-full border transition-colors ${active ? "bg-amber-600 text-white border-amber-600" : "bg-white text-stone-600 border-stone-200 hover:border-stone-300"}`}
                     >
                       {t.label}
                     </button>
@@ -831,15 +862,18 @@ export function OrderMenu({
                             )}
                             {(() => {
                               const deal = findDealForProduct(product, activeDeals);
+                              // Non-interactive chip — was a Link but customers
+                              // tapping "+ Add" near the bottom-right corner kept
+                              // mistapping into the deal landing instead.
+                              // Per UX_AUDIT_2026_05_03 P1-4.
                               return deal ? (
-                                <Link
-                                  href={`/deals/${deal.id}?from=order-card%3A${encodeURIComponent(deal.id)}`}
-                                  aria-label={`Active deal: ${deal.short}`}
-                                  className="absolute bottom-2.5 right-2.5 inline-flex items-center gap-1 text-[10px] px-2 py-1 rounded-full font-extrabold bg-indigo-600 text-white shadow-md uppercase tracking-wide hover:bg-indigo-500 transition-colors"
+                                <span
+                                  aria-label={`On sale: ${deal.short}`}
+                                  className="absolute bottom-2.5 right-2.5 inline-flex items-center gap-1 text-[10px] px-2 py-1 rounded-full font-extrabold bg-indigo-600 text-white shadow-md uppercase tracking-wide pointer-events-none"
                                 >
                                   <span aria-hidden>★</span>
                                   {deal.short}
-                                </Link>
+                                </span>
                               ) : null;
                             })()}
                             {product.isNew && (
