@@ -441,6 +441,7 @@ export default async function HomePage() {
                 body: "Active military, veterans, first responders, healthcare, K-12 teachers. Show ID at the register.",
                 iconPath:
                   "M12 2L4 6v6c0 5 3.5 9.5 8 10 4.5-.5 8-5 8-10V6l-8-4zm-1 14l-4-4 1.4-1.4L11 13.2l4.6-4.6L17 10l-6 6z",
+                href: "/heroes",
               },
               {
                 title: "15% Off Online Orders",
@@ -454,34 +455,51 @@ export default async function HomePage() {
                 iconPath:
                   "M12 2c-4 0-8 .5-8 4v9.5C4 17.43 5.57 19 7.5 19L6 20.5v.5h12v-.5L16.5 19c1.93 0 3.5-1.57 3.5-3.5V6c0-3.5-3.58-4-8-4zM7.5 17a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm3.5-7H6V6h5v4zm2 0V6h5v4h-5zm3.5 7a1.5 1.5 0 110-3 1.5 1.5 0 010 3z",
               },
-            ].map(({ title, body, iconPath }) => (
-              <div
-                key={title}
-                className="bg-white rounded-2xl border border-stone-200 hover:border-indigo-300 hover:shadow-md transition-all p-5 sm:p-6 flex gap-4 sm:gap-5"
-              >
-                <div className="shrink-0">
-                  <div className="w-11 h-11 rounded-xl bg-indigo-100 flex items-center justify-center text-indigo-700">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      className="w-6 h-6"
-                      aria-hidden="true"
-                    >
-                      <path d={iconPath} />
-                    </svg>
+            ].map((card) => {
+              const { title, body, iconPath } = card;
+              const href = "href" in card ? (card as { href: string }).href : undefined;
+              const cardInner = (
+                <>
+                  <div className="shrink-0">
+                    <div className="w-11 h-11 rounded-xl bg-indigo-100 flex items-center justify-center text-indigo-700">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="w-6 h-6"
+                        aria-hidden="true"
+                      >
+                        <path d={iconPath} />
+                      </svg>
+                    </div>
                   </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-sm sm:text-base font-bold text-stone-900 leading-tight">
+                      {title}
+                    </h3>
+                    <p
+                      className="text-xs sm:text-sm text-stone-600 mt-1.5 leading-relaxed"
+                      dangerouslySetInnerHTML={{ __html: body }}
+                    />
+                    {href && (
+                      <span className="text-xs font-semibold text-indigo-700 mt-2 inline-block">
+                        Learn more →
+                      </span>
+                    )}
+                  </div>
+                </>
+              );
+              const className =
+                "bg-white rounded-2xl border border-stone-200 hover:border-indigo-300 hover:shadow-md transition-all p-5 sm:p-6 flex gap-4 sm:gap-5";
+              return href ? (
+                <Link key={title} href={href} className={className}>
+                  {cardInner}
+                </Link>
+              ) : (
+                <div key={title} className={className}>
+                  {cardInner}
                 </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-sm sm:text-base font-bold text-stone-900 leading-tight">
-                    {title}
-                  </h3>
-                  <p
-                    className="text-xs sm:text-sm text-stone-600 mt-1.5 leading-relaxed"
-                    dangerouslySetInnerHTML={{ __html: body }}
-                  />
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
