@@ -11,6 +11,28 @@ export function SiteFooter() {
     // Matches the AnnouncementBar at the top — bookends the page in the same
     // indigo→violet gradient identity.
     <footer className="bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-indigo-200">
+      {/* Trust strip — thin top band of credentials. Visible-everywhere
+          chrome that signals "real licensed shop" before the call to order.
+          Mirrors the Wenatchee footer for cross-store consistency. */}
+      <div className="border-b border-indigo-900/40 bg-indigo-950/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-center gap-x-5 gap-y-1.5 text-[10.5px] sm:text-[11px] font-semibold uppercase tracking-[0.12em] text-indigo-300/80">
+          <span className="flex items-center gap-1.5">
+            <svg viewBox="0 0 24 24" fill="currentColor" className="w-3 h-3" aria-hidden="true">
+              <path d="M12 2L4 6v6c0 5 3.5 9.5 8 10 4.5-.5 8-5 8-10V6l-8-4z" />
+            </svg>
+            Founded 2010
+          </span>
+          <span className="hidden sm:inline text-indigo-700">·</span>
+          <span>WSLCB License {STORE.wslcbLicense}</span>
+          <span className="hidden sm:inline text-indigo-700">·</span>
+          <span>21+ Verified</span>
+          <span className="hidden sm:inline text-indigo-700">·</span>
+          <span>Cash Only</span>
+          <span className="hidden sm:inline text-indigo-700">·</span>
+          <span>ADA Accessible</span>
+        </div>
+      </div>
+
       {/* Pre-footer CTA strip — subtle gradient overlay so the strip stands
           out from the main footer body. */}
       <div className="border-b border-indigo-900/60 bg-gradient-to-r from-indigo-900/40 via-violet-900/30 to-indigo-900/40">
