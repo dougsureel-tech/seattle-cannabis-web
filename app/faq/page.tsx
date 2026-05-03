@@ -32,7 +32,7 @@ const FAQS: { q: string; a: string; tag?: string }[] = [
   {
     tag: "Discounts",
     q: "Do you offer service discounts?",
-    a: "Yes — we run a Heroes service discount for active military, veterans, first responders (police, fire, EMS), healthcare workers, and K-12 teachers. Show valid ID or service credential at the register. The discount can't combine with other %-off promos — you get whichever is bigger.",
+    a: `Yes — we run a Heroes service discount (20% off) for active military, veterans, first responders (police, fire, EMS), healthcare workers, and K-12 teachers. Show valid ID or service credential at the register. The discount can't combine with other %-off promos — you get whichever is bigger. Full eligibility + how it works is at ${STORE.website}/heroes.`,
   },
   {
     tag: "First Visit",
