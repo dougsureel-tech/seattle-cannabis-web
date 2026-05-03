@@ -23,6 +23,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly",
       priority: 0.8,
     },
+    // Heroes cohort SEO landings (hack #7) — capture cohort-specific
+    // Seattle search traffic (veteran cannabis Rainier Valley, JBLM
+    // cannabis discount, SPD weed discount, etc.). Static-rendered.
+    ...["veterans", "military", "first-responders", "healthcare", "teachers"].map((slug) => ({
+      url: `${STORE.website}/heroes/${slug}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.75,
+    })),
     {
       url: `${STORE.website}/community`,
       lastModified: new Date(),
