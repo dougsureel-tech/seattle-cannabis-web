@@ -6,6 +6,7 @@ import { getActiveBrands, getActiveDeals, getFeaturedProducts } from "@/lib/db";
 import { PrimaryCTA } from "@/components/PrimaryCTA";
 import { SectionHeading } from "@/components/SectionHeading";
 import { ReviewsSection } from "@/components/Reviews";
+import { LoyaltyArc } from "@/components/LoyaltyArc";
 import { RecentlyViewedAutoStrip } from "@/components/RecentlyViewedAutoStrip";
 import { HeroBackground } from "@/components/HeroBackground";
 import { NeighborhoodMap } from "@/components/NeighborhoodMap";
@@ -875,6 +876,9 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ─── Loyalty arc — tier vocabulary that matches POS/account ─── */}
+      <LoyaltyArc />
 
       {/* ─── Reviews + AggregateRating schema ───────────────────────────────── */}
       <ReviewsSection />
