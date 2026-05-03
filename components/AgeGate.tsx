@@ -114,7 +114,7 @@ export function AgeGate() {
           </button>
         </div>
 
-        <p className="text-indigo-900 text-xs leading-relaxed">
+        <p className="text-indigo-300/60 text-xs leading-relaxed">
           By entering you confirm you are of legal age to purchase cannabis in Washington State.
         </p>
       </div>
