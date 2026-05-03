@@ -93,9 +93,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Per-deal deep pages — only currently-active deals, since /deals/[id]
   // 404s on expired ones and Google penalizes sitemaps with dead URLs.
+  // lastModified = endDate when present so search engines see a stable
+  // signal per deal rather than every-page-changes-every-day noise.
   const dealPages: MetadataRoute.Sitemap = deals.map((d) => ({
     url: `${STORE.website}/deals/${d.id}`,
-    lastModified: new Date(),
+    lastModified: d.endDate ? new Date(d.endDate) : new Date(),
     changeFrequency: "daily" as const,
     priority: 0.85,
   }));
