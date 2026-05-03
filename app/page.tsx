@@ -28,9 +28,27 @@ export const revalidate = 60;
 const NEIGHBORHOOD_NAMES = NEIGHBORHOODS.map((n) => n.name).join(", ");
 
 export const metadata: Metadata = {
-  title: `${STORE.name} | South Seattle's Cannabis Dispensary — Rainier Valley`,
-  description: `${STORE.name} at ${STORE.address.full}. Closest shop to ${NEIGHBORHOOD_NAMES}. Five min from Othello Light Rail. Founded 2010 · Rainier Valley since 2018, daily 8am–11pm.`,
+  // Homepage-specific title — distinct from /menu so / earns brand-search
+  // landing and /menu shows up as a sitelink underneath. Founded year +
+  // neighborhood anchor signals "this is the canonical entity page."
+  title: `${STORE.name} | Cannabis Dispensary in ${STORE.neighborhood}, Seattle — Founded 2010`,
+  description: `${STORE.name} at ${STORE.address.full}. Closest shop to ${NEIGHBORHOOD_NAMES}. Five min from Othello Light Rail. Founded 2010, in Rainier Valley since 2018. Open daily 8 AM–11 PM. Cash only, 21+.`,
   alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    url: STORE.website,
+    siteName: STORE.name,
+    title: `${STORE.name} | Cannabis Dispensary in ${STORE.neighborhood}, Seattle — Founded 2010`,
+    description: `${STORE.neighborhood} cannabis dispensary. Closest shop to ${NEIGHBORHOOD_NAMES}. ${STORE.address.full}.`,
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: `${STORE.name} — ${STORE.neighborhood}, Seattle Cannabis Dispensary`,
+      },
+    ],
+  },
   other: {
     "geo.region": "US-WA",
     "geo.placename": "Seattle, Rainier Valley",

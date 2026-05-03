@@ -15,10 +15,13 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 export const metadata: Metadata = {
   metadataBase: new URL(STORE.website),
   title: {
-    default: `${STORE.name} | Cannabis Dispensary Seattle, WA`,
+    // Brand-anchor title with founded year + neighborhood. Brand-search
+    // ("Seattle Cannabis Co") should land on / not /menu, which means /
+    // needs a tighter primary title than the live-menu page.
+    default: `${STORE.name} | Cannabis Dispensary in ${STORE.neighborhood}, Seattle — Founded 2010`,
     template: `%s | ${STORE.name}`,
   },
-  description: `${STORE.name} — ${STORE.neighborhood} cannabis dispensary at ${STORE.address.full}. Open daily 8am–11pm. Founded 2010, rooted in Rainier Valley since 2018. Serving Rainier Valley, Seward Park, Beacon Hill & South Seattle.`,
+  description: `${STORE.name} — ${STORE.neighborhood} cannabis dispensary at ${STORE.address.full}. Open daily 8 AM–11 PM. Founded 2010, rooted in Rainier Valley since 2018. Serving Rainier Valley, Seward Park, Beacon Hill, Mount Baker, Columbia City & Othello. Cash only, 21+.`,
   keywords: [
     "cannabis dispensary Seattle",
     "cannabis dispensary Rainier Valley",
@@ -30,10 +33,28 @@ export const metadata: Metadata = {
     "cannabis Beacon Hill Seattle",
     "Rainier Valley dispensary since 2018",
   ],
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "en_US",
+    url: STORE.website,
     siteName: STORE.name,
+    title: `${STORE.name} | ${STORE.neighborhood}, Seattle Cannabis Dispensary — Founded 2010`,
+    description: `Premium cannabis at ${STORE.name} — ${STORE.neighborhood} since 2018, founded 2010. Flower, edibles, concentrates, vapes & more. Open daily 8 AM–11 PM.`,
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: `${STORE.name} — Cannabis Dispensary in ${STORE.neighborhood}, Seattle`,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${STORE.name} | ${STORE.neighborhood}, Seattle`,
+    description: `${STORE.neighborhood} cannabis dispensary, founded 2010. Cash only, 21+. ${STORE.address.full}.`,
+    images: ["/opengraph-image"],
   },
   robots: { index: true, follow: true },
   appleWebApp: {
@@ -41,7 +62,18 @@ export const metadata: Metadata = {
     statusBarStyle: "black-translucent",
     title: "Seattle Cannabis",
   },
-  other: { rating: "adult", "mobile-web-app-capable": "yes" },
+  other: {
+    rating: "adult",
+    "mobile-web-app-capable": "yes",
+    // Geo SEO meta — paid display + CRM ad networks (Meta/Google Ads/
+    // Klaviyo) anchor location-targeted creative off these. ICBM +
+    // geo.position duplicate each other on purpose; different crawlers
+    // prefer different conventions. Matches greenlife-web layout.
+    "geo.region": "US-WA",
+    "geo.placename": `Seattle, ${STORE.neighborhood}`,
+    "geo.position": `${STORE.geo.lat};${STORE.geo.lng}`,
+    ICBM: `${STORE.geo.lat}, ${STORE.geo.lng}`,
+  },
 };
 
 export const viewport = {
@@ -50,18 +82,115 @@ export const viewport = {
   initialScale: 1,
 };
 
+// Convert STORE.hours format ("8:00 AM" / "11:00 PM") → schema.org ISO 24h
+// ("08:00" / "23:00"). schema.org/openingHoursSpecification REQUIRES the
+// 24h ISO format; AM/PM strings fail Google Rich Results validation.
+function toIso24(t: string): string {
+  const [time, ampm] = t.split(" ");
+  const [hStr, mStr] = time.split(":");
+  let h = Number(hStr);
+  if (ampm === "PM" && h !== 12) h += 12;
+  if (ampm === "AM" && h === 12) h = 0;
+  return `${String(h).padStart(2, "0")}:${mStr.padStart(2, "0")}`;
+}
+
+// Canonical Organization @id reused across schemas so Google graphs the
+// LocalBusiness, WebSite, and Organization as one entity. Mirrors the
+// pattern in greenlife-web/app/layout.tsx.
+const ORG_ID = `${STORE.website}/#organization`;
+const WEBSITE_ID = `${STORE.website}/#website`;
+const LOGO_URL = `${STORE.website}/icon-512.png`;
+
+const sameAsLinks = [
+  STORE.social.instagram,
+  STORE.social.facebook,
+  STORE.googleMapsUrl,
+].filter(Boolean);
+
+// Organization schema — anchors brand identity. mainEntityOfPage points
+// at / so a "Seattle Cannabis Co" brand search lifts the homepage, not
+// /menu. Legal entity is Green Anne LLC (per RANDOM/PROJECT_BOARD memory),
+// founded 2010, Rainier Valley since 2018.
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": ORG_ID,
+  name: STORE.name,
+  legalName: "Green Anne LLC",
+  alternateName: ["Seattle Cannabis Co", "SCC Rainier", "Seattle Cannabis Company"],
+  url: STORE.website,
+  logo: {
+    "@type": "ImageObject",
+    url: LOGO_URL,
+    width: 512,
+    height: 512,
+  },
+  image: `${STORE.website}/opengraph-image`,
+  description: `Cannabis dispensary in ${STORE.neighborhood}, Seattle — founded 2010, in Rainier Valley since 2018.`,
+  foundingDate: "2010",
+  foundingLocation: {
+    "@type": "Place",
+    name: "Seattle, WA",
+  },
+  areaServed: {
+    "@type": "State",
+    name: "Washington",
+  },
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: STORE.phoneTel,
+    contactType: "customer service",
+    areaServed: "US-WA",
+    availableLanguage: ["English"],
+  },
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": `${STORE.website}/`,
+  },
+  sameAs: sameAsLinks,
+};
+
+// WebSite + SearchAction — enables Google's sitelinks search box. The
+// {search_term_string} placeholder is part of the schema spec, not a
+// Next route param. Lands on /menu (Boost embed), since "Seattle Cannabis
+// Co {strain}" long-tail brand-search-with-product is what we want to
+// capture.
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": WEBSITE_ID,
+  url: STORE.website,
+  name: STORE.name,
+  alternateName: "Seattle Cannabis Co",
+  description: `${STORE.name} — ${STORE.neighborhood} cannabis dispensary since 2010.`,
+  publisher: { "@id": ORG_ID },
+  inLanguage: "en-US",
+  potentialAction: {
+    "@type": "SearchAction",
+    target: {
+      "@type": "EntryPoint",
+      urlTemplate: `${STORE.website}/menu?q={search_term_string}`,
+    },
+    "query-input": "required name=search_term_string",
+  },
+};
+
 const localBusinessSchema = {
   "@context": "https://schema.org",
   "@type": ["LocalBusiness", "Store"],
   "@id": `${STORE.website}/#dispensary`,
   name: STORE.name,
-  legalName: STORE.name,
+  legalName: "Green Anne LLC",
   alternateName: ["Seattle Cannabis Co", "SCC Rainier", "Seattle Cannabis Company"],
   description: `Cannabis dispensary in ${STORE.neighborhood}, Seattle — founded 2010, in Rainier Valley since 2018. Premium flower, pre-rolls, vapes, concentrates, edibles, tinctures and topicals. Open daily 8 AM–11 PM. Cash only, 21+ with valid ID.`,
   slogan: STORE.tagline,
   url: STORE.website,
+  image: `${STORE.website}/opengraph-image`,
+  logo: LOGO_URL,
   telephone: STORE.phoneTel,
   email: STORE.email,
+  foundingDate: "2010",
+  parentOrganization: { "@id": ORG_ID },
   address: {
     "@type": "PostalAddress",
     streetAddress: STORE.address.street,
@@ -106,12 +235,14 @@ const localBusinessSchema = {
   openingHoursSpecification: STORE.hours.map((h) => ({
     "@type": "OpeningHoursSpecification",
     dayOfWeek: `https://schema.org/${h.day}`,
-    opens: h.open,
-    closes: h.close,
+    // ISO 24h format ("08:00") not "8:00 AM" — schema.org spec requires
+    // the unambiguous form, Google Rich Results Test rejects AM/PM.
+    opens: toIso24(h.open),
+    closes: toIso24(h.close),
   })),
-  priceRange: "$$",
+  priceRange: "$",
   currenciesAccepted: "USD",
-  paymentAccepted: "Cash",
+  paymentAccepted: ["Cash"],
   hasMap: STORE.googleMapsUrl,
   identifier: {
     "@type": "PropertyValue",
@@ -147,7 +278,7 @@ const localBusinessSchema = {
     target: STORE.shopUrl,
     deliveryMethod: "http://purl.org/goodrelations/v1#DeliveryModePickUp",
   },
-  sameAs: [STORE.social.instagram, STORE.social.facebook].filter(Boolean),
+  sameAs: sameAsLinks,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -166,6 +297,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             /sign-in, /sign-up, /account via per-route layouts. */}
         <link rel="preconnect" href="https://images.squarespace-cdn.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://static.wixstatic.com" crossOrigin="anonymous" />
+        {/* Three coordinated JSON-LD payloads. Together they tell Google
+            (a) what the brand is (Organization), (b) that the SITE has
+            a search box that should appear under the homepage in SERPs
+            (WebSite + SearchAction — sitelinks searchbox), and (c) the
+            full physical-place NAP+hours+geo (LocalBusiness/Store). The
+            shared @id graph (ORG_ID, WEBSITE_ID, #dispensary) lets the
+            knowledge graph stitch them. Adding the Organization +
+            WebSite schemas makes / outrank /menu in brand searches —
+            without them, Google has no signal that / is the canonical
+            entity hub. */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
