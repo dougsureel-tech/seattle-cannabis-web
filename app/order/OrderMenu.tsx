@@ -4,8 +4,23 @@ import { useState, useMemo, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import type { MenuProduct } from "@/lib/db";
+import type { MenuProduct, ActiveDeal } from "@/lib/db";
 import { STORE, getOrderingStatus, getPickupSlots, type OrderingStatus, type PickupSlot } from "@/lib/store";
+
+// Map a product to a running deal it qualifies for. Mirror of the
+// helper in greenlife-web — keep in sync. Stem-match against the
+// product's category column. First match wins (deals are pre-ordered
+// ending-soonest by getActiveDeals).
+function findDealForProduct(p: MenuProduct, deals: ActiveDeal[]): ActiveDeal | null {
+  if (!deals || deals.length === 0) return null;
+  const cat = (p.category ?? "").toLowerCase();
+  for (const d of deals) {
+    if (!d.appliesTo || d.appliesTo === "all") return d;
+    const stem = d.appliesTo.toLowerCase().replace(/s$/, "");
+    if (cat.includes(stem)) return d;
+  }
+  return null;
+}
 
 type CartItem = MenuProduct & { quantity: number };
 type SortKey = "default" | "price-asc" | "price-desc" | "thc-desc" | "name";
@@ -180,7 +195,15 @@ function ProductImage({ src, alt, category }: { src: string | null; alt: string;
   );
 }
 
-export function OrderMenu({ products, signedIn = false }: { products: MenuProduct[]; signedIn?: boolean }) {
+export function OrderMenu({
+  products,
+  signedIn = false,
+  activeDeals = [],
+}: {
+  products: MenuProduct[];
+  signedIn?: boolean;
+  activeDeals?: ActiveDeal[];
+}) {
   const router = useRouter();
   const [cart, setCart] = useState<CartItem[]>(() => {
     if (typeof window === "undefined") return [];
@@ -678,6 +701,19 @@ export function OrderMenu({ products, signedIn = false }: { products: MenuProduc
                                 {parsed.weight}
                               </span>
                             )}
+                            {(() => {
+                              const deal = findDealForProduct(product, activeDeals);
+                              return deal ? (
+                                <Link
+                                  href={`/deals/${deal.id}?from=order-card%3A${encodeURIComponent(deal.id)}`}
+                                  aria-label={`Active deal: ${deal.short}`}
+                                  className="absolute bottom-2.5 right-2.5 inline-flex items-center gap-1 text-[10px] px-2 py-1 rounded-full font-extrabold bg-indigo-600 text-white shadow-md uppercase tracking-wide hover:bg-indigo-500 transition-colors"
+                                >
+                                  <span aria-hidden>★</span>
+                                  {deal.short}
+                                </Link>
+                              ) : null;
+                            })()}
                             {product.isNew && (
                               <span className="absolute top-2.5 right-2.5 text-[10px] px-2 py-0.5 rounded-full font-bold bg-indigo-700 text-white shadow-md uppercase tracking-wide">
                                 New
