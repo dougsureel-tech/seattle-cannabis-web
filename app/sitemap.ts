@@ -79,6 +79,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: "weekly" as const,
       priority: 0.7,
+      // Image-extension entry — Google Image search picks the brand
+      // logo as the canonical preview. Skips brands without a logo URL.
+      ...(b.logoUrl ? { images: [b.logoUrl] } : {}),
     }));
 
   const postPages: MetadataRoute.Sitemap = posts.map((p) => ({
