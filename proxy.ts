@@ -12,25 +12,45 @@ const isClerkRoute = createRouteMatcher(["/account(.*)", "/sign-in(.*)", "/sign-
 // auth.protect() sends to /sign-in?redirect_url=/sign-in → loop.
 const isProtectedRoute = createRouteMatcher(["/account(.*)"]);
 
-// Canonical production host — every visitor should land here. Anyone hitting
-// a per-deployment URL (like seattle-cannabis-abc123-dougsureel-3370s-
-// projects.vercel.app) gets blocked by Vercel's deployment protection and
-// sees the iOS-Safari "This page couldn't load" screen because the auth
-// challenge can't complete cross-origin. We catch those at the edge and
-// 308 redirect to the canonical alias so a stale link or shared deploy URL
-// always resolves to a working page.
+// Single canonical customer-facing host. EVERY non-canonical incoming host
+// (apex `seattlecannabis.co`, per-deployment Vercel URLs like
+// `seattle-cannabis-abc123-dougsureel-3370s-projects.vercel.app`, the bare
+// `seattle-cannabis-web.vercel.app` deployment alias) 308-redirects here.
 //
-// Override at deploy time with NEXT_PUBLIC_CANONICAL_HOST if a custom
-// domain ever lands (e.g. "www.seattlecannabis.com").
-const CANONICAL_HOST = process.env.NEXT_PUBLIC_CANONICAL_HOST || "seattle-cannabis-web.vercel.app";
+// Reasons this is the single source of authority:
+//   1. iHeartJane Boost's CORS allowlist for embedConfigId 222 (Seattle)
+//      was registered against this exact origin when the partnership was
+//      stood up — apex requests to api.iheartjane.com get CORS-rejected.
+//      See memory `reference_iheartjane_cors_origin` + MENU_LOG.md.
+//   2. Clerk session cookies are single-host. Splitting customers across
+//      apex + www would silently break "I just signed in but /account
+//      still says signed-out" loops if a customer wandered between hosts.
+//   3. Per-deployment URLs (anything ending in `-dougsureel-3370s-projects
+//      .vercel.app`) get blocked by Vercel's deployment-protection auth
+//      challenge and render the iOS-Safari "This page couldn't load"
+//      overlay. Catching them at the edge means stale share-links always
+//      resolve to a working page.
+//
+// Override at deploy time with NEXT_PUBLIC_CANONICAL_HOST if a brand-new
+// custom domain ever lands (e.g. moving to .com in the future).
+const CANONICAL_HOST = process.env.NEXT_PUBLIC_CANONICAL_HOST || "www.seattlecannabis.co";
+
+// Belt-and-suspenders: even if NEXT_PUBLIC_CANONICAL_HOST is ever
+// misconfigured at deploy time (e.g. a stale value from when the deployment
+// alias was canonical), the production customer-facing host MUST always be
+// treated as canonical so we never accidentally redirect customers AWAY
+// from www.seattlecannabis.co.
+const ALWAYS_CANONICAL_HOSTS = new Set(["www.seattlecannabis.co"]);
 
 function isCanonicalOrLocal(host: string): boolean {
   if (!host) return true;
   const h = host.toLowerCase().split(":")[0];
   if (h === CANONICAL_HOST.toLowerCase()) return true;
+  if (ALWAYS_CANONICAL_HOSTS.has(h)) return true;
+  // Local dev hosts pass through untouched — never redirect to the prod
+  // canonical or the dev iframe stops responding.
   if (h === "localhost" || h.endsWith(".localhost")) return true;
   if (h === "127.0.0.1" || h === "[::1]") return true;
-  if (h === "www.seattlecannabis.co" || h === "seattlecannabis.co") return true;
   return false;
 }
 
@@ -53,22 +73,19 @@ const clerk = clerkMiddleware(async (auth, req) => {
 export default async function middleware(req: NextRequest) {
   const url = new URL(req.url);
 
-  // /menu must be served from www, not apex. iHeartJane's CORS allowlist
-  // for embedConfigId 222 (Seattle) was registered against the WP origin
-  // www.seattlecannabis.co when the partnership was set up — the bare
-  // apex (seattlecannabis.co) is NOT on the allowlist, so Boost's
-  // cross-origin XHR to api.iheartjane.com gets CORS-rejected when the
-  // page is served from apex. Confirmed via WP DB dump of
-  // wp_jane_store_menu_config: WP /menu/ ran under www. Match that exact
-  // origin. Scoped to /menu* only so /account etc. keep their existing
-  // Clerk session-cookie scope on apex.
-  if (url.hostname === "seattlecannabis.co" && url.pathname.startsWith("/menu")) {
-    const target = new URL(req.url);
-    target.hostname = "www.seattlecannabis.co";
-    return NextResponse.redirect(target.toString(), 308);
-  }
-
-  if (!isCanonicalOrLocal(url.hostname)) {
+  // Site-wide canonical-host redirect. Was previously scoped to `/menu*`
+  // only (because that path was the original CORS-driven case — see
+  // CANONICAL_HOST comment above), but every other route benefits too:
+  // saves one hop for first-time apex visitors, keeps Clerk session
+  // cookies on a single host, and rescues stale per-deployment share-
+  // links. Local dev hostnames are exempt via isCanonicalOrLocal().
+  //
+  // /api/health is exempt: external monitors and the post-deploy LKG
+  // verification curl (per OPERATING_PRINCIPLES) need to hit any host
+  // alias and get a clean 200 with `sha` + `version` — a 308 response
+  // body has no JSON to parse, and following the redirect would mask
+  // host-specific liveness signal.
+  if (!isCanonicalOrLocal(url.hostname) && url.pathname !== "/api/health") {
     const target = new URL(req.url);
     target.hostname = CANONICAL_HOST;
     target.protocol = "https:";
