@@ -50,9 +50,51 @@ const ELIGIBILITY = [
   },
 ];
 
+// Hoisted to a top-level const so the rendered <details> AND the FAQPage
+// JSON-LD draw from the same source — schema can never drift from visible
+// content. Mirror of greenlife-web pattern.
+const FAQS: { q: string; a: string }[] = [
+  {
+    q: "Does the discount stack with daily deals?",
+    a: "No — the discount that's bigger applies. Heroes is 20%, daily deals usually run 10-15%, so Heroes wins.",
+  },
+  {
+    q: "Does it expire?",
+    a: "No. Once we've verified your credentials, you can use it every visit going forward.",
+  },
+  {
+    q: "What if my ID is expired?",
+    a: "Active military / law enforcement / fire-EMS need a current credential. Veterans with a DD-214, VA card, or VHIC are good even if other IDs expire.",
+  },
+  {
+    q: "Does my spouse or family qualify?",
+    a: "Heroes is the individual cardholder only. We can't extend it to family — that's how WSLCB-aware retailers stay compliant.",
+  },
+  {
+    q: "Can I use it on online orders?",
+    a: "Online ordering already saves 15% automatically. Heroes is in-person only — show ID at the register.",
+  },
+  {
+    q: "Why two IDs?",
+    a: "State law requires a 21+ government photo ID for every cannabis purchase, every visit. The service or work ID is what proves your Heroes eligibility.",
+  },
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: FAQS.map(({ q, a }) => ({
+    "@type": "Question",
+    name: q,
+    acceptedAnswer: { "@type": "Answer", text: a },
+  })),
+};
+
 export default function HeroesPage() {
   return (
     <main className="min-h-[80vh] bg-stone-50">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+
       <section className="relative overflow-hidden bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white">
         <div
           className="absolute inset-0 opacity-[0.07]"
@@ -154,32 +196,7 @@ export default function HeroesPage() {
             </h2>
           </div>
           <dl className="space-y-3">
-            {[
-              {
-                q: "Does the discount stack with daily deals?",
-                a: "No — the discount that&rsquo;s bigger applies. Heroes is 20%, daily deals usually run 10-15%, so Heroes wins.",
-              },
-              {
-                q: "Does it expire?",
-                a: "No. Once we&rsquo;ve verified your credentials, you can use it every visit going forward.",
-              },
-              {
-                q: "What if my ID is expired?",
-                a: "Active military / law enforcement / fire-EMS need a current credential. Veterans with a DD-214, VA card, or VHIC are good even if other IDs expire.",
-              },
-              {
-                q: "Does my spouse or family qualify?",
-                a: "Heroes is the individual cardholder only. We can&rsquo;t extend it to family — that&rsquo;s how WSLCB-aware retailers stay compliant.",
-              },
-              {
-                q: "Can I use it on online orders?",
-                a: "Online ordering already saves 15% automatically. Heroes is in-person only — show ID at the register.",
-              },
-              {
-                q: "Why two IDs?",
-                a: "State law requires a 21+ government photo ID for every cannabis purchase, every visit. The service or work ID is what proves your Heroes eligibility.",
-              },
-            ].map(({ q, a }) => (
+            {FAQS.map(({ q, a }) => (
               <details key={q} className="group rounded-2xl bg-white border border-stone-200 px-5 py-4">
                 <summary className="cursor-pointer list-none flex items-start justify-between gap-4">
                   <span className="font-bold text-stone-900 text-sm sm:text-base">{q}</span>
