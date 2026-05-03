@@ -24,6 +24,22 @@ function findDealForProduct(p: MenuProduct, deals: ActiveDeal[]): ActiveDeal | n
 
 type CartItem = MenuProduct & { quantity: number };
 type SortKey = "default" | "price-asc" | "price-desc" | "thc-desc" | "name";
+type PriceTier = "all" | "under15" | "15to30" | "over30";
+type ThcTier = "all" | "under10" | "10to20" | "over20";
+
+// Same tier definitions as greenlife-web — keep in sync. Bands match
+// natural shopping cohorts (budget / daily-driver / premium) and the
+// THC tolerance bands customers actually shop on.
+const PRICE_TIERS: { key: Exclude<PriceTier, "all">; label: string; match: (p: number | null) => boolean }[] = [
+  { key: "under15", label: "Under $15", match: (p) => p != null && p < 15 },
+  { key: "15to30", label: "$15–30", match: (p) => p != null && p >= 15 && p < 30 },
+  { key: "over30", label: "$30+", match: (p) => p != null && p >= 30 },
+];
+const THC_TIERS: { key: Exclude<ThcTier, "all">; label: string; match: (t: number | null) => boolean }[] = [
+  { key: "under10", label: "<10% THC", match: (t) => t != null && t < 10 },
+  { key: "10to20", label: "10–20% THC", match: (t) => t != null && t >= 10 && t < 20 },
+  { key: "over20", label: "20%+ THC", match: (t) => t != null && t >= 20 },
+];
 
 // Preferred sidebar order. Categories not on this list are appended at the
 // end in alphabetical order, so the sidebar always reflects what's actually
@@ -232,6 +248,8 @@ export function OrderMenu({
     return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
   });
   const [brandFilter, setBrandFilter] = useState<string | null>(null);
+  const [priceTier, setPriceTier] = useState<PriceTier>("all");
+  const [thcTier, setThcTier] = useState<ThcTier>("all");
   const [sortBy, setSortBy] = useState<SortKey>("default");
   const [cartOpen, setCartOpen] = useState(false);
   const [placing, setPlacing] = useState(false);
@@ -314,6 +332,14 @@ export function OrderMenu({
       if (activeCategory && p.category !== activeCategory) return false;
       if (strainFilter && p.strainType !== strainFilter) return false;
       if (brandFilter && p.brand !== brandFilter) return false;
+      if (priceTier !== "all") {
+        const tier = PRICE_TIERS.find((t) => t.key === priceTier);
+        if (tier && !tier.match(p.unitPrice)) return false;
+      }
+      if (thcTier !== "all") {
+        const tier = THC_TIERS.find((t) => t.key === thcTier);
+        if (tier && !tier.match(p.thcPct)) return false;
+      }
       if (search) {
         const q = search.toLowerCase();
         return (p.name + (p.brand ?? "") + (p.category ?? "") + (p.strainType ?? ""))
@@ -337,7 +363,7 @@ export function OrderMenu({
         break;
     }
     return result;
-  }, [visibleProducts, search, activeCategory, strainFilter, brandFilter, sortBy]);
+  }, [visibleProducts, search, activeCategory, strainFilter, brandFilter, priceTier, thcTier, sortBy]);
 
   const grouped = useMemo(() => {
     const map = new Map<string, MenuProduct[]>();
@@ -632,11 +658,45 @@ export function OrderMenu({
                 <option value="name">A → Z</option>
               </select>
 
-              {(strainFilter || brandFilter || sortBy !== "default") && (
+              {/* Price tier */}
+              <div className="flex gap-1.5">
+                {PRICE_TIERS.map((t) => {
+                  const active = priceTier === t.key;
+                  return (
+                    <button
+                      key={t.key}
+                      onClick={() => setPriceTier(active ? "all" : t.key)}
+                      className={`text-xs font-semibold px-3 py-1.5 rounded-full border transition-colors ${active ? "bg-indigo-700 text-white border-indigo-700" : "bg-white text-stone-600 border-stone-200 hover:border-stone-300"}`}
+                    >
+                      {t.label}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* THC tier */}
+              <div className="flex gap-1.5">
+                {THC_TIERS.map((t) => {
+                  const active = thcTier === t.key;
+                  return (
+                    <button
+                      key={t.key}
+                      onClick={() => setThcTier(active ? "all" : t.key)}
+                      className={`text-xs font-semibold px-3 py-1.5 rounded-full border transition-colors ${active ? "bg-violet-700 text-white border-violet-700" : "bg-white text-stone-600 border-stone-200 hover:border-stone-300"}`}
+                    >
+                      {t.label}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {(strainFilter || brandFilter || priceTier !== "all" || thcTier !== "all" || sortBy !== "default") && (
                 <button
                   onClick={() => {
                     setStrainFilter(null);
                     setBrandFilter(null);
+                    setPriceTier("all");
+                    setThcTier("all");
                     setSortBy("default");
                   }}
                   className="text-xs font-semibold text-stone-500 hover:text-stone-700 px-2 py-1.5"
