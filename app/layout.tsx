@@ -78,6 +78,30 @@ const localBusinessSchema = {
       name,
       containedInPlace: { "@type": "City", name: "Seattle" },
     })),
+    // ZIP-code-level served-area (Hack #8 — Local SEO). Drives
+    // "cannabis 98118" / "weed near 98178" intent — zip-code queries
+    // are 2-3× higher purchase intent than city queries because they
+    // typically come from people checking what's actually near them
+    // RIGHT NOW. Pickup-only — these are the ZIPs we DRAW from, not
+    // where we ship to. South Seattle + Skyway + Renton border only;
+    // North-of-downtown ZIPs excluded since the I-5 commute makes us
+    // farther than competitors for those customers.
+    ...[
+      { zip: "98118", area: "Rainier Valley + Columbia City + Hillman City" },
+      { zip: "98144", area: "Mt Baker + Leschi" },
+      { zip: "98108", area: "Beacon Hill + Georgetown" },
+      { zip: "98178", area: "Skyway + Bryn Mawr" },
+      { zip: "98168", area: "White Center + Tukwila border" },
+      { zip: "98106", area: "South Park + West Seattle south end" },
+      { zip: "98188", area: "Tukwila + SeaTac" },
+      { zip: "98055", area: "Renton north" },
+    ].map(({ zip, area }) => ({
+      "@type": "PostalAddress",
+      postalCode: zip,
+      addressRegion: "WA",
+      addressCountry: "US",
+      description: area,
+    })),
   ],
   openingHoursSpecification: STORE.hours.map((h) => ({
     "@type": "OpeningHoursSpecification",
