@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { STORE } from "@/lib/store";
 import { getDealById, getPickupEta, getCategoryPreviewProducts } from "@/lib/db";
 import { withAttr } from "@/lib/attribution";
+import { breadcrumbJsonLd, HOME_CRUMB } from "@/lib/breadcrumb-jsonld";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -92,11 +93,22 @@ export default async function DealDetailPage({ params }: Params) {
       : {}),
   };
 
+  // BreadcrumbList — Home > Deals > <deal>
+  const breadcrumbSchema = breadcrumbJsonLd([
+    HOME_CRUMB,
+    { name: "Deals", url: "/deals" },
+    { name: deal.name, url: `/deals/${deal.id}` },
+  ]);
+
   return (
     <div className="min-h-screen bg-stone-50">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(dealSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
       <section className="relative overflow-hidden bg-gradient-to-br from-indigo-800 via-indigo-900 to-violet-900 text-white">

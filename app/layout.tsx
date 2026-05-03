@@ -278,6 +278,15 @@ const localBusinessSchema = {
     target: STORE.shopUrl,
     deliveryMethod: "http://purl.org/goodrelations/v1#DeliveryModePickUp",
   },
+  // Speakable spec — tells voice assistants (Siri / Google Assistant /
+  // Alexa / Apple Intelligence) which DOM nodes to read aloud when a
+  // user asks "what are the hours of Seattle Cannabis Co" via a
+  // voice-only surface. Pairs with `className="speakable-*"` tags on
+  // the SiteFooter address + hours + phone elements.
+  speakable: {
+    "@type": "SpeakableSpecification",
+    cssSelector: [".speakable-address", ".speakable-hours", ".speakable-phone"],
+  },
   sameAs: sameAsLinks,
 };
 
