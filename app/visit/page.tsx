@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { STORE, isOpenNow, nextOpenLabel } from "@/lib/store";
+import { withAttr } from "@/lib/attribution";
 
 // ISR: only dynamic data is "is the store open NOW" + which day-row to
 // highlight. 5-minute revalidate keeps that fresh enough that customers
@@ -10,8 +11,16 @@ export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Visit — Hours, Directions, What to Bring",
-  description: `Visit ${STORE.name} at ${STORE.address.full}. Hours, parking, ID requirements, and directions. ATM on-site, free parking, ADA accessible. ${STORE.phone}.`,
+  description: `Visit ${STORE.name} at ${STORE.address.full}. Hours, parking, ID, directions. Near Othello Light Rail. ATM on-site, free parking. Open daily 8AM–11PM, ${STORE.phone}.`,
   alternates: { canonical: "/visit" },
+  keywords: [
+    "Rainier Valley dispensary",
+    "South Seattle dispensary",
+    "Othello dispensary",
+    "Seattle Cannabis Co hours",
+    "dispensary near Othello Light Rail",
+    "Rainier Valley cannabis store",
+  ],
   openGraph: {
     title: `Visit ${STORE.name}`,
     description: `${STORE.address.full} · ${STORE.phone} · Free parking, near Othello Light Rail.`,
@@ -128,25 +137,64 @@ export default function VisitPage() {
               href={STORE.googleMapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-indigo-300 hover:bg-indigo-200 text-indigo-950 font-bold text-sm transition-all shadow-lg"
+              aria-label={`Get directions to ${STORE.name} on Google Maps (opens in new tab)`}
+              className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-indigo-300 hover:bg-indigo-200 text-indigo-950 font-bold text-sm transition-all shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300 focus-visible:ring-offset-2 focus-visible:ring-offset-indigo-950"
             >
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z" />
               </svg>
               Get Directions
             </a>
             <Link
-              href="/menu"
-              className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl border border-white/20 hover:border-white/40 hover:bg-white/10 text-white font-semibold text-sm transition-all"
+              href={withAttr("/menu", "menu", "visit-hero")}
+              className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl border border-white/20 hover:border-white/40 hover:bg-white/10 text-white font-semibold text-sm transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300"
             >
               Order Ahead
             </Link>
             <a
               href={`tel:${STORE.phoneTel}`}
-              className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl border border-white/20 hover:border-white/40 hover:bg-white/10 text-white font-semibold text-sm transition-all"
+              aria-label={`Call ${STORE.name} at ${STORE.phone}`}
+              className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl border border-white/20 hover:border-white/40 hover:bg-white/10 text-white font-semibold text-sm transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300"
             >
-              📞 {STORE.phone}
+              <span aria-hidden="true">📞</span> {STORE.phone}
             </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Trust strip — reinforces Seattle positioning between hero + hours.
+          Per memory `project_seattle_founding` — founded 2010 (pre-I-502),
+          Rainier Valley since 2018. Locally-owned IS the framing here. */}
+      <section className="bg-white border-b border-stone-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-7 sm:py-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-8 text-center sm:text-left">
+            <div className="flex sm:items-center sm:gap-3 flex-col sm:flex-row gap-1.5">
+              <span className="text-2xl shrink-0" aria-hidden="true">🏡</span>
+              <div>
+                <div className="font-bold text-stone-900 text-sm">Locally owned since 2010</div>
+                <div className="text-stone-500 text-xs leading-snug">
+                  Independent neighborhood dispensary — not a chain. Pre-I-502 origin.
+                </div>
+              </div>
+            </div>
+            <div className="flex sm:items-center sm:gap-3 flex-col sm:flex-row gap-1.5">
+              <span className="text-2xl shrink-0" aria-hidden="true">🚉</span>
+              <div>
+                <div className="font-bold text-stone-900 text-sm">Rainier Valley since 2018</div>
+                <div className="text-stone-500 text-xs leading-snug">
+                  On Rainier Ave S, 5 min walk from Othello Light Rail.
+                </div>
+              </div>
+            </div>
+            <div className="flex sm:items-center sm:gap-3 flex-col sm:flex-row gap-1.5">
+              <span className="text-2xl shrink-0" aria-hidden="true">🪪</span>
+              <div>
+                <div className="font-bold text-stone-900 text-sm">WSLCB licensed</div>
+                <div className="text-stone-500 text-xs leading-snug">
+                  License #{STORE.wslcbLicense}. Cash-only, 21+ with valid ID.
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -162,7 +210,11 @@ export default function VisitPage() {
                 {STORE.hours.map((h) => {
                   const isToday = h.day === today;
                   return (
-                    <tr key={h.day} className={isToday ? "bg-indigo-50" : ""}>
+                    <tr
+                      key={h.day}
+                      className={isToday ? "bg-indigo-50" : ""}
+                      aria-current={isToday ? "date" : undefined}
+                    >
                       <td className={`py-3 font-semibold ${isToday ? "text-indigo-800" : "text-stone-700"}`}>
                         {h.day}
                         {isToday && (
@@ -277,6 +329,63 @@ export default function VisitPage() {
         </div>
       </section>
 
+      {/* Internal-link mesh — quick pivot to highest-converting next
+          surfaces. Helps PageRank flow + customer intent. */}
+      <section className="bg-stone-50 border-b border-stone-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
+          <div className="text-center mb-6">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-indigo-700">Before you stop in</p>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight mt-1.5">
+              Plan your trip
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <Link
+              href={withAttr("/deals", "deal", "visit-mesh")}
+              className="group rounded-2xl border border-stone-200 bg-white hover:border-indigo-300 hover:shadow-md transition-all p-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+            >
+              <div className="text-2xl mb-2" aria-hidden="true">🏷️</div>
+              <h3 className="font-bold text-stone-900 text-sm">Live deals today</h3>
+              <p className="text-xs text-stone-500 mt-1.5 leading-relaxed">
+                Brand-day pricing, % off categories, weekly recurring specials.
+              </p>
+              <span className="text-indigo-700 group-hover:text-indigo-600 text-xs font-bold mt-3 inline-flex items-center gap-1">
+                See what&apos;s on
+                <span aria-hidden="true">→</span>
+              </span>
+            </Link>
+            <Link
+              href={withAttr("/heroes", "header", "visit-mesh-heroes")}
+              className="group rounded-2xl border border-stone-200 bg-white hover:border-indigo-300 hover:shadow-md transition-all p-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+            >
+              <div className="text-2xl mb-2" aria-hidden="true">🎖️</div>
+              <h3 className="font-bold text-stone-900 text-sm">Heroes 20% off</h3>
+              <p className="text-xs text-stone-500 mt-1.5 leading-relaxed">
+                Active military, veterans, first responders, healthcare, K-12 teachers.
+              </p>
+              <span className="text-indigo-700 group-hover:text-indigo-600 text-xs font-bold mt-3 inline-flex items-center gap-1">
+                Check eligibility
+                <span aria-hidden="true">→</span>
+              </span>
+            </Link>
+            <Link
+              href={withAttr("/brands", "header", "visit-mesh-brands")}
+              className="group rounded-2xl border border-stone-200 bg-white hover:border-indigo-300 hover:shadow-md transition-all p-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+            >
+              <div className="text-2xl mb-2" aria-hidden="true">🌿</div>
+              <h3 className="font-bold text-stone-900 text-sm">Brands we carry</h3>
+              <p className="text-xs text-stone-500 mt-1.5 leading-relaxed">
+                Hand-curated Washington-state producers — flower, vapes, edibles, concentrates.
+              </p>
+              <span className="text-indigo-700 group-hover:text-indigo-600 text-xs font-bold mt-3 inline-flex items-center gap-1">
+                Browse the lineup
+                <span aria-hidden="true">→</span>
+              </span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Bottom CTA — same gradient bookend as the hero. Page bookends in
           matching depth, just like the homepage. */}
       <section className="bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white">
@@ -289,14 +398,14 @@ export default function VisitPage() {
           </div>
           <div className="flex flex-col sm:flex-row gap-3 shrink-0">
             <Link
-              href="/menu"
-              className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-indigo-300 hover:bg-indigo-200 text-indigo-950 font-bold text-sm transition-all shadow-md"
+              href={withAttr("/menu", "menu", "visit-bottom-browse")}
+              className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-indigo-300 hover:bg-indigo-200 text-indigo-950 font-bold text-sm transition-all shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300 focus-visible:ring-offset-2 focus-visible:ring-offset-indigo-950"
             >
               Browse Menu
             </Link>
             <Link
-              href="/menu"
-              className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl border border-white/20 hover:border-white/40 hover:bg-white/10 text-white font-semibold text-sm transition-all"
+              href={withAttr("/menu", "menu", "visit-bottom-order")}
+              className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl border border-white/20 hover:border-white/40 hover:bg-white/10 text-white font-semibold text-sm transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300"
             >
               Order Ahead
             </Link>

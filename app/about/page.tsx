@@ -1,16 +1,66 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { STORE } from "@/lib/store";
+import { withAttr } from "@/lib/attribution";
+
+// ISR — content rarely changes; today-row highlight is the only dynamic
+// bit and a 5-minute cache window is plenty.
+export const revalidate = 300;
 
 export const metadata: Metadata = {
-  title: "About Us",
-  description: `Learn about ${STORE.name} — Rainier Valley's neighborhood cannabis dispensary. Founded 2010, in Rainier Valley since 2018. Expert staff and carefully curated products.`,
+  title: "About — Locally Owned Rainier Valley Dispensary Since 2010",
+  description: `Learn about ${STORE.name} — Rainier Valley's locally-owned neighborhood cannabis dispensary. Founded 2010 (pre-I-502), in Rainier Valley since 2018. Knowledgeable budtenders, carefully curated Washington-state products.`,
   alternates: { canonical: "/about" },
+  keywords: [
+    "Rainier Valley dispensary",
+    "Seattle Cannabis Co history",
+    "South Seattle cannabis",
+    "locally owned dispensary Seattle",
+    "independent dispensary Seattle",
+    "Othello cannabis",
+    "Seattle dispensary since 2010",
+  ],
+  openGraph: {
+    title: `About ${STORE.name} — Locally owned Rainier Valley dispensary`,
+    description: `Locally owned independent dispensary. Founded 2010, in Rainier Valley since 2018.`,
+    url: `${STORE.website}/about`,
+    type: "website",
+    images: ["/opengraph-image"],
+  },
+};
+
+// AboutPage schema — links back to LocalBusiness @id from layout.tsx so
+// AI engines + Google graph this page as the same store entity. Big GEO
+// add for "who owns Seattle Cannabis Co" / "Seattle Cannabis Co history".
+const aboutSchema = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  name: `About ${STORE.name}`,
+  url: `${STORE.website}/about`,
+  description: `Rainier Valley locally-owned cannabis dispensary — founded 2010, in Rainier Valley since 2018, neighborhood community-focused.`,
+  mainEntity: { "@id": `${STORE.website}/#dispensary` },
+  inLanguage: "en-US",
+  isPartOf: { "@id": `${STORE.website}/#website` },
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: STORE.website },
+    { "@type": "ListItem", position: 2, name: "About", item: `${STORE.website}/about` },
+  ],
 };
 
 export default function AboutPage() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutSchema) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+
       {/* Hero — gradient bookend matching homepage / visit / footer. */}
       <div className="relative overflow-hidden bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white py-10 sm:py-14">
         <div
@@ -213,8 +263,8 @@ export default function AboutPage() {
                   Get Directions ↗
                 </a>
                 <Link
-                  href="/contact"
-                  className="px-4 py-2 rounded-xl border border-stone-200 hover:border-indigo-300 text-sm font-semibold text-stone-700 hover:text-indigo-700 transition-colors"
+                  href={withAttr("/contact", "header", "about-location")}
+                  className="px-4 py-2 rounded-xl border border-stone-200 hover:border-indigo-300 text-sm font-semibold text-stone-700 hover:text-indigo-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
                 >
                   Contact Us
                 </Link>
@@ -257,6 +307,53 @@ export default function AboutPage() {
           </div>
         </section>
 
+        {/* Internal-link mesh — surfaces highest-converting next pages so
+            the about-page reader has a clear next move. */}
+        <section className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <Link
+            href={withAttr("/heroes", "header", "about-mesh-heroes")}
+            className="group rounded-2xl border border-stone-200 bg-white hover:border-indigo-300 hover:shadow-md transition-all p-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+          >
+            <div className="text-2xl mb-2" aria-hidden="true">🎖️</div>
+            <h3 className="font-bold text-stone-900 text-sm">Heroes 20% off</h3>
+            <p className="text-xs text-stone-500 mt-1.5 leading-relaxed">
+              Military, vets, first responders, healthcare, K-12 teachers.
+            </p>
+            <span className="text-indigo-700 group-hover:text-indigo-600 text-xs font-bold mt-3 inline-flex items-center gap-1">
+              Eligibility
+              <span aria-hidden="true">→</span>
+            </span>
+          </Link>
+          <Link
+            href={withAttr("/brands", "header", "about-mesh-brands")}
+            className="group rounded-2xl border border-stone-200 bg-white hover:border-indigo-300 hover:shadow-md transition-all p-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+          >
+            <div className="text-2xl mb-2" aria-hidden="true">🌿</div>
+            <h3 className="font-bold text-stone-900 text-sm">Brands we curate</h3>
+            <p className="text-xs text-stone-500 mt-1.5 leading-relaxed">
+              Hand-picked Washington-state producers across every category.
+            </p>
+            <span className="text-indigo-700 group-hover:text-indigo-600 text-xs font-bold mt-3 inline-flex items-center gap-1">
+              See the lineup
+              <span aria-hidden="true">→</span>
+            </span>
+          </Link>
+          <Link
+            href={withAttr("/find-your-strain", "quiz", "about-mesh")}
+            className="group rounded-2xl border border-stone-200 bg-white hover:border-indigo-300 hover:shadow-md transition-all p-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+          >
+            <div className="text-2xl mb-2" aria-hidden="true">🧭</div>
+            <h3 className="font-bold text-stone-900 text-sm">Find your strain</h3>
+            <p className="text-xs text-stone-500 mt-1.5 leading-relaxed">
+              Tell us how you want to feel — we&apos;ll match you to the right cultivar.
+            </p>
+            <span className="text-indigo-700 group-hover:text-indigo-600 text-xs font-bold mt-3 inline-flex items-center gap-1">
+              Take the quiz
+              <span aria-hidden="true">→</span>
+            </span>
+          </Link>
+        </section>
+
         {/* Bottom CTA — gradient bookend matching hero. */}
         <section className="rounded-3xl bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white p-8 text-center space-y-4">
           <p className="font-bold text-xl">Come see us in Rainier Valley</p>
@@ -265,14 +362,14 @@ export default function AboutPage() {
           </p>
           <div className="flex justify-center gap-3 flex-wrap">
             <a
-              href={STORE.shopUrl}
-              className="px-5 py-2.5 rounded-xl bg-indigo-300 hover:bg-indigo-200 text-indigo-950 text-sm font-bold transition-all shadow-md hover:-translate-y-0.5"
+              href={withAttr(STORE.shopUrl, "menu", "about-bottom")}
+              className="px-5 py-2.5 rounded-xl bg-indigo-300 hover:bg-indigo-200 text-indigo-950 text-sm font-bold transition-all shadow-md hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300 focus-visible:ring-offset-2 focus-visible:ring-offset-indigo-950"
             >
               Order Online — 15% Off
             </a>
             <Link
-              href="/contact"
-              className="px-5 py-2.5 rounded-xl border border-white/20 hover:border-white/40 hover:bg-white/10 text-white text-sm font-semibold transition-all"
+              href={withAttr("/contact", "header", "about-bottom")}
+              className="px-5 py-2.5 rounded-xl border border-white/20 hover:border-white/40 hover:bg-white/10 text-white text-sm font-semibold transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300"
             >
               Contact Us
             </Link>
