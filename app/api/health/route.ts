@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getClient } from "@/lib/db";
 import { BUILD_VERSION, BUILD_SHA } from "@/lib/version";
+import { STORE } from "@/lib/store";
 
 // Mirror of greenlife-web/app/api/health/route.ts. See PLAN_RELIABILITY.md
 // for the broader reliability stack (LKG tracking, monitoring, auto-rollback).
@@ -98,6 +99,7 @@ export async function GET() {
       "x-health-status": allOk ? "ok" : "degraded",
       "x-version": BUILD_VERSION,
       "x-sha": BUILD_SHA,
+      "x-store-name": STORE.name,
     },
   });
 }

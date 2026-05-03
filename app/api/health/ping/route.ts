@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { BUILD_VERSION, BUILD_SHA } from "@/lib/version";
+import { STORE } from "@/lib/store";
 
 // Mirror of greenlife-web/app/api/health/ping/route.ts. Minimal liveness
 // endpoint — no DB hit, for second-bucket uptime monitor pings. See
@@ -22,6 +23,7 @@ export async function GET() {
         "x-health-status": "ok",
         "x-version": BUILD_VERSION,
         "x-sha": BUILD_SHA,
+        "x-store-name": STORE.name,
       },
     },
   );
