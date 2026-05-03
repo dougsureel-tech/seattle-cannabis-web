@@ -89,7 +89,7 @@ const CATEGORIES = [
 const STATS = [
   { val: "Open Daily", label: "8 AM – 11 PM" },
   { val: "Free Parking", label: "On-site lot" },
-  { val: "Since 2010", label: "Rainier Valley since 2018" },
+  { val: "16+ Years", label: "Founded 2010 · Rainier since '18" },
   { val: "15% Off", label: "Online orders" },
 ];
 
