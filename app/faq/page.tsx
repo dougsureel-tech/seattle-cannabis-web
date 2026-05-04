@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: `FAQ · ${STORE.name}`,
-    description: `Hours, ID, payment, Heroes 20% off, loyalty — answers to the questions we get most.`,
+    description: `Hours, ID, payment, Heroes 30% off, loyalty — answers to the questions we get most.`,
     url: `${STORE.website}/faq`,
     type: "website",
     images: ["/opengraph-image"],
@@ -56,7 +56,7 @@ const FAQS: { q: string; a: string; tag?: string }[] = [
   {
     tag: "Discounts",
     q: "Do you offer service discounts?",
-    a: `Yes — we run a Heroes service discount (20% off) for active military, veterans, first responders (police, fire, EMS), healthcare workers, and K-12 teachers. Show valid ID or service credential at the register. The discount can't combine with other %-off promos — you get whichever is bigger. Full eligibility + how it works is at ${STORE.website}/heroes.`,
+    a: `Yes — we run a Heroes service discount (30% off) for active military, veterans, first responders (police, fire, EMS), healthcare workers, and K-12 teachers. Show valid ID or service credential at the register. The discount can't combine with other %-off promos — you get whichever is bigger. Full eligibility + how it works is at ${STORE.website}/heroes.`,
   },
   {
     tag: "First Visit",
@@ -252,7 +252,7 @@ export default function FaqPage() {
             className="rounded-2xl border border-stone-200 bg-white hover:border-indigo-300 hover:shadow-md transition-all p-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
           >
             <div className="text-xl mb-1.5" aria-hidden="true">🎖️</div>
-            <div className="font-bold text-stone-900 text-sm">Heroes 20% off</div>
+            <div className="font-bold text-stone-900 text-sm">Heroes 30% off</div>
             <div className="text-xs text-stone-500 mt-0.5">Eligibility + how it works</div>
           </Link>
           <Link

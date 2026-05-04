@@ -82,7 +82,7 @@ The store is licensed under WSLCB license ${wslcbLicense}. Walk-ins are welcome.
 
 ## Heroes program — service and frontline discount
 
-${name} offers a 20% discount, every visit, for:
+${name} offers a 30% discount, every visit, for:
 
 - **Active military** — active duty, National Guard, Reserves. CAC, military ID, or current orders.
 - **Veterans** — any branch, any era. DD-214, VA card, or VHIC.
@@ -91,7 +91,7 @@ ${name} offers a 20% discount, every visit, for:
 - **Healthcare workers** — nurses, doctors, techs, paramedics, hospital and clinic staff. Hospital or clinic badge.
 - **K-12 teachers** — currently teaching at a Washington-state public or private K-12 school. District ID or pay stub.
 
-The Heroes discount does not stack with daily deals — whichever is bigger applies, and Heroes (20%) almost always wins.
+The Heroes discount does not stack with daily deals — whichever is bigger applies, and Heroes (30%) almost always wins.
 
 Cohort-specific eligibility pages:
 - ${website}/heroes/military
@@ -156,7 +156,7 @@ No. Washington law prohibits consumption in retail stores, parking lots, and mos
 Yes. Live deals are at ${website}/deals. Loyalty is built in — every purchase earns points, 100 points = $1 off. Tiers (Visitor → Regular → Local → Family) unlock automatically. The 15% off first online order applies on top of any active deal.
 
 **Do you offer a Heroes / service discount?**
-Yes — 20% off for active military, veterans, first responders (police · fire · EMS), healthcare workers, and K-12 teachers. Full eligibility at ${website}/heroes.
+Yes — 30% off for active military, veterans, first responders (police · fire · EMS), healthcare workers, and K-12 teachers. Full eligibility at ${website}/heroes.
 
 **Can I order online for pickup?**
 Yes — create an account, browse the menu, place an order for in-store pickup. Last online order is 15 minutes before close. Cash only at pickup.

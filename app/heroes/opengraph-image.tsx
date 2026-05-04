@@ -3,7 +3,7 @@ import { STORE } from "@/lib/store";
 
 // /heroes OG card mirror of Wenatchee's, with Seattle indigo/violet/fuchsia palette.
 
-export const alt = `Heroes Discount · 20% off · ${STORE.name}`;
+export const alt = `Heroes Discount · 30% off · ${STORE.name}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -104,7 +104,7 @@ export default function HeroesOG() {
             local heroes.
           </span>
           <span style={{ fontSize: 26, color: "#ddd6fe", marginTop: 22, fontWeight: 600, lineHeight: 1.3 }}>
-            20% off · Active military · Veterans · First responders · Healthcare · Teachers
+            30% off · Active military · Veterans · First responders · Healthcare · Teachers
           </span>
         </div>
 
