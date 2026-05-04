@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { VendorAdSlot } from "@/components/VendorAdSlot";
 import { getBrandBySlug, getBrandProducts, getActiveBrands } from "@/lib/db";
 import { STORE } from "@/lib/store";
 import NWCSBrandPage from "./_brands/northwest-cannabis-solutions";
@@ -281,6 +282,9 @@ export default async function BrandPage({ params }: Props) {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 space-y-10 sm:space-y-12">
+        {/* Vendor / house ad — top of brand page (placement_slot='brand_page_top') */}
+        <VendorAdSlot slot="brand_page_top" />
+
         {/* Brand bio + socials — vendor-authored via /vmi/profile. Both
             blocks render only when the vendor has filled them in (avoids a
             half-empty section on brands that haven't logged in yet). The

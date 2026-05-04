@@ -3,6 +3,7 @@
 // comes from Vercel automatically on every deploy and is the authoritative
 // "did my push actually land" signal.
 
+// 4.195 — VendorAdSlot wired to 4 remaining placement slots: homepage_top (above hero), homepage_under_brands (below brands carousel), menu_sidebar (above iHeartJane Boost embed on /menu), brand_page_top (top of /brands/[slug] generic template). All slots silent until admin curates active ads at inventoryapp /admin/marketing/vendor-ads. Now 5 of 5 schema-enum slots are mounted. Mirror on greenlife-web v3.295.
 // 4.190 — `/brands` redirect FINAL FIX in `proxy.ts` middleware. v4.175's page-level approach (`permanentRedirect()` + `dynamic = "force-dynamic"`) deployed but did NOT produce a real HTTP 308 — Next 16 served HTTP 200 with homepage HTML body even though page was rendered dynamically (no `x-vercel-cache: HIT`). Middleware-level intercept runs BEFORE Next's render pipeline; response is a guaranteed real HTTP 308 with `location: /menu`. Page-level fallback in `app/brands/page.tsx` remains as defense-in-depth. Closes the `🟡 /brands redirect caveat` flag in LIVE.md. Mirror on greenlife-web v3.290.
 // 4.180 — `/brands` redirect moved to proxy.ts middleware (FIRST attempt — see v4.190 for the actual ship). Note: this entry rode along with the HOTFIX commit `bf55ebc` that pinned vercel CLI to 52.0.0; the proxy.ts middleware change was intended but not yet present, so the page-level v4.175 approach remained the deployed behavior. Kept here as historical narrative.
 // 4.175 — `/brands` redirect SEO fix. Was returning HTTP 200 + a Next.js Loading-then-`router.push("/menu")` static payload (Next 16 captures `redirect()` during prerender as static HTML when there's no `dynamic = "force-dynamic"` directive on the page). Crawlers + uptime checks + curl saw 200 + empty body, not a redirect. Now: `export const dynamic = "force-dynamic"` forces per-request render, and `redirect` swapped for `permanentRedirect` so the response is a real HTTP 308 → /menu (matches the page comment's stated intent + the LIVE.md follow-up note). Mirror on greenlife-web v3.265.
@@ -26,7 +27,7 @@
 // 4.81 — /brands/[slug] generic-template renders vendor-authored brand bio + Instagram/X/Facebook handles when filled in via /vmi/profile (inventoryapp). Section sits above the order CTA, only renders when at least one field is non-null. Handles are sanitized to /^[A-Za-z0-9._-]+$/ before being concatenated into URLs (prevents query-param injection or path traversal). Per-brand override components intentionally NOT touched — those are graduated, hand-authored layouts.
 // 4.76 — /apply personality prompts: two optional written prompts (product-recommendation pitch + customer-recovery story) capture personality signal without the photo discrimination risk. Stored in applicants.metadata JSONB on inventoryapp side. Compliance: written-only — no photo (WA RCW 49.60 / EEOC pre-offer photo discrimination risk).
 // 4.71 — Public /apply form: apply-to-work intake with resume upload + 3 references + 21+ confirmation. POSTs to inventoryapp /api/applications. Compliance: no photo / no SSN / no DOB.
-export const BUILD_VERSION = "4.190";
+export const BUILD_VERSION = "4.195";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ??

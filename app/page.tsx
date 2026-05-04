@@ -150,6 +150,12 @@ export default async function HomePage() {
           </div>
         </div>
       )}
+      {/* Vendor / house ad slot — top of page (above hero) */}
+      <section className="bg-stone-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3">
+          <VendorAdSlot slot="homepage_top" />
+        </div>
+      </section>
       {/* ─── Hero ─────────────────────────────────────────────────────────── */}
       {/* bg-gradient on the section is the static fallback that paints
           identically to HeroBackground's Layer 1; the component then renders
@@ -1277,6 +1283,13 @@ export default async function HomePage() {
           ) : null}
         </section>
       )}
+
+      {/* Vendor / house ad slot — under brands carousel */}
+      <section className="bg-stone-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+          <VendorAdSlot slot="homepage_under_brands" />
+        </div>
+      </section>
 
       {/* ─── CTA band ───────────────────────────────────────────────────────── */}
       {/* Bottom-of-page CTA — same indigo→violet gradient identity as the
