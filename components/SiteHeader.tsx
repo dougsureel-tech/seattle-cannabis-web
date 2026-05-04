@@ -48,6 +48,7 @@ const NAV = [
   { href: "/blog", label: "Guides" },
   { href: "/faq", label: "FAQ" },
   { href: "/about", label: "About" },
+  { href: "/apply", label: "Careers" },
 ];
 
 export function SiteHeader() {
