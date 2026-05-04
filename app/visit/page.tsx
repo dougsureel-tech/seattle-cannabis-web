@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { STORE, isOpenNow, nextOpenLabel } from "@/lib/store";
 import { withAttr } from "@/lib/attribution";
+import { fetchClosureStatus } from "@/lib/closure-status";
+import { ClosureBanner } from "@/components/ClosureBanner";
 
 // ISR: only dynamic data is "is the store open NOW" + which day-row to
 // highlight. 5-minute revalidate keeps that fresh enough that customers
@@ -78,11 +80,15 @@ const NEARBY = [
   { name: "I-5 via Columbia City", direction: "Direct on-ramp" },
 ];
 
-export default function VisitPage() {
+export default async function VisitPage() {
   const open = isOpenNow();
   const statusLabel = nextOpenLabel();
   const today = new Date().toLocaleDateString("en-US", { weekday: "long", timeZone: "America/Los_Angeles" });
   const todayHours = STORE.hours.find((h) => h.day === today);
+  // Customers landing here pre-drive should know if we've flagged today
+  // closed via /admin/hours-override even when our static configured hours
+  // would normally say "open". 5-min ISR on the page bounds fetch frequency.
+  const closure = await fetchClosureStatus();
 
   return (
     <>
@@ -91,6 +97,12 @@ export default function VisitPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
+
+      {closure.isClosed && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-4">
+          <ClosureBanner closure={closure} />
+        </div>
+      )}
 
       {/* Hero — gradient bookend matches the homepage hero / footer / bottom
           CTAs. Same indigo→violet identity across every page. */}
@@ -365,20 +377,6 @@ export default function VisitPage() {
               </p>
               <span className="text-indigo-700 group-hover:text-indigo-600 text-xs font-bold mt-3 inline-flex items-center gap-1">
                 Check eligibility
-                <span aria-hidden="true">→</span>
-              </span>
-            </Link>
-            <Link
-              href={withAttr("/brands", "header", "visit-mesh-brands")}
-              className="group rounded-2xl border border-stone-200 bg-white hover:border-indigo-300 hover:shadow-md transition-all p-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
-            >
-              <div className="text-2xl mb-2" aria-hidden="true">🌿</div>
-              <h3 className="font-bold text-stone-900 text-sm">Brands we carry</h3>
-              <p className="text-xs text-stone-500 mt-1.5 leading-relaxed">
-                Hand-curated Washington-state producers — flower, vapes, edibles, concentrates.
-              </p>
-              <span className="text-indigo-700 group-hover:text-indigo-600 text-xs font-bold mt-3 inline-flex items-center gap-1">
-                Browse the lineup
                 <span aria-hidden="true">→</span>
               </span>
             </Link>
