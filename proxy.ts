@@ -73,6 +73,19 @@ const clerk = clerkMiddleware(async (auth, req) => {
 export default async function middleware(req: NextRequest) {
   const url = new URL(req.url);
 
+  // /brands index → /menu (308 permanent). The brands index was deleted
+  // 2026-05-04 (Doug + Kat call) but the page-level `permanentRedirect()`
+  // approach in `app/brands/page.tsx` didn't produce a true HTTP 308 even
+  // with `dynamic = "force-dynamic"` (Next 16 quirk — response body came
+  // back as homepage HTML at HTTP 200). Middleware-level intercept runs
+  // BEFORE rendering and emits a real 308. Per-brand pages /brands/[slug]
+  // are kept (graduated boutique pages) — only the bare /brands index
+  // redirects.
+  if (url.pathname === "/brands" || url.pathname === "/brands/") {
+    const target = new URL("/menu", req.url);
+    return NextResponse.redirect(target.toString(), 308);
+  }
+
   // Site-wide canonical-host redirect. Was previously scoped to `/menu*`
   // only (because that path was the original CORS-driven case — see
   // CANONICAL_HOST comment above), but every other route benefits too:
