@@ -55,6 +55,13 @@ export async function getMenuProducts(): Promise<MenuProduct[]> {
       SELECT DISTINCT ON (product_id) product_id, quantity_on_hand::numeric AS qty
       FROM inventory_snapshots
       ORDER BY product_id, captured_at DESC
+    ),
+    brands_with_recent_sales AS (
+      SELECT DISTINCT p.vendor_id
+      FROM sale_line_items sli
+      INNER JOIN products p ON p.id = sli.product_id
+      WHERE sli.sold_at >= NOW() - INTERVAL '365 days'
+        AND p.vendor_id IS NOT NULL
     )
     SELECT
       p.id, p.name, p.brand, p.category, p.strain_type,
@@ -63,6 +70,7 @@ export async function getMenuProducts(): Promise<MenuProduct[]> {
       COALESCE(fs.first_seen >= NOW() - INTERVAL '7 days', FALSE) AS is_new
     FROM products p
     INNER JOIN latest_inv li ON li.product_id = p.id
+    INNER JOIN brands_with_recent_sales bws ON bws.vendor_id = p.vendor_id
     LEFT JOIN (
       SELECT product_id, MIN(captured_at) AS first_seen
       FROM inventory_snapshots
@@ -105,6 +113,13 @@ export async function getProductsByIds(ids: string[]): Promise<MenuProduct[]> {
       SELECT DISTINCT ON (product_id) product_id, quantity_on_hand::numeric AS qty
       FROM inventory_snapshots
       ORDER BY product_id, captured_at DESC
+    ),
+    brands_with_recent_sales AS (
+      SELECT DISTINCT p.vendor_id
+      FROM sale_line_items sli
+      INNER JOIN products p ON p.id = sli.product_id
+      WHERE sli.sold_at >= NOW() - INTERVAL '365 days'
+        AND p.vendor_id IS NOT NULL
     )
     SELECT
       p.id, p.name, p.brand, p.category, p.strain_type,
@@ -113,6 +128,7 @@ export async function getProductsByIds(ids: string[]): Promise<MenuProduct[]> {
       COALESCE(fs.first_seen >= NOW() - INTERVAL '7 days', FALSE) AS is_new
     FROM products p
     INNER JOIN latest_inv li ON li.product_id = p.id
+    INNER JOIN brands_with_recent_sales bws ON bws.vendor_id = p.vendor_id
     LEFT JOIN (
       SELECT product_id, MIN(captured_at) AS first_seen
       FROM inventory_snapshots
@@ -149,6 +165,13 @@ export async function getFeaturedProducts(limit = 8): Promise<MenuProduct[]> {
       SELECT DISTINCT ON (product_id) product_id, quantity_on_hand::numeric AS qty
       FROM inventory_snapshots
       ORDER BY product_id, captured_at DESC
+    ),
+    brands_with_recent_sales AS (
+      SELECT DISTINCT p.vendor_id
+      FROM sale_line_items sli
+      INNER JOIN products p ON p.id = sli.product_id
+      WHERE sli.sold_at >= NOW() - INTERVAL '365 days'
+        AND p.vendor_id IS NOT NULL
     )
     SELECT p.id, p.name, p.brand, p.category, p.strain_type,
       p.thc_pct::float AS thc_pct, p.cbd_pct::float AS cbd_pct,
@@ -156,6 +179,7 @@ export async function getFeaturedProducts(limit = 8): Promise<MenuProduct[]> {
       FALSE AS is_new
     FROM products p
     INNER JOIN latest_inv li ON li.product_id = p.id
+    INNER JOIN brands_with_recent_sales bws ON bws.vendor_id = p.vendor_id
     WHERE p.carry_status = 'active'
       AND p.unit_price IS NOT NULL
       AND p.image_url IS NOT NULL
@@ -183,6 +207,13 @@ export async function getFeaturedProducts(limit = 8): Promise<MenuProduct[]> {
         SELECT DISTINCT ON (product_id) product_id, quantity_on_hand::numeric AS qty
         FROM inventory_snapshots
         ORDER BY product_id, captured_at DESC
+      ),
+      brands_with_recent_sales AS (
+        SELECT DISTINCT p.vendor_id
+        FROM sale_line_items sli
+        INNER JOIN products p ON p.id = sli.product_id
+        WHERE sli.sold_at >= NOW() - INTERVAL '365 days'
+          AND p.vendor_id IS NOT NULL
       )
       SELECT p.id, p.name, p.brand, p.category, p.strain_type,
         p.thc_pct::float AS thc_pct, p.cbd_pct::float AS cbd_pct,
@@ -190,6 +221,7 @@ export async function getFeaturedProducts(limit = 8): Promise<MenuProduct[]> {
         FALSE AS is_new
       FROM products p
       INNER JOIN latest_inv li ON li.product_id = p.id
+      INNER JOIN brands_with_recent_sales bws ON bws.vendor_id = p.vendor_id
       WHERE p.carry_status = 'active'
         AND p.unit_price IS NOT NULL
         AND li.qty > 0
@@ -319,12 +351,20 @@ export async function getCategoryPreviewProducts(
       SELECT DISTINCT ON (product_id) product_id, quantity_on_hand::numeric AS qty
       FROM inventory_snapshots
       ORDER BY product_id, captured_at DESC
+    ),
+    brands_with_recent_sales AS (
+      SELECT DISTINCT p.vendor_id
+      FROM sale_line_items sli
+      INNER JOIN products p ON p.id = sli.product_id
+      WHERE sli.sold_at >= NOW() - INTERVAL '365 days'
+        AND p.vendor_id IS NOT NULL
     )
     SELECT p.id, p.name, p.brand, p.category, p.strain_type,
       p.thc_pct::float AS thc_pct, p.cbd_pct::float AS cbd_pct,
       p.unit_price::float AS unit_price, p.image_url, p.effects, p.terpenes
     FROM products p
     INNER JOIN latest_inv li ON li.product_id = p.id
+    INNER JOIN brands_with_recent_sales bws ON bws.vendor_id = p.vendor_id
     WHERE p.carry_status = 'active'
       AND p.unit_price IS NOT NULL AND p.unit_price > 0
       AND p.image_url IS NOT NULL
@@ -550,6 +590,13 @@ export async function getBrandProducts(vendorId: string) {
       SELECT DISTINCT ON (product_id) product_id, quantity_on_hand::numeric AS qty
       FROM inventory_snapshots
       ORDER BY product_id, captured_at DESC
+    ),
+    brands_with_recent_sales AS (
+      SELECT DISTINCT p.vendor_id
+      FROM sale_line_items sli
+      INNER JOIN products p ON p.id = sli.product_id
+      WHERE sli.sold_at >= NOW() - INTERVAL '365 days'
+        AND p.vendor_id IS NOT NULL
     )
     SELECT
       p.id,
@@ -565,6 +612,7 @@ export async function getBrandProducts(vendorId: string) {
       p.terpenes
     FROM products p
     INNER JOIN latest_inv li ON li.product_id = p.id
+    INNER JOIN brands_with_recent_sales bws ON bws.vendor_id = p.vendor_id
     WHERE p.vendor_id = ${vendorId}
       AND p.carry_status = 'active'
       AND p.unit_price IS NOT NULL
