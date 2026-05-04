@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { STORE, isOpenNow, nextOpenLabel } from "@/lib/store";
 import { withAttr } from "@/lib/attribution";
-import { getActiveBrands, getActiveDeals, getFeaturedProducts } from "@/lib/db";
+import { getActiveBrands, getActiveDeals, getFeaturedProducts, getJustInProducts } from "@/lib/db";
 import { fetchClosureStatus } from "@/lib/closure-status";
 import { ClosureBanner } from "@/components/ClosureBanner";
 import { PrimaryCTA } from "@/components/PrimaryCTA";
@@ -122,9 +122,10 @@ const STATS = [
 ];
 
 export default async function HomePage() {
-  const [brands, featured, deals, closure] = await Promise.all([
+  const [brands, featured, justIn, deals, closure] = await Promise.all([
     getActiveBrands().catch(() => []),
     getFeaturedProducts(8).catch(() => []),
+    getJustInProducts(12).catch(() => []),
     getActiveDeals().catch(() => []),
     fetchClosureStatus(),
   ]);
@@ -885,6 +886,94 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ─── 🆕 Just In This Week ──────────────────────────────────────────── */}
+      {/* Auto-derived from inventory_snapshots first_seen ≤ 7d. Mirror of
+          greenlife-web v3.260. Distinct from the curated /admin/marketing/featured
+          surface — that's "hot picks", this is "what's new". CTA links to /menu
+          (the iHeartJane Boost embed in prod), safe distinct from /order tree dev. */}
+      {justIn.length > 0 && (
+        <section className="py-12 sm:py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+            <div className="flex items-end justify-between mb-8 gap-4">
+              <SectionHeading align="left" kicker="🆕 New this week">
+                Just In
+              </SectionHeading>
+              <Link
+                href="/menu"
+                className="shrink-0 text-sm font-semibold text-indigo-700 hover:text-indigo-600 transition-colors"
+              >
+                Full menu →
+              </Link>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+              {justIn.map((p) => (
+                <Link
+                  key={p.id}
+                  href="/menu"
+                  className="group bg-white rounded-2xl border border-stone-100 overflow-hidden hover:border-indigo-300 hover:shadow-lg transition-all relative"
+                >
+                  <span className="absolute top-2 right-2 z-10 text-[10px] font-bold uppercase tracking-wider bg-indigo-700 text-white px-2 py-0.5 rounded-full shadow">
+                    🆕 New
+                  </span>
+                  <div className="aspect-square bg-stone-100 overflow-hidden relative">
+                    {p.imageUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={p.imageUrl}
+                        alt={p.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-4xl bg-gradient-to-br from-stone-100 to-stone-200">
+                        🌱
+                      </div>
+                    )}
+                    {p.strainType && (
+                      <span
+                        className={`absolute top-2 left-2 text-xs px-2 py-0.5 rounded-full font-semibold ${
+                          p.strainType === "Sativa"
+                            ? "bg-amber-100 text-amber-700"
+                            : p.strainType === "Indica"
+                              ? "bg-purple-100 text-purple-700"
+                              : "bg-indigo-100 text-indigo-700"
+                        }`}
+                      >
+                        {p.strainType}
+                      </span>
+                    )}
+                  </div>
+                  <div className="p-3 space-y-1">
+                    {p.brand && (
+                      <div className="text-xs text-stone-600 font-medium uppercase tracking-wide truncate">
+                        {p.brand}
+                      </div>
+                    )}
+                    <div className="font-semibold text-stone-900 text-sm leading-tight line-clamp-2">
+                      {p.name}
+                    </div>
+                    <div className="flex items-center justify-between pt-1">
+                      <span className="font-bold text-indigo-800">
+                        {p.unitPrice != null && p.unitPrice > 0 ? (
+                          `$${p.unitPrice.toFixed(2)}`
+                        ) : (
+                          <span className="text-stone-600 font-medium">In store</span>
+                        )}
+                      </span>
+                      {p.thcPct != null && (
+                        <span className="text-xs text-stone-600">THC {p.thcPct.toFixed(1)}%</span>
+                      )}
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+            <div className="text-center mt-10">
+              <PrimaryCTA href="/menu">Browse Full Menu →</PrimaryCTA>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ─── Featured products ──────────────────────────────────────────────── */}
       {/* TEMPORARILY REMOVED 2026-05-04 per Doug — surfaces products that read as
