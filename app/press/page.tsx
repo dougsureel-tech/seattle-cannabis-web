@@ -26,7 +26,7 @@ const FACTS: { label: string; value: string }[] = [
   { label: "Hours", value: "8 AM – 11 PM daily" },
   { label: "WSLCB License", value: STORE.wslcbLicense },
   { label: "Founded", value: FOUNDED_YEAR },
-  { label: "Owner", value: "Doug Sureel · locally owned, independent" },
+  { label: "Owner", value: "Doug Waun · locally owned, independent" },
   {
     label: "Region",
     value: `${STORE.neighborhood}, plus ${STORE.nearbyNeighborhoods.slice(0, 3).join(", ")}`,
@@ -126,7 +126,7 @@ export default function PressPage() {
             &ldquo;Rainier Valley deserves the same quality, the same service, the same care a customer in
             Capitol Hill or Bellevue gets. We built {STORE.name} to be that — same hours, same selection, same
             answers, half the attitude.&rdquo;
-            <footer className="mt-2 not-italic text-xs text-stone-500">— Doug Sureel, owner</footer>
+            <footer className="mt-2 not-italic text-xs text-stone-500">— Doug Waun, owner</footer>
           </blockquote>
           <p className="text-xs text-stone-500">
             Need a custom quote, owner interview, or background-only call? Email {PRESS_EMAIL} and we&apos;ll

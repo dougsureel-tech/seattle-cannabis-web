@@ -23,6 +23,6 @@ export const metadata: Metadata = {
 //
 // Restore: replace this stub with the original implementation (preserved in
 // git at SHA 4cbe36a / v3.50: app/order/page.tsx) when the price sync ships.
-export default function OrderPage() {
+export default async function OrderPage() {
   redirect("/menu");
 }
