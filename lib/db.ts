@@ -9,6 +9,10 @@ export type VendorBrand = {
   imageSource: string | null;
   notes: string | null;
   activeSkus: number;
+  brandBio: string | null;
+  socialInstagram: string | null;
+  socialX: string | null;
+  socialFacebook: string | null;
 };
 
 export function getClient() {
@@ -343,6 +347,10 @@ export async function getActiveBrands(): Promise<VendorBrand[]> {
       v.logo_url,
       v.image_source,
       v.notes,
+      v.brand_bio,
+      v.social_instagram,
+      v.social_x,
+      v.social_facebook,
       COUNT(p.id) FILTER (WHERE p.carry_status != 'discontinued')::int AS active_skus
     FROM vendors v
     LEFT JOIN products p ON p.vendor_id = v.id
@@ -359,6 +367,10 @@ export async function getActiveBrands(): Promise<VendorBrand[]> {
     imageSource: r.image_source as string | null,
     notes: r.notes as string | null,
     activeSkus: r.active_skus as number,
+    brandBio: (r.brand_bio as string | null) ?? null,
+    socialInstagram: (r.social_instagram as string | null) ?? null,
+    socialX: (r.social_x as string | null) ?? null,
+    socialFacebook: (r.social_facebook as string | null) ?? null,
   }));
 }
 
@@ -373,6 +385,10 @@ export async function getBrandBySlug(slug: string): Promise<VendorBrand | null> 
       v.logo_url,
       v.image_source,
       v.notes,
+      v.brand_bio,
+      v.social_instagram,
+      v.social_x,
+      v.social_facebook,
       COUNT(p.id) FILTER (WHERE p.carry_status != 'discontinued')::int AS active_skus
     FROM vendors v
     LEFT JOIN products p ON p.vendor_id = v.id
@@ -391,6 +407,10 @@ export async function getBrandBySlug(slug: string): Promise<VendorBrand | null> 
     imageSource: r.image_source as string | null,
     notes: r.notes as string | null,
     activeSkus: r.active_skus as number,
+    brandBio: (r.brand_bio as string | null) ?? null,
+    socialInstagram: (r.social_instagram as string | null) ?? null,
+    socialX: (r.social_x as string | null) ?? null,
+    socialFacebook: (r.social_facebook as string | null) ?? null,
   };
 }
 
