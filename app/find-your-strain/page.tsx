@@ -5,9 +5,16 @@ import { StrainFinderClient } from "./StrainFinderClient";
 import { withAttr } from "@/lib/attribution";
 
 export const metadata: Metadata = {
-  title: "Find Your Strain",
-  description: `Quick 3-question quiz to match you with the right cannabis at ${STORE.name}. Tell us the moment, the form, and the strain type — we'll filter the menu for you.`,
+  title: "Find Your Strain — 3-Question Cannabis Quiz",
+  description: `Quick 3-question quiz to match you with the right cannabis at ${STORE.name}. Tell us the moment (energize, chill, sleep, creative, social, relief), the form (flower, edible, vape, concentrate), and the strain type (sativa, indica, hybrid) — we'll filter the live menu down to what fits.`,
   alternates: { canonical: "/find-your-strain" },
+  openGraph: {
+    title: `Find Your Strain | ${STORE.name}`,
+    description: "Quick 3-question quiz to match you with the right cannabis. Live menu in Rainier Valley, Seattle.",
+    url: `${STORE.website}/find-your-strain`,
+    type: "website",
+    images: ["/opengraph-image"],
+  },
 };
 
 // Mood shortcuts under the quiz — for visitors who already know what they
