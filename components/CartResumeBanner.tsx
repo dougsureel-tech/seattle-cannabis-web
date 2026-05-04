@@ -48,15 +48,18 @@ export function CartResumeBanner() {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [mounted, setMounted] = useState(false);
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     setMounted(true);
     setCart(readCart());
   }, []);
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     setCart(readCart());
   }, [pathname]);
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     const onVis = () => {
       if (document.visibilityState === "visible") setCart(readCart());

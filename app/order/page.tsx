@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { auth } from "@clerk/nextjs/server";
-import { getMenuProducts, getPickupEta, getActiveDeals } from "@/lib/db";
-import { STORE, getOrderingStatus } from "@/lib/store";
-import { OrderMenu } from "./OrderMenu";
+import { STORE } from "@/lib/store";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
@@ -18,93 +15,14 @@ export const metadata: Metadata = {
   },
 };
 
-function minToLabel(min: number): string {
-  const h24 = Math.floor(min / 60);
-  const m = min % 60;
-  const ampm = h24 >= 12 ? "PM" : "AM";
-  const h12 = h24 % 12 === 0 ? 12 : h24 % 12;
-  return `${h12}:${String(m).padStart(2, "0")} ${ampm}`;
-}
-
-export default async function OrderPage() {
-  // TEMPORARILY REDIRECTED 2026-05-04 per Doug — Seattle inventoryapp DB has
-  // Wenatchee-seeded prices on shared-ID products (per OUTSTANDING_WORK 3.9
-  // + INCIDENTS.md), so the in-tree menu shows wrong prices for Seattle until
-  // a Dutchie sync reconciles them. /menu (iHeartJane Boost embed at storeId
-  // 5295) shows the real Dutchie Seattle prices, so push customers there.
-  // Restore (delete this redirect) when /order tree menu prices are fixed.
+// TEMPORARILY REDIRECTED 2026-05-04 per Doug — Seattle inventoryapp DB has
+// Wenatchee-seeded prices on shared-ID products (per OUTSTANDING_WORK 3.9
+// + INCIDENTS.md), so the in-tree menu shows wrong prices for Seattle until
+// a Dutchie sync reconciles them. /menu (iHeartJane Boost embed at storeId
+// 5295) shows the real Dutchie Seattle prices, so push customers there.
+//
+// Restore: replace this stub with the original implementation (preserved in
+// git at SHA 4cbe36a / v3.50: app/order/page.tsx) when the price sync ships.
+export default function OrderPage() {
   redirect("/menu");
-
-  const [products, eta, { userId }, activeDeals] = await Promise.all([
-    getMenuProducts().catch(() => []),
-    getPickupEta().catch(() => ({ depth: 0, label: "Usually ready in under 10 min" })),
-    auth(),
-    getActiveDeals().catch(() => []),
-  ]);
-  const status = getOrderingStatus();
-  const signedIn = !!userId;
-
-  return (
-    <>
-      {/* Premium page header — gradient bookend matching the rest of the site. */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white py-10">
-        <div
-          className="absolute inset-0 opacity-10"
-          style={{
-            backgroundImage: "radial-gradient(circle, #fff 1px, transparent 1px)",
-            backgroundSize: "24px 24px",
-          }}
-        />
-        <div
-          className="absolute inset-0 opacity-25"
-          style={{ backgroundImage: "radial-gradient(ellipse 70% 80% at 20% 50%, #818cf8, transparent)" }}
-        />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row sm:items-end gap-4">
-          <div className="flex-1 space-y-2">
-            <p className="text-indigo-400 text-xs font-bold uppercase tracking-widest">Pickup Menu</p>
-            <h1 className="text-3xl font-extrabold tracking-tight">Order for Pickup</h1>
-            <p className="text-indigo-300/70 text-sm">
-              Browse · Add to cart · Pick up &amp; pay cash · Earn points
-            </p>
-            {/* Locally-owned-since-2010 positioning per project memory
-                project_seattle_founding (founded 2010, Rainier Valley since
-                2018). Single line under the pickup-flow recap so the page
-                doesn't read as a faceless e-com surface. */}
-            <p className="text-indigo-200/70 text-xs">
-              Locally owned since 2010 — walk in or call us if you want backup picking.
-            </p>
-          </div>
-          <div className="flex flex-col items-start sm:items-end gap-2 text-xs">
-            {status.state === "open" && status.minutesUntilLastCall <= 60 && (
-              <span className="inline-flex items-center gap-1.5 text-amber-300/90 font-semibold">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_4px_#fbbf24] animate-pulse" />
-                Last call in {status.minutesUntilLastCall} min · order by {minToLabel(status.lastCallMin)}
-              </span>
-            )}
-            {status.state !== "open" && (
-              <span className="inline-flex items-center gap-1.5 text-amber-300/90 font-semibold">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_4px_#fbbf24]" />
-                {status.state === "before_open"
-                  ? `Online ordering opens at ${status.opensAt}`
-                  : status.state === "after_last_call"
-                    ? `Online ordering closed · reopens at ${status.reopensAt}`
-                    : `Online ordering closed · reopens at ${status.opensAt}`}
-              </span>
-            )}
-            {status.state === "open" && (
-              <span className="inline-flex items-center gap-1.5 text-indigo-200/95 font-semibold">
-                <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 shadow-[0_0_4px_#818cf8] animate-pulse" />
-                ⚡ {eta.label}
-              </span>
-            )}
-            <span className="inline-flex items-center gap-1.5 text-indigo-300/60">
-              <span className="w-1 h-1 rounded-full bg-indigo-400/60" />
-              Cash only · 21+ ID required
-            </span>
-          </div>
-        </div>
-      </div>
-      <OrderMenu products={products} signedIn={signedIn} activeDeals={activeDeals} />
-    </>
-  );
 }
