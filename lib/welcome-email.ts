@@ -55,10 +55,7 @@ export type WelcomeEmailArgs = {
 // Origin used for the strain-quiz CTA. Resolved from env so the link is
 // absolute (email clients won't relative-resolve a `/find-your-strain`
 // path) and falls back to the canonical apex if `NEXT_PUBLIC_SITE_URL`
-// isn't set in the env. No trailing slash. v9.910 — Seattle's welcome
-// email previously omitted the strain-quiz CTA that Wenatchee's had
-// (`greenlife-web/lib/welcome-email.ts:55-62,100,160-164`); fixed here
-// so new Seattle customers get the same 60-second-quiz funnel.
+// isn't set in the env. No trailing slash.
 const SITE_ORIGIN = (
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://seattlecannabis.co"
 ).replace(/\/+$/, "");
@@ -91,6 +88,13 @@ const COLORS = {
   divider: "#e7e5e4",
 } as const;
 
+// Seattle static facts — kept in-file so the footer renders without
+// pulling more from STORE than the args already give us. License is the
+// WSLCB retailer license issued to Green Anne LLC (dba Seattle Cannabis Co.).
+const PHONE_DISPLAY = "(206) 420-1042";
+const PHONE_TEL = "+12064201042";
+const WSLCB_LICENSE = "WSLCB License 426199";
+
 function buildHtml(args: WelcomeEmailArgs): string {
   const { firstName, storeName, storeAddress, mapUrl, hoursText, deepLinkOrder } = args;
 
@@ -115,20 +119,26 @@ function buildHtml(args: WelcomeEmailArgs): string {
     <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:${COLORS.bgCard};border:1px solid ${COLORS.border};border-radius:14px;overflow:hidden;">
       <tr><td style="background:${COLORS.headerBg};padding:24px 28px;">
         <p style="margin:0;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:${COLORS.headerText};font-weight:700;">
-          ${safeStoreName}
+          ${safeStoreName} · Rainier Valley since 2018
         </p>
-        <p style="margin:6px 0 0;font-size:20px;font-weight:700;color:#ffffff;line-height:1.3;">
-          Welcome to the shop
+        <p style="margin:6px 0 0;font-size:22px;font-weight:700;color:#ffffff;line-height:1.3;">
+          Welcome, ${greetingName}.
         </p>
       </td></tr>
 
       <tr><td style="padding:28px 28px 8px;">
-        <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:${COLORS.textBody};">
-          Hey ${greetingName} — thanks for joining us. Your account is set up
+        <p style="margin:0 0 14px;font-size:15px;line-height:1.6;color:${COLORS.textBody};">
+          Thanks for signing up. We've been a Seattle shop since 2010 and a
+          Rainier Valley anchor since 2018 — well-curated menu, careful staff,
+          and the smoothest pickup we know how to run. Your account is set up
           and you can place a pickup order any time.
         </p>
 
-        <div style="background:${COLORS.accentBg};border-radius:10px;padding:16px 18px;margin:8px 0 20px;">
+        <a href="${safeDeepLink}" style="display:inline-block;background:${COLORS.buttonBg};color:${COLORS.buttonText};font-weight:600;font-size:14px;padding:12px 24px;border-radius:8px;text-decoration:none;letter-spacing:0.02em;">
+          Browse the menu
+        </a>
+
+        <div style="background:${COLORS.accentBg};border-radius:10px;padding:16px 18px;margin:22px 0 8px;">
           <p style="margin:0 0 8px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:${COLORS.accentText};">
             First-visit essentials
           </p>
@@ -143,41 +153,65 @@ function buildHtml(args: WelcomeEmailArgs): string {
           </p>
         </div>
 
-        <a href="${safeDeepLink}" style="display:inline-block;background:${COLORS.buttonBg};color:${COLORS.buttonText};font-weight:600;font-size:14px;padding:12px 24px;border-radius:8px;text-decoration:none;letter-spacing:0.02em;">
-          Browse the menu
-        </a>
+        <div style="border-top:1px solid ${COLORS.divider};padding-top:18px;margin-top:22px;">
+          <p style="margin:0 0 6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:${COLORS.accentText};">
+            Loyalty — every visit counts
+          </p>
+          <p style="margin:0 0 6px;font-size:14px;color:${COLORS.textBody};line-height:1.6;">
+            Earn <strong>1 point per $1</strong> spent in store. Redeem
+            <strong>100 points = $1 off</strong> your next visit. Tier progress
+            runs <strong>Visitor → Regular → Local → Family</strong>, with
+            perks at each step. Ask a budtender to start your card on your
+            first visit — it takes about thirty seconds.
+          </p>
+        </div>
+
+        <div style="border-top:1px solid ${COLORS.divider};padding-top:18px;margin-top:18px;">
+          <p style="margin:0 0 6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:${COLORS.textMuted};">
+            What you'll hear from us
+          </p>
+          <p style="margin:0;font-size:14px;color:${COLORS.textBody};line-height:1.6;">
+            Order confirmations and the occasional drop note when something
+            we love lands. That's it — no daily blast, no spam. Reply STOP
+            any time and we'll honor it.
+          </p>
+        </div>
 
         <div style="border-top:1px solid ${COLORS.divider};padding-top:18px;margin-top:18px;">
           <p style="margin:0 0 6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:${COLORS.textMuted};">
             New to cannabis? Start here
           </p>
           <p style="margin:0;font-size:14px;color:${COLORS.textBody};line-height:1.6;">
-            Not sure where to start? Take our 60-second strain quiz:
+            Our 60-second strain quiz gives you three things we'd actually
+            recommend across the counter:
             <a href="${safeQuizUrl}" style="color:${COLORS.accentText};text-decoration:underline;font-weight:600;">${safeQuizUrl}</a>
           </p>
         </div>
 
-        <div style="border-top:1px solid ${COLORS.divider};padding-top:18px;margin-top:18px;">
-          <p style="margin:0 0 4px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:${COLORS.textMuted};">
-            Find us
-          </p>
-          <p style="margin:0 0 12px;font-size:14px;color:${COLORS.textBody};line-height:1.5;">
-            ${safeStoreAddress}
-          </p>
-          <a href="${safeMapUrl}" style="display:inline-block;color:${COLORS.accentText};font-weight:600;font-size:14px;text-decoration:underline;">
-            Get directions →
-          </a>
-        </div>
-
-        <p style="margin:24px 0 0;font-size:13px;color:${COLORS.textFaint};line-height:1.6;">
-          Questions? Just reply to this email — it goes straight to the team.
+        <p style="margin:24px 0 0;font-size:14px;color:${COLORS.textBody};line-height:1.6;">
+          See you soon, ${greetingName} — we're open today ${safeHours}.
+        </p>
+        <p style="margin:10px 0 0;font-size:13px;color:${COLORS.textFaint};line-height:1.6;">
+          Questions? Reply to this email — it goes straight to the team.
         </p>
       </td></tr>
 
-      <tr><td style="padding:18px 28px 22px;border-top:1px solid ${COLORS.divider};background:${COLORS.bgPage};">
-        <p style="margin:0;font-size:11px;color:${COLORS.textFaint};line-height:1.6;">
-          You're getting this because you just created an account at ${safeStoreName}.
-          To stop future marketing emails, reply STOP or email
+      <tr><td style="padding:20px 28px 22px;border-top:1px solid ${COLORS.divider};background:${COLORS.bgPage};">
+        <p style="margin:0 0 4px;font-size:12px;color:${COLORS.textMuted};line-height:1.55;font-weight:600;">
+          ${safeStoreName}
+        </p>
+        <p style="margin:0 0 4px;font-size:12px;color:${COLORS.textMuted};line-height:1.55;">
+          ${safeStoreAddress} ·
+          <a href="${safeMapUrl}" style="color:${COLORS.accentText};text-decoration:underline;">Directions</a>
+        </p>
+        <p style="margin:0 0 10px;font-size:12px;color:${COLORS.textMuted};line-height:1.55;">
+          <a href="tel:${PHONE_TEL}" style="color:${COLORS.accentText};text-decoration:none;">${PHONE_DISPLAY}</a>
+          · ${WSLCB_LICENSE}
+        </p>
+        <p style="margin:0;font-size:11px;color:${COLORS.textFaint};line-height:1.55;">
+          You're getting this because you just created an account at
+          ${safeStoreName}. To stop future marketing emails, reply STOP or
+          email
           <a href="mailto:hi@seattlecannabis.co" style="color:${COLORS.accentText};text-decoration:underline;">hi@seattlecannabis.co</a>.
         </p>
       </td></tr>
@@ -192,23 +226,41 @@ function buildText(args: WelcomeEmailArgs): string {
   const { firstName, storeName, storeAddress, mapUrl, hoursText, deepLinkOrder } = args;
   const greeting = firstName ?? "there";
   return [
-    `${storeName} — welcome to the shop`,
+    `${storeName} — Rainier Valley since 2018`,
     "",
-    `Hey ${greeting} — thanks for joining us. Your account is set up and you can place a pickup order any time.`,
+    `Welcome, ${greeting}.`,
+    "",
+    "Thanks for signing up. We've been a Seattle shop since 2010 and a",
+    "Rainier Valley anchor since 2018 — well-curated menu, careful staff,",
+    "and the smoothest pickup we know how to run. Your account is set up",
+    "and you can place a pickup order any time.",
+    "",
+    `Browse the menu: ${deepLinkOrder}`,
     "",
     "First-visit essentials:",
     "  - Cash only. Federal banking rules — there's an ATM in the lobby.",
     "  - Bring ID, 21+. Government-issued, every visit, every time — WSLCB rules.",
     `  - Hours: ${hoursText}`,
     "",
-    `Browse the menu: ${deepLinkOrder}`,
+    "Loyalty — every visit counts:",
+    "  - Earn 1 point per $1 spent in store.",
+    "  - Redeem 100 points = $1 off your next visit.",
+    "  - Tiers: Visitor → Regular → Local → Family, with perks at each step.",
+    "  - Ask a budtender to start your card on your first visit — about 30 seconds.",
     "",
-    `Find us: ${storeAddress}`,
-    `Directions: ${mapUrl}`,
+    "What you'll hear from us:",
+    "  Order confirmations + the occasional drop note. That's it — no spam.",
+    "  Reply STOP any time.",
     "",
+    `See you soon, ${greeting} — we're open today ${hoursText}.`,
     "Questions? Reply to this email — it goes straight to the team.",
     "",
     "—",
+    `${storeName}`,
+    `${storeAddress}`,
+    `Directions: ${mapUrl}`,
+    `${PHONE_DISPLAY} · ${WSLCB_LICENSE}`,
+    "",
     `Welcome email from ${storeName}. To stop future marketing emails, reply STOP or email hi@seattlecannabis.co.`,
   ].join("\n");
 }
