@@ -48,16 +48,10 @@ export default function VendorAccessThanksPage() {
             anything else from you.
           </p>
 
-          <div className="mt-8 flex flex-col sm:flex-row gap-3">
-            <Link
-              href="/brands"
-              className="flex-1 inline-flex items-center justify-center px-5 py-3 rounded-xl bg-indigo-700 hover:bg-indigo-600 text-white text-sm font-bold transition-colors"
-            >
-              See brands we carry →
-            </Link>
+          <div className="mt-8 flex">
             <Link
               href="/"
-              className="flex-1 inline-flex items-center justify-center px-5 py-3 rounded-xl border border-stone-300 hover:border-indigo-400 text-stone-700 hover:text-indigo-700 text-sm font-semibold transition-colors"
+              className="flex-1 inline-flex items-center justify-center px-5 py-3 rounded-xl bg-indigo-700 hover:bg-indigo-600 text-white text-sm font-bold transition-colors"
             >
               Back to home
             </Link>

@@ -1135,16 +1135,10 @@ export default async function HomePage() {
       {/* ─── Brands ─────────────────────────────────────────────────────────── */}
       {brands.length > 0 && (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
-          <div className="flex items-end justify-between mb-8 gap-4">
+          <div className="mb-8">
             <SectionHeading align="left" kicker="Washington's finest producers, on our shelves">
               Top Brands
             </SectionHeading>
-            <Link
-              href="/brands"
-              className="shrink-0 text-sm font-semibold text-indigo-700 hover:text-indigo-600 transition-colors"
-            >
-              All {brands.length} brands →
-            </Link>
           </div>
           {featuredBrands.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4">
@@ -1164,28 +1158,8 @@ export default async function HomePage() {
                   </span>
                 </Link>
               ))}
-              {brands.length > featuredBrands.length && (
-                <Link
-                  href="/brands"
-                  className="flex flex-col items-center justify-center gap-1 p-4 rounded-2xl border-2 border-dashed border-stone-200 hover:border-indigo-300 bg-stone-50 hover:bg-indigo-50 transition-all aspect-square"
-                >
-                  <span className="text-2xl font-extrabold text-stone-300">
-                    +{brands.length - featuredBrands.length}
-                  </span>
-                  <span className="text-xs text-stone-400 font-medium">more brands</span>
-                </Link>
-              )}
             </div>
-          ) : (
-            <Link
-              href="/brands"
-              className="block rounded-2xl border-2 border-dashed border-stone-200 hover:border-indigo-300 hover:bg-indigo-50 transition-all py-14 text-center group"
-            >
-              <p className="text-stone-400 group-hover:text-indigo-600 transition-colors font-semibold">
-                See all brands we carry →
-              </p>
-            </Link>
-          )}
+          ) : null}
         </section>
       )}
 

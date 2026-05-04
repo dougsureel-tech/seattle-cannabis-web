@@ -325,20 +325,6 @@ export default function AboutPage() {
             </span>
           </Link>
           <Link
-            href={withAttr("/brands", "header", "about-mesh-brands")}
-            className="group rounded-2xl border border-stone-200 bg-white hover:border-indigo-300 hover:shadow-md transition-all p-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
-          >
-            <div className="text-2xl mb-2" aria-hidden="true">🌿</div>
-            <h3 className="font-bold text-stone-900 text-sm">Brands we curate</h3>
-            <p className="text-xs text-stone-500 mt-1.5 leading-relaxed">
-              Hand-picked Washington-state producers across every category.
-            </p>
-            <span className="text-indigo-700 group-hover:text-indigo-600 text-xs font-bold mt-3 inline-flex items-center gap-1">
-              See the lineup
-              <span aria-hidden="true">→</span>
-            </span>
-          </Link>
-          <Link
             href={withAttr("/find-your-strain", "quiz", "about-mesh")}
             className="group rounded-2xl border border-stone-200 bg-white hover:border-indigo-300 hover:shadow-md transition-all p-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
           >

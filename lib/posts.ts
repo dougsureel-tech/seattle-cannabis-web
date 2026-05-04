@@ -159,7 +159,7 @@ We don't always get it right. Sometimes a producer goes off, or a strain stops h
 
 ## Want to know who we carry?
 
-[Browse our vendor list](/brands) — every producer on our shelves, with the option to view their products. If you want a deeper look at a specific producer we haven't profiled yet, [let us know](/contact) and we'll write one up.
+[Check the live menu](/menu) — every active SKU, with the producer + strain type + THC % on each card. If you want a deeper look at a specific producer we haven't profiled yet, [let us know](/contact) and we'll write one up.
 `,
   },
 ];

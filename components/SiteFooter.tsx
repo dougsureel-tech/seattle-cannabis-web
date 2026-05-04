@@ -211,7 +211,6 @@ export function SiteFooter() {
               { href: "/deals", label: "Deals & Specials" },
               { href: "/heroes", label: "Heroes Discount" },
               { href: "/find-your-strain", label: "Find your strain" },
-              { href: "/brands", label: "Our Brands" },
               { href: "/visit", label: "Visit Us" },
               { href: "/community", label: "Our Community" },
               { href: "/blog", label: "Guides" },
