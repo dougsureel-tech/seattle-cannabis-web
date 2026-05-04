@@ -72,7 +72,7 @@ export function SiteFooter() {
               <div className="text-white font-bold text-base leading-tight">{STORE.name}</div>
               <div className="text-indigo-400/70 text-xs mt-0.5">{STORE.tagline}</div>
               <div className="text-fuchsia-300/70 text-[10px] mt-1 font-semibold uppercase tracking-[0.14em]">
-                Founded 2010 · 16+ years · Rainier Valley
+                16+ yrs · Rainier Valley&apos;s longest-running
               </div>
             </div>
           </div>

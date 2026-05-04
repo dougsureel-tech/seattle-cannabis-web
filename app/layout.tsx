@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     url: STORE.website,
     siteName: STORE.name,
     title: `${STORE.name} | ${STORE.neighborhood}, Seattle Cannabis Dispensary — Founded 2010`,
-    description: `Premium cannabis at ${STORE.name} — ${STORE.neighborhood} since 2018, founded 2010. Flower, edibles, concentrates, vapes & more. Open daily 8 AM–11 PM.`,
+    description: `Premium cannabis at ${STORE.name} — 16+ yrs · Rainier Valley's longest-running, founded 2010. Flower, edibles, concentrates, vapes & more. Open daily 8 AM–11 PM.`,
     images: [
       {
         url: "/opengraph-image",
