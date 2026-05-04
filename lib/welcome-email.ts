@@ -52,6 +52,17 @@ export type WelcomeEmailArgs = {
   deepLinkOrder: string;
 };
 
+// Origin used for the strain-quiz CTA. Resolved from env so the link is
+// absolute (email clients won't relative-resolve a `/find-your-strain`
+// path) and falls back to the canonical apex if `NEXT_PUBLIC_SITE_URL`
+// isn't set in the env. No trailing slash. v9.910 — Seattle's welcome
+// email previously omitted the strain-quiz CTA that Wenatchee's had
+// (`greenlife-web/lib/welcome-email.ts:55-62,100,160-164`); fixed here
+// so new Seattle customers get the same 60-second-quiz funnel.
+const SITE_ORIGIN = (
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://seattlecannabis.co"
+).replace(/\/+$/, "");
+
 // Tiny HTML escape — keep self-contained so the file has no extra deps.
 const safe = (s: string): string =>
   s.replace(/[&<>"']/g, (c) => ({
@@ -89,6 +100,7 @@ function buildHtml(args: WelcomeEmailArgs): string {
   const safeMapUrl = safe(mapUrl);
   const safeHours = safe(hoursText);
   const safeDeepLink = safe(deepLinkOrder);
+  const safeQuizUrl = safe(`${SITE_ORIGIN}/find-your-strain`);
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -135,7 +147,17 @@ function buildHtml(args: WelcomeEmailArgs): string {
           Browse the menu
         </a>
 
-        <div style="border-top:1px solid ${COLORS.divider};padding-top:18px;margin-top:24px;">
+        <div style="border-top:1px solid ${COLORS.divider};padding-top:18px;margin-top:18px;">
+          <p style="margin:0 0 6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:${COLORS.textMuted};">
+            New to cannabis? Start here
+          </p>
+          <p style="margin:0;font-size:14px;color:${COLORS.textBody};line-height:1.6;">
+            Not sure where to start? Take our 60-second strain quiz:
+            <a href="${safeQuizUrl}" style="color:${COLORS.accentText};text-decoration:underline;font-weight:600;">${safeQuizUrl}</a>
+          </p>
+        </div>
+
+        <div style="border-top:1px solid ${COLORS.divider};padding-top:18px;margin-top:18px;">
           <p style="margin:0 0 4px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:${COLORS.textMuted};">
             Find us
           </p>
