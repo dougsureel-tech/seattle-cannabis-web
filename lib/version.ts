@@ -3,6 +3,7 @@
 // comes from Vercel automatically on every deploy and is the authoritative
 // "did my push actually land" signal.
 
+// 4.113 — `proxy.ts` /api/health exemption broadened from exact-equality to `startsWith("/api/health")` so the cheap second-bucket /api/health/ping liveness endpoint also stays reachable on apex / per-deployment Vercel URLs. Pre-fix: /api/health was already exempt but /api/health/ping was still 308'ing — uptime monitors hitting /ping every 30-60s for second-bucket liveness couldn't follow the redirect cleanly. Same fix on greenlife-web v3.199.
 // 4.107 — Brand pages + featured + category previews now require current inventory (Doug bug report 2026-05-04 "showing items we hant had in a long time on both stores"). Layers on top of v4.101/v4.102 carry_status tightening. Now `getActiveBrands` + `getBrandBySlug` + `getBrandProducts` + `getFeaturedProducts` (+ fallback) + `getCategoryPreviewProducts` all join the canonical `latest_inv` CTE and filter `li.qty > 0`. Customer no longer sees brands that haven't shipped a SKU in months, or "featured" products with empty shelves. WSLCB advertising-accuracy + customer-trust fix. Mirror on greenlife-web v3.187.
 // 4.102 — `/order` + `/shop` + `/stash` product filter tightened (Doug bug report 2026-05-04 "saying we have things that we dont"). `getMenuProducts` + `getProductsByIds` in `lib/db.ts` now require strict `carry_status = 'active'` AND INNER JOIN to a latest-snapshot `qty > 0` CTE. Pairs with v4.101 brand-page tightening: same root cause, different surfaces. Mirror on greenlife-web v3.182.
 // 4.101 — `/brands/[slug]` + `/brands` tightened product filter (Kat bug report 2026-05-04). `getActiveBrands` + `getBrandBySlug` + `getBrandProducts` in `lib/db.ts` now require `carry_status = 'active' AND unit_price > 0` instead of the looser `carry_status != 'discontinued'`. Kat: Bon Bombs were rendering on the Seattle brands page despite never having been carried in Seattle; samples were rendering on both stores. The looser filter let phasing-out vendors + $0-priced placeholder rows through. Same change shipped to greenlife-web v3.181. SQL stays one query each, no N+1 introduced.
@@ -12,7 +13,7 @@
 // 4.81 — /brands/[slug] generic-template renders vendor-authored brand bio + Instagram/X/Facebook handles when filled in via /vmi/profile (inventoryapp). Section sits above the order CTA, only renders when at least one field is non-null. Handles are sanitized to /^[A-Za-z0-9._-]+$/ before being concatenated into URLs (prevents query-param injection or path traversal). Per-brand override components intentionally NOT touched — those are graduated, hand-authored layouts.
 // 4.76 — /apply personality prompts: two optional written prompts (product-recommendation pitch + customer-recovery story) capture personality signal without the photo discrimination risk. Stored in applicants.metadata JSONB on inventoryapp side. Compliance: written-only — no photo (WA RCW 49.60 / EEOC pre-offer photo discrimination risk).
 // 4.71 — Public /apply form: apply-to-work intake with resume upload + 3 references + 21+ confirmation. POSTs to inventoryapp /api/applications. Compliance: no photo / no SSN / no DOB.
-export const BUILD_VERSION = "4.107";
+export const BUILD_VERSION = "4.113";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ??

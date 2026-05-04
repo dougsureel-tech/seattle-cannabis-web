@@ -80,12 +80,14 @@ export default async function middleware(req: NextRequest) {
   // cookies on a single host, and rescues stale per-deployment share-
   // links. Local dev hostnames are exempt via isCanonicalOrLocal().
   //
-  // /api/health is exempt: external monitors and the post-deploy LKG
+  // /api/health* is exempt: external monitors and the post-deploy LKG
   // verification curl (per OPERATING_PRINCIPLES) need to hit any host
   // alias and get a clean 200 with `sha` + `version` — a 308 response
   // body has no JSON to parse, and following the redirect would mask
-  // host-specific liveness signal.
-  if (!isCanonicalOrLocal(url.hostname) && url.pathname !== "/api/health") {
+  // host-specific liveness signal. Covers both /api/health (full DB +
+  // content check) and /api/health/ping (cheap second-bucket liveness)
+  // since both serve the same monitoring use cases.
+  if (!isCanonicalOrLocal(url.hostname) && !url.pathname.startsWith("/api/health")) {
     const target = new URL(req.url);
     target.hostname = CANONICAL_HOST;
     target.protocol = "https:";
