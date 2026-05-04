@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getClient } from "@/lib/db";
 import { BUILD_VERSION, BUILD_SHA } from "@/lib/version";
 import { STORE } from "@/lib/store";
+import { isEmailConfigured } from "@/lib/email";
 
 // Mirror of greenlife-web/app/api/health/route.ts. See PLAN_RELIABILITY.md
 // for the broader reliability stack (LKG tracking, monitoring, auto-rollback).
@@ -98,6 +99,10 @@ export async function GET() {
     ts: new Date().toISOString(),
     elapsedMs,
     checks: { db, content },
+    // Boolean only — never expose the API key. `true` means RESEND_API_KEY
+    // is set on this deployment; `false` means email helper falls back to
+    // the no-op skip path.
+    emailConfigured: isEmailConfigured(),
   };
 
   return NextResponse.json(body, {

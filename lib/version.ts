@@ -3,6 +3,7 @@
 // comes from Vercel automatically on every deploy and is the authoritative
 // "did my push actually land" signal.
 
+// 4.215 — `/api/health` exposes `emailConfigured: boolean` for one-curl Resend wire-up verification. After adding `RESEND_API_KEY` env var to a Vercel project, this flag flips `true` on the next deploy. Boolean only — never the key value. Mirror of greenlife-web v3.315.
 // 4.211 — vendor-ads `daily_impression_cap` render-side enforcement (companion to inventoryapp v49.705 + migration 0158). `getActiveVendorAds()` now (1) excludes any ad whose TODAY's count has already hit cap via WHERE branch — `last_impression_day IS DISTINCT FROM today OR impressions_today < cap`, (2) atomic post-SELECT UPDATE increments `impressions_today` (or resets to 1 if day rolled over). Day boundary in `America/Los_Angeles` so rollover lines up with Kat's calendar. Lazy-reset semantics — no daily cron required. UPDATE failure swallowed. Mirror of greenlife-web v3.311.
 // 4.200 — `/api/health` redacts Neon endpoint ID from `db.host`. Pre-fix exposed `ep-fragrant-hat-anugd8t6-pooler.c-6.us-east-1.aws.neon.tech` to anonymous health-check callers — the leading label uniquely identifies the Neon project. Now redacts to `***.c-6.us-east-1.aws.neon.tech` — keeps cluster/region/provider for ops "is this Neon? right region?" debug, drops project-uniqueness leak. Same fix on greenlife-web v3.305 + inventoryapp v49.045. Auth'd ops reading raw env var still see full hostname.
 // 4.195 — VendorAdSlot wired to 4 remaining placement slots: homepage_top (above hero), homepage_under_brands (below brands carousel), menu_sidebar (above iHeartJane Boost embed on /menu), brand_page_top (top of /brands/[slug] generic template). All slots silent until admin curates active ads at inventoryapp /admin/marketing/vendor-ads. Now 5 of 5 schema-enum slots are mounted. Mirror on greenlife-web v3.295.
@@ -29,7 +30,7 @@
 // 4.81 — /brands/[slug] generic-template renders vendor-authored brand bio + Instagram/X/Facebook handles when filled in via /vmi/profile (inventoryapp). Section sits above the order CTA, only renders when at least one field is non-null. Handles are sanitized to /^[A-Za-z0-9._-]+$/ before being concatenated into URLs (prevents query-param injection or path traversal). Per-brand override components intentionally NOT touched — those are graduated, hand-authored layouts.
 // 4.76 — /apply personality prompts: two optional written prompts (product-recommendation pitch + customer-recovery story) capture personality signal without the photo discrimination risk. Stored in applicants.metadata JSONB on inventoryapp side. Compliance: written-only — no photo (WA RCW 49.60 / EEOC pre-offer photo discrimination risk).
 // 4.71 — Public /apply form: apply-to-work intake with resume upload + 3 references + 21+ confirmation. POSTs to inventoryapp /api/applications. Compliance: no photo / no SSN / no DOB.
-export const BUILD_VERSION = "4.211";
+export const BUILD_VERSION = "4.215";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ??
