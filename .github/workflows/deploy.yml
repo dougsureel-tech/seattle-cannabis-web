@@ -46,8 +46,16 @@ jobs:
         with:
           node-version: 24
 
+      # Pin vercel CLI — `@latest` (53.1.1, rolled out ~2026-05-04 19:30 PT)
+      # crashes during prebuilt upload with `Error: Upload aborted` deep in
+      # chunk-SPXTKMOV.js retries logic. v4.125 (19:28 PT) was the last
+      # green deploy on @latest; every push since has died at upload.
+      # 52.0.0 is the immediately-prior stable; deploys ran clean on it
+      # for weeks. Belt-and-suspenders: `--archive=tgz` switches the upload
+      # path to a single tarball POST instead of per-file streaming, which
+      # is the documented workaround for transient upload-aborts.
       - name: Install Vercel CLI
-        run: npm install --global vercel@latest
+        run: npm install --global vercel@52.0.0
 
       - name: Pull production env from Vercel
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
@@ -56,4 +64,4 @@ jobs:
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Deploy to production
-        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel deploy --prebuilt --prod --archive=tgz --token=${{ secrets.VERCEL_TOKEN }}
