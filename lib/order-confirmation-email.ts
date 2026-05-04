@@ -132,13 +132,13 @@ function buildHtml(args: OrderConfirmationArgs): string {
           ${safeStoreName}
         </p>
         <p style="margin:6px 0 0;font-size:20px;font-weight:700;color:#ffffff;line-height:1.3;">
-          We got your order
+          We got your order, ${greetingName}.
         </p>
       </td></tr>
 
       <tr><td style="padding:28px 28px 8px;">
         <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:${COLORS.textBody};">
-          Hey ${greetingName} — thanks for ordering with us. Your pickup is locked in.
+          Thanks for ordering with us. Your pickup is locked in — we'll have it ready and waiting at the counter.
         </p>
 
         <div style="background:${COLORS.accentBg};border-radius:10px;padding:16px 18px;margin:8px 0 20px;">
