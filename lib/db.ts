@@ -336,6 +336,12 @@ export type VendorAd = {
 
 export async function getActiveVendorAds(slot: string, limit = 3): Promise<VendorAd[]> {
   const sql = getClient();
+  // SELECT excludes any ad whose TODAY's impression count has already
+  // reached `daily_impression_cap`. Day boundary computed in store TZ
+  // (America/Los_Angeles) so the rollover lines up with Kat's calendar.
+  // Lazy-reset semantics: `last_impression_day` != today branch always
+  // passes the cap check (yesterday's at-cap counter is irrelevant once
+  // the day rolls over). Mirror of greenlife-web/lib/db.ts.
   const rows = await sql`
     SELECT
       va.id, va.kind,
@@ -351,10 +357,15 @@ export async function getActiveVendorAds(slot: string, limit = 3): Promise<Vendo
       AND (va.start_date IS NULL OR va.start_date <= CURRENT_DATE)
       AND (va.end_date IS NULL OR va.end_date >= CURRENT_DATE)
       AND (va.store_scope IS NULL OR va.store_scope = 'seattle')
+      AND (
+        va.daily_impression_cap IS NULL
+        OR va.last_impression_day IS DISTINCT FROM (NOW() AT TIME ZONE 'America/Los_Angeles')::date
+        OR va.impressions_today < va.daily_impression_cap
+      )
     ORDER BY va.priority DESC NULLS LAST, va.created_at DESC
     LIMIT ${limit}
   `;
-  return rows.map((r) => ({
+  const ads = rows.map((r) => ({
     id: r.id as string,
     kind: ((r.kind ?? "vendor") as "vendor" | "house"),
     vendorName: (r.vendor_name ?? null) as string | null,
@@ -366,6 +377,27 @@ export async function getActiveVendorAds(slot: string, limit = 3): Promise<Vendo
     placementSlot: r.placement_slot as string,
     priority: (r.priority ?? null) as number | null,
   }));
+  // Best-effort atomic increment / lazy-reset. Failure shouldn't block
+  // rendering — render quality > telemetry. Cap-check on the next
+  // request catches up if this UPDATE failed.
+  if (ads.length > 0) {
+    const ids = ads.map((a) => a.id);
+    try {
+      await sql`
+        UPDATE vendor_ads
+        SET impressions_today = CASE
+              WHEN last_impression_day IS DISTINCT FROM (NOW() AT TIME ZONE 'America/Los_Angeles')::date
+                THEN 1
+              ELSE impressions_today + 1
+            END,
+            last_impression_day = (NOW() AT TIME ZONE 'America/Los_Angeles')::date
+        WHERE id = ANY(${ids}::text[])
+      `;
+    } catch {
+      // Swallow.
+    }
+  }
+  return ads;
 }
 
 // "Just In" — products first stocked within the last 7 days, currently
