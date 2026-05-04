@@ -3,6 +3,7 @@
 // comes from Vercel automatically on every deploy and is the authoritative
 // "did my push actually land" signal.
 
+// 4.225 — `lib/email.ts` honors `RESEND_REPLY_TO` env var. Helper-side mirror of greenlife-web v3.325. Behavior unchanged on this project (`RESEND_REPLY_TO` not set, since `rainier@seattlecannabis.co` is actively monitored — replies default to From and land where they should). Helper kept symmetric across both repos so future routing changes stay env-only, no code edits.
 // 4.220 — `/menu` server-side Dutchie prewarm. New `prewarmDutchieMenu()` async helper inside `app/menu/page.tsx` does a fire-alongside `fetch("https://api.iheartjane.com/api/v1/stores/5295/menu_products?per_page=1")` at SSR time, BEFORE the HTML response reaches the browser. Boost (which runs `afterInteractive` in `JaneMenu.tsx`) then queries the same URL ~200ms after page paint and hits Jane's now-warm edge cache — Dutchie cold-start time is amortized away from the customer's first paint. AbortSignal 1.5s timeout caps TTFB impact when Jane is unreachable; failure silently swallowed. Closes the customer-reported "menu error coming up first pass" pattern. Mirror of greenlife-web v3.320.
 // 4.215 — `/api/health` exposes `emailConfigured: boolean` for one-curl Resend wire-up verification. After adding `RESEND_API_KEY` env var to a Vercel project, this flag flips `true` on the next deploy. Boolean only — never the key value. Mirror of greenlife-web v3.315.
 // 4.211 — vendor-ads `daily_impression_cap` render-side enforcement (companion to inventoryapp v49.705 + migration 0158). `getActiveVendorAds()` now (1) excludes any ad whose TODAY's count has already hit cap via WHERE branch — `last_impression_day IS DISTINCT FROM today OR impressions_today < cap`, (2) atomic post-SELECT UPDATE increments `impressions_today` (or resets to 1 if day rolled over). Day boundary in `America/Los_Angeles` so rollover lines up with Kat's calendar. Lazy-reset semantics — no daily cron required. UPDATE failure swallowed. Mirror of greenlife-web v3.311.
@@ -31,7 +32,7 @@
 // 4.81 — /brands/[slug] generic-template renders vendor-authored brand bio + Instagram/X/Facebook handles when filled in via /vmi/profile (inventoryapp). Section sits above the order CTA, only renders when at least one field is non-null. Handles are sanitized to /^[A-Za-z0-9._-]+$/ before being concatenated into URLs (prevents query-param injection or path traversal). Per-brand override components intentionally NOT touched — those are graduated, hand-authored layouts.
 // 4.76 — /apply personality prompts: two optional written prompts (product-recommendation pitch + customer-recovery story) capture personality signal without the photo discrimination risk. Stored in applicants.metadata JSONB on inventoryapp side. Compliance: written-only — no photo (WA RCW 49.60 / EEOC pre-offer photo discrimination risk).
 // 4.71 — Public /apply form: apply-to-work intake with resume upload + 3 references + 21+ confirmation. POSTs to inventoryapp /api/applications. Compliance: no photo / no SSN / no DOB.
-export const BUILD_VERSION = "4.220";
+export const BUILD_VERSION = "4.225";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ??

@@ -34,6 +34,13 @@ import "server-only";
 const API_KEY = process.env.RESEND_API_KEY;
 const DEFAULT_FROM =
   process.env.RESEND_FROM ?? "Seattle Cannabis Co. <hi@seattlecannabis.co>";
+// Reply-To override. When set, customer replies to outbound mail land
+// here instead of the From address. Mirror of greenlife-web — kept
+// symmetric so both repos behave identically. Seattle's From
+// (rainier@seattlecannabis.co) is actively monitored as of 2026-05-04
+// so this env var is currently unset on the SCC project, but the
+// support is wired so future routing changes don't need code edits.
+const DEFAULT_REPLY_TO = process.env.RESEND_REPLY_TO ?? null;
 
 export type SendEmailArgs = {
   to: string;
@@ -80,7 +87,9 @@ export async function sendEmail(args: SendEmailArgs): Promise<SendEmailResult> {
       subject: args.subject,
       html: args.html,
       text: args.text,
-      replyTo: args.replyTo,
+      // Per-call replyTo wins when supplied; otherwise fall through to
+      // the env-var default; otherwise undefined (Resend defaults to From).
+      replyTo: args.replyTo ?? DEFAULT_REPLY_TO ?? undefined,
     });
     // Resend's response shape varies between SDK versions; try common
     // id paths defensively (matches the inventoryapp helper).
