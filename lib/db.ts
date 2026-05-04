@@ -393,16 +393,37 @@ export async function getDealById(id: string): Promise<ActiveDeal | null> {
 
 export async function getActiveBrands(): Promise<VendorBrand[]> {
   const sql = getClient();
-  // Bug fix 2026-05-04: pre-fix this only filtered carry_status + price > 0,
-  // so brands appeared on /brands and per-brand pages even when we hadn't
-  // had any of their products in stock for months. Now joins through to
-  // the latest inventory snapshot per product and only counts SKUs with
-  // current qty > 0. Mirror of the canonical greenlife-web fix.
+  // Bug fix 2026-05-04 (round 2): v4.107 added qty>0 guard, but Doug
+  // showed a screenshot of "ABS Buds" (Wenatchee-era brand) rendering
+  // on Seattle with 13 FOG concentrate SKUs. Root cause: Seattle's
+  // Neon has leaked inventory_snapshots for products that were never
+  // actually sold here — a seed-migration leak (per
+  // feedback_seed_migrations_must_be_store_aware memory). qty>0 alone
+  // can't distinguish "real Seattle inventory" from "ghost inventory
+  // from a Wenatchee-seeded product."
+  //
+  // The strongest "actually carried here" signal is `sale_line_items`:
+  // each Neon DB only has THAT store's sales (per CLAUDE.md), so any
+  // row in this table = customer paid for it at this register. Adding
+  // a `brands_with_recent_sales` CTE that requires ≥1 sale in the last
+  // 365d (rolling year) excludes leaked brands without false-positiving
+  // legit-but-quiet brands that have at least one tail sale.
+  //
+  // Tradeoff: a brand-new vendor whose first sale hasn't happened yet
+  // would be hidden until that first ring. Acceptable — onboarding-side
+  // friction is far less customer-visible than ghost-brand listings.
   const rows = await sql`
     WITH latest_inv AS (
       SELECT DISTINCT ON (product_id) product_id, quantity_on_hand::numeric AS qty
       FROM inventory_snapshots
       ORDER BY product_id, captured_at DESC
+    ),
+    brands_with_recent_sales AS (
+      SELECT DISTINCT p.vendor_id
+      FROM sale_line_items sli
+      INNER JOIN products p ON p.id = sli.product_id
+      WHERE sli.sold_at >= NOW() - INTERVAL '365 days'
+        AND p.vendor_id IS NOT NULL
     )
     SELECT
       v.id,
@@ -423,6 +444,7 @@ export async function getActiveBrands(): Promise<VendorBrand[]> {
           AND COALESCE(li.qty, 0) > 0
       )::int AS active_skus
     FROM vendors v
+    INNER JOIN brands_with_recent_sales bws ON bws.vendor_id = v.id
     LEFT JOIN products p ON p.vendor_id = v.id
     LEFT JOIN latest_inv li ON li.product_id = p.id
     GROUP BY v.id
@@ -452,14 +474,25 @@ export async function getActiveBrands(): Promise<VendorBrand[]> {
 
 export async function getBrandBySlug(slug: string): Promise<VendorBrand | null> {
   const sql = getClient();
-  // Bug fix 2026-05-04: same `latest_inv` join as getActiveBrands so the
-  // active_skus count shown in the hero matches what the page renders.
-  // Mirror of the canonical greenlife-web fix.
+  // Bug fix 2026-05-04 (round 2): adds the same `brands_with_recent_sales`
+  // gate as getActiveBrands so a direct visit to /brands/abs-buds (or
+  // any leaked Wenatchee-era slug) returns null → page 404s instead of
+  // rendering an empty-products page or — worse — a hand-authored brand
+  // override component for a brand we don't actually carry. Strict
+  // INNER JOIN here, not left, because we want the function to return
+  // null for unrecognized brands, not a half-populated row.
   const rows = await sql`
     WITH latest_inv AS (
       SELECT DISTINCT ON (product_id) product_id, quantity_on_hand::numeric AS qty
       FROM inventory_snapshots
       ORDER BY product_id, captured_at DESC
+    ),
+    brands_with_recent_sales AS (
+      SELECT DISTINCT p.vendor_id
+      FROM sale_line_items sli
+      INNER JOIN products p ON p.id = sli.product_id
+      WHERE sli.sold_at >= NOW() - INTERVAL '365 days'
+        AND p.vendor_id IS NOT NULL
     )
     SELECT
       v.id,
@@ -480,6 +513,7 @@ export async function getBrandBySlug(slug: string): Promise<VendorBrand | null> 
           AND COALESCE(li.qty, 0) > 0
       )::int AS active_skus
     FROM vendors v
+    INNER JOIN brands_with_recent_sales bws ON bws.vendor_id = v.id
     LEFT JOIN products p ON p.vendor_id = v.id
     LEFT JOIN latest_inv li ON li.product_id = p.id
     GROUP BY v.id
