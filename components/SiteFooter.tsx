@@ -296,6 +296,24 @@ export function SiteFooter() {
         </p>
       </div>
 
+      {/* Sister-shop cross-link — separate WA cannabis retailer over the
+          Cascades in Wenatchee. Mutual link helps both domains' authority +
+          serves the actual customer who travels between the two regions.
+          Footer placement keeps it as a "good neighbor" mention rather than
+          competing with our own primary CTAs. */}
+      <div className="border-t border-indigo-900/60 py-3 px-4 sm:px-6 text-center">
+        <p className="text-xs text-indigo-300/70">
+          Visiting Wenatchee? Our friends at{" "}
+          <a
+            href="https://www.greenlifecannabis.com"
+            className="font-semibold text-indigo-200 underline-offset-4 hover:underline hover:text-white transition-colors"
+          >
+            Green Life Cannabis
+          </a>{" "}
+          — Wenatchee Valley, in the same building since 2014.
+        </p>
+      </div>
+
       {/* Bottom bar */}
       <div className="border-t border-indigo-900/60 py-5 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-indigo-500/70">
