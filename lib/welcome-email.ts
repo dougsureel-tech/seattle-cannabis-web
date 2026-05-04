@@ -94,6 +94,13 @@ const COLORS = {
 const PHONE_DISPLAY = "(206) 420-1042";
 const PHONE_TEL = "+12064201042";
 const WSLCB_LICENSE = "WSLCB License 426199";
+// Customer-facing opt-out address. Pre-fix said "reply STOP or email
+// hi@seattlecannabis.co" but `hi@` is the FROM address, not necessarily
+// the monitored inbox. Per `project_seattle_rainier_email_monitored`
+// memory, `rainier@` is the confirmed monitored inbox. Sister to
+// greenlife-web v3.335. RESEND_REPLY_TO unset on Seattle so falls
+// through to STORE.email = `rainier@seattlecannabis.co`.
+const OPT_OUT_EMAIL = process.env.RESEND_REPLY_TO ?? STORE.email;
 
 function buildHtml(args: WelcomeEmailArgs): string {
   const { firstName, storeName, storeAddress, mapUrl, hoursText, deepLinkOrder } = args;
@@ -212,7 +219,7 @@ function buildHtml(args: WelcomeEmailArgs): string {
           You're getting this because you just created an account at
           ${safeStoreName}. To stop future marketing emails, reply STOP or
           email
-          <a href="mailto:hi@seattlecannabis.co" style="color:${COLORS.accentText};text-decoration:underline;">hi@seattlecannabis.co</a>.
+          <a href="mailto:${OPT_OUT_EMAIL}" style="color:${COLORS.accentText};text-decoration:underline;">${OPT_OUT_EMAIL}</a>.
         </p>
       </td></tr>
     </table>
@@ -261,7 +268,7 @@ function buildText(args: WelcomeEmailArgs): string {
     `Directions: ${mapUrl}`,
     `${PHONE_DISPLAY} · ${WSLCB_LICENSE}`,
     "",
-    `Welcome email from ${storeName}. To stop future marketing emails, reply STOP or email hi@seattlecannabis.co.`,
+    `Welcome email from ${storeName}. To stop future marketing emails, reply STOP or email ${OPT_OUT_EMAIL}.`,
   ].join("\n");
 }
 

@@ -86,6 +86,15 @@ const COLORS = {
 const PHONE_DISPLAY = "(206) 420-1042";
 const PHONE_TEL = "+12064201042";
 const WSLCB_LICENSE = "WSLCB License 426199";
+// Customer-facing opt-out address. Pre-fix the body said "reply STOP
+// or email hi@seattlecannabis.co" — but `hi@` is the FROM address
+// (RESEND_FROM_SEATTLE), not necessarily the monitored inbox. Per
+// `project_seattle_rainier_email_monitored` memory, `rainier@` is the
+// confirmed monitored inbox. Sister fix to greenlife-web v3.335.
+// `RESEND_REPLY_TO` env unset on Seattle (per inventoryapp v3.325
+// notes) so falls through to STORE.email = `rainier@seattlecannabis.co`
+// — the monitored inbox.
+const OPT_OUT_EMAIL = process.env.RESEND_REPLY_TO ?? STORE.email;
 
 function buildHtml(args: OrderConfirmationArgs): string {
   const {
@@ -252,7 +261,7 @@ function buildHtml(args: OrderConfirmationArgs): string {
           You're getting this because you placed an order at ${safeStoreName}.
           This is a transactional confirmation — to stop future marketing
           emails, reply STOP or email
-          <a href="mailto:hi@seattlecannabis.co" style="color:${COLORS.accentText};text-decoration:underline;">hi@seattlecannabis.co</a>.
+          <a href="mailto:${OPT_OUT_EMAIL}" style="color:${COLORS.accentText};text-decoration:underline;">${OPT_OUT_EMAIL}</a>.
         </p>
       </td></tr>
     </table>
@@ -306,7 +315,7 @@ function buildText(args: OrderConfirmationArgs): string {
     `${storeAddress}`,
     `${PHONE_DISPLAY} · ${WSLCB_LICENSE}`,
     "",
-    `Transactional confirmation from ${storeName}. To stop future marketing emails, reply STOP or email hi@seattlecannabis.co.`,
+    `Transactional confirmation from ${storeName}. To stop future marketing emails, reply STOP or email ${OPT_OUT_EMAIL}.`,
   ].join("\n");
 }
 
