@@ -44,20 +44,34 @@ export type MenuProduct = {
 
 export async function getMenuProducts(): Promise<MenuProduct[]> {
   const sql = getClient();
+  // Bug fix 2026-05-04 (Doug: "saying we have things that we dont"):
+  //   1. Was `carry_status != 'discontinued'` — INCLUDED phasing_out
+  //      products. Now strict `= 'active'`, matching rest of file.
+  //   2. NO current-stock filter pre-fix; INNER JOIN to latest_inv now
+  //      enforces qty > 0. Mirrors Wenatchee fix + inventoryapp's
+  //      lib/menu-server.ts canonical pattern.
   const rows = await sql`
+    WITH latest_inv AS (
+      SELECT DISTINCT ON (product_id) product_id, quantity_on_hand::numeric AS qty
+      FROM inventory_snapshots
+      ORDER BY product_id, captured_at DESC
+    )
     SELECT
       p.id, p.name, p.brand, p.category, p.strain_type,
       p.thc_pct::float AS thc_pct, p.cbd_pct::float AS cbd_pct,
       p.unit_price::float AS unit_price, p.image_url, p.effects, p.terpenes,
       COALESCE(fs.first_seen >= NOW() - INTERVAL '7 days', FALSE) AS is_new
     FROM products p
+    INNER JOIN latest_inv li ON li.product_id = p.id
     LEFT JOIN (
       SELECT product_id, MIN(captured_at) AS first_seen
       FROM inventory_snapshots
       WHERE quantity_on_hand > 0
       GROUP BY product_id
     ) fs ON fs.product_id = p.id
-    WHERE p.carry_status != 'discontinued' AND p.unit_price IS NOT NULL
+    WHERE p.carry_status = 'active'
+      AND li.qty > 0
+      AND p.unit_price IS NOT NULL
     ORDER BY p.category NULLS LAST, p.brand NULLS LAST, p.name
   `;
   return rows.map((r) => ({
@@ -82,13 +96,23 @@ export async function getMenuProducts(): Promise<MenuProduct[]> {
 export async function getProductsByIds(ids: string[]): Promise<MenuProduct[]> {
   if (ids.length === 0) return [];
   const sql = getClient();
+  // Sister fix to getMenuProducts above. /stash hydrates from localStorage;
+  // pre-fix returned items even when out-of-stock or phasing_out, so
+  // customer thought they could order from /stash + cart silently had
+  // nothing addable. Now strict active + qty > 0.
   const rows = await sql`
+    WITH latest_inv AS (
+      SELECT DISTINCT ON (product_id) product_id, quantity_on_hand::numeric AS qty
+      FROM inventory_snapshots
+      ORDER BY product_id, captured_at DESC
+    )
     SELECT
       p.id, p.name, p.brand, p.category, p.strain_type,
       p.thc_pct::float AS thc_pct, p.cbd_pct::float AS cbd_pct,
       p.unit_price::float AS unit_price, p.image_url, p.effects, p.terpenes,
       COALESCE(fs.first_seen >= NOW() - INTERVAL '7 days', FALSE) AS is_new
     FROM products p
+    INNER JOIN latest_inv li ON li.product_id = p.id
     LEFT JOIN (
       SELECT product_id, MIN(captured_at) AS first_seen
       FROM inventory_snapshots
@@ -96,7 +120,8 @@ export async function getProductsByIds(ids: string[]): Promise<MenuProduct[]> {
       GROUP BY product_id
     ) fs ON fs.product_id = p.id
     WHERE p.id = ANY(${ids}::text[])
-      AND p.carry_status != 'discontinued'
+      AND p.carry_status = 'active'
+      AND li.qty > 0
   `;
   return rows.map((r) => ({
     id: r.id as string,
@@ -351,11 +376,19 @@ export async function getActiveBrands(): Promise<VendorBrand[]> {
       v.social_instagram,
       v.social_x,
       v.social_facebook,
-      COUNT(p.id) FILTER (WHERE p.carry_status != 'discontinued')::int AS active_skus
+      COUNT(p.id) FILTER (
+        WHERE p.carry_status = 'active'
+          AND p.unit_price IS NOT NULL
+          AND p.unit_price > 0
+      )::int AS active_skus
     FROM vendors v
     LEFT JOIN products p ON p.vendor_id = v.id
     GROUP BY v.id
-    HAVING COUNT(p.id) FILTER (WHERE p.carry_status != 'discontinued') > 0
+    HAVING COUNT(p.id) FILTER (
+      WHERE p.carry_status = 'active'
+        AND p.unit_price IS NOT NULL
+        AND p.unit_price > 0
+    ) > 0
     ORDER BY v.name
   `;
   return rows.map((r) => ({
@@ -389,7 +422,11 @@ export async function getBrandBySlug(slug: string): Promise<VendorBrand | null> 
       v.social_instagram,
       v.social_x,
       v.social_facebook,
-      COUNT(p.id) FILTER (WHERE p.carry_status != 'discontinued')::int AS active_skus
+      COUNT(p.id) FILTER (
+        WHERE p.carry_status = 'active'
+          AND p.unit_price IS NOT NULL
+          AND p.unit_price > 0
+      )::int AS active_skus
     FROM vendors v
     LEFT JOIN products p ON p.vendor_id = v.id
     GROUP BY v.id
@@ -431,7 +468,9 @@ export async function getBrandProducts(vendorId: string) {
       p.terpenes
     FROM products p
     WHERE p.vendor_id = ${vendorId}
-      AND p.carry_status != 'discontinued'
+      AND p.carry_status = 'active'
+      AND p.unit_price IS NOT NULL
+      AND p.unit_price > 0
     ORDER BY p.category NULLS LAST, p.brand NULLS LAST, p.name
   `;
   return rows as Array<{
