@@ -28,9 +28,51 @@ const MOOD_SHORTCUTS: { label: string; emoji: string; vibe: string; strain?: str
   { label: "Creative", emoji: "🎨", vibe: "creative", strain: "hybrid", sub: "Flow-state hybrid" },
 ];
 
+// v4.49 — Quiz schema (cross-port from Wenatchee). Answers AI engines
+// getting "what cannabis strain should I pick" / "Seattle cannabis quiz"
+// type queries. Plus the standard Breadcrumb + WebPage linkage so the
+// strain-finder gets the same E-E-A-T credit as the rest of the site.
+const finderSchema = {
+  "@context": "https://schema.org",
+  "@type": "Quiz",
+  name: `Find Your Strain · ${STORE.name}`,
+  url: `${STORE.website}/find-your-strain`,
+  about: { "@id": `${STORE.website}/#dispensary` },
+  educationalAlignment: {
+    "@type": "AlignmentObject",
+    alignmentType: "educationalSubject",
+    targetName: "Cannabis selection guide",
+  },
+  hasPart: [
+    { "@type": "Question", name: "What's the moment? (Energize, Chill, Sleep, Creative, Social, Relief)" },
+    {
+      "@type": "Question",
+      name: "What form do you prefer? (Flower, Pre-roll, Edible, Vape, Concentrate, Tincture)",
+    },
+    { "@type": "Question", name: "Which strain type? (Sativa, Indica, Hybrid, or no preference)" },
+  ],
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: STORE.website },
+    { "@type": "ListItem", position: 2, name: "Find Your Strain", item: `${STORE.website}/find-your-strain` },
+  ],
+};
+
 export default function FindYourStrainPage() {
   return (
     <div className="min-h-screen bg-stone-50">
+      {/* eslint-disable-next-line react/no-danger */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(finderSchema) }} />
+      {/* eslint-disable-next-line react/no-danger */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+
       {/* Hero — soft decorative gradient behind the headline so the page
           stops looking like flat default white. The accent splash sits
           aria-hidden behind the text. */}
