@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
 import { getMenuProducts, getPickupEta, getActiveDeals } from "@/lib/db";
 import { STORE, getOrderingStatus } from "@/lib/store";
@@ -26,6 +27,14 @@ function minToLabel(min: number): string {
 }
 
 export default async function OrderPage() {
+  // TEMPORARILY REDIRECTED 2026-05-04 per Doug — Seattle inventoryapp DB has
+  // Wenatchee-seeded prices on shared-ID products (per OUTSTANDING_WORK 3.9
+  // + INCIDENTS.md), so the in-tree menu shows wrong prices for Seattle until
+  // a Dutchie sync reconciles them. /menu (iHeartJane Boost embed at storeId
+  // 5295) shows the real Dutchie Seattle prices, so push customers there.
+  // Restore (delete this redirect) when /order tree menu prices are fixed.
+  redirect("/menu");
+
   const [products, eta, { userId }, activeDeals] = await Promise.all([
     getMenuProducts().catch(() => []),
     getPickupEta().catch(() => ({ depth: 0, label: "Usually ready in under 10 min" })),
