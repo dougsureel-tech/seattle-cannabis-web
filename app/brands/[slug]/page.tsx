@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import { VendorAdSlot } from "@/components/VendorAdSlot";
 import { getBrandBySlug, getBrandProducts, getActiveBrands } from "@/lib/db";
 import { STORE } from "@/lib/store";
@@ -251,8 +252,8 @@ export default async function BrandPage({ params }: Props) {
       <div className="bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white py-10 sm:py-14">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center gap-4 sm:gap-6">
           {brand.logoUrl ? (
-            <div className="shrink-0 w-20 h-20 rounded-2xl bg-white p-2.5 flex items-center justify-center shadow-lg">
-              <img src={brand.logoUrl} alt={brand.name} className="max-h-full max-w-full object-contain" />
+            <div className="shrink-0 w-20 h-20 rounded-2xl bg-white p-2.5 flex items-center justify-center shadow-lg relative overflow-hidden">
+              <Image src={brand.logoUrl} alt={brand.name} fill className="object-contain p-2" unoptimized />
             </div>
           ) : (
             <div className="shrink-0 w-20 h-20 rounded-2xl bg-indigo-800 border border-indigo-700 flex items-center justify-center text-2xl">
@@ -395,11 +396,14 @@ export default async function BrandPage({ params }: Props) {
                         className="rounded-2xl border border-stone-100 bg-white overflow-hidden hover:border-indigo-300 hover:shadow-md transition-all group"
                       >
                         {p.image_url ? (
-                          <div className="h-44 bg-stone-100 overflow-hidden">
-                            <img
+                          <div className="h-44 bg-stone-100 overflow-hidden relative">
+                            <Image
                               src={p.image_url}
                               alt={p.name}
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                              fill
+                              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                              className="object-cover group-hover:scale-105 transition-transform duration-300"
+                              loading="lazy"
                             />
                           </div>
                         ) : (

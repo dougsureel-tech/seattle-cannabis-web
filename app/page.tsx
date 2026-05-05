@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { STORE, isOpenNow, nextOpenLabel } from "@/lib/store";
 import { withAttr } from "@/lib/attribution";
 import { getActiveBrands, getActiveDeals, getFeaturedProducts, getJustInProducts } from "@/lib/db";
@@ -1022,10 +1023,13 @@ export default async function HomePage() {
                 >
                   <div className="aspect-square bg-stone-100 overflow-hidden relative">
                     {p.imageUrl ? (
-                      <img
+                      <Image
                         src={p.imageUrl}
                         alt={p.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        fill
+                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        loading="lazy"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-4xl bg-gradient-to-br from-stone-100 to-stone-200">
@@ -1268,10 +1272,13 @@ export default async function HomePage() {
                   href={`/brands/${brand.slug}`}
                   className="group flex flex-col items-center justify-center gap-2 p-4 rounded-2xl border border-stone-100 bg-white hover:border-violet-300 hover:shadow-lg hover:shadow-violet-500/15 hover:-translate-y-0.5 transition-all duration-200 aspect-square"
                 >
-                  <img
+                  <Image
                     src={brand.logoUrl!}
                     alt={brand.name}
+                    width={120}
+                    height={56}
                     className="max-h-14 max-w-full object-contain group-hover:scale-105 transition-transform duration-200"
+                    unoptimized
                   />
                   <span className="text-xs text-stone-400 group-hover:text-indigo-700 transition-colors text-center leading-tight font-medium">
                     {brand.name}
