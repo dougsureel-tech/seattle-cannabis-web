@@ -3,6 +3,7 @@
 // comes from Vercel automatically on every deploy and is the authoritative
 // "did my push actually land" signal.
 
+// 4.305 — Heroes self-attest Phase 3b: mirror of greenlife-web v3.435. /account/heroes page (indigo theme) + /api/heroes POST route + portal.ts updateHeroesAttest() + PortalUser.heroesSelfAttestType. Account hub shows heroes card. No migration — customers.heroes_self_attest_type already exists (inventoryapp mig 0072). tsc clean.
 // 4.295 — Loyalty Phase 2: tiered-discount picker on /order checkout. Mirror of greenlife-web v3.425. lib/loyalty-redemption.ts (pure tier math), getLoyaltyByClerkId() + placeOrder 5th param in portal.ts, tier picker UI in OrderMenu.tsx (indigo theme), loyaltyTierPointCost validation in /api/orders. tsc clean.
 // 4.285 — P4 pickup flow: mirror no_substitute_pref from portal_users to customers on profile save. lib/portal.ts updatePortalUser addition. tsc clean.
 // 4.275 — `<img>` → `<Image>` migration on `/brands/[slug]` + `/` (homepage). Closes the 4 deferred `@next/next/no-img-element` warnings from v4.260. **What landed**: `app/brands/[slug]/page.tsx` brand-hero logo (line 255) + product-card image (line 399); `app/page.tsx` homepage product card (line 1025) + featured-brand logo tile (line 1271). Mirrors the greenlife-web pattern (already on `<Image>` for the same surfaces). External vendor logo/product URLs work because `next.config.ts` sets `images.remotePatterns: [{ protocol: "https", hostname: "**" }]` — no domain allowlist needed. Brand-logo Image uses `fill` + `unoptimized` (already-CDN-hosted, often SVG, no need for Next's resize pipeline); product Images use `fill` + `sizes` + `loading=\"lazy\"` for above-fold-aware responsive sizing. Customer-visible behavior identical pre/post — the `<img>` and `<Image fill>` both stretch into the wrapper's `relative overflow-hidden` parent. Lint at 0 errors + 0 warnings. tsc clean.
@@ -39,7 +40,7 @@
 // 4.81 — /brands/[slug] generic-template renders vendor-authored brand bio + Instagram/X/Facebook handles when filled in via /vmi/profile (inventoryapp). Section sits above the order CTA, only renders when at least one field is non-null. Handles are sanitized to /^[A-Za-z0-9._-]+$/ before being concatenated into URLs (prevents query-param injection or path traversal). Per-brand override components intentionally NOT touched — those are graduated, hand-authored layouts.
 // 4.76 — /apply personality prompts: two optional written prompts (product-recommendation pitch + customer-recovery story) capture personality signal without the photo discrimination risk. Stored in applicants.metadata JSONB on inventoryapp side. Compliance: written-only — no photo (WA RCW 49.60 / EEOC pre-offer photo discrimination risk).
 // 4.71 — Public /apply form: apply-to-work intake with resume upload + 3 references + 21+ confirmation. POSTs to inventoryapp /api/applications. Compliance: no photo / no SSN / no DOB.
-export const BUILD_VERSION = "4.295";
+export const BUILD_VERSION = "4.305";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ??
