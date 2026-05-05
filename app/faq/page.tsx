@@ -84,6 +84,11 @@ const FAQS: { q: string; a: string; tag?: string }[] = [
     a: `Yes. Live deals are at ${STORE.website}/deals — usually a rotating mix of % off categories, brand spotlights, vendor day pricing, and weekly recurring specials. Loyalty is built in: every purchase earns points, and 100 points = $1 off, redeemable at the counter any time. Tiers (Visitor → Regular → Local → Family) unlock automatically as you visit; the higher you go, the bigger the perks. Sign up at ${STORE.website}/sign-up — the 15% off your first online order applies on top of any active deal.`,
   },
   {
+    tag: "Rewards",
+    q: "Can I stack loyalty points with other discounts?",
+    a: "Yes. Loyalty points always apply on top of any active deal or promotion — they're earned cash you're spending, not a discount layer. So if there's a 20% category deal running, you can still redeem points on the same transaction.",
+  },
+  {
     tag: "Ordering",
     q: "Can I order online for pickup?",
     a: "Yes — browse our menu at seattlecannabis.co/menu and place a pickup order to save 15% automatically.",
