@@ -50,12 +50,14 @@ export function CartResumeBanner() {
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     setCart(readCart());
   }, []);
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCart(readCart());
   }, [pathname]);
 

@@ -86,7 +86,6 @@ export function MobileStickyCta() {
     fetch("/api/deals/top", { signal: ctrl.signal })
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`status ${r.status}`))))
       .then((d: { deal: TopDeal | null }) => {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         setDeal(d.deal);
       })
       .catch((e) => {
@@ -98,6 +97,7 @@ export function MobileStickyCta() {
   }, []);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Hydration-safe ticker for the time-of-day mode pill: reconcile to client time on mount/deal-change before the 60s interval takes over.
     setMode(computeMode(deal));
     const id = window.setInterval(() => setMode(computeMode(deal)), 60_000);
     return () => window.clearInterval(id);

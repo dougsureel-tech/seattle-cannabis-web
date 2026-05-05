@@ -65,9 +65,7 @@ const breadcrumbSchema = {
 export default function FindYourStrainPage() {
   return (
     <div className="min-h-screen bg-stone-50">
-      {/* eslint-disable-next-line react/no-danger */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(finderSchema) }} />
-      {/* eslint-disable-next-line react/no-danger */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}

@@ -57,6 +57,7 @@ export function NeighborhoodMap({ destinationAddress, fallbackDealShort }: Props
   useEffect(() => {
     if (typeof window === "undefined" || !window.matchMedia) return;
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- One-shot read of OS prefers-reduced-motion at mount; SSR-safe via the early-return above.
     setReduceMotion(mq.matches);
   }, []);
 

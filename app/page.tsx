@@ -657,7 +657,6 @@ export default async function HomePage() {
                 const ends = d.endDate
                   ? (() => {
                       const date = new Date(`${d.endDate}T12:00:00`);
-                      // eslint-disable-next-line react-hooks/purity
                       const days = Math.ceil((date.getTime() - Date.now()) / 86400000);
                       if (days <= 0) return { label: "Ends today", urgent: true };
                       if (days === 1) return { label: "Ends tomorrow", urgent: true };

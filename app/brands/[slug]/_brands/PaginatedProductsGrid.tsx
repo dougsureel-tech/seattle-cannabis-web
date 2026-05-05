@@ -93,6 +93,7 @@ export function PaginatedProductsGrid({
   // Reset to page 0 whenever the outer name filter changes — same reason
   // as strain/sort: avoids "page 4 of 1" if the new filter shrinks the list.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Canonical "reset child pagination on filter prop change" pattern. Derive-during-render rewrite is a larger refactor.
     setPage(0);
   }, [nameContains]);
 
@@ -182,24 +183,6 @@ export function PaginatedProductsGrid({
   const safePage = Math.min(page, totalPages - 1);
   const start = safePage * perPage;
   const visible = sorted.slice(start, start + perPage);
-
-  // Group the visible slice back into category buckets so headers + counts
-  // match what the customer sees on this page (not the global totals).
-  const buckets = useMemo(() => {
-    const map = new Map<string, Product[]>();
-    for (const p of visible) {
-      const cat = p.category ?? "Other";
-      if (!map.has(cat)) map.set(cat, []);
-      map.get(cat)!.push(p);
-    }
-    return [...map.entries()].sort((a, b) => {
-      const ai = CATEGORY_ORDER.indexOf(a[0]);
-      const bi = CATEGORY_ORDER.indexOf(b[0]);
-      const ax = ai < 0 ? CATEGORY_ORDER.length : ai;
-      const bx = bi < 0 ? CATEGORY_ORDER.length : bi;
-      return ax - bx;
-    });
-  }, [visible]);
 
   const filterChips: { id: StrainFilter; label: string; emoji: string }[] = [
     { id: "all", label: "All", emoji: "🌱" },

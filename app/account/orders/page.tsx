@@ -78,6 +78,7 @@ export default async function OrderHistoryPage() {
     (o) => o.status === "pending" || o.status === "preparing" || o.status === "ready",
   );
   const hasJustReady = orders.some(
+    // eslint-disable-next-line react-hooks/purity -- Server Component renders per-request (`force-dynamic` page); intentional "just-flipped-ready in last 5 min" check drives the SMS-vs-page-banner branch.
     (o) => o.status === "ready" && o.readyAt && Date.now() - new Date(o.readyAt).getTime() < 5 * 60_000,
   );
 
