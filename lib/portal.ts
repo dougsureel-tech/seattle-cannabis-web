@@ -144,6 +144,7 @@ export type LoyaltySnapshot = {
   dollarValue: number;
   visitCount: number;
   lastVisitAt: string | null;
+  tieredFlagOn: boolean;
 };
 
 export async function getLoyaltyForPortalUser(portalUserId: string): Promise<LoyaltySnapshot | null> {
@@ -156,7 +157,8 @@ export async function getLoyaltyForPortalUser(portalUserId: string): Promise<Loy
         SELECT COUNT(*)::int
         FROM transactions t
         WHERE t.customer_id = c.id AND t.status = 'completed'
-      ) AS visit_count
+      ) AS visit_count,
+      COALESCE((SELECT enabled FROM feature_flags WHERE key = 'loyalty_tiered_redemption'), false) AS tiered_flag_on
     FROM portal_users pu
     JOIN customers c ON LOWER(c.email) = LOWER(pu.email)
     WHERE pu.id = ${portalUserId}
@@ -166,13 +168,46 @@ export async function getLoyaltyForPortalUser(portalUserId: string): Promise<Loy
     LIMIT 1
   `;
   if (rows.length === 0) return null;
-  const r = rows[0] as { points: number; last_visit_at: Date | null; visit_count: number };
+  const r = rows[0] as { points: number; last_visit_at: Date | null; visit_count: number; tiered_flag_on: boolean };
   const points = r.points ?? 0;
   return {
     points,
     dollarValue: Math.floor(points / POINTS_PER_DOLLAR),
     visitCount: r.visit_count ?? 0,
     lastVisitAt: r.last_visit_at ? r.last_visit_at.toISOString() : null,
+    tieredFlagOn: r.tiered_flag_on ?? false,
+  };
+}
+
+export async function getLoyaltyByClerkId(clerkUserId: string): Promise<LoyaltySnapshot | null> {
+  const sql = getClient();
+  const rows = await sql`
+    SELECT
+      c.loyalty_points::int AS points,
+      COALESCE(c.last_visit_at, c.created_at) AS last_visit_at,
+      (
+        SELECT COUNT(*)::int
+        FROM transactions t
+        WHERE t.customer_id = c.id AND t.status = 'completed'
+      ) AS visit_count,
+      COALESCE((SELECT enabled FROM feature_flags WHERE key = 'loyalty_tiered_redemption'), false) AS tiered_flag_on
+    FROM portal_users pu
+    JOIN customers c ON LOWER(c.email) = LOWER(pu.email)
+    WHERE pu.clerk_user_id = ${clerkUserId}
+      AND pu.email IS NOT NULL
+      AND c.email IS NOT NULL
+    ORDER BY c.last_visit_at DESC NULLS LAST
+    LIMIT 1
+  `;
+  if (rows.length === 0) return null;
+  const r = rows[0] as { points: number; last_visit_at: Date | null; visit_count: number; tiered_flag_on: boolean };
+  const points = r.points ?? 0;
+  return {
+    points,
+    dollarValue: Math.floor(points / POINTS_PER_DOLLAR),
+    visitCount: r.visit_count ?? 0,
+    lastVisitAt: r.last_visit_at ? r.last_visit_at.toISOString() : null,
+    tieredFlagOn: r.tiered_flag_on ?? false,
   };
 }
 
@@ -380,6 +415,7 @@ export async function placeOrder(
   }>,
   notes?: string,
   pickupTimeISO?: string,
+  loyaltyTierPointCost?: number | null,
 ): Promise<string> {
   const sql = getClient();
   const orderId = crypto.randomUUID();
@@ -420,16 +456,63 @@ export async function placeOrder(
   const customerEmail = (u.email as string | null) ?? null;
   const customerPhone = (u.phone as string | null) ?? null;
 
+  // Loyalty tier redemption — only when flag is ON and a valid tier was requested.
+  let loyaltyDiscountDollars = 0;
+  let resolvedTierPointCost: number | null = null;
+
+  if (loyaltyTierPointCost != null && customerEmail) {
+    const VALID_COSTS = [50, 100, 200, 250, 300, 400];
+    if (VALID_COSTS.includes(loyaltyTierPointCost)) {
+      const flagRows = await sql`
+        SELECT enabled FROM feature_flags WHERE key = 'loyalty_tiered_redemption' LIMIT 1
+      `;
+      const flagOn = (flagRows[0]?.enabled as boolean) ?? false;
+
+      if (flagOn) {
+        const MAX_SUB: Record<number, number> = { 300: 75 };
+        const MIN_SUB: Record<number, number> = { 400: 75 };
+        const maxSub = MAX_SUB[loyaltyTierPointCost];
+        const minSub = MIN_SUB[loyaltyTierPointCost];
+        const subtotalOk =
+          (maxSub == null || subtotal < maxSub) &&
+          (minSub == null || subtotal >= minSub);
+
+        if (subtotalOk) {
+          const DISCOUNT_FRACTION: Record<number, number> = {
+            50: 0.05, 100: 0.10, 200: 0.20, 250: 0.25, 300: 0.30, 400: 0.30,
+          };
+          const fraction = DISCOUNT_FRACTION[loyaltyTierPointCost] ?? 0;
+
+          const deductRows = await sql`
+            UPDATE customers
+            SET loyalty_points = loyalty_points - ${loyaltyTierPointCost}
+            WHERE LOWER(email) = LOWER(${customerEmail})
+              AND loyalty_points >= ${loyaltyTierPointCost}
+            RETURNING id
+          `;
+
+          if (deductRows.length > 0) {
+            loyaltyDiscountDollars = Math.round(subtotal * fraction * 100) / 100;
+            resolvedTierPointCost = loyaltyTierPointCost;
+          }
+        }
+      }
+    }
+  }
+
+  const orderTotal = Math.max(0, subtotal - loyaltyDiscountDollars);
+
   await sql`
     INSERT INTO online_orders (
       id, portal_user_id, status, order_total, item_count, items, notes, source,
-      pickup_time, customer_name, customer_email, customer_phone
+      pickup_time, customer_name, customer_email, customer_phone,
+      loyalty_redemption, loyalty_tier_point_cost
     )
     VALUES (
       ${orderId},
       ${portalUserId},
       'pending',
-      ${subtotal},
+      ${orderTotal},
       ${itemCount},
       ${JSON.stringify(pricedItems)},
       ${notes ?? null},
@@ -437,7 +520,9 @@ export async function placeOrder(
       ${pickupTimeISO ?? null},
       ${customerName},
       ${customerEmail},
-      ${customerPhone}
+      ${customerPhone},
+      ${resolvedTierPointCost != null ? loyaltyDiscountDollars : null},
+      ${resolvedTierPointCost}
     )
   `;
 
