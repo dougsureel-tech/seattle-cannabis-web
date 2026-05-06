@@ -33,11 +33,11 @@ const VARIANT_CLASSES: Record<Variant, string> = {
     // button reads as alive, not as a marketing carousel.
     "bg-gradient-to-r from-indigo-800 via-violet-700 to-indigo-800 hover:from-indigo-700 hover:via-violet-600 hover:to-indigo-700 text-white font-bold shadow-md shadow-violet-900/20 hover:shadow-lg hover:shadow-violet-700/30 hover:-translate-y-0.5 animate-gradient",
   light:
-    // Bright pill with the same drift treatment, but the gradient stays in
-    // the indigo-300/fuchsia-200 light range so the dark indigo-950 text
-    // keeps WCAG AA contrast against any frame of the animation. Used on
+    // Rich indigo→fuchsia→violet gradient with white text and a violet glow
+    // shadow — same treatment as the header Order Now button on dark pages.
+    // Replaces the washed-out pale lavender that read as flat against the
     // dark hero/footer backgrounds.
-    "bg-gradient-to-r from-indigo-300 via-fuchsia-200 to-indigo-300 hover:from-indigo-200 hover:via-fuchsia-100 hover:to-indigo-200 active:from-indigo-400 active:to-indigo-400 text-indigo-950 font-bold shadow-lg shadow-indigo-900/40 hover:-translate-y-0.5 animate-gradient",
+    "bg-gradient-to-r from-indigo-500 via-fuchsia-400 to-violet-500 hover:from-indigo-400 hover:via-fuchsia-300 hover:to-violet-400 text-white font-bold shadow-lg shadow-violet-600/40 hover:shadow-xl hover:shadow-violet-500/50 hover:-translate-y-0.5 hover:scale-[1.02] animate-gradient",
   secondary:
     "border border-white/20 hover:border-white/40 hover:bg-white/10 text-white font-semibold",
 };
