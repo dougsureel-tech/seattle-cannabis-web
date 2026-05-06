@@ -1050,7 +1050,7 @@ export function OrderMenu({
                             {/* Effects / terpenes */}
                             {product.effects && (
                               <p className="text-xs text-stone-400 leading-relaxed line-clamp-1">
-                                ✨ {product.effects}
+                                <span aria-hidden="true">✨ </span>{product.effects}
                               </p>
                             )}
 
@@ -1326,7 +1326,7 @@ export function OrderMenu({
                 href={withAttr("/visit", "order", "bottom-visit")}
                 className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white text-indigo-900 text-sm font-bold hover:bg-indigo-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-indigo-900"
               >
-                📍 Visit us
+                <span aria-hidden="true">📍 </span>Visit us
               </Link>
               {/* tel: links are no-op'd by withAttr (cookie carries the
                   breadcrumb on return visits anyway) — kept call-through in
@@ -1335,13 +1335,13 @@ export function OrderMenu({
                 href={`tel:${STORE.phoneTel}`}
                 className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-white text-sm font-semibold border border-white/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-indigo-900"
               >
-                📞 {STORE.phone}
+                <span aria-hidden="true">📞 </span>{STORE.phone}
               </a>
               <Link
                 href={withAttr("/find-your-strain", "order", "bottom-quiz")}
                 className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-white text-sm font-semibold border border-white/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-indigo-900"
               >
-                🌿 Take the strain quiz
+                <span aria-hidden="true">🌿 </span>Take the strain quiz
               </Link>
             </div>
           </div>
