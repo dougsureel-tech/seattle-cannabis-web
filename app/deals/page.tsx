@@ -35,7 +35,7 @@ function fmtEndDate(iso: string | null): string {
 
 type Props = { searchParams: Promise<{ cat?: string }> };
 
-const FILTER_CATS = ["flower", "pre-rolls", "vapes", "concentrates", "edibles"] as const;
+const FILTER_CATS = ["flower", "pre-rolls", "vapes", "concentrates", "edibles", "beverages"] as const;
 type FilterCat = (typeof FILTER_CATS)[number];
 
 function normalizeCat(cat: string | null): FilterCat | "all" {
@@ -60,6 +60,7 @@ export default async function DealsPage({ searchParams }: Props) {
     vapes: 0,
     concentrates: 0,
     edibles: 0,
+    beverages: 0,
   };
   for (const d of allDeals) {
     const c = normalizeCat(d.appliesTo);
