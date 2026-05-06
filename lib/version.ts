@@ -3,6 +3,7 @@
 // comes from Vercel automatically on every deploy and is the authoritative
 // "did my push actually land" signal.
 
+// 4.515 — Sativa color: amber → red across all 7 customer-facing surfaces. Mirror of greenlife-web v3.745. Catches the public sites up to the strain-color convention update Doug landed today (memory `reference_strain_type_color_convention`: Indica=purple, Sativa=red, Hybrid=green/emerald). Inventoryapp shipped this earlier; public sites were behind. Surfaces fixed: OrderMenu badge+dot, brands/[slug] badge, PaginatedProductsGrid badge, deals/[id] dot, StashClient badge, RecentlyViewedAutoStrip dot, RecentlyViewedStrip dot. amber-* → red-* (same shade levels). Indica + Hybrid colors unchanged. tsc clean.
 // 4.495 — Customer-visible "Green Life" residue swept from Seattle brand pages. Three hand-authored boutique brand pages (`/brands/avitas`, `/brands/2k-gardens`, `/brands/northwest-cannabis-solutions`) had cross-contamination from greenlife-web — Avitas + 2K Gardens FAQ entries asked "Why does Green Life carry them?" and NWCS sub-brand intro said "the ones that move at Green Life". Customer landing on Seattle's brand page saw Wenatchee's store name. Fixes: switch to "we" voice per `feedback_staff_voice_we_not_i.md` ("Why do we carry them?" / "the ones that move in our case") — single-shop voice, no store-name swap needed. Also: stale color-theme comment on `/sign-in` page ("Match Green Life's emerald/green brand") corrected to indigo. tsc clean.
 // 4.485 — Mailto subject prefill sweep — homepage contact section + `/about` + `/community`. Mirror of greenlife-web v3.685. Continues v4.435 + v4.475 across the remaining customer-facing email touchpoints. Homepage + /about use generic "Question from seattlecannabis.co"; `/community` past-staff signup gets contextual "Past staff — alumni signup" so the receiving inbox can route alumni-cohort outreach separately. Three single-line edits. tsc clean.
 // 4.475 — Mailto subject prefill on `/apply/thanks` + `/vendor-access/thanks`. Mirror of greenlife-web v3.635. Pattern continuation from v4.435 `/contact`. Each thank-you page's "Questions in the meantime? Email <addr>" link now opens with a contextual subject ("Job application — follow up" / "Vendor access — follow up") so the receiving inbox can route immediately. Two single-line edits. tsc clean.
@@ -54,7 +55,7 @@
 // 4.76 — /apply personality prompts: two optional written prompts (product-recommendation pitch + customer-recovery story) capture personality signal without the photo discrimination risk. Stored in applicants.metadata JSONB on inventoryapp side. Compliance: written-only — no photo (WA RCW 49.60 / EEOC pre-offer photo discrimination risk).
 // 4.465 — /order place-order error messages reassure customer their cart is preserved on failure. Mirror of greenlife-web v3.625.
 // 4.71 — Public /apply form: apply-to-work intake with resume upload + 3 references + 21+ confirmation. POSTs to inventoryapp /api/applications. Compliance: no photo / no SSN / no DOB.
-export const BUILD_VERSION = "4.495";
+export const BUILD_VERSION = "4.515";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ??

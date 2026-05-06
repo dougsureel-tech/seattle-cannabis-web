@@ -129,7 +129,7 @@ const CAT_DISPLAY: Record<string, string> = {
 // Hybrid uses emerald — the brand is indigo so a contrasting hue keeps the
 // strain pill from disappearing into the page chrome.
 const STRAIN_COLORS: Record<string, { badge: string; dot: string }> = {
-  Sativa: { badge: "bg-amber-100 text-amber-700 border-amber-200", dot: "bg-amber-400" },
+  Sativa: { badge: "bg-red-100 text-red-700 border-red-200", dot: "bg-red-400" },
   Indica: { badge: "bg-purple-100 text-purple-700 border-purple-200", dot: "bg-purple-400" },
   Hybrid: { badge: "bg-emerald-100 text-emerald-700 border-emerald-200", dot: "bg-emerald-400" },
   CBD: { badge: "bg-sky-100 text-sky-700 border-sky-200", dot: "bg-sky-400" },
