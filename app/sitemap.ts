@@ -79,7 +79,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "yearly",
       priority: 0.3,
     },
-    // /apply intentionally excluded — application form, ?position deep-link, no canonical surface.
+    {
+      url: `${STORE.website}/vendor-access`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.4,
+    },
+    {
+      url: `${STORE.website}/apply`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.5,
+    },
+    // /quiz, /stash intentionally excluded — robots:noindex (per-visitor views).
   ];
 
   // Dedupe brand slugs — `getActiveBrands` groups by `v.id` but the slug is
