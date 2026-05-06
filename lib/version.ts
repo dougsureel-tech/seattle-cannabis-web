@@ -3,6 +3,7 @@
 // comes from Vercel automatically on every deploy and is the authoritative
 // "did my push actually land" signal.
 
+// 4.355 — Order-status mapping fix. Mirror of greenlife-web v3.475. Inventoryapp's POS PATCH writes `in_progress` and `fulfilled` to `online_orders.status` (per inventoryapp's pos/online-orders/[id]/route.ts), but this app's `OnlineOrder["status"]` type and UI label maps use `preparing` and `picked_up`. Pre-fix: lib/portal.ts read paths cast raw DB string to the type without value transformation, so `STATUS_LABEL[order.status]` resolved to `undefined` — customer's `/account/orders` row + `/order/confirmation/[id]` timeline rendered blank when a budtender hit Start Order or marked picked up. Post-fix: new `normalizeOrderStatus()` helper maps `in_progress` → `preparing`, `fulfilled` → `picked_up`, passes other valid statuses through, falls back to `pending` for unknown. Applied in both `getOrder()` and `getOrders()` return mappings. tsc clean.
 // 4.345 — /account/profile: Heroes Discount cohort select added alongside No Substitutions. Mirror of greenlife-web v3.465. Server validates against allowlist; writes to customers.heroes_self_attest_type.
 // 4.315 — AgeGate: embed WAC 314-55-082 statutory health warnings in scrollable panel (indigo theme). Mirror of greenlife-web v3.445. tsc clean.
 // 4.305 — Heroes self-attest Phase 3b: mirror of greenlife-web v3.435. /account/heroes page (indigo theme) + /api/heroes POST route + portal.ts updateHeroesAttest() + PortalUser.heroesSelfAttestType. Account hub shows heroes card. No migration — customers.heroes_self_attest_type already exists (inventoryapp mig 0072). tsc clean.
@@ -42,7 +43,7 @@
 // 4.81 — /brands/[slug] generic-template renders vendor-authored brand bio + Instagram/X/Facebook handles when filled in via /vmi/profile (inventoryapp). Section sits above the order CTA, only renders when at least one field is non-null. Handles are sanitized to /^[A-Za-z0-9._-]+$/ before being concatenated into URLs (prevents query-param injection or path traversal). Per-brand override components intentionally NOT touched — those are graduated, hand-authored layouts.
 // 4.76 — /apply personality prompts: two optional written prompts (product-recommendation pitch + customer-recovery story) capture personality signal without the photo discrimination risk. Stored in applicants.metadata JSONB on inventoryapp side. Compliance: written-only — no photo (WA RCW 49.60 / EEOC pre-offer photo discrimination risk).
 // 4.71 — Public /apply form: apply-to-work intake with resume upload + 3 references + 21+ confirmation. POSTs to inventoryapp /api/applications. Compliance: no photo / no SSN / no DOB.
-export const BUILD_VERSION = "4.345";
+export const BUILD_VERSION = "4.355";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ??
