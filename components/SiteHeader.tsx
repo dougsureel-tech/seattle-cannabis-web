@@ -341,7 +341,7 @@ export function SiteHeader() {
             onClick={() => setOpen(false)}
             className="flex items-center justify-center px-4 py-3 rounded-xl bg-gradient-to-r from-indigo-800 via-violet-700 to-indigo-800 hover:from-indigo-700 hover:via-violet-600 hover:to-indigo-700 text-white text-sm font-bold transition-all shadow-md shadow-violet-900/20 animate-gradient bg-[length:200%_auto]"
           >
-            Order Now — 15% Off →
+            Order Now
           </Link>
         </div>
       </div>
