@@ -3,6 +3,7 @@
 // comes from Vercel automatically on every deploy and is the authoritative
 // "did my push actually land" signal.
 
+// 4.475 — Mailto subject prefill on `/apply/thanks` + `/vendor-access/thanks`. Mirror of greenlife-web v3.635. Pattern continuation from v4.435 `/contact`. Each thank-you page's "Questions in the meantime? Email <addr>" link now opens with a contextual subject ("Job application — follow up" / "Vendor access — follow up") so the receiving inbox can route immediately. Two single-line edits. tsc clean.
 // 4.445 — Loyalty card tier display on `/account`. Mirror of greenlife-web v3.605. Customer's loyalty card now shows their relationship tier (Visitor → Regular → Local → Family) + a progress bar with `$X to {NextTier}` hint. Pulls lifetime post-tax spend from transactions (mirrors inventoryapp's tier math). New `lib/loyalty-tiers.ts` (mirror of inventoryapp `lib/loyalty.ts` minus styling). `LoyaltySnapshot.lifetimeSpent` added; both `getLoyaltyForPortalUser` + `getLoyaltyByClerkId` now SUM transactions. Skipped at top tier ("Top tier — thank you 🌿") and when lifetimeSpent=0. tsc clean.
 // 4.435 — `/contact` mailto subject prefill. Mirror of greenlife-web v3.595. Bare `mailto:${STORE.email}` opened a blank email; now prefills `?subject=Question%20from%20seattlecannabis.co` so the team can triage incoming email at a glance. Hosts that don't honor `?subject=` ignore the param — no breakage. NOT included: hint copy steering customers email → phone (Doug 2026-05-05). tsc clean.
 // 4.425 — `/not-found.tsx` now closure-aware. Mirror of greenlife-web v3.585. Parity with the rest of the customer-facing surfaces (`/`, `/menu`, `/order`, `/visit` — all closure-aware since v4.140–v4.160). Pre-fix the 404's "open now" chip used `isOpenNow()` only, ignoring emergency-closure overrides at `/admin/hours-override`. Customer landing on a stale URL on a closure day saw "open now" and could drive over for nothing. Post-fix: `await fetchClosureStatus()` + `const open = isOpenNow() && !closure.isClosed`. Helper has 5s AbortController + graceful-degrades on error. Single-file ship. tsc clean.
@@ -51,7 +52,7 @@
 // 4.76 — /apply personality prompts: two optional written prompts (product-recommendation pitch + customer-recovery story) capture personality signal without the photo discrimination risk. Stored in applicants.metadata JSONB on inventoryapp side. Compliance: written-only — no photo (WA RCW 49.60 / EEOC pre-offer photo discrimination risk).
 // 4.465 — /order place-order error messages reassure customer their cart is preserved on failure. Mirror of greenlife-web v3.625.
 // 4.71 — Public /apply form: apply-to-work intake with resume upload + 3 references + 21+ confirmation. POSTs to inventoryapp /api/applications. Compliance: no photo / no SSN / no DOB.
-export const BUILD_VERSION = "4.465";
+export const BUILD_VERSION = "4.475";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ??
