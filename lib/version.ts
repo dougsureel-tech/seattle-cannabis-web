@@ -3,6 +3,7 @@
 // comes from Vercel automatically on every deploy and is the authoritative
 // "did my push actually land" signal.
 
+// 4.675 — Decorative-emoji a11y sweep across 4 customer empty-state surfaces. Mirror of greenlife-web v3.915. `aria-hidden="true"` on (1) /order OrderMenu 🌿, (2) /brands/[slug] 🌿, (3) PaginatedProductsGrid 🌿, (4) /account 🛒. Screen readers now skip the decoration and read the heading. tsc clean.
 // 4.665 — `/accessibility` — WCAG link filter `levels=aaa` → `levels=a,aa` to match the 'Level AA conformance' claim. Mirror of greenlife-web v3.905. Link text said WCAG 2.1 Level AA but the URL filter filtered to AAA-only — wrong scope. Now filters to the cumulative A+AA criteria the page actually claims to conform to. tsc clean.
 // 4.655 — `/accessibility` — DOH cannabis health-info link `/marijuana` → `/cannabis`. Mirror of greenlife-web v3.895. DOH's canonical path moved from /marijuana to /cannabis (verified via WebFetch). Customer-visible source link updated to canonical URL to avoid future deprecation. tsc clean.
 // 4.645 — `app/global-error.tsx` — `aria-hidden="true"` on the decorative 😔 emoji wrapper. Mirror of greenlife-web v3.885. Catastrophic-fallback page had `<div>😔</div>` which screen readers announced as 'frowning face' before the actual heading. aria-hidden lets assistive tech skip the decoration. tsc clean.
@@ -70,7 +71,7 @@
 // 4.76 — /apply personality prompts: two optional written prompts (product-recommendation pitch + customer-recovery story) capture personality signal without the photo discrimination risk. Stored in applicants.metadata JSONB on inventoryapp side. Compliance: written-only — no photo (WA RCW 49.60 / EEOC pre-offer photo discrimination risk).
 // 4.465 — /order place-order error messages reassure customer their cart is preserved on failure. Mirror of greenlife-web v3.625.
 // 4.71 — Public /apply form: apply-to-work intake with resume upload + 3 references + 21+ confirmation. POSTs to inventoryapp /api/applications. Compliance: no photo / no SSN / no DOB.
-export const BUILD_VERSION = "4.665";
+export const BUILD_VERSION = "4.675";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ??
