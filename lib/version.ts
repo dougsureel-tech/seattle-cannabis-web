@@ -3,6 +3,7 @@
 // comes from Vercel automatically on every deploy and is the authoritative
 // "did my push actually land" signal.
 
+// 4.585 — Sitemap completeness fix — added /careers (weekly, 0.6), /terms-of-use (yearly, 0.3), and /health-data-policy (yearly, 0.3). Mirror of greenlife-web v3.835. All three pages were already public + indexable but missing from canonical sitemap discovery. Added explicit-exclusion comment for /apply. tsc clean.
 // 4.575 — Brand-voice "may" hedge sweep — 2 boutique brand pages. Mirror of greenlife-web v3.825. 2k-gardens.tsx + avitas.tsx both said "refresh tomorrow, the mix may have rotated" — replaced with "the mix often rotates" (confident framing, accurate to reality). Per brand-voice doc § "What we never do" line 204. tsc clean.
 // 4.565 — `/apply` form error states de-hedged. Mirror of greenlife-web v3.815. Pre-fix the network-error + server-error fallbacks said "Please try again" — soft apology + please-hedge per brand-voice doc § "What we never do". Post-fix: "Try again", "Try again or email us directly", "Network issue — check your connection and try again". tsc clean.
 // 4.555 — Homepage hero H1 "Premier Cannabis Shop" → "Favorite Cannabis Shop". Closes the brand-voice violation called out in `Inventory App/docs/brand-voice.md` § Tone calibration: ban on "premier" + "one of the best" — use "the best" or "our favorite" instead. Inventoryapp metadata already swept (changelog v??.?? "premier → best"); Greenlife homepage hero already uses "Favorite"; Seattle was the lone holdout. Customer-voice superlative ("our customers' favorite") beats corporate hedge ("we say we're premier"). Single-word change in the gradient-text focal point. tsc clean.
@@ -61,7 +62,7 @@
 // 4.76 — /apply personality prompts: two optional written prompts (product-recommendation pitch + customer-recovery story) capture personality signal without the photo discrimination risk. Stored in applicants.metadata JSONB on inventoryapp side. Compliance: written-only — no photo (WA RCW 49.60 / EEOC pre-offer photo discrimination risk).
 // 4.465 — /order place-order error messages reassure customer their cart is preserved on failure. Mirror of greenlife-web v3.625.
 // 4.71 — Public /apply form: apply-to-work intake with resume upload + 3 references + 21+ confirmation. POSTs to inventoryapp /api/applications. Compliance: no photo / no SSN / no DOB.
-export const BUILD_VERSION = "4.575";
+export const BUILD_VERSION = "4.585";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ??
