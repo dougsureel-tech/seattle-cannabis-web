@@ -3,6 +3,7 @@
 // comes from Vercel automatically on every deploy and is the authoritative
 // "did my push actually land" signal.
 
+// 4.625 — `/community` plain-text email mentions converted to clickable mailto links with contextual subject prefills. Mirror of greenlife-web v3.865. Pre-fix the "Featured creators · Coming soon" + "Featured local businesses · Coming soon" blocks rendered STORE.email as plain text. Post-fix: each mention is `<a href="mailto:...?subject=...">` with indigo-700 font-semibold underline + contextual subject ("Featured creator — interested" / "Featured local business — interested") so the inbox can route inbound by intent. Closes the last two un-clickable email mentions on Seattle's public site. tsc clean.
 // 4.615 — PWA manifest shortcuts aligned with Greenlife pattern. Pre-fix Seattle's PWA shortcuts ("Order Online" / "Browse Menu" / "Account") lacked the `description` field that Greenlife shortcuts include ("Place a pickup order" / "See what's in stock today"). Description renders alongside the shortcut label on long-press menus across iOS / Android / desktop PWA installs. Also normalized "Order Online" → "Order for Pickup" — more specific + matches Greenlife's wording (the order IS for pickup; we don't ship). tsc clean.
 // 4.605 — Order-confirmation email opt-out copy fix. Mirror of greenlife-web v3.855. Pre-fix said "reply STOP or email <addr>" — but "reply STOP" only works for SMS. Now: "email <addr>?subject=Unsubscribe" only. HTML + plain-text both updated. tsc clean.
 // 4.595 — Sitemap completeness round 2 — added /vendor-access (monthly, 0.4) and /apply (weekly, 0.5). Mirror of greenlife-web v3.845. Both pages indexable but missing from sitemap discovery. tsc clean.
@@ -65,7 +66,7 @@
 // 4.76 — /apply personality prompts: two optional written prompts (product-recommendation pitch + customer-recovery story) capture personality signal without the photo discrimination risk. Stored in applicants.metadata JSONB on inventoryapp side. Compliance: written-only — no photo (WA RCW 49.60 / EEOC pre-offer photo discrimination risk).
 // 4.465 — /order place-order error messages reassure customer their cart is preserved on failure. Mirror of greenlife-web v3.625.
 // 4.71 — Public /apply form: apply-to-work intake with resume upload + 3 references + 21+ confirmation. POSTs to inventoryapp /api/applications. Compliance: no photo / no SSN / no DOB.
-export const BUILD_VERSION = "4.615";
+export const BUILD_VERSION = "4.625";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ??

@@ -115,8 +115,15 @@ export default function CommunityPage() {
               law.
             </p>
             <p className="text-stone-500 text-sm leading-relaxed mt-3">
-              If that sounds like you, email {STORE.email} with your handle, location, and a recent
-              post you&apos;re proud of. We&apos;re vetting the first cohort over the next few weeks.
+              If that sounds like you, email{" "}
+              <a
+                href={`mailto:${STORE.email}?subject=${encodeURIComponent("Featured creator — interested")}`}
+                className="text-indigo-700 font-semibold hover:text-indigo-600 underline underline-offset-2"
+              >
+                {STORE.email}
+              </a>{" "}
+              with your handle, location, and a recent post you&apos;re proud of. We&apos;re vetting
+              the first cohort over the next few weeks.
             </p>
           </div>
         </section>
@@ -141,8 +148,15 @@ export default function CommunityPage() {
             </div>
             <div>
               <p className="text-stone-500 text-sm leading-relaxed">
-                Interested? Email {STORE.email}. We&apos;re starting with three or four neighbors
-                this summer to make sure the mechanics are right before we open it up.
+                Interested? Email{" "}
+                <a
+                  href={`mailto:${STORE.email}?subject=${encodeURIComponent("Featured local business — interested")}`}
+                  className="text-indigo-700 font-semibold hover:text-indigo-600 underline underline-offset-2"
+                >
+                  {STORE.email}
+                </a>
+                . We&apos;re starting with three or four neighbors this summer to make sure the
+                mechanics are right before we open it up.
               </p>
             </div>
           </div>
