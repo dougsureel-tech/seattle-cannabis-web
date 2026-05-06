@@ -3,6 +3,7 @@
 // comes from Vercel automatically on every deploy and is the authoritative
 // "did my push actually land" signal.
 
+// 4.745 — Decorative-emoji a11y sweep — 6 more leading icons wrapped in `<span aria-hidden="true">`. Mirror of greenlife-web v3.995. (1+2) /order/confirmation/[id] 🔄 + 📞. (3) /brands/[slug] PaginatedProductsGrid ⭐. (4+5+6) /find-your-strain 📞 / 📍 / 🛒. (7) /deals/[id] 🔥. tsc clean.
 // 4.735 — Decorative-emoji a11y sweep — 4 leading icons in `/order` OrderMenu wrapped in `<span aria-hidden="true">`. Mirror of greenlife-web v3.985. (1) effects-summary ✨, (2) Visit us 📍, (3) phone link 📞, (4) strain quiz 🌿. tsc clean.
 // 4.725 — `/press` 3 plain-text email mentions converted to clickable mailto links with contextual subject prefills. Mirror of greenlife-web v3.975. (1) fact-sheet correction, (2) interview request, (3) hi-res asset request. tsc clean.
 // 4.715 — `/heroes/[cohort]` ID-examples list — `aria-hidden="true"` on decorative ✓ checkmark spans. Mirror of greenlife-web v3.955. Example text carries the meaning. tsc clean.
@@ -77,7 +78,7 @@
 // 4.76 — /apply personality prompts: two optional written prompts (product-recommendation pitch + customer-recovery story) capture personality signal without the photo discrimination risk. Stored in applicants.metadata JSONB on inventoryapp side. Compliance: written-only — no photo (WA RCW 49.60 / EEOC pre-offer photo discrimination risk).
 // 4.465 — /order place-order error messages reassure customer their cart is preserved on failure. Mirror of greenlife-web v3.625.
 // 4.71 — Public /apply form: apply-to-work intake with resume upload + 3 references + 21+ confirmation. POSTs to inventoryapp /api/applications. Compliance: no photo / no SSN / no DOB.
-export const BUILD_VERSION = "4.735";
+export const BUILD_VERSION = "4.745";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ??
