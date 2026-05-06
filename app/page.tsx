@@ -131,7 +131,7 @@ export default async function HomePage() {
     getActiveDeals().catch(() => []),
     fetchClosureStatus(),
   ]);
-  const featuredBrands = brands.filter((b) => b.logoUrl).slice(0, 10);
+  const featuredBrands = brands.slice(0, 10);
   // `open` flips false whenever an emergency closure is active so all
   // "Open Now / Closed" indicators on the page read consistently. The
   // static configured-hours check alone would still say "open" today even
@@ -233,8 +233,8 @@ export default async function HomePage() {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3">
-                <PrimaryCTA href={withAttr(STORE.shopUrl, "home", "hero-order")} variant="light">
-                  Order Online — 15% Off
+                <PrimaryCTA href={withAttr("/menu", "home", "hero-browse")} variant="light">
+                  Browse Menu
                   <svg
                     className="w-4 h-4"
                     fill="none"
@@ -246,8 +246,8 @@ export default async function HomePage() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
                 </PrimaryCTA>
-                <PrimaryCTA href={withAttr("/menu", "home", "hero-browse")} variant="secondary">
-                  Browse Menu
+                <PrimaryCTA href={withAttr(STORE.shopUrl, "home", "hero-order")} variant="secondary">
+                  Order Online — 15% Off
                 </PrimaryCTA>
               </div>
 
@@ -424,6 +424,59 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* ─── Brands strip — sits between stats and neighborhood map so the
+            rhythm is: proof (stats) → who we carry (brands) → where you are
+            (neighborhood). Compact heading + logo grid with initials fallback
+            for brands that haven't uploaded a logo yet. */}
+      {featuredBrands.length > 0 && (
+        <section className="bg-white border-b border-stone-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+            <div className="flex items-baseline justify-between mb-5">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-indigo-600 mb-1">
+                  Washington&apos;s finest producers
+                </p>
+                <h2 className="text-xl sm:text-2xl font-extrabold text-stone-900 tracking-tight">
+                  Top Brands
+                </h2>
+              </div>
+              <Link href="/brands" className="text-sm font-semibold text-indigo-600 hover:text-indigo-800 transition-colors">
+                All brands →
+              </Link>
+            </div>
+            <div className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-10 gap-3">
+              {featuredBrands.map((brand) => (
+                <Link
+                  key={brand.id}
+                  href={`/brands/${brand.slug}`}
+                  className="group flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border border-stone-100 bg-stone-50 hover:border-violet-300 hover:bg-white hover:shadow-md hover:shadow-violet-500/10 hover:-translate-y-0.5 transition-all duration-200 aspect-square"
+                >
+                  {brand.logoUrl ? (
+                    <Image
+                      src={brand.logoUrl}
+                      alt={brand.name}
+                      width={80}
+                      height={40}
+                      className="max-h-10 max-w-full object-contain group-hover:scale-105 transition-transform duration-200"
+                      unoptimized
+                    />
+                  ) : (
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-100 to-violet-100 border border-indigo-200/60 flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
+                      <span className="text-base font-extrabold text-indigo-700 leading-none">
+                        {brand.name.trim().charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                  )}
+                  <span className="text-[10px] text-stone-400 group-hover:text-indigo-600 transition-colors text-center leading-tight font-medium truncate w-full text-center">
+                    {brand.name}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* ─── Neighborhood map — South Seattle anchor. Eight neighborhoods
             (Rainier Valley, Seward Park, Columbia City, Beacon Hill, Mt
             Baker, Othello, Hillman City, Rainier Beach) plus the shop pin
@@ -451,7 +504,7 @@ export default async function HomePage() {
             site. Locally owned framing stays here per the SCC positioning
             (Wenatchee uses best-staff framing instead, separate decision). */}
       <section className="bg-stone-50 border-b border-stone-100" aria-labelledby="why-heading">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
           <div className="text-center mb-10 sm:mb-12">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-indigo-700">
               Why customers love us
@@ -705,7 +758,7 @@ export default async function HomePage() {
       )}
 
       {/* ─── Category grid ──────────────────────────────────────────────────── */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
         <SectionHeading
           className="mb-10"
           kicker="Premium products from the Pacific Northwest's top producers"
@@ -767,7 +820,7 @@ export default async function HomePage() {
           <path d="M0 40 L150 10 L260 25 L380 5 L520 30 L660 12 L820 35 L960 15 L1080 28 L1200 18 L1200 60 L0 60 Z" />
         </svg>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
           <SectionHeading
             className="mb-10 sm:mb-12"
             eyebrow={
@@ -846,7 +899,7 @@ export default async function HomePage() {
 
       {/* ─── How Pickup Works ───────────────────────────────────────────────── */}
       <section className="bg-stone-50 border-y border-stone-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
           <SectionHeading className="mb-10" kicker="Order online, skip the wait, save 15%">
             How Pickup Works
           </SectionHeading>
@@ -910,7 +963,7 @@ export default async function HomePage() {
           surface — that's "hot picks", this is "what's new". CTA links to /menu
           (the iHeartJane Boost embed in prod), safe distinct from /order tree dev. */}
       {justIn.length > 0 && (
-        <section className="py-12 sm:py-16">
+        <section className="py-12 sm:py-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <div className="flex items-end justify-between mb-8 gap-4">
               <SectionHeading align="left" kicker="🆕 New this week">
@@ -997,7 +1050,7 @@ export default async function HomePage() {
           a preview of the in-dev /order tree menu. Restore (drop the `false &&`)
           when /order ships to prod. */}
       {false && featured.length > 0 && (
-        <section className="py-12 sm:py-16">
+        <section className="py-12 sm:py-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <div className="flex items-end justify-between mb-8 gap-4">
               <SectionHeading align="left" kicker="Fresh arrivals & staff favorites">
@@ -1094,7 +1147,7 @@ export default async function HomePage() {
 
       {/* ─── Why Seattle Cannabis Co. ───────────────────────────────────────── */}
       <section className="bg-stone-50 border-y border-stone-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
           <SectionHeading className="mb-10">Why Seattle Cannabis Co.?</SectionHeading>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
             {[
@@ -1149,7 +1202,7 @@ export default async function HomePage() {
 
       {/* ─── Hours + Map ────────────────────────────────────────────────────── */}
       <section className="bg-white border-b border-stone-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           <div className="space-y-6">
             <div>
               <h2 className="text-3xl font-extrabold text-stone-900 tracking-tight">Visit Us</h2>
@@ -1256,41 +1309,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ─── Brands ─────────────────────────────────────────────────────────── */}
-      {brands.length > 0 && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
-          <div className="mb-8">
-            <SectionHeading align="left" kicker="Washington's finest producers, on our shelves">
-              Top Brands
-            </SectionHeading>
-          </div>
-          {featuredBrands.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4">
-              {featuredBrands.map((brand) => (
-                <Link
-                  key={brand.id}
-                  href={`/brands/${brand.slug}`}
-                  className="group flex flex-col items-center justify-center gap-2 p-4 rounded-2xl border border-stone-100 bg-white hover:border-violet-300 hover:shadow-lg hover:shadow-violet-500/15 hover:-translate-y-0.5 transition-all duration-200 aspect-square"
-                >
-                  <Image
-                    src={brand.logoUrl!}
-                    alt={brand.name}
-                    width={120}
-                    height={56}
-                    className="max-h-14 max-w-full object-contain group-hover:scale-105 transition-transform duration-200"
-                    unoptimized
-                  />
-                  <span className="text-xs text-stone-400 group-hover:text-indigo-700 transition-colors text-center leading-tight font-medium">
-                    {brand.name}
-                  </span>
-                </Link>
-              ))}
-            </div>
-          ) : null}
-        </section>
-      )}
-
-      {/* Vendor / house ad slot — under brands carousel */}
+      {/* Vendor / house ad slot */}
       <section className="bg-stone-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
           <VendorAdSlot slot="homepage_under_brands" />
@@ -1302,7 +1321,7 @@ export default async function HomePage() {
           AnnouncementBar / footer / hours card. Page bookends in matching
           depth instead of a flat indigo slab. */}
       <section className="bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 flex flex-col sm:flex-row items-center justify-between gap-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 flex flex-col sm:flex-row items-center justify-between gap-8">
           <div className="space-y-2 text-center sm:text-left">
             <h2 className="text-2xl sm:text-3xl font-extrabold">Ready to order?</h2>
             <p className="text-indigo-300/80 text-sm">
@@ -1310,11 +1329,11 @@ export default async function HomePage() {
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 shrink-0">
-            <PrimaryCTA href={withAttr(STORE.shopUrl, "home", "bottom-order")} variant="light">
-              Order Online — 15% Off
-            </PrimaryCTA>
-            <PrimaryCTA href={withAttr("/menu", "home", "bottom-browse")} variant="secondary">
+            <PrimaryCTA href={withAttr("/menu", "home", "bottom-browse")} variant="light">
               Browse Menu
+            </PrimaryCTA>
+            <PrimaryCTA href={withAttr(STORE.shopUrl, "home", "bottom-order")} variant="secondary">
+              Order Online — 15% Off
             </PrimaryCTA>
           </div>
         </div>

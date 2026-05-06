@@ -188,10 +188,10 @@ export function SiteHeader() {
                 CTA on every page now wears the consistent brand gradient. */}
             <Link
               href={withAttr("/menu", "header", "order-now")}
-              className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-200 shadow-sm animate-gradient bg-[length:200%_auto] ${
+              className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-200 animate-gradient bg-[length:200%_auto] hover:-translate-y-0.5 ${
                 dark
-                  ? "bg-gradient-to-r from-indigo-300 via-fuchsia-200 to-indigo-300 text-indigo-950 hover:from-indigo-200 hover:via-fuchsia-100 hover:to-indigo-200 shadow-black/20"
-                  : "bg-gradient-to-r from-indigo-800 via-violet-700 to-indigo-800 hover:from-indigo-700 hover:via-violet-600 hover:to-indigo-700 text-white shadow-violet-900/20"
+                  ? "bg-gradient-to-r from-indigo-400 via-fuchsia-400 to-violet-500 text-white shadow-lg shadow-violet-600/40 hover:shadow-xl hover:shadow-violet-500/50 hover:scale-[1.03]"
+                  : "bg-gradient-to-r from-indigo-800 via-violet-700 to-indigo-800 hover:from-indigo-700 hover:via-violet-600 hover:to-indigo-700 text-white shadow-md shadow-violet-900/20 hover:shadow-lg hover:shadow-violet-700/30"
               }`}
             >
               Order Now

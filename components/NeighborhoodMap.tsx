@@ -119,7 +119,7 @@ export function NeighborhoodMap({ destinationAddress, fallbackDealShort }: Props
       className="relative bg-gradient-to-b from-white via-indigo-50/40 to-white border-b border-stone-100"
       aria-labelledby="neighborhood-map-heading"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
         <div className="text-center mb-8 sm:mb-12">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-indigo-700">
             Closest shop in South Seattle
@@ -292,7 +292,7 @@ export function NeighborhoodMap({ destinationAddress, fallbackDealShort }: Props
           })}
         </ul>
 
-        <p className="text-center text-xs text-stone-500 mt-8 sm:mt-10">
+        <p className="text-center text-xs text-stone-500 mt-5 sm:mt-6">
           Times are wall-clock from 7266 Rainier Ave S — Link Light Rail runs every 6–10 min
           through Othello Station.
         </p>
