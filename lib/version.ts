@@ -3,6 +3,7 @@
 // comes from Vercel automatically on every deploy and is the authoritative
 // "did my push actually land" signal.
 
+// 4.555 — Homepage hero H1 "Premier Cannabis Shop" → "Favorite Cannabis Shop". Closes the brand-voice violation called out in `Inventory App/docs/brand-voice.md` § Tone calibration: ban on "premier" + "one of the best" — use "the best" or "our favorite" instead. Inventoryapp metadata already swept (changelog v??.?? "premier → best"); Greenlife homepage hero already uses "Favorite"; Seattle was the lone holdout. Customer-voice superlative ("our customers' favorite") beats corporate hedge ("we say we're premier"). Single-word change in the gradient-text focal point. tsc clean.
 // 4.545 — Customer-note echo on the order-confirmation email. Mirror of greenlife-web v3.775. When a customer writes a note at checkout, the receipt email now echoes it back in an amber-bordered '📝 Your note to staff' panel. Plain-text version mirrors with 'Your note to staff:' indented body. Closes the last gap in the customer-note signal chain. lib/order-confirmation-email.ts + /api/orders updated. tsc clean.
 // 4.535 — Customer-note display on /account/orders. Mirror of greenlife-web v3.765. When a customer writes a note on their order, it now shows on the order history card with "📝 Your note to staff" + italic body. Same row block pattern as the substitutions panel. Closes the customer side of the customer-note signal chain. tsc clean.
 // 4.525 — Hybrid color: indigo → emerald on 2 Seattle surfaces. Companion to v4.515. Two boutique-brand templates (`/brands/[slug]/page.tsx` STRAIN_COLORS + `/stash/StashClient.tsx` STRAIN_BADGE) were rendering the Hybrid badge in indigo (Seattle's brand color). Per memory `reference_strain_type_color_convention` the canonical Hybrid hue is emerald/green so customers can scan I/S/H without confusing it with the surrounding store theme. Other 5 Seattle surfaces (OrderMenu, PaginatedProductsGrid, deals/[id], RecentlyViewedAutoStrip, RecentlyViewedStrip) were already on emerald/green — these two were the drift. Greenlife already uses green-100 everywhere; no Greenlife mirror needed. tsc clean.
@@ -58,7 +59,7 @@
 // 4.76 — /apply personality prompts: two optional written prompts (product-recommendation pitch + customer-recovery story) capture personality signal without the photo discrimination risk. Stored in applicants.metadata JSONB on inventoryapp side. Compliance: written-only — no photo (WA RCW 49.60 / EEOC pre-offer photo discrimination risk).
 // 4.465 — /order place-order error messages reassure customer their cart is preserved on failure. Mirror of greenlife-web v3.625.
 // 4.71 — Public /apply form: apply-to-work intake with resume upload + 3 references + 21+ confirmation. POSTs to inventoryapp /api/applications. Compliance: no photo / no SSN / no DOB.
-export const BUILD_VERSION = "4.545";
+export const BUILD_VERSION = "4.555";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ??

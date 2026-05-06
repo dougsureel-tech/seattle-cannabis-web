@@ -226,12 +226,15 @@ export default async function HomePage() {
                 <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-[1.05] tracking-tight">
                   Rainier Valley&apos;s
                   <br />
-                  {/* "Premier" — gradient text indigo→fuchsia→indigo with a
+                  {/* "Favorite" — gradient text indigo→fuchsia→indigo with a
                       slow gradient drift (animate-gradient, 8s loop) so the
                       hero focal point reads as alive instead of static.
-                      Brand-coherent — indigo-anchored on both ends. */}
+                      Brand-coherent — indigo-anchored on both ends. Customer-
+                      voice superlative per docs/brand-voice.md (ban on
+                      "premier" / "one of the best" — use "the best" or "our
+                      favorite" instead). Mirror of greenlife-web hero. */}
                   <span className="animate-gradient bg-gradient-to-r from-indigo-300 via-fuchsia-300 to-indigo-300 bg-clip-text text-transparent">
-                    Premier
+                    Favorite
                   </span>{" "}
                   <span className="text-white/90">Cannabis</span>
                   <br />
