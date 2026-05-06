@@ -196,6 +196,9 @@ export type LoyaltySnapshot = {
   visitCount: number;
   lastVisitAt: string | null;
   tieredFlagOn: boolean;
+  /** Lifetime post-tax spend, in dollars. Powers the tier label + progress on
+   *  the customer-facing /account loyalty card. */
+  lifetimeSpent: number;
 };
 
 export async function getLoyaltyForPortalUser(portalUserId: string): Promise<LoyaltySnapshot | null> {
@@ -209,6 +212,11 @@ export async function getLoyaltyForPortalUser(portalUserId: string): Promise<Loy
         FROM transactions t
         WHERE t.customer_id = c.id AND t.status = 'completed'
       ) AS visit_count,
+      (
+        SELECT COALESCE(SUM(t.total::numeric), 0)::float
+        FROM transactions t
+        WHERE t.customer_id = c.id AND t.status = 'completed'
+      ) AS lifetime_spent,
       COALESCE((SELECT enabled FROM feature_flags WHERE key = 'loyalty_tiered_redemption'), false) AS tiered_flag_on
     FROM portal_users pu
     JOIN customers c ON LOWER(c.email) = LOWER(pu.email)
@@ -219,7 +227,13 @@ export async function getLoyaltyForPortalUser(portalUserId: string): Promise<Loy
     LIMIT 1
   `;
   if (rows.length === 0) return null;
-  const r = rows[0] as { points: number; last_visit_at: Date | null; visit_count: number; tiered_flag_on: boolean };
+  const r = rows[0] as {
+    points: number;
+    last_visit_at: Date | null;
+    visit_count: number;
+    lifetime_spent: number;
+    tiered_flag_on: boolean;
+  };
   const points = r.points ?? 0;
   return {
     points,
@@ -227,6 +241,7 @@ export async function getLoyaltyForPortalUser(portalUserId: string): Promise<Loy
     visitCount: r.visit_count ?? 0,
     lastVisitAt: r.last_visit_at ? r.last_visit_at.toISOString() : null,
     tieredFlagOn: r.tiered_flag_on ?? false,
+    lifetimeSpent: r.lifetime_spent ?? 0,
   };
 }
 
@@ -241,6 +256,11 @@ export async function getLoyaltyByClerkId(clerkUserId: string): Promise<LoyaltyS
         FROM transactions t
         WHERE t.customer_id = c.id AND t.status = 'completed'
       ) AS visit_count,
+      (
+        SELECT COALESCE(SUM(t.total::numeric), 0)::float
+        FROM transactions t
+        WHERE t.customer_id = c.id AND t.status = 'completed'
+      ) AS lifetime_spent,
       COALESCE((SELECT enabled FROM feature_flags WHERE key = 'loyalty_tiered_redemption'), false) AS tiered_flag_on
     FROM portal_users pu
     JOIN customers c ON LOWER(c.email) = LOWER(pu.email)
@@ -251,7 +271,13 @@ export async function getLoyaltyByClerkId(clerkUserId: string): Promise<LoyaltyS
     LIMIT 1
   `;
   if (rows.length === 0) return null;
-  const r = rows[0] as { points: number; last_visit_at: Date | null; visit_count: number; tiered_flag_on: boolean };
+  const r = rows[0] as {
+    points: number;
+    last_visit_at: Date | null;
+    visit_count: number;
+    lifetime_spent: number;
+    tiered_flag_on: boolean;
+  };
   const points = r.points ?? 0;
   return {
     points,
@@ -259,6 +285,7 @@ export async function getLoyaltyByClerkId(clerkUserId: string): Promise<LoyaltyS
     visitCount: r.visit_count ?? 0,
     lastVisitAt: r.last_visit_at ? r.last_visit_at.toISOString() : null,
     tieredFlagOn: r.tiered_flag_on ?? false,
+    lifetimeSpent: r.lifetime_spent ?? 0,
   };
 }
 
