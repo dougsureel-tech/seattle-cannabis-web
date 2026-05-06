@@ -431,18 +431,13 @@ export default async function HomePage() {
       {featuredBrands.length > 0 && (
         <section className="bg-white border-b border-stone-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-            <div className="flex items-baseline justify-between mb-5">
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-indigo-600 mb-1">
-                  Washington&apos;s finest producers
-                </p>
-                <h2 className="text-xl sm:text-2xl font-extrabold text-stone-900 tracking-tight">
-                  Top Brands
-                </h2>
-              </div>
-              <Link href="/brands" className="text-sm font-semibold text-indigo-600 hover:text-indigo-800 transition-colors">
-                All brands →
-              </Link>
+            <div className="mb-5">
+              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-indigo-600 mb-1">
+                Washington&apos;s finest producers
+              </p>
+              <h2 className="text-xl sm:text-2xl font-extrabold text-stone-900 tracking-tight">
+                Top Brands
+              </h2>
             </div>
             <div className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-10 gap-3">
               {featuredBrands.map((brand) => (
