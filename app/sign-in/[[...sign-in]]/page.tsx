@@ -14,7 +14,7 @@ const BENEFITS = [
   { emoji: "🔔", label: "Drop alerts for your favorite brands" },
 ];
 
-// Match Green Life's emerald/green brand instead of Clerk's default blue.
+// Match Seattle Cannabis Co.'s indigo brand instead of Clerk's default blue.
 const clerkAppearance = {
   variables: {
     colorPrimary: "#4338ca", // indigo-700

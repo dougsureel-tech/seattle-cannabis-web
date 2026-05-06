@@ -237,7 +237,7 @@ export default function NWCSBrandPage({
               </h2>
             </div>
             <p className="text-sm text-stone-500 max-w-md">
-              NWCS runs sixteen total — these are the ones that move at Green Life. Ask a budtender
+              NWCS runs sixteen total — these are the ones that move in our case. Ask a budtender
               if you want a sample of what each one does.
             </p>
           </div>

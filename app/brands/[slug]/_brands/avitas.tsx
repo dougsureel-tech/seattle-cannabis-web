@@ -29,7 +29,7 @@ const ABOUT_QA = [
     a: "Indoor flower, pre-roll 10-packs, distillate vape carts (Ultra line), and live-resin carts + disposables. Their flavored vape sub-line ships under the Hellavated label. Pesticide-free cultivation — they fight pests with beneficial fungi, predatory insects, and natural oils instead of sprays.",
   },
   {
-    q: "Why does Green Life carry them?",
+    q: "Why do we carry them?",
     a: "Avitas is one of the consistent volume vape brands on the WA market and the indoor flower lands clean — tight terps, controlled cure. The Live Resin disposables hit a price point that lets a customer try the brand without committing to a battery. The Hellavated flavored line gives us a non-cannabis-flavor-forward option for customers who want vape effect without the gas profile.",
   },
 ];

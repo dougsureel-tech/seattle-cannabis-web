@@ -31,7 +31,7 @@ const ABOUT_QA = [
     a: "Flower-forward operation — bulk and packaged flower across multiple weights, pre-rolls, and infused pre-rolls. They run Columbia Basin sun and seasonal greenhouse cycles, which shows up as bigger, denser harvest-time terpene profiles than year-round indoor.",
   },
   {
-    q: "Why does Green Life carry them?",
+    q: "Why do we carry them?",
     a: "2K Gardens is one of our highest-volume flower vendors — frequently in the top three for total active SKUs in the case. The price-to-quality ratio is the standout: Quincy growers pay a fraction of indoor power costs, and the savings show up as well-priced eighths, pre-rolls, and bulk ounces without the harshness you sometimes get from rushed outdoor cures.",
   },
 ];
