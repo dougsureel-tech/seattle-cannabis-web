@@ -463,9 +463,9 @@ export async function getJustInProducts(limit = 12): Promise<MenuProduct[]> {
 }
 
 // Order: today's day-specific deals FIRST so the daily-deal mailer headline
-// always ranks above accumulated always-on deals (loyalty-stacker, senior-
-// 10, etc.). LIMIT 20 to leave headroom for the daily seed (2 always-on + 3
-// today) plus pre-existing site-specific deals.
+// always ranks above the always-on tier (heroes-30, first-visit-30,
+// industry-20, etc.). LIMIT 20 to leave headroom for the daily seed
+// (2 always-on + 3 today) plus pre-existing site-specific deals.
 export async function getActiveDeals(): Promise<ActiveDeal[]> {
   const sql = getClient();
   const rows = await sql`
