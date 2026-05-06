@@ -331,7 +331,7 @@ export function SiteHeader() {
             onClick={() => setOpen(false)}
             className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-50 border border-indigo-200 text-indigo-800 text-sm font-bold hover:bg-indigo-100 transition-all"
           >
-            ✨ Create Account · 15% off first order
+            <span aria-hidden="true">✨ </span>Create Account · 15% off first order
           </Link>
           {/* Mobile drawer Order Now — same gradient treatment as the
               header desktop button so the brand mark is consistent. */}

@@ -406,7 +406,7 @@ export function MenuSearch({ categories }: { categories: { slug: string; name: s
                   onChange={(e) => setNewOnly(e.target.checked)}
                   className="w-4 h-4 rounded border-stone-300 text-indigo-700 focus:ring-indigo-500"
                 />
-                ✨ Just In (last 7 days)
+                <span aria-hidden="true">✨ </span>Just In (last 7 days)
               </label>
               {activeFilterCount > 0 && (
                 <button
