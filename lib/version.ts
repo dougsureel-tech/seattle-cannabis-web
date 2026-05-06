@@ -3,6 +3,7 @@
 // comes from Vercel automatically on every deploy and is the authoritative
 // "did my push actually land" signal.
 
+// 4.715 — `/heroes/[cohort]` ID-examples list — `aria-hidden="true"` on decorative ✓ checkmark spans. Mirror of greenlife-web v3.955. Example text carries the meaning. tsc clean.
 // 4.705 — `/order/confirmation/[id]` decorative ✓ checkmark icon `aria-hidden="true"`. Mirror of greenlife-web v3.945. Heading 'Order placed / You're all set' carries the meaning. tsc clean.
 // 4.695 — Decorative-emoji a11y sweep — 5 inline span emojis on public-site surfaces wrapped with `aria-hidden="true"`. Mirror of greenlife-web v3.935. (1) /account Place Order 🛒, (2) /account Order History 📋, (3) /order OrderMenu 'All Items' 🛒, (4) /account/heroes 'Bring your ID' 🪪, (5) PushSubscribe Drop Alerts 🔔. tsc clean.
 // 4.685 — Decorative-emoji a11y sweep — `/account` Heroes Discount card 🎖️ aria-hidden. Mirror of greenlife-web v3.925 (Heroes only — no homepage equivalent on Seattle layout). tsc clean.
@@ -74,7 +75,7 @@
 // 4.76 — /apply personality prompts: two optional written prompts (product-recommendation pitch + customer-recovery story) capture personality signal without the photo discrimination risk. Stored in applicants.metadata JSONB on inventoryapp side. Compliance: written-only — no photo (WA RCW 49.60 / EEOC pre-offer photo discrimination risk).
 // 4.465 — /order place-order error messages reassure customer their cart is preserved on failure. Mirror of greenlife-web v3.625.
 // 4.71 — Public /apply form: apply-to-work intake with resume upload + 3 references + 21+ confirmation. POSTs to inventoryapp /api/applications. Compliance: no photo / no SSN / no DOB.
-export const BUILD_VERSION = "4.705";
+export const BUILD_VERSION = "4.715";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ??
