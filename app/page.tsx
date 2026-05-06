@@ -1272,7 +1272,7 @@ export default async function HomePage() {
                 {STORE.phone}
               </a>
               <a
-                href={`mailto:${STORE.email}`}
+                href={`mailto:${STORE.email}?subject=${encodeURIComponent("Question from seattlecannabis.co")}`}
                 className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50 text-sm font-semibold text-stone-700 hover:text-indigo-700 transition-all"
               >
                 <svg

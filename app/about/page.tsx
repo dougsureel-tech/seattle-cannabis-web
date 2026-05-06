@@ -247,7 +247,7 @@ export default function AboutPage() {
                   </svg>
                 </div>
                 <a
-                  href={`mailto:${STORE.email}`}
+                  href={`mailto:${STORE.email}?subject=${encodeURIComponent("Question from seattlecannabis.co")}`}
                   className="font-bold text-indigo-700 hover:text-indigo-600 transition-colors text-sm"
                 >
                   {STORE.email}

@@ -81,7 +81,10 @@ export default function CommunityPage() {
             <div className="flex-1">
               <p className="text-stone-700 leading-relaxed">
                 Past Seattle Cannabis Co. staff — drop us a line at{" "}
-                <a href={`mailto:${STORE.email}`} className="font-semibold text-indigo-700 hover:underline">
+                <a
+                  href={`mailto:${STORE.email}?subject=${encodeURIComponent("Past staff — alumni signup")}`}
+                  className="font-semibold text-indigo-700 hover:underline"
+                >
                   {STORE.email}
                 </a>{" "}
                 and we&apos;ll add you to the roster + send you a code to share with people you send
