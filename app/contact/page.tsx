@@ -77,7 +77,12 @@ export default function ContactPage() {
                   ),
                 },
                 {
-                  href: `mailto:${STORE.email}`,
+                  // Subject prefill so the team can triage incoming emails at
+                  // a glance ("Order question" vs "Vendor pitch" vs spam).
+                  // Hosts that don't honor `?subject=` ignore the param —
+                  // worst case the customer sees an unprefilled email, no
+                  // breakage.
+                  href: `mailto:${STORE.email}?subject=${encodeURIComponent("Question from seattlecannabis.co")}`,
                   label: "Email",
                   value: STORE.email,
                   icon: (

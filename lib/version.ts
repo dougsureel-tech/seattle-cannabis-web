@@ -3,6 +3,7 @@
 // comes from Vercel automatically on every deploy and is the authoritative
 // "did my push actually land" signal.
 
+// 4.435 — `/contact` mailto subject prefill. Mirror of greenlife-web v3.595. Bare `mailto:${STORE.email}` opened a blank email; now prefills `?subject=Question%20from%20seattlecannabis.co` so the team can triage incoming email at a glance. Hosts that don't honor `?subject=` ignore the param — no breakage. NOT included: hint copy steering customers email → phone (Doug 2026-05-05). tsc clean.
 // 4.425 — `/not-found.tsx` now closure-aware. Mirror of greenlife-web v3.585. Parity with the rest of the customer-facing surfaces (`/`, `/menu`, `/order`, `/visit` — all closure-aware since v4.140–v4.160). Pre-fix the 404's "open now" chip used `isOpenNow()` only, ignoring emergency-closure overrides at `/admin/hours-override`. Customer landing on a stale URL on a closure day saw "open now" and could drive over for nothing. Post-fix: `await fetchClosureStatus()` + `const open = isOpenNow() && !closure.isClosed`. Helper has 5s AbortController + graceful-degrades on error. Single-file ship. tsc clean.
 // 4.415 — Brand-name cleanup extends to vendor-ad chips (`<VendorAdSlot>`). Mirror of greenlife-web v3.575. Companion to v4.395 lib-boundary cleaner. `getActiveVendorAds()` was returning raw `v.name` as `vendorName` and `VendorAdSlot.tsx` rendered it in the small "From {vendor}" chip — same legal-entity-suffix problem as the carousel. Now wraps `r.vendor_name` with `cleanBrandName()` (preserving null when null). Single-line change at row mapping site. tsc clean.
 // 4.405 — Customer-facing substitution display on /account/orders + /order/confirmation/[id]. When inventoryapp's POS substitutes an OOS item (per online_orders.substitutions JSONB), the customer's order pages now show a 🔄 "Substitution made by staff" panel listing each {original} → {sub} pair. Mirror of greenlife-web v3.565. portal.ts: OnlineOrder type gains `substitutions: OrderSubstitution[]`, getOrders/getOrder both SELECT o.substitutions, parseSubstitutions defensive parser filters malformed JSONB rows. tsc clean.
@@ -48,7 +49,7 @@
 // 4.81 — /brands/[slug] generic-template renders vendor-authored brand bio + Instagram/X/Facebook handles when filled in via /vmi/profile (inventoryapp). Section sits above the order CTA, only renders when at least one field is non-null. Handles are sanitized to /^[A-Za-z0-9._-]+$/ before being concatenated into URLs (prevents query-param injection or path traversal). Per-brand override components intentionally NOT touched — those are graduated, hand-authored layouts.
 // 4.76 — /apply personality prompts: two optional written prompts (product-recommendation pitch + customer-recovery story) capture personality signal without the photo discrimination risk. Stored in applicants.metadata JSONB on inventoryapp side. Compliance: written-only — no photo (WA RCW 49.60 / EEOC pre-offer photo discrimination risk).
 // 4.71 — Public /apply form: apply-to-work intake with resume upload + 3 references + 21+ confirmation. POSTs to inventoryapp /api/applications. Compliance: no photo / no SSN / no DOB.
-export const BUILD_VERSION = "4.425";
+export const BUILD_VERSION = "4.435";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ??
