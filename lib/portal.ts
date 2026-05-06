@@ -25,6 +25,13 @@ export type PortalUser = {
   heroesSelfAttestType: string | null;
 };
 
+export type OrderSubstitution = {
+  originalName: string;
+  subName: string;
+  originalPrice?: number;
+  subPrice?: number;
+};
+
 export type OnlineOrder = {
   id: string;
   status: "pending" | "preparing" | "ready" | "picked_up" | "cancelled";
@@ -36,6 +43,7 @@ export type OnlineOrder = {
   pickedUpAt: string | null;
   pickupTime: string | null;
   items: OrderItem[];
+  substitutions: OrderSubstitution[];
 };
 
 // Inventoryapp's POS writes `in_progress` and `fulfilled` to online_orders.status
@@ -289,6 +297,26 @@ export async function notifyReadyOrders(portalUserId: string): Promise<{ sent: n
   return { sent: total };
 }
 
+// Defensive parser for the JSONB substitutions column. Filters out malformed
+// rows so a bad value can't break the order page render.
+function parseSubstitutions(raw: unknown): OrderSubstitution[] {
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .filter(
+      (s): s is { originalName: string; subName: string; originalPrice?: number; subPrice?: number } =>
+        typeof s === "object" &&
+        s !== null &&
+        typeof (s as Record<string, unknown>).originalName === "string" &&
+        typeof (s as Record<string, unknown>).subName === "string",
+    )
+    .map((s) => ({
+      originalName: s.originalName,
+      subName: s.subName,
+      originalPrice: typeof s.originalPrice === "number" ? s.originalPrice : undefined,
+      subPrice: typeof s.subPrice === "number" ? s.subPrice : undefined,
+    }));
+}
+
 export async function getOrders(portalUserId: string): Promise<OnlineOrder[]> {
   const sql = getClient();
   const orders = await sql`
@@ -299,7 +327,8 @@ export async function getOrders(portalUserId: string): Promise<OnlineOrder[]> {
       COALESCE(o.placed_at, o.received_at, o.created_at) AS placed_at,
       o.ready_at,
       COALESCE(o.picked_up_at, o.fulfilled_at) AS picked_up_at,
-      o.pickup_time
+      o.pickup_time,
+      o.substitutions
     FROM online_orders o
     WHERE o.portal_user_id = ${portalUserId}
     ORDER BY COALESCE(o.placed_at, o.received_at, o.created_at) DESC NULLS LAST
@@ -332,6 +361,7 @@ export async function getOrders(portalUserId: string): Promise<OnlineOrder[]> {
     pickedUpAt: o.picked_up_at ? (o.picked_up_at as Date).toISOString() : null,
     pickupTime: o.pickup_time ? (o.pickup_time as Date).toISOString() : null,
     items: itemsByOrder.get(o.id as string) ?? [],
+    substitutions: parseSubstitutions(o.substitutions),
   }));
 }
 
@@ -422,7 +452,8 @@ export async function getOrder(
       COALESCE(o.placed_at, o.received_at, o.created_at) AS placed_at,
       o.ready_at,
       COALESCE(o.picked_up_at, o.fulfilled_at) AS picked_up_at,
-      o.pickup_time
+      o.pickup_time,
+      o.substitutions
     FROM online_orders o
     WHERE o.id = ${orderId} AND o.portal_user_id = ${portalUserId}
     LIMIT 1
@@ -442,6 +473,7 @@ export async function getOrder(
     pickedUpAt: r.picked_up_at ? (r.picked_up_at as Date).toISOString() : null,
     pickupTime: r.pickup_time ? (r.pickup_time as Date).toISOString() : null,
     items: items.map(mapOrderItem),
+    substitutions: parseSubstitutions(r.substitutions),
   };
 }
 
