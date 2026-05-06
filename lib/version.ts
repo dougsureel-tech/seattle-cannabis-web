@@ -3,6 +3,7 @@
 // comes from Vercel automatically on every deploy and is the authoritative
 // "did my push actually land" signal.
 
+// 4.645 — `app/global-error.tsx` — `aria-hidden="true"` on the decorative 😔 emoji wrapper. Mirror of greenlife-web v3.885. Catastrophic-fallback page had `<div>😔</div>` which screen readers announced as 'frowning face' before the actual heading. aria-hidden lets assistive tech skip the decoration. tsc clean.
 // 4.635 — `/visit` hero — fix duplicate Tailwind breakpoint that dead-coded `sm:py-14`. Mirror of greenlife-web v3.875. Pre-fix the hero container had `py-10 sm:py-14 sm:py-20` (two `sm:` rules — last wins so it effectively rendered `py-10 sm:py-20`, skipping the medium step entirely). Post-fix: `py-10 sm:py-14 lg:py-20` — clean three-step responsive scale (mobile → tablet → desktop). tsc clean.
 // 4.625 — `/community` plain-text email mentions converted to clickable mailto links with contextual subject prefills. Mirror of greenlife-web v3.865. Pre-fix the "Featured creators · Coming soon" + "Featured local businesses · Coming soon" blocks rendered STORE.email as plain text. Post-fix: each mention is `<a href="mailto:...?subject=...">` with indigo-700 font-semibold underline + contextual subject ("Featured creator — interested" / "Featured local business — interested") so the inbox can route inbound by intent. Closes the last two un-clickable email mentions on Seattle's public site. tsc clean.
 // 4.615 — PWA manifest shortcuts aligned with Greenlife pattern. Pre-fix Seattle's PWA shortcuts ("Order Online" / "Browse Menu" / "Account") lacked the `description` field that Greenlife shortcuts include ("Place a pickup order" / "See what's in stock today"). Description renders alongside the shortcut label on long-press menus across iOS / Android / desktop PWA installs. Also normalized "Order Online" → "Order for Pickup" — more specific + matches Greenlife's wording (the order IS for pickup; we don't ship). tsc clean.
@@ -67,7 +68,7 @@
 // 4.76 — /apply personality prompts: two optional written prompts (product-recommendation pitch + customer-recovery story) capture personality signal without the photo discrimination risk. Stored in applicants.metadata JSONB on inventoryapp side. Compliance: written-only — no photo (WA RCW 49.60 / EEOC pre-offer photo discrimination risk).
 // 4.465 — /order place-order error messages reassure customer their cart is preserved on failure. Mirror of greenlife-web v3.625.
 // 4.71 — Public /apply form: apply-to-work intake with resume upload + 3 references + 21+ confirmation. POSTs to inventoryapp /api/applications. Compliance: no photo / no SSN / no DOB.
-export const BUILD_VERSION = "4.635";
+export const BUILD_VERSION = "4.645";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ??
