@@ -9,7 +9,7 @@ import type { MenuProduct } from "@/lib/db";
 const STRAIN_BADGE: Record<string, string> = {
   Sativa: "bg-red-100 text-red-700 border-red-200",
   Indica: "bg-purple-100 text-purple-700 border-purple-200",
-  Hybrid: "bg-indigo-100 text-indigo-700 border-indigo-200",
+  Hybrid: "bg-emerald-100 text-emerald-700 border-emerald-200",
 };
 
 const CAT_ICONS: Record<string, string> = {
