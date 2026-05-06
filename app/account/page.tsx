@@ -278,14 +278,14 @@ export default async function AccountPage({ searchParams }: Props) {
           href="/menu"
           className="group flex flex-col items-center gap-2.5 p-5 rounded-2xl bg-indigo-800 hover:bg-indigo-700 text-white transition-all text-center hover:-translate-y-0.5 shadow-md shadow-indigo-900/20"
         >
-          <span className="text-2xl">🛒</span>
+          <span className="text-2xl" aria-hidden="true">🛒</span>
           <span className="text-sm font-bold">Place Order</span>
         </Link>
         <Link
           href="/account/orders"
           className="group flex flex-col items-center gap-2.5 p-5 rounded-2xl border border-stone-200 bg-white hover:border-indigo-300 hover:shadow-sm transition-all text-center"
         >
-          <span className="text-2xl">📋</span>
+          <span className="text-2xl" aria-hidden="true">📋</span>
           <span className="text-sm font-bold text-stone-700">Order History</span>
         </Link>
       </div>
