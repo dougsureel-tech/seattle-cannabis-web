@@ -169,6 +169,18 @@ export async function POST(req: NextRequest) {
   // confirm whether the customer row exists — preserves the privacy
   // posture noted at the top of the file (server side learns nothing
   // an attacker probing this endpoint couldn't already learn).
+  // Retroactive PWA-install attribution — when an OTP sign-in arrives from
+  // a device that already has the install cookie (`scc_pwa_installed=1`,
+  // dropped by /api/track-install on first standalone-mode hit), back-fill
+  // `customers.scc_app_installed_at` for the customer. /api/track-install
+  // only sets this when a Clerk session is active, but the typical flow is
+  // (a) install PWA anonymously → (b) open /rewards → (c) sign in via OTP.
+  // Without this hook, step (a)'s install never gets attributed to the
+  // customer at all and the migration-funnel "Installed" tile undercounts
+  // by exactly the install-before-signin cohort. Same `after()` block as
+  // the rewards_signed_in_at stamp; same idempotent COALESCE guard.
+  const isInstalledDevice = req.cookies.get("scc_pwa_installed")?.value === "1";
+
   after(async () => {
     try {
       await sql`
@@ -176,6 +188,13 @@ export async function POST(req: NextRequest) {
         SET rewards_signed_in_at = COALESCE(rewards_signed_in_at, NOW())
         WHERE phone = ${phoneE164}
       `;
+      if (isInstalledDevice) {
+        await sql`
+          UPDATE customers
+          SET scc_app_installed_at = COALESCE(scc_app_installed_at, NOW())
+          WHERE phone = ${phoneE164}
+        `;
+      }
     } catch (err) {
       console.error("[verify-code] rewards_signed_in_at update failed:", err);
     }
