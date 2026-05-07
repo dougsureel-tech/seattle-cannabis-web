@@ -15,6 +15,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { readRewardsSession, REWARDS_COOKIE_NAME } from "@/lib/rewards-session";
 import { getClient } from "@/lib/db";
+import { AddToHomeScreen } from "../AddToHomeScreen";
 import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
@@ -161,6 +162,11 @@ export default async function RewardsDashboardPage() {
             </p>
           </div>
         </div>
+
+        {/* Add to Home Screen — auto-hides if installed or dismissed.
+            Renders here so the customer sees it after the points hero
+            (delight first, install nudge second). */}
+        <AddToHomeScreen />
 
         {/* Redeem + History nav cards */}
         <div className="grid grid-cols-1 gap-2">
