@@ -26,7 +26,7 @@
 //   - Each verify increments `attempts` on the most-recent row.
 //   - At 5 attempts the row is silently treated as exhausted.
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse, after } from "next/server";
 import { getClient } from "@/lib/db";
 import { normalizeToE164 } from "@/lib/sms";
 import { createHash, createHmac } from "node:crypto";
@@ -157,5 +157,29 @@ export async function POST(req: NextRequest) {
     path: "/rewards",
     maxAge: SESSION_TTL_DAYS * 86_400,
   });
+
+  // SpringBig→SCC migration funnel (Doug 2026-05-07): stamp first
+  // /rewards sign-in for migration-funnel reporting on inventoryapp
+  // /admin/marketing. Schema added in inventoryapp migration 0215
+  // (rewards_signed_in_at TIMESTAMPTZ, NULL = not yet signed in via
+  // the new flow). Idempotent — only sets when NULL so subsequent
+  // sign-ins don't bump the timestamp + lose the "first sign-in"
+  // signal. Fired via `after()` so the response isn't blocked by
+  // the UPDATE (and a UPDATE failure can't break login). Does NOT
+  // confirm whether the customer row exists — preserves the privacy
+  // posture noted at the top of the file (server side learns nothing
+  // an attacker probing this endpoint couldn't already learn).
+  after(async () => {
+    try {
+      await sql`
+        UPDATE customers
+        SET rewards_signed_in_at = COALESCE(rewards_signed_in_at, NOW())
+        WHERE phone = ${phoneE164}
+      `;
+    } catch (err) {
+      console.error("[verify-code] rewards_signed_in_at update failed:", err);
+    }
+  });
+
   return res;
 }
