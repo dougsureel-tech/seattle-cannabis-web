@@ -20,17 +20,25 @@
 // and the OTP migration ships.
 
 import type { Metadata } from "next";
-import { LookupForm } from "./LookupForm";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import Link from "next/link";
+import { readRewardsSession, REWARDS_COOKIE_NAME } from "@/lib/rewards-session";
 
+export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
-  title: "Rewards — check your points balance",
+  title: "Rewards — your points balance",
   description:
-    "Seattle Cannabis Co rewards lookup. Enter your phone to see your points balance + tier.",
-  robots: { index: false }, // V0 — keep out of Google until OTP-hardened.
+    "Seattle Cannabis Co rewards. Sign in with your phone to see your points balance, tier, and lifetime stats.",
+  robots: { index: false },
 };
 
-export default function RewardsLandingPage() {
+export default async function RewardsLandingPage() {
+  // If they already have a session, jump straight to the dashboard.
+  const cookieStore = await cookies();
+  const session = readRewardsSession(cookieStore.get(REWARDS_COOKIE_NAME)?.value);
+  if (session) redirect("/rewards/dashboard");
+
   return (
     <div className="min-h-[70vh] bg-white">
       <div className="max-w-md mx-auto px-4 sm:px-6 py-10 sm:py-14">
@@ -42,13 +50,21 @@ export default function RewardsLandingPage() {
             Your points, on your phone.
           </h1>
           <p className="text-stone-500 text-sm sm:text-base">
-            Punch in the number you give us at the register. Same balance,
-            no app to install.
+            Sign in with the number you give us at the register. Same
+            balance, no app to install.
           </p>
         </div>
 
-        <div className="mt-8 sm:mt-10 rounded-3xl border border-stone-200 bg-white p-6 sm:p-7 shadow-sm">
-          <LookupForm />
+        <div className="mt-8 sm:mt-10 rounded-3xl bg-gradient-to-br from-indigo-700 to-indigo-900 text-white p-7 sm:p-8 shadow-lg shadow-indigo-900/30 text-center space-y-4">
+          <p className="text-sm text-indigo-100">
+            We&apos;ll text you a 6-digit code so it&apos;s really you.
+          </p>
+          <Link
+            href="/rewards/login"
+            className="block w-full rounded-2xl bg-white hover:bg-stone-50 text-indigo-800 font-bold py-3.5 text-base transition-all hover:-translate-y-0.5"
+          >
+            Sign in with phone →
+          </Link>
         </div>
 
         <div className="mt-6 rounded-2xl bg-amber-50 border border-amber-200 px-4 py-3 text-xs text-amber-900 leading-relaxed">
@@ -60,15 +76,15 @@ export default function RewardsLandingPage() {
 
         <div className="mt-8 space-y-3 text-sm text-center">
           <Link
-            href="/sign-up"
+            href="/account/sign-in"
             className="block w-full rounded-2xl border border-stone-200 bg-white hover:border-indigo-300 hover:shadow-sm px-5 py-3.5 font-semibold text-stone-700 transition-all"
           >
-            Want full account features?{" "}
-            <span className="text-indigo-700">Create an account →</span>
+            Have an account with email?{" "}
+            <span className="text-indigo-700">Sign in here →</span>
           </Link>
           <p className="text-xs text-stone-400 px-4">
             Order history, ready-for-pickup alerts, and one-tap re-orders
-            need an account. Lookup is fine for just-the-points.
+            live in your full account.
           </p>
         </div>
       </div>

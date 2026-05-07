@@ -1,15 +1,13 @@
 "use client";
 
+// DEPRECATED — V0 query-string lookup. Replaced by /rewards/login +
+// /rewards/verify (OTP-gated). Kept here only so the /rewards/balance
+// page still has a form to submit to during the cutover testing
+// window. Once the OTP flow is verified end-to-end in production with
+// real customer data, /rewards/balance + this form get deleted.
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-
-// Phone-lookup form. Client component for inline validation + UX —
-// the actual lookup happens server-side via the /rewards/balance route
-// reading from `customers` in Postgres.
-//
-// Validation: at least 10 digits before submit. Server normalizes to
-// E.164 anyway; this is just so the customer sees an immediate error
-// instead of bouncing through a server roundtrip.
 
 export function LookupForm() {
   const router = useRouter();

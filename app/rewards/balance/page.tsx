@@ -1,9 +1,13 @@
 // /rewards/balance?phone=<digits> — read-only points balance lookup.
 //
+// DEPRECATED — V0 query-string lookup. Replaced by /rewards/dashboard
+// (OTP-gated). Kept here only as a fallback during the cutover testing
+// window. /rewards/page.tsx no longer routes to this; LookupForm is
+// orphaned but kept compiling. Slated for deletion once the OTP flow
+// is verified end-to-end against real customer data.
+//
 // V0 of the SpringBig-cutover Track B PWA per
-// /CODE/Green Life/PLAN_SPRINGBIG_CUTOVER_5_25.md. Customer enters
-// phone on /rewards, lands here with the phone in the query string;
-// we look up the customers row and render a privacy-conservative card.
+// /CODE/Green Life/PLAN_SPRINGBIG_CUTOVER_5_25.md.
 //
 // PII MINIMIZATION (privacy posture without OTP):
 //   - Show: first name + last initial + points balance + tier label
