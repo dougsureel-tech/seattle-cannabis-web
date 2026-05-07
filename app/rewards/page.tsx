@@ -1,23 +1,26 @@
-// /rewards — phone-lookup landing for Seattle Cannabis Co loyalty.
+// /rewards — landing page for Seattle Cannabis Co loyalty PWA.
 //
-// V0 scaffold for the SpringBig cutover (Track B per
-// /CODE/Green Life/PLAN_SPRINGBIG_CUTOVER_5_25.md). Lets a customer
-// punch in their phone to see their points balance + tier without
-// needing a Clerk account first.
+// Replaces SpringBig as the customer-facing loyalty surface (Track B per
+// /CODE/Green Life/PLAN_SPRINGBIG_CUTOVER_5_25.md). When a returning
+// customer hits this URL with a valid `gl_customer` session cookie they
+// jump straight to /rewards/dashboard. Cold visitors land here, click
+// the CTA, and start the phone-OTP flow at /rewards/login.
 //
-// Privacy posture (no OTP yet — that ships Track B Week 1 with a new
-// loyalty_otp_codes table in the Inventory App schema):
-//   - Result page shows ONLY first name + last initial + points +
-//     lifetime-spent. No email, no address, no DOB, no ID, no full
-//     last name.
-//   - Rate limit: TODO Track B Week 1 (per-IP, 5 lookups/hr).
-//   - "Claim this account" CTA → /sign-up routes to Clerk + binds the
-//     customer-row to the new portal_user via email match (existing
-//     /account flow).
+// Auth: phone-OTP via the inventoryapp `/api/customer/auth/send-code` +
+// `/api/customer/auth/verify` endpoints (loyalty_otp_codes table, mig
+// 0204 in inventoryapp). 6-digit code, 10-min TTL, 5-attempts cap, single-
+// use, hashed-at-rest. Session cookie name `gl_customer` (purpose-namespaced
+// HMAC, 30-day TTL, HttpOnly + Secure + SameSite=lax).
 //
-// This page is intentionally simple — the auth hardening + redemption
-// catalog + history land in subsequent commits as Doug confirms branding
-// and the OTP migration ships.
+// Surfaces post-auth:
+//   - /rewards/dashboard — points, tier, redemption catalog
+//   - /rewards/history — visit + earnings history
+//   - /rewards/redeem — pick a tier → mint a redemption-intent token →
+//     QR for the budtender to scan at /pos/checkout
+//   - /rewards (this page) — landing for cold visitors only
+//
+// Add-to-Home-Screen banner on first visit (AddToHomeScreen.tsx mounted
+// on dashboard) walks them through pinning the PWA so it feels like an app.
 
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
