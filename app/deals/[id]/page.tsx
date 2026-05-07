@@ -32,6 +32,21 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
       robots: { index: false, follow: false },
     };
   }
+  // App-only deals — also gate OG preview metadata so a shared link's
+  // unfurl preview (Messages/Slack/Discord) doesn't leak the discount
+  // amount before the recipient's installed. Same install-cookie gate
+  // as the page render below.
+  if (deal.appOnly) {
+    const { cookies } = await import("next/headers");
+    const cookieStore = await cookies();
+    const isInstalled = cookieStore.get("scc_pwa_installed")?.value === "1";
+    if (!isInstalled) {
+      return {
+        title: "Deal not found",
+        robots: { index: false, follow: false },
+      };
+    }
+  }
   const desc = deal.description ?? `${deal.short} at ${STORE.name} in ${STORE.address.city}, WA.`;
   return {
     title: `${deal.short} — ${deal.name}`,
@@ -58,6 +73,22 @@ export default async function DealDetailPage({ params }: Params) {
   const dealResult = await getDealById(id).catch(() => null);
   if (!dealResult) notFound();
   const deal = dealResult;
+
+  // App-only deals — visible only to PWA-installed visitors. Pre-fix the
+  // deep page hardcoded `appOnly: false` upstream, so a customer could
+  // share /deals/<app-only-id> and a non-installed recipient could view
+  // the full discount details, bypassing the install incentive that's
+  // the whole point. Mirror of /deals page filter (which uses the same
+  // cookie via getActiveDeals({ includeAppOnly })). Behavior: if the
+  // deal is app-only AND the visitor doesn't have the install cookie,
+  // 404 — same response shape as a stale/expired share link, which
+  // already happens organically.
+  if (deal.appOnly) {
+    const { cookies } = await import("next/headers");
+    const cookieStore = await cookies();
+    const isInstalled = cookieStore.get("scc_pwa_installed")?.value === "1";
+    if (!isInstalled) notFound();
+  }
 
   const isScoped = !!deal.appliesTo && deal.appliesTo !== "all";
   const [eta, previewProducts] = await Promise.all([
