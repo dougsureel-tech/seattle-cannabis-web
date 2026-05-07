@@ -218,7 +218,6 @@ export default async function RewardsDashboardPage() {
         <div className="rounded-2xl border border-stone-200 bg-stone-50 px-5 py-4 text-sm text-stone-700 space-y-2">
           <p className="font-semibold text-stone-800">Coming soon</p>
           <ul className="space-y-1.5 text-stone-600 text-[13px] leading-relaxed">
-            <li className="text-stone-400">· Add to your home screen for one-tap access</li>
             <li className="text-stone-400">· Birthday + tier-up bonuses surfaced here</li>
             <li className="text-stone-400">· Push alerts when your order is ready</li>
           </ul>
@@ -251,7 +250,7 @@ function NotFoundCard({ phone }: { phone: string }) {
     <div className="min-h-[60vh] bg-white">
       <div className="max-w-md mx-auto px-4 sm:px-6 py-12 space-y-6">
         <div className="rounded-3xl border border-stone-200 bg-white p-7 sm:p-8 text-center space-y-4">
-          <div className="text-3xl">🌱</div>
+          <div className="text-3xl" aria-hidden="true">🌱</div>
           <h1 className="text-2xl font-extrabold text-stone-900">
             We don&apos;t have you on file yet
           </h1>

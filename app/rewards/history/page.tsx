@@ -179,7 +179,7 @@ function VisitRow({ visit }: { visit: VisitRow }) {
 function EmptyHistoryCard() {
   return (
     <div className="rounded-3xl border border-stone-200 bg-stone-50 p-7 text-center space-y-3">
-      <div className="text-3xl">🌱</div>
+      <div className="text-3xl" aria-hidden="true">🌱</div>
       <p className="font-bold text-stone-900">No visits yet</p>
       <p className="text-stone-500 text-sm">
         Your first visit will show up here. Drop by + we&apos;ll get you
@@ -200,7 +200,7 @@ function NoCustomerCard({ phone }: { phone: string }) {
     <div className="min-h-[60vh] bg-white">
       <div className="max-w-md mx-auto px-4 sm:px-6 py-12 space-y-6">
         <div className="rounded-3xl border border-stone-200 bg-white p-7 text-center space-y-4">
-          <div className="text-3xl">🌱</div>
+          <div className="text-3xl" aria-hidden="true">🌱</div>
           <h1 className="text-2xl font-extrabold text-stone-900">
             We don&apos;t have you on file yet
           </h1>

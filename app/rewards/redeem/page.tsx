@@ -17,7 +17,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { readRewardsSession, REWARDS_COOKIE_NAME } from "@/lib/rewards-session";
 import { getClient } from "@/lib/db";
-import { REDEMPTION_TIERS } from "@/lib/redemption-tiers";
+import { REDEMPTION_TIERS, type RedemptionTier } from "@/lib/redemption-tiers";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
@@ -136,8 +136,6 @@ export default async function RewardsRedeemPage() {
     </div>
   );
 }
-
-import type { RedemptionTier } from "@/lib/redemption-tiers";
 
 function TierCard({
   tier,
