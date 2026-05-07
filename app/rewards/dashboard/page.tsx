@@ -15,6 +15,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { readRewardsSession, REWARDS_COOKIE_NAME } from "@/lib/rewards-session";
 import { getClient } from "@/lib/db";
+import { getTierProgress } from "@/lib/loyalty-tiers";
 import { AddToHomeScreen } from "../AddToHomeScreen";
 import type { Metadata } from "next";
 
@@ -23,12 +24,6 @@ export const metadata: Metadata = {
   title: "Your rewards",
   robots: { index: false },
 };
-
-function tierLabel(points: number): { label: string; nextAt: number | null } {
-  if (points >= 750) return { label: "Gold", nextAt: null };
-  if (points >= 250) return { label: "Silver", nextAt: 750 };
-  return { label: "Bronze", nextAt: 250 };
-}
 
 type CustomerRow = {
   first_name: string;
@@ -82,12 +77,18 @@ export default async function RewardsDashboardPage() {
   const firstName = (c.first_name ?? "").trim() || "Friend";
   const lastInitial = (c.last_name ?? "").trim().charAt(0).toUpperCase();
   const points = c.loyalty_points ?? 0;
-  const tier = tierLabel(points);
-  const progressPct = tier.nextAt
-    ? Math.min(100, Math.round((points / tier.nextAt) * 100))
-    : 100;
   const visitCount = c.visit_count ?? 0;
   const lifetimeSpend = c.lifetime_spend ?? 0;
+  // Use canonical 4-tier table from `lib/loyalty-tiers` keyed on
+  // lifetime spend — same vocabulary the customer sees on their POS
+  // receipt + lifecycle emails (Visitor/Regular/Local/Family). The
+  // pre-fix Bronze/Silver/Gold/POINTS-keyed local helper diverged from
+  // the inventoryapp SSoT, so the same customer would see different
+  // tier names depending on whether they read their email or opened
+  // the PWA.
+  const tierProgress = getTierProgress(lifetimeSpend);
+  const tier = { label: tierProgress.tier.label, nextAt: tierProgress.nextTier?.minSpend ?? null };
+  const progressPct = Math.round(tierProgress.progressPct);
   const memberSinceMs = c.created_at instanceof Date ? c.created_at.getTime() : null;
   const memberSinceLabel = memberSinceMs
     ? new Date(memberSinceMs).toLocaleDateString("en-US", {
@@ -125,13 +126,13 @@ export default async function RewardsDashboardPage() {
           </p>
         </div>
 
-        {/* Tier progress */}
-        {tier.nextAt && (
+        {/* Tier progress — keyed on lifetime spend (matches POS/email vocabulary) */}
+        {tierProgress.nextTier && tierProgress.toNext != null && (
           <div className="rounded-2xl border border-stone-200 bg-white p-5">
             <div className="flex items-center justify-between text-sm font-semibold text-stone-700 mb-2">
-              <span>{tier.label} → next tier</span>
+              <span>{tier.label} → {tierProgress.nextTier.label}</span>
               <span className="text-stone-400 tabular-nums">
-                {tier.nextAt - points} pts to go
+                ${Math.round(tierProgress.toNext).toLocaleString()} to go
               </span>
             </div>
             <div className="h-2 rounded-full bg-stone-100 overflow-hidden">

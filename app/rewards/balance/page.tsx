@@ -51,16 +51,6 @@ function normalizeToE164(input: string): string {
   return trimmed;
 }
 
-function tierLabel(points: number): { label: string; nextAt: number | null } {
-  // Mirrors the inventoryapp loyalty-tier engine for display purposes
-  // only. Actual redemption math runs at POS via lib/loyalty-redemption.
-  // Bronze 0-249 / Silver 250-749 / Gold 750+ — kept simple for the
-  // customer-facing card. Real cliff is 300/400 redemption tiers.
-  if (points >= 750) return { label: "Gold", nextAt: null };
-  if (points >= 250) return { label: "Silver", nextAt: 750 };
-  return { label: "Bronze", nextAt: 250 };
-}
-
 type CustomerRow = {
   first_name: string;
   last_name: string;
@@ -97,10 +87,6 @@ export default async function RewardsBalancePage({ searchParams }: Props) {
   const firstName = (c.first_name ?? "").trim() || "Friend";
   const lastInitial = (c.last_name ?? "").trim().charAt(0).toUpperCase();
   const points = c.loyalty_points ?? 0;
-  const tier = tierLabel(points);
-  const progressPct = tier.nextAt
-    ? Math.min(100, Math.round((points / tier.nextAt) * 100))
-    : 100;
 
   return (
     <div className="min-h-[70vh] bg-white">
@@ -125,34 +111,33 @@ export default async function RewardsBalancePage({ searchParams }: Props) {
             {points.toLocaleString()}
           </div>
           <p className="mt-2 text-sm text-indigo-100/90">
-            <span className="font-semibold">{tier.label}</span> tier
+            See your tier on the full dashboard.
           </p>
         </div>
 
-        {/* Tier progress */}
-        {tier.nextAt && (
-          <div className="rounded-2xl border border-stone-200 bg-white p-5">
-            <div className="flex items-center justify-between text-sm font-semibold text-stone-700 mb-2">
-              <span>{tier.label} → next tier</span>
-              <span className="text-stone-400 tabular-nums">
-                {tier.nextAt - points} pts to go
-              </span>
-            </div>
-            <div className="h-2 rounded-full bg-stone-100 overflow-hidden">
-              <div
-                className="h-full bg-indigo-600 transition-all"
-                style={{ width: `${progressPct}%` }}
-              />
-            </div>
-          </div>
-        )}
+        {/* Pre-fix this V0 page rendered a Bronze/Silver/Gold tier
+            keyed on POINTS — diverged from the canonical Visitor /
+            Regular / Local / Family table (keyed on lifetime spend)
+            that POS receipts + lifecycle emails use. Rather than
+            duplicate the canonical computation here AND violate the
+            page-header PII-minimization rule (lifetime spend gated to
+            /rewards/dashboard behind OTP), the tier display is
+            removed. Route customers to the OTP-authed dashboard for
+            their authoritative tier. This page is a deprecated V0
+            fallback anyway, slated for deletion once OTP is verified
+            end-to-end. */}
 
         {/* What you can do here today (V0 honest-disclosure) */}
         <div className="rounded-2xl border border-stone-200 bg-stone-50 px-5 py-4 text-sm text-stone-700 space-y-2">
           <p className="font-semibold text-stone-800">What this page does today</p>
           <ul className="space-y-1.5 text-stone-600 text-[13px] leading-relaxed">
             <li>✓ Shows your current points balance</li>
-            <li>✓ Shows your tier + progress to the next one</li>
+            <li>
+              ✓ For your tier + progress, sign in at{" "}
+              <Link href="/rewards" className="text-indigo-700 underline underline-offset-2">
+                /rewards
+              </Link>
+            </li>
             <li className="text-stone-400">
               · Redemption catalog + visit history coming soon
             </li>
