@@ -1,4 +1,4 @@
-import { isOpenNow, nextOpenLabel, STORE, minutesUntilClose, getOrderingStatus } from "@/lib/store";
+import { isOpenNow, nextOpenLabel, STORE, STORE_TZ, minutesUntilClose, getOrderingStatus } from "@/lib/store";
 import { getActiveDeals } from "@/lib/db";
 
 // Within this window before close, swap the static hours line for a live
@@ -10,7 +10,7 @@ const CLOSING_SOON_WINDOW_MIN = 90;
 export async function AnnouncementBar() {
   const open = isOpenNow();
   const status = nextOpenLabel();
-  const today = new Date().toLocaleDateString("en-US", { weekday: "long", timeZone: "America/Los_Angeles" });
+  const today = new Date().toLocaleDateString("en-US", { weekday: "long", timeZone: STORE_TZ });
   const todayHours = STORE.hours.find((h) => h.day === today);
   const minsLeft = minutesUntilClose();
   const orderingStatus = getOrderingStatus();

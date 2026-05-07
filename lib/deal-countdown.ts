@@ -4,6 +4,8 @@
 // directive into its module graph (Next 16 / React 19 throws if a server
 // component imports a value from a "use client" file).
 
+import { STORE_TZ } from "./store";
+
 export type DealCountdownState = {
   label: string;
   urgent: boolean;
@@ -30,10 +32,10 @@ export function computeDealCountdown(endDate: string | null): DealCountdownState
     const hours = Math.ceil(ms / 3_600_000);
     if (hours <= 24 && hours > 0) {
       const todayPt = new Date(
-        new Date().toLocaleString("en-US", { timeZone: "America/Los_Angeles" }),
+        new Date().toLocaleString("en-US", { timeZone: STORE_TZ }),
       );
       const endPt = new Date(
-        new Date(end).toLocaleString("en-US", { timeZone: "America/Los_Angeles" }),
+        new Date(end).toLocaleString("en-US", { timeZone: STORE_TZ }),
       );
       const sameDay =
         todayPt.getFullYear() === endPt.getFullYear() &&

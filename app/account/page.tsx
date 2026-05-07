@@ -7,7 +7,7 @@ import {
   getOrders,
   getLoyaltyForPortalUser,
 } from "@/lib/portal";
-import { STORE, hoursSummary } from "@/lib/store";
+import { STORE, STORE_TZ, hoursSummary } from "@/lib/store";
 import { sendWelcomeEmail } from "@/lib/welcome-email";
 import { PushSubscribe } from "@/components/PushSubscribe";
 import { LoyaltyCard } from "@/components/LoyaltyCard";
@@ -38,7 +38,7 @@ const STATUS_ICON: Record<string, string> = {
   cancelled: "✕",
 };
 
-const TZ = "America/Los_Angeles";
+const TZ = STORE_TZ;
 
 function fmtTime(iso: string): string {
   return new Date(iso).toLocaleTimeString("en-US", { timeZone: TZ, hour: "numeric", minute: "2-digit" });

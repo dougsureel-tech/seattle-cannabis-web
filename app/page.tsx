@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { STORE, isOpenNow, nextOpenLabel } from "@/lib/store";
+import { STORE, STORE_TZ, isOpenNow, nextOpenLabel } from "@/lib/store";
 import { withAttr } from "@/lib/attribution";
 import { getActiveBrands, getActiveDeals, getFeaturedProducts, getJustInProducts, getTreasureChestProducts } from "@/lib/db";
 import { fetchClosureStatus } from "@/lib/closure-status";
@@ -152,7 +152,7 @@ export default async function HomePage() {
   // closed store. ClosureBanner above the hero gives the reason inline.
   const open = isOpenNow() && !closure.isClosed;
   const statusLabel = nextOpenLabel();
-  const today = new Date().toLocaleDateString("en-US", { weekday: "long", timeZone: "America/Los_Angeles" });
+  const today = new Date().toLocaleDateString("en-US", { weekday: "long", timeZone: STORE_TZ });
   const todayHours = STORE.hours.find((h) => h.day === today);
 
   return (

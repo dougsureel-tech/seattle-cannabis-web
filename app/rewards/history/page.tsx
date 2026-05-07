@@ -14,6 +14,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { readRewardsSession, REWARDS_COOKIE_NAME } from "@/lib/rewards-session";
 import { getClient } from "@/lib/db";
+import { STORE_TZ } from "@/lib/store";
 import { RewardsBottomNav } from "../RewardsBottomNav";
 
 export const dynamic = "force-dynamic";
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
   robots: { index: false },
 };
 
-const TZ = "America/Los_Angeles";
+const TZ = STORE_TZ;
 
 type VisitRow = {
   id: string;
