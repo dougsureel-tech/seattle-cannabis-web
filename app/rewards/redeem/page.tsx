@@ -18,6 +18,7 @@ import type { Metadata } from "next";
 import { readRewardsSession, REWARDS_COOKIE_NAME } from "@/lib/rewards-session";
 import { getClient } from "@/lib/db";
 import { REDEMPTION_TIERS, type RedemptionTier } from "@/lib/redemption-tiers";
+import { RewardsBottomNav } from "../RewardsBottomNav";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
@@ -134,12 +135,13 @@ export default async function RewardsRedeemPage() {
           </Link>
           <Link
             href="/rewards/dashboard"
-            className="block text-sm text-stone-400 hover:text-stone-600 font-medium"
+            className="block text-sm text-stone-400 hover:text-stone-600 font-medium min-h-[44px] py-2"
           >
             ← Back to dashboard
           </Link>
         </div>
       </div>
+      <RewardsBottomNav active="redeem" />
     </div>
   );
 }

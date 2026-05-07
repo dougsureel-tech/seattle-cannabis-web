@@ -14,6 +14,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { readRewardsSession, REWARDS_COOKIE_NAME } from "@/lib/rewards-session";
 import { getClient } from "@/lib/db";
+import { RewardsBottomNav } from "../RewardsBottomNav";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
@@ -118,12 +119,13 @@ export default async function RewardsHistoryPage() {
         <div className="space-y-3 text-center">
           <Link
             href="/rewards/dashboard"
-            className="block w-full rounded-2xl bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-3.5 transition-all hover:-translate-y-0.5 shadow-md shadow-indigo-900/20"
+            className="block w-full rounded-2xl bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-3.5 min-h-[44px] transition-all hover:-translate-y-0.5 shadow-md shadow-indigo-900/20"
           >
             ← Back to dashboard
           </Link>
         </div>
       </div>
+      <RewardsBottomNav active="history" />
     </div>
   );
 }

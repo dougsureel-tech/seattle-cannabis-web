@@ -17,6 +17,7 @@ import { readRewardsSession, REWARDS_COOKIE_NAME } from "@/lib/rewards-session";
 import { getClient } from "@/lib/db";
 import { getTierProgress } from "@/lib/loyalty-tiers";
 import { AddToHomeScreen } from "../AddToHomeScreen";
+import { RewardsBottomNav } from "../RewardsBottomNav";
 import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
@@ -228,20 +229,21 @@ export default async function RewardsDashboardPage() {
         <div className="space-y-3 text-center">
           <Link
             href="/menu"
-            className="block w-full rounded-2xl bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-3.5 transition-all hover:-translate-y-0.5 shadow-md shadow-indigo-900/20"
+            className="block w-full rounded-2xl bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-3.5 min-h-[44px] transition-all hover:-translate-y-0.5 shadow-md shadow-indigo-900/20"
           >
             Browse the menu →
           </Link>
           <form action="/api/rewards/sign-out" method="POST">
             <button
               type="submit"
-              className="text-sm text-stone-400 hover:text-stone-600 font-medium"
+              className="text-sm text-stone-400 hover:text-stone-600 font-medium min-h-[44px] px-2"
             >
               Sign out
             </button>
           </form>
         </div>
       </div>
+      <RewardsBottomNav active="dashboard" />
     </div>
   );
 }
