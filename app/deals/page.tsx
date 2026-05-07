@@ -5,6 +5,7 @@ import { getActiveDeals } from "@/lib/db";
 import { DealArt } from "@/components/DealArt";
 import { matchDealVendor } from "@/lib/deal-vendor-match";
 import { withAttr } from "@/lib/attribution";
+import { VendorAdSlot } from "@/components/VendorAdSlot";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -99,6 +100,10 @@ export default async function DealsPage({ searchParams }: Props) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(dealsSchema) }}
         />
       )}
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-3">
+        <VendorAdSlot slot="deals_page_top" />
+      </div>
 
       <section className="relative overflow-hidden bg-gradient-to-br from-indigo-700 via-indigo-800 to-indigo-900 text-white">
         <div
