@@ -21,6 +21,7 @@ export default function manifest(): MetadataRoute.Manifest {
     shortcuts: [
       { name: "Order for Pickup", short_name: "Order", url: "/order", description: "Place a pickup order" },
       { name: "Browse Menu", short_name: "Menu", url: "/menu", description: "See what's in stock today" },
+      { name: "Rewards", short_name: "Rewards", url: "/rewards", description: "Points balance + redemption catalog" },
       { name: "Account", short_name: "Account", url: "/account" },
     ],
   };
