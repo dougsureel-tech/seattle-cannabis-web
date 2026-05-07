@@ -42,11 +42,21 @@ export const metadata: Metadata = {
   robots: { index: false },
 };
 
+// Migration-banner sunset. Seattle cutover lands ~2026-06-25 per
+// /CODE/Green Life/PLAN_SPRINGBIG_CUTOVER_5_25.md Track B; +3 weeks
+// margin covers any straggling balance reconciliations. After this
+// date the "we're moving loyalty over" banner becomes a false claim
+// (customers would think the system is still unstable and may not
+// trust the displayed balance), so it auto-hides.
+const MIGRATION_BANNER_SUNSET = new Date("2026-07-15T00:00:00-07:00");
+
 export default async function RewardsLandingPage() {
   // If they already have a session, jump straight to the dashboard.
   const cookieStore = await cookies();
   const session = readRewardsSession(cookieStore.get(REWARDS_COOKIE_NAME)?.value);
   if (session) redirect("/rewards/dashboard");
+
+  const showMigrationBanner = new Date() < MIGRATION_BANNER_SUNSET;
 
   return (
     <div className="min-h-[70vh] bg-white">
@@ -76,12 +86,14 @@ export default async function RewardsLandingPage() {
           </Link>
         </div>
 
-        <div className="mt-6 rounded-2xl bg-amber-50 border border-amber-200 px-4 py-3 text-xs text-amber-900 leading-relaxed">
-          <strong className="font-bold">Heads up:</strong> we&apos;re moving
-          loyalty over from our old system. If your balance looks off,
-          give us a few days — every point is preserved and will show up
-          here.
-        </div>
+        {showMigrationBanner && (
+          <div className="mt-6 rounded-2xl bg-amber-50 border border-amber-200 px-4 py-3 text-xs text-amber-900 leading-relaxed">
+            <strong className="font-bold">Heads up:</strong> we&apos;re moving
+            loyalty over from our old system. If your balance looks off,
+            give us a few days — every point is preserved and will show up
+            here.
+          </div>
+        )}
 
         <div className="mt-8 space-y-3 text-sm text-center">
           <Link
