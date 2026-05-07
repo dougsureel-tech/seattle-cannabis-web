@@ -62,10 +62,10 @@ export const TEAM: TeamMember[] = [
     oneLine: "",
   },
 
-  // ── Inventory ───────────────────────────────────────────────────────
+  // ── Admin ───────────────────────────────────────────────────────────
   {
     name: "Austin Aronson",
-    role: "Inventory Manager",
+    role: "Admin",
     era: "current",
     photoSrc: null,
     oneLine: "",
