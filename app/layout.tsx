@@ -7,6 +7,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { MobileStickyCta } from "@/components/MobileStickyCta";
 import { CartResumeBanner } from "@/components/CartResumeBanner";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
+import { InstallAppBanner } from "@/components/InstallAppBanner";
 import { STORE } from "@/lib/store";
 import "./globals.css";
 
@@ -349,6 +350,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SiteFooter />
         <MobileStickyCta />
         <ServiceWorkerRegister />
+        <InstallAppBanner />
       </body>
     </html>
   );
