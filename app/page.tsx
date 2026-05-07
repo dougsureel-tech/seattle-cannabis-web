@@ -124,11 +124,16 @@ const STATS = [
 ];
 
 export default async function HomePage() {
+  // PWA-install detection — same cookie that /deals reads. Drives whether
+  // the homepage Today's-deals strip surfaces app_only deals to this
+  // customer. Doug 2026-05-07 — symmetry with the /deals filter.
+  const cookieStore = await import("next/headers").then((m) => m.cookies());
+  const isInstalled = cookieStore.get("scc_pwa_installed")?.value === "1";
   const [brands, featured, justIn, deals, closure, treasureChest] = await Promise.all([
     getActiveBrands().catch(() => []),
     getFeaturedProducts(8).catch(() => []),
     getJustInProducts(12).catch(() => []),
-    getActiveDeals().catch(() => []),
+    getActiveDeals({ includeAppOnly: isInstalled }).catch(() => []),
     fetchClosureStatus(),
     getTreasureChestProducts(60).catch(() => []),
   ]);
