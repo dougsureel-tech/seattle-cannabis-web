@@ -25,6 +25,11 @@ Verified deploy = (a) HTTP 200, (b) `ok: true`, (c) `sha` matches what was just 
 
 | Date (PT) | Version | SHA | Notes |
 |---|---|---|---|
+| 2026-05-07 | v4.885 | 7bcd1aa | a11y sweep round 3 — 5 data-driven `{icon}` / `{CAT_ICONS}` wrappers (homepage / OrderMenu / brands ×2 / about) |
+| 2026-05-07 | v4.875 | 11e5d02 | a11y sweep mirror — /learn 🎓 + /visit `{b.emoji}` (mirror of greenlife-web v4.285) |
+| 2026-05-07 | v4.865 | ef2de87 | Pre-Next.js legacy URL preservation — 10 redirects (/shop /products /flower /concentrates /edibles /pre-rolls /vapes → /menu · /strains → /find-your-strain · /book + /book-now → /order · /about-us → /about) |
+| 2026-05-07 | v4.855 | 3073297 | SiteFooter Explore column — `/rewards` link added between Heroes Discount + Find your strain |
+| 2026-05-07 | v4.845 | 5c14358 | /rewards/balance polish — SUCCESSOR FLOW comment cleanup + PII MINIMIZATION list correction + 🔍 a11y wrap |
 | 2026-05-07 | v4.835 | 7dd85c5 | /rewards/page.tsx stale-comment-drift cleanup (wrong cookie + wrong routes — corrected to local `scc_rewards_session` + `/api/rewards/*`) |
 | 2026-05-07 | v4.825 | 751ba79 | /rewards/* polish round 1 — 3× 🌱 a11y wraps + drop stale "Add to home screen" coming-soon bullet + hoist orphan import-type in /redeem |
 | 2026-05-07 | v4.815 | c71ac2e | PWA manifest /rewards shortcut (long-press exposes Rewards alongside Order/Menu/Account) + AGENTS.md path-ref to `Green Life/AGENT_BOARD.md` |
