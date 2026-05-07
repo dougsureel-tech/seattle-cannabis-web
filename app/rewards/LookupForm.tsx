@@ -23,8 +23,10 @@ export function LookupForm() {
     }
     setErr(null);
     // Pass phone via query string. The balance page does the lookup.
-    // Once the OTP table ships (Track B Week 1) this will instead POST
-    // to /api/rewards/request-code and route to a verify step.
+    // Note: the OTP-gated successor flow lives at /rewards/login →
+    // /rewards/verify → /rewards/dashboard. This component + the
+    // /rewards/balance page survive only as a cutover-testing fallback
+    // and will be deleted once the OTP flow is verified end-to-end.
     router.push(`/rewards/balance?phone=${encodeURIComponent(digits)}`);
   }
 

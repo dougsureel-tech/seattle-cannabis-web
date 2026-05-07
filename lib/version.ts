@@ -3,6 +3,7 @@
 // comes from Vercel automatically on every deploy and is the authoritative
 // "did my push actually land" signal.
 
+// 4.795 — `/rewards/LookupForm.tsx` + `/rewards/balance/page.tsx` comment cleanup — second pass on the same drift class as v4.785. (1) LookupForm inline comment removed the stale "Once the OTP table ships (Track B Week 1) this will instead POST" hint — the OTP flow shipped; this component is now framed as a cutover-testing fallback per the deprecation header that already exists. (2) balance/page.tsx replaced the obsolete "TODO Track B Week 1" 5-line block with a "SUCCESSOR FLOW (live as of v4.755+)" block describing the actual auth path: inventoryapp /api/customer/auth/send-code + verify endpoints, loyalty_otp_codes table from migration 0204, gl_customer HMAC-purpose-namespaced session cookie 30-day TTL, /rewards → /login → /verify → /dashboard customer flow. Both files now consistently frame as "smoke-test fallback during cutover testing window, slated for deletion once OTP is verified end-to-end." Pure comment edits — no behavioral change. tsc clean.
 // 4.785 — `/rewards` page comment block updated to reflect shipped state. Pre-fix the file-header comment said "V0 scaffold... no OTP yet — that ships Track B Week 1" but the OTP flow DID ship (login + verify + dashboard + history + redeem all live). Comment now describes the actual surfaces (login → verify → dashboard) + auth (phone-OTP via inventoryapp /api/customer/auth/* endpoints, gl_customer session cookie, 30-day TTL, HMAC purpose-namespace) + post-auth surfaces (history / redeem / A2HS banner). No code change — comment-only edit so future agents reading the file get an accurate picture instead of a 1-day-stale "TODO" hint. tsc clean.
 // 4.775 — `/deals` topicals icon swap 🌱 → 🧴 (move-not-remove). Mirror of greenlife-web v4.245. Doug: lotion was wrong for concentrates (v4.765 → 💎) but right for topicals (cannabis topicals are literal lotions/balms). Boarded: wider iconography refresh post-launch. tsc clean.
 // 4.765 — `/deals` concentrates-category icon swap 🧴 → 💎. Mirror of greenlife-web v4.015. Doug 2026-05-06: lotion-bottle read as soap/skincare on the /deals card-art when a deal applies to concentrates and the vendor doesn't match a known logo. 💎 (gem/diamond) is cannabis-industry vernacular for the category. Single line in `components/DealArt.tsx` `CATEGORY_ART.concentrates.emoji`. Topicals icon (🌱) deliberately unchanged. tsc clean.
@@ -82,7 +83,7 @@
 // 4.76 — /apply personality prompts: two optional written prompts (product-recommendation pitch + customer-recovery story) capture personality signal without the photo discrimination risk. Stored in applicants.metadata JSONB on inventoryapp side. Compliance: written-only — no photo (WA RCW 49.60 / EEOC pre-offer photo discrimination risk).
 // 4.465 — /order place-order error messages reassure customer their cart is preserved on failure. Mirror of greenlife-web v3.625.
 // 4.71 — Public /apply form: apply-to-work intake with resume upload + 3 references + 21+ confirmation. POSTs to inventoryapp /api/applications. Compliance: no photo / no SSN / no DOB.
-export const BUILD_VERSION = "4.785";
+export const BUILD_VERSION = "4.795";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ??

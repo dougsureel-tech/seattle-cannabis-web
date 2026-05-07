@@ -9,19 +9,24 @@
 // V0 of the SpringBig-cutover Track B PWA per
 // /CODE/Green Life/PLAN_SPRINGBIG_CUTOVER_5_25.md.
 //
-// PII MINIMIZATION (privacy posture without OTP):
+// PII MINIMIZATION (privacy posture for the cutover-testing fallback):
 //   - Show: first name + last initial + points balance + tier label
 //     + lifetime spent
 //   - Hide: full last name, email, address, DOB, ID, phone (don't echo)
 //   - "Not your account?" CTA → /rewards (clear + retry)
 //
-// TODO Track B Week 1:
-//   - Replace this query-string flow with phone-OTP via Twilio. The
-//     customer enters phone → we send a 6-digit code → they enter the
-//     code → THEN they see the balance. This V0 is sufficient for the
-//     SCC migration smoke-test but will be tightened before launch.
-//   - Per-IP rate limiting (5 lookups/hr).
-//   - Store loyalty_otp_codes table — needs migration in Inventory App.
+// SUCCESSOR FLOW (live as of v4.755+ inventoryapp / v169.085+ here):
+//   - Phone-OTP via inventoryapp `/api/customer/auth/send-code` +
+//     `/api/customer/auth/verify` (Twilio-delivered 6-digit code,
+//     10-min TTL, single-use, 5-attempt cap, hashed at rest in
+//     `loyalty_otp_codes` table from migration 0204).
+//   - Per-customer rate limit (3 mints / 60s) + per-IP throttle.
+//   - Session: `gl_customer` HMAC-purpose-namespaced cookie, 30-day TTL.
+//   - Customer flow: /rewards → /rewards/login → /rewards/verify →
+//     /rewards/dashboard (+ /history + /redeem).
+// This page survives only as a smoke-test fallback during the cutover
+// testing window and is slated for deletion once the OTP flow is
+// verified end-to-end against real customer data.
 
 import Link from "next/link";
 import { getClient } from "@/lib/db";
