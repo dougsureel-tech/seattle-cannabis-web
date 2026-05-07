@@ -3,6 +3,7 @@
 // comes from Vercel automatically on every deploy and is the authoritative
 // "did my push actually land" signal.
 
+// 5.075 — **Homepage Today's-deals strip surfaces /treasure-chest pill — sister to greenlife-web v4.415.** Same shape: amber `🪙 Treasure chest · {N}` pill alongside the existing "All deals →" link, server-conditional on `getTreasureChestProducts(60).length > 0`. tsc clean.
 // 5.045 — **NEW /treasure-chest customer-facing surface — mirror of greenlife-web v4.385.** Doug 2026-05-07 ask shipped earlier on Wen public site; this is the SCC mirror so both stores expose the same clearance lane. `lib/db.ts` `getTreasureChestProducts(60)` (display_priority='clearance' + latest_inv > 0 + brands_with_recent_sales gate) + `app/treasure-chest/page.tsx` (amber theming, 5-col responsive grid, friendly empty state, transparency footer). force-dynamic + revalidate=0 so newly-tagged items show immediately. tsc clean.
 // 5.025 — **Email opt-in toggle on /account/profile — sister to inventoryapp v174.985 POS-side capture + greenlife-web v4.395 mirror.** Customer-facing self-service opt-in for email marketing alongside the existing SMS toggle. Drives the 0.5 / 0.25 pt-per-$1 accrual rate per Doug 2026-05-07: enrolled (SMS opt-in OR email opt-in) earns 0.5; not-enrolled earns 0.25. **Migration:** depends on inventoryapp `0211_portal_users_email_opt_in.sql` (v175.305). **What ships:** (1) `lib/portal.ts` PortalUser type adds `emailOptIn: boolean`; mapPortalUser reads `email_opt_in`; updatePortalUser accepts the new field; both SELECT (existing-user) + RETURNING (new-user INSERT) extended with `email_opt_in` column. (2) `app/api/profile/route.ts` POST handler accepts `emailOptIn` body field. (3) `app/account/profile/ProfileForm.tsx` Email Notifications toggle below the SMS toggle (brand-indigo styling) + transparency line: "Either toggle on = 0.5 pt per $1 spent (vs 0.25)." Customer can self-enroll without budtender intervention. tsc clean. 3 file edits.
 // 4.995 — `/faq` no-stacking copy fix (round-1 sweep missed). The "Do you offer deals or loyalty rewards?" Q&A said "the 15% off your first online order applies on top of any active deal" — directly contradicts the no-stacking policy AND the Q&A right below it on the same page ("discounts don't combine"). Fix: "redeemable at the counter when you're not also using a deal (best discount applies — discounts don't combine)" + dropped the "applies on top of any active deal" claim entirely. Per Doug 2026-05-07 via Kat. Mirror with greenlife-web v4.355. tsc clean.
@@ -103,7 +104,7 @@
 // 4.76 — /apply personality prompts: two optional written prompts (product-recommendation pitch + customer-recovery story) capture personality signal without the photo discrimination risk. Stored in applicants.metadata JSONB on inventoryapp side. Compliance: written-only — no photo (WA RCW 49.60 / EEOC pre-offer photo discrimination risk).
 // 4.465 — /order place-order error messages reassure customer their cart is preserved on failure. Mirror of greenlife-web v3.625.
 // 4.71 — Public /apply form: apply-to-work intake with resume upload + 3 references + 21+ confirmation. POSTs to inventoryapp /api/applications. Compliance: no photo / no SSN / no DOB.
-export const BUILD_VERSION = "5.045";
+export const BUILD_VERSION = "5.075";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ??
