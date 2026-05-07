@@ -186,10 +186,10 @@ export default async function DealsPage({ searchParams }: Props) {
             ) : (
               <>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight">
-                  No deals today — but loyalty stacks every day.
+                  No deals today — but you still earn points.
                 </h2>
                 <p className="text-stone-600 mt-3 max-w-md mx-auto leading-relaxed">
-                  100 points = $1 off at the counter, on top of any everyday-low pricing. Browse
+                  100 points = $1 off at the counter on a regular-price visit. Browse
                   the live menu — we&apos;ll have what you&apos;re after.
                 </p>
                 <Link
@@ -264,9 +264,6 @@ export default async function DealsPage({ searchParams }: Props) {
                   </div>
 
                   <div className="mt-3 flex flex-wrap items-center gap-1.5 text-[11px]">
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md font-semibold bg-indigo-50 text-indigo-800 ring-1 ring-indigo-200">
-                      Stacks with loyalty
-                    </span>
                     {vendor && (
                       <Link
                         href={withAttr(`/brands/${vendor.slug}`, "deals-card", `${d.id}-vendor`)}

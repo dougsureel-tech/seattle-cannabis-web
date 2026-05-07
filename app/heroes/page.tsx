@@ -66,8 +66,8 @@ const ELIGIBILITY = [
 // content. Mirror of greenlife-web pattern.
 const FAQS: { q: string; a: string }[] = [
   {
-    q: "Does the discount stack with daily deals?",
-    a: "No — the discount that's bigger applies. Heroes is 30%, daily deals usually run 10-15%, so Heroes wins.",
+    q: "Does the Heroes discount combine with daily deals?",
+    a: "No — discounts don't combine. Heroes 30% applies in place of any daily deal, and on Heroes orders that's the discount you'll see at the counter.",
   },
   {
     q: "Does it expire?",
@@ -138,7 +138,7 @@ export default function HeroesPage() {
               <span className="text-base">★</span> 30% off · every visit
             </span>
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white text-sm font-semibold">
-              Stacks with loyalty points
+              Earn loyalty points every visit
             </span>
           </div>
         </div>
@@ -197,7 +197,7 @@ export default function HeroesPage() {
             {[
               { step: "Step 1", title: "Bring two IDs", detail: "Your government 21+ ID and your service / work credential." },
               { step: "Step 2", title: "Tell the budtender", detail: "Mention you&rsquo;re here for the Heroes discount when you walk up." },
-              { step: "Step 3", title: "Save automatically", detail: "30% off your subtotal. Stacks with your loyalty points." },
+              { step: "Step 3", title: "Save automatically", detail: "30% off your subtotal. You still earn loyalty points on the visit." },
             ].map(({ step, title, detail }) => (
               <li key={step} className="relative rounded-2xl bg-white border border-stone-200 p-5 sm:p-6">
                 <span className="absolute -top-2.5 left-5 text-[10px] font-bold uppercase tracking-widest text-white bg-indigo-700 px-2 py-0.5 rounded-full">

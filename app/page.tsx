@@ -704,8 +704,7 @@ export default async function HomePage() {
                   Today&apos;s deals
                 </h2>
                 <p className="text-stone-600 mt-1 text-sm">
-                  Stackable with your loyalty points at the counter — 100 pts = $1 off — cash savings on the
-                  way out.
+                  Best deal applies at the counter — earn loyalty points on every visit either way.
                 </p>
               </div>
               <Link

@@ -85,8 +85,8 @@ const FAQS: { q: string; a: string; tag?: string }[] = [
   },
   {
     tag: "Rewards",
-    q: "Can I stack loyalty points with other discounts?",
-    a: "Yes. Loyalty points always apply on top of any active deal or promotion — they're earned cash you're spending, not a discount layer. So if there's a 20% category deal running, you can still redeem points on the same transaction.",
+    q: "Can I redeem loyalty points on top of a deal?",
+    a: "No — discounts don't combine. The best applicable discount applies on a given order (Heroes 30%, today's daily deal, online 20%, etc.), so you'd save your points for a regular-price visit when redemption gives you the most. You always earn points on every visit either way.",
   },
   {
     tag: "Ordering",
