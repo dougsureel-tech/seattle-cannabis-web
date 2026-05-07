@@ -25,6 +25,9 @@ Verified deploy = (a) HTTP 200, (b) `ok: true`, (c) `sha` matches what was just 
 
 | Date (PT) | Version | SHA | Notes |
 |---|---|---|---|
+| 2026-05-07 | v4.835 | 7dd85c5 | /rewards/page.tsx stale-comment-drift cleanup (wrong cookie + wrong routes — corrected to local `scc_rewards_session` + `/api/rewards/*`) |
+| 2026-05-07 | v4.825 | 751ba79 | /rewards/* polish round 1 — 3× 🌱 a11y wraps + drop stale "Add to home screen" coming-soon bullet + hoist orphan import-type in /redeem |
+| 2026-05-07 | v4.815 | c71ac2e | PWA manifest /rewards shortcut (long-press exposes Rewards alongside Order/Menu/Account) + AGENTS.md path-ref to `Green Life/AGENT_BOARD.md` |
 | 2026-05-07 | v4.795 | 7f08aeb | /rewards LookupForm + balance page comments — drop stale Track B Week 1 TODOs (OTP shipped) |
 | 2026-05-07 | v4.785 | 7e533ef | /rewards page comment block updated — reflects shipped OTP flow (was stale) |
 | 2026-05-07 | (unversioned) | 6ebae8f | GET /api/rewards/me — client-side rewards snapshot |
@@ -44,7 +47,7 @@ Verified deploy = (a) HTTP 200, (b) `ok: true`, (c) `sha` matches what was just 
 
 Per `Green Life/PLAN_SPRINGBIG_CUTOVER_5_25.md` Track B: the Seattle SpringBig consumer app retires ~2026-06-25, with the `/rewards` PWA on this repo as the replacement. Track B Week 3 (Days 6-10, 2026-05-12 to 2026-05-16) is the build window.
 
-**Current PWA state (as of v4.795):**
+**Current PWA state (as of v4.835):**
 - ✅ Phone-OTP login + verify flow shipped
 - ✅ Authenticated dashboard with points balance + tier + visit count + lifetime spend
 - ✅ /rewards/redeem — redemption catalog
