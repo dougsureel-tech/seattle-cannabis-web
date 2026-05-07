@@ -126,10 +126,13 @@ export default async function RewardsBalancePage({ searchParams }: Props) {
               </Link>
             </li>
             <li className="text-stone-400">
-              · Redemption catalog + visit history coming soon
+              · For redemption catalog + visit history,{" "}
+              <Link href="/rewards" className="underline underline-offset-2 hover:text-stone-600">
+                sign in at /rewards
+              </Link>
             </li>
             <li className="text-stone-400">
-              · Redeem at the counter on your next visit — your budtender
+              · Or redeem at the counter on your next visit — your budtender
               applies the discount
             </li>
           </ul>
