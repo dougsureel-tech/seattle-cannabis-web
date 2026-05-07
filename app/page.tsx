@@ -1342,6 +1342,16 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Cross-store + reciprocal-vendor promotion slot — Doug 2026-05-07
+          mirror of glw v4.595. Goodwill swaps (sister-store + vendor
+          partners) — no money exchange per WSLCB. VendorAdSlot returns
+          null when no active ad, so invisible until curated. */}
+      <section className="bg-stone-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+          <VendorAdSlot slot="cross_store_promo" />
+        </div>
+      </section>
+
       {/* ─── CTA band ───────────────────────────────────────────────────────── */}
       {/* Bottom-of-page CTA — same indigo→violet gradient identity as the
           AnnouncementBar / footer / hours card. Page bookends in matching
