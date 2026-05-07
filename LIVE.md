@@ -25,6 +25,11 @@ Verified deploy = (a) HTTP 200, (b) `ok: true`, (c) `sha` matches what was just 
 
 | Date (PT) | Version | SHA | Notes |
 |---|---|---|---|
+| 2026-05-07 | v4.935 | 4d0cc43 | `lib/loyalty-redemption.ts` field rename `discountFraction` → `discountPct` to match canonical inventoryapp. SSoT-tightening only — same numeric values + no consumer reads the field directly. |
+| 2026-05-07 | v4.925 | e0bc3c8 | `/rewards/balance` drops local 13-line `normalizeToE164` duplicate, imports canonical from `@/lib/sms`. Pure SSoT-tightening. |
+| 2026-05-07 | v4.915 | 7cafa36 | `/rewards/dashboard` + `/rewards/balance` adopt canonical 4-tier loyalty model (Visitor/Regular/Local/Family keyed on lifetime spend). Pre-fix had local Bronze/Silver/Gold helper keyed on POINTS — same customer would see different tier names on PWA vs POS receipt. |
+| 2026-05-07 | v4.905 | 332bf65 | `/rewards` migration banner gains date-bounded sunset (2026-07-15 = Seattle cutover + 3wk margin). Auto-retires post-cutover so customers don't see "we're moving" months after migration is done. |
+| 2026-05-07 | v4.895 | 2519f80 | Mirror 3 educational blog posts from greenlife-web (terpenes-101 + edibles-dosing + indica-vs-sativa) — closes PLAN_WEEKLY_GUIDES parity gap (was 2 posts, now 5). |
 | 2026-05-07 | v4.885 | 7bcd1aa | a11y sweep round 3 — 5 data-driven `{icon}` / `{CAT_ICONS}` wrappers (homepage / OrderMenu / brands ×2 / about) |
 | 2026-05-07 | v4.875 | 11e5d02 | a11y sweep mirror — /learn 🎓 + /visit `{b.emoji}` (mirror of greenlife-web v4.285) |
 | 2026-05-07 | v4.865 | ef2de87 | Pre-Next.js legacy URL preservation — 10 redirects (/shop /products /flower /concentrates /edibles /pre-rolls /vapes → /menu · /strains → /find-your-strain · /book + /book-now → /order · /about-us → /about) |
