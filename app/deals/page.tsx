@@ -47,7 +47,13 @@ function normalizeCat(cat: string | null): FilterCat | "all" {
 export default async function DealsPage({ searchParams }: Props) {
   const sp = await searchParams;
   const activeFilter = normalizeCat(sp.cat ?? null);
-  const allDeals = await getActiveDeals().catch(() => []);
+  // PWA-install detection — cookie set by /api/track-install on first
+  // standalone-mode launch. Customers who installed the SCC PWA see
+  // app_only deals; browser-only visitors don't (they see the install
+  // banner instead, which is the conversion path). Doug 2026-05-07.
+  const cookieStore = await import("next/headers").then((m) => m.cookies());
+  const isInstalled = cookieStore.get("scc_pwa_installed")?.value === "1";
+  const allDeals = await getActiveDeals({ includeAppOnly: isInstalled }).catch(() => []);
   const deals =
     activeFilter === "all"
       ? allDeals

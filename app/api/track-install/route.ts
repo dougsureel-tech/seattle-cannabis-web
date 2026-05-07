@@ -103,7 +103,21 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  return NextResponse.json({ ok: true, attributed: !!customerId, source });
+  const res = NextResponse.json({ ok: true, attributed: !!customerId, source });
+  // Drop a long-lived cookie so server-rendered pages can detect "this
+  // device installed the PWA" without a client roundtrip. Used by /deals
+  // to surface app_only deals (Doug 2026-05-07). Cookie value is just a
+  // marker; presence == installed. 365-day expiry rolls forward on every
+  // standalone-launch ping, so it stays alive as long as the customer
+  // keeps using the app.
+  res.cookies.set("scc_pwa_installed", "1", {
+    httpOnly: false, // readable by client-side JS too if needed
+    sameSite: "lax",
+    secure: true,
+    path: "/",
+    maxAge: 60 * 60 * 24 * 365, // 1 year
+  });
+  return res;
 }
 
 // GET — returns total install count + last 7d count. Public OK; no PII
