@@ -785,7 +785,7 @@ export default async function HomePage() {
               className={`group relative flex flex-col gap-3 p-5 rounded-2xl bg-gradient-to-br ${color} hover:scale-[1.03] hover:shadow-2xl ${glow} transition-all duration-200 overflow-hidden`}
             >
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-white/10" />
-              <span className="text-3xl relative">{icon}</span>
+              <span className="text-3xl relative" aria-hidden="true">{icon}</span>
               <div className="relative">
                 <div className="font-bold text-white text-sm">{label}</div>
                 <div className="text-white/65 text-xs mt-0.5 leading-tight">{desc}</div>
