@@ -32,24 +32,11 @@
 
 import Link from "next/link";
 import { getClient } from "@/lib/db";
+import { normalizeToE164 } from "@/lib/sms";
 
 export const dynamic = "force-dynamic";
 
 type Props = { searchParams: Promise<{ phone?: string }> };
-
-function normalizeToE164(input: string): string {
-  const trimmed = (input ?? "").trim();
-  if (!trimmed) return trimmed;
-  if (trimmed.startsWith("+")) {
-    const digitsOnly = trimmed.replace(/\D/g, "");
-    return digitsOnly.length === 0 ? trimmed : `+${digitsOnly}`;
-  }
-  const digits = trimmed.replace(/\D/g, "");
-  if (digits.length === 10) return `+1${digits}`;
-  if (digits.length === 11 && digits.startsWith("1")) return `+${digits}`;
-  if (digits.length >= 11) return `+${digits}`;
-  return trimmed;
-}
 
 type CustomerRow = {
   first_name: string;
