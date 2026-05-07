@@ -11,17 +11,19 @@
 //
 // PII MINIMIZATION (privacy posture for the cutover-testing fallback):
 //   - Show: first name + last initial + points balance + tier label
-//     + lifetime spent
-//   - Hide: full last name, email, address, DOB, ID, phone (don't echo)
+//   - Hide: full last name, email, address, DOB, ID, phone (don't echo),
+//     visit count, lifetime spend (those live on /rewards/dashboard
+//     behind the OTP gate)
 //   - "Not your account?" CTA → /rewards (clear + retry)
 //
-// SUCCESSOR FLOW (live as of v4.755+ inventoryapp / v169.085+ here):
-//   - Phone-OTP via inventoryapp `/api/customer/auth/send-code` +
-//     `/api/customer/auth/verify` (Twilio-delivered 6-digit code,
-//     10-min TTL, single-use, 5-attempt cap, hashed at rest in
-//     `loyalty_otp_codes` table from migration 0204).
-//   - Per-customer rate limit (3 mints / 60s) + per-IP throttle.
-//   - Session: `gl_customer` HMAC-purpose-namespaced cookie, 30-day TTL.
+// SUCCESSOR FLOW (live as of v4.755+):
+//   - Phone-OTP locally via `/api/rewards/request-code` +
+//     `/api/rewards/verify-code` (Twilio-delivered 6-digit code,
+//     10-min TTL, single-use, hashed at rest in the `loyalty_otp_codes`
+//     table on Seattle Neon).
+//   - Session cookie: `scc_rewards_session` (HMAC signed, 30-day TTL,
+//     HttpOnly + Secure + SameSite=lax) — read helper at
+//     `lib/rewards-session.ts` (`readRewardsSession` + `REWARDS_COOKIE_NAME`).
 //   - Customer flow: /rewards → /rewards/login → /rewards/verify →
 //     /rewards/dashboard (+ /history + /redeem).
 // This page survives only as a smoke-test fallback during the cutover
@@ -186,7 +188,7 @@ function NotFoundCard({ reason }: { reason: string }) {
     <div className="min-h-[60vh] bg-white">
       <div className="max-w-md mx-auto px-4 sm:px-6 py-12 space-y-6">
         <div className="rounded-3xl border border-stone-200 bg-white p-7 sm:p-8 text-center space-y-4">
-          <div className="text-3xl">🔍</div>
+          <div className="text-3xl" aria-hidden="true">🔍</div>
           <h1 className="text-2xl font-extrabold text-stone-900">No match</h1>
           <p className="text-stone-500 text-sm">{reason}</p>
           <p className="text-stone-500 text-sm">
