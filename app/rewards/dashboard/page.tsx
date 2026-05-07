@@ -162,13 +162,37 @@ export default async function RewardsDashboardPage() {
           </div>
         </div>
 
+        {/* Redeem CTA */}
+        <Link
+          href="/rewards/redeem"
+          className="flex items-center justify-between gap-3 rounded-2xl border border-indigo-200 bg-indigo-50/40 hover:bg-indigo-50 px-5 py-4 transition-all group"
+        >
+          <div>
+            <p className="font-bold text-indigo-900">
+              See what your points get you
+            </p>
+            <p className="text-xs text-indigo-700/70 mt-0.5">
+              Redemption tiers + how-to-redeem
+            </p>
+          </div>
+          <svg
+            className="w-5 h-5 text-indigo-600 group-hover:translate-x-0.5 transition-transform shrink-0"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </Link>
+
         {/* What's coming soon */}
         <div className="rounded-2xl border border-stone-200 bg-stone-50 px-5 py-4 text-sm text-stone-700 space-y-2">
           <p className="font-semibold text-stone-800">Coming soon</p>
           <ul className="space-y-1.5 text-stone-600 text-[13px] leading-relaxed">
-            <li className="text-stone-400">· Redeem points right here for accessories + store credit</li>
             <li className="text-stone-400">· Visit history with what you bought + what you earned</li>
             <li className="text-stone-400">· Add to your home screen for one-tap access</li>
+            <li className="text-stone-400">· Birthday + tier-up bonuses surfaced here</li>
           </ul>
         </div>
 
