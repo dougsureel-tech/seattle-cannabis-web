@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { STORE } from "@/lib/store";
-import { getActiveDeals } from "@/lib/db";
+import { getActiveDeals, getTreasureChestProducts } from "@/lib/db";
 import { fetchClosureStatus } from "@/lib/closure-status";
 import { JaneMenu } from "./JaneMenu";
 import { MenuFallback } from "./MenuFallback";
@@ -73,12 +73,14 @@ async function prewarmDutchieMenu(): Promise<void> {
 }
 
 export default async function MenuPage() {
-  const [deals, closure] = await Promise.all([
+  const [deals, closure, treasureChest] = await Promise.all([
     getActiveDeals().catch(() => []),
     fetchClosureStatus(),
+    getTreasureChestProducts(60).catch(() => []),
     prewarmDutchieMenu(),
   ]);
   const featuredDeal = deals[0] ?? null;
+  const treasureChestCount = treasureChest.length;
 
   return (
     <div className="bg-stone-50">
@@ -94,7 +96,7 @@ export default async function MenuPage() {
         <VendorAdSlot slot="menu_sidebar" />
       </div>
       <JaneMenu storeId={IHEARTJANE_STORE_ID} embedConfigId={IHEARTJANE_EMBED_CONFIG_ID} />
-      <MenuActiveDealsStrip deals={deals} />
+      <MenuActiveDealsStrip deals={deals} treasureChestCount={treasureChestCount} />
       <MenuFallback featuredDeal={featuredDeal} />
       <MenuLocalStrip />
     </div>
