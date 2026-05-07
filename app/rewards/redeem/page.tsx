@@ -110,6 +110,13 @@ export default async function RewardsRedeemPage() {
             we can&apos;t apply it from this page.
           </p>
           <p>
+            <strong className="text-stone-800 font-semibold">One discount per order:</strong>{" "}
+            Loyalty redemption doesn&apos;t combine with an active deal
+            (Heroes 30%, daily deal, Online order, etc.) — your budtender
+            picks whichever saves you more on the cart. Your points stay on
+            the ledger if they go unused.
+          </p>
+          <p>
             <strong className="text-stone-800 font-semibold">About the $75 cliff:</strong>{" "}
             Two 30%-off tiers exist — 300pt for orders under $75, 400pt
             for orders $75 and up. Bigger orders cost a few more points;
