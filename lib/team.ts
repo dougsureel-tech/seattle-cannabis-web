@@ -29,15 +29,10 @@ export type TeamMember = {
 
 export const TEAM: TeamMember[] = [
   // ── Current — Seattle Cannabis Co. (Green Anne LLC) roster, May 2026 ──
-  // Owner row first; consumers that want floor-runners only filter on
-  // `m.role !== "Owner"` (e.g. /order's named-chip strip).
-  {
-    name: "Doug",
-    role: "Owner",
-    era: "current",
-    photoSrc: null,
-    oneLine: "Same shop since 2010. Built the place to outlast the trends.",
-  },
+  // Doug removed from public-facing team page on Doug's call 2026-05-07
+  // ("take us off the website for now"). Kat as GM is the current
+  // top-of-org public face. Doug still owns the place; just not
+  // surfaced on /our-community.
   {
     name: "Kat",
     role: "General Manager",
