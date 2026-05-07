@@ -71,7 +71,32 @@ export function InstallAppBanner() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (isStandalone()) return;
+
+    // Standalone-mode visit = the app is launched from the home-screen icon.
+    // Record once per session as proof-of-install (covers iOS where the
+    // appinstalled event doesn't fire reliably + any prior install where
+    // we never got an attribution call). Per-session sentinel keyed in
+    // sessionStorage so a single visit produces one count even if the
+    // PWA is multi-tab. Cross-session visits count as separate launches —
+    // useful for engagement metrics, not download metrics, but the total
+    // count from /api/track-install GET de-dupes by customer-id when
+    // signed in (anon launches do count multiple times — acceptable
+    // tradeoff for v0; can add an install_session_id cookie if needed).
+    if (isStandalone()) {
+      try {
+        const SENTINEL = "scc-pwa-launch-recorded";
+        if (!sessionStorage.getItem(SENTINEL)) {
+          sessionStorage.setItem(SENTINEL, "1");
+          void fetch("/api/track-install?source=standalone_launch", {
+            method: "POST",
+            keepalive: true,
+          }).catch(() => {});
+        }
+      } catch {
+        /* sessionStorage blocked (private mode) — skip */
+      }
+      return;
+    }
     if (isDismissed()) return;
 
     const p = detectPlatform();
@@ -106,9 +131,29 @@ export function InstallAppBanner() {
     }
   }
 
+  // Fire-and-forget install attribution. Doug 2026-05-07: "lets also keep
+  // track of how many downloads our new app has." Posts to /api/track-install
+  // which writes an audit_log row + (when signed in) sets
+  // customers.scc_app_installed_at. Source param surfaces on /api/track-install
+  // GET aggregate so Doug can see "X organic, Y from springbig migration."
+  async function recordInstall(source: string) {
+    try {
+      await fetch(`/api/track-install?source=${encodeURIComponent(source)}`, {
+        method: "POST",
+        keepalive: true,
+      });
+    } catch {
+      // Network blip / offline — don't surface, the install still worked
+    }
+  }
+
   async function install() {
     if (platform === "ios") {
       setIosSheetOpen(true);
+      // iOS doesn't fire `appinstalled` reliably — record at sheet-open as
+      // intent. Idempotent on the server side; double-counts are filtered
+      // out via per-customer dedup when attributable.
+      void recordInstall("ios_sheet_opened");
       return;
     }
     if (platform === "android" && installEvent) {
@@ -117,6 +162,7 @@ export function InstallAppBanner() {
         const choice = await installEvent.userChoice;
         if (choice.outcome === "accepted") {
           setVisible(false);
+          void recordInstall("android_accepted");
         }
       } catch {
         // User cancelled or browser refused — leave banner up
