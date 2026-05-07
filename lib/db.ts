@@ -462,6 +462,57 @@ export async function getJustInProducts(limit = 12): Promise<MenuProduct[]> {
   }));
 }
 
+// Treasure-chest = staff-curated clearance lane. Doug 2026-05-07: tag slow-
+// moving items with display_priority='clearance' from /admin/treasure-chest
+// in inventoryapp; this surface renders them on the Seattle public site.
+// Mirror of greenlife-web/lib/db.ts getTreasureChestProducts (v4.385).
+export async function getTreasureChestProducts(limit = 60): Promise<MenuProduct[]> {
+  const sql = getClient();
+  const rows = await sql`
+    WITH latest_inv AS (
+      SELECT DISTINCT ON (product_id) product_id, quantity_on_hand::float AS qty
+      FROM inventory_snapshots
+      WHERE location_id = 'default'
+      ORDER BY product_id, captured_at DESC
+    ),
+    brands_with_recent_sales AS (
+      SELECT DISTINCT p.vendor_id
+      FROM sale_line_items sli
+      INNER JOIN products p ON p.id = sli.product_id
+      WHERE sli.sold_at >= NOW() - INTERVAL '365 days'
+        AND p.vendor_id IS NOT NULL
+    )
+    SELECT
+      p.id, p.name, p.brand, p.category, p.strain_type,
+      p.thc_pct::float AS thc_pct, p.cbd_pct::float AS cbd_pct,
+      p.unit_price::float AS unit_price, p.image_url, p.effects, p.terpenes
+    FROM products p
+    INNER JOIN latest_inv li ON li.product_id = p.id
+    INNER JOIN brands_with_recent_sales bws ON bws.vendor_id = p.vendor_id
+    WHERE p.carry_status = 'active'
+      AND p.display_priority = 'clearance'
+      AND li.qty > 0
+      AND p.unit_price IS NOT NULL
+      AND p.unit_price >= 1.99
+    ORDER BY p.unit_price ASC NULLS LAST, p.name ASC
+    LIMIT ${limit}
+  `;
+  return rows.map((r) => ({
+    id: r.id as string,
+    name: r.name as string,
+    brand: (r.brand ?? null) as string | null,
+    category: (r.category ?? null) as string | null,
+    strainType: (r.strain_type ?? null) as string | null,
+    thcPct: (r.thc_pct ?? null) as number | null,
+    cbdPct: (r.cbd_pct ?? null) as number | null,
+    unitPrice: (r.unit_price ?? null) as number | null,
+    imageUrl: (r.image_url ?? null) as string | null,
+    effects: (r.effects ?? null) as string | null,
+    terpenes: (r.terpenes ?? null) as string | null,
+    isNew: false,
+  }));
+}
+
 // Order: today's day-specific deals FIRST so the daily-deal mailer headline
 // always ranks above the always-on tier (heroes-30, first-visit-30,
 // industry-20, etc.). LIMIT 20 to leave headroom for the daily seed
