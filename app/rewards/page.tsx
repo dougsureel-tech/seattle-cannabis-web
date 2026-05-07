@@ -2,25 +2,31 @@
 //
 // Replaces SpringBig as the customer-facing loyalty surface (Track B per
 // /CODE/Green Life/PLAN_SPRINGBIG_CUTOVER_5_25.md). When a returning
-// customer hits this URL with a valid `gl_customer` session cookie they
+// customer hits this URL with a valid `scc_rewards_session` cookie they
 // jump straight to /rewards/dashboard. Cold visitors land here, click
 // the CTA, and start the phone-OTP flow at /rewards/login.
 //
-// Auth: phone-OTP via the inventoryapp `/api/customer/auth/send-code` +
-// `/api/customer/auth/verify` endpoints (loyalty_otp_codes table, mig
-// 0204 in inventoryapp). 6-digit code, 10-min TTL, 5-attempts cap, single-
-// use, hashed-at-rest. Session cookie name `gl_customer` (purpose-namespaced
-// HMAC, 30-day TTL, HttpOnly + Secure + SameSite=lax).
+// Auth: phone-OTP via locally-managed `/api/rewards/request-code` +
+// `/api/rewards/verify-code` routes (Twilio SMS + loyalty_otp_codes
+// table on Seattle Neon). 6-digit code, 10-min TTL, single-use,
+// hashed-at-rest. Session cookie name `scc_rewards_session` (HMAC
+// signed, 30-day TTL, HttpOnly + Secure + SameSite=lax). Read helper
+// at `lib/rewards-session.ts` (`readRewardsSession` + `REWARDS_COOKIE_NAME`).
 //
 // Surfaces post-auth:
-//   - /rewards/dashboard — points, tier, redemption catalog
-//   - /rewards/history — visit + earnings history
-//   - /rewards/redeem — pick a tier → mint a redemption-intent token →
-//     QR for the budtender to scan at /pos/checkout
+//   - /rewards/dashboard — first name + last initial, points, tier,
+//     progress bar, lifetime visits/spend, nav cards to redeem + history
+//   - /rewards/history — last 25 completed transactions with earned/
+//     redeemed/promo chips per row
+//   - /rewards/redeem — affordable + unaffordable tiers from
+//     `lib/redemption-tiers`; redemption itself happens at the register
+//     (Apple guideline 1.4.3 / Google Play marijuana policy ban — PWA
+//     cannot complete the cannabis transaction)
 //   - /rewards (this page) — landing for cold visitors only
 //
-// Add-to-Home-Screen banner on first visit (AddToHomeScreen.tsx mounted
-// on dashboard) walks them through pinning the PWA so it feels like an app.
+// Add-to-Home-Screen banner mounts on /rewards/dashboard (one component
+// at AddToHomeScreen.tsx; iOS-Safari + Chrome-Android branches both
+// handled). Auto-hides if installed or dismissed (localStorage key).
 
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
