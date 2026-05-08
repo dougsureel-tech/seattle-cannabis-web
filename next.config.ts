@@ -182,6 +182,11 @@ const nextConfig: NextConfig = {
       { source: "/how-to-roll-a-blunt-blunt-rolling-directions", destination: "/blog/how-to-roll-a-blunt", permanent: true },
       { source: "/marijuana-pipes-how-to-smoke-from-and-use-a-weed-pipe", destination: "/blog/how-to-use-a-cannabis-pipe", permanent: true },
       { source: "/marijuana-vaporizers-the-benefits-of-a-weed-vaporizer", destination: "/blog/cannabis-vaporizers-explained", permanent: true },
+      // Slug rename: vendor-spotlight-template → how-we-pick-our-producers
+      // (the original "template" suffix screamed dev-placeholder; renamed to a
+      // descriptive slug. Original URL preserved via 308 to avoid breaking
+      // any inbound links from the past 2 weeks the post has been live.)
+      { source: "/blog/vendor-spotlight-template", destination: "/blog/how-we-pick-our-producers", permanent: true },
       { source: "/incredible-edibles-where-to-buy-edibles-in-seattle", destination: "/blog", permanent: true },
       { source: "/individual-care-and-exceptional-experience-is-our-goal-at-seattle-cannabis-co-marijuana-store", destination: "/blog", permanent: true },
       { source: "/interview-with-cannabis-update", destination: "/blog", permanent: true },
