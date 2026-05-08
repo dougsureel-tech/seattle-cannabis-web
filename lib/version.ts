@@ -3,6 +3,7 @@
 // comes from Vercel automatically on every deploy and is the authoritative
 // "did my push actually land" signal.
 
+// 7.365 — 🔍 SEO redirect map round-2 expansion (Doug 2026-05-07: "same with seattle"). Mirror of glw v6.165's redirect-map work. **Routes added (~28):** wildcards `/shop/* /products/*` → `/menu`; missed categories `/prerolls /cartridges /topicals /tinctures /accessories` → `/menu`; `/strain/*` → `/find-your-strain`; legacy info-page paths `/contact-us /contact /location /locations /find-us /hours` → `/visit`; `/our-story /team /staff` → `/about`; `/privacy-policy /privacy /terms-of-service /terms-and-conditions /terms /tos` → `/about` (no real privacy/terms page; closest legal-disclosure surface is /about); WP archive paths `/author/* /blog/author/* /blog/category/* /blog/blog/* /tag/* /category/*` → `/blog`. All 308-permanent so existing inbound links + Google index entries resolve to a real page instead of 404. Sister: glw v6.165. tsc clean.
 // 7.285 — 🛡️ `/api/quiz/capture` adds 5/min/IP rate limit. Each call inserts + fires Resend (per-email billing). 7-day dedupe per (email, source) prevents repeat-to-same-inbox; per-IP rate limit blocks the different-email loop. Sister mirror on glw v6.085. tsc clean.
 // 7.205 — 🛡️ `/api/orders` adds 5/min/user rate limit. Each order-place call triggers INSERT + SMS confirm + email confirm + audit row — accidentally double-firing or a stuck retry loop fans out to staff (POS queue) + Twilio + Resend. Clerk auth gated; rate limits PER userId. Sister to glw v6.005 + inv `/api/customer/orders` (5/min/IP, existing). Pre-fix the public-site sister had only Vercel-edge body-size as defense. tsc clean.
 // 7.105 — 🛡️ `/api/rewards/{request-code,verify-code}` add upfront length caps. Both routes call `normalizeToE164(body.phone)` which runs a regex strip — without the cap, a 10MB phone payload would burn CPU on the strip before the length check would reject. verify-code additionally calls `(body.code ?? "").trim()` before the `/^\\d{6}$/` regex check. New caps: phone 32 chars (E.164 max formatted ~17), code 16 (6 digits + slack). Same defense class as inv v190.645 (sister `/api/customer/auth/verify` input caps) + this session's input-cap arc. All Sea OTP-flow endpoints now bound input length before crypto + regex work. Single-file edit per route, ~6 LOC each. tsc clean.
@@ -144,7 +145,7 @@
 // 4.76 — /apply personality prompts: two optional written prompts (product-recommendation pitch + customer-recovery story) capture personality signal without the photo discrimination risk. Stored in applicants.metadata JSONB on inventoryapp side. Compliance: written-only — no photo (WA RCW 49.60 / EEOC pre-offer photo discrimination risk).
 // 4.465 — /order place-order error messages reassure customer their cart is preserved on failure. Mirror of greenlife-web v3.625.
 // 4.71 — Public /apply form: apply-to-work intake with resume upload + 3 references + 21+ confirmation. POSTs to inventoryapp /api/applications. Compliance: no photo / no SSN / no DOB.
-export const BUILD_VERSION = "7.285";
+export const BUILD_VERSION = "7.365";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ??

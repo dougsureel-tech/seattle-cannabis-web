@@ -93,6 +93,51 @@ const nextConfig: NextConfig = {
       // this preserves the future-correct landing).
       { source: "/book", destination: "/order", permanent: true },
       { source: "/book-now", destination: "/order", permanent: true },
+
+      // Round-2 e-comm path expansion + WP-legacy info paths (Doug
+      // 2026-05-07: "same with seattle" — mirror of glw v6.165). Catches
+      // wildcard variants Sea was missing + the common /contact /location
+      // /hours /our-story style URLs that WordPress retailer sites
+      // typically had.
+      { source: "/shop/:path*", destination: "/menu", permanent: true },
+      { source: "/products/:path*", destination: "/menu", permanent: true },
+      { source: "/prerolls", destination: "/menu", permanent: true },
+      { source: "/cartridges", destination: "/menu", permanent: true },
+      { source: "/topicals", destination: "/menu", permanent: true },
+      { source: "/tinctures", destination: "/menu", permanent: true },
+      { source: "/accessories", destination: "/menu", permanent: true },
+      { source: "/strain/:slug*", destination: "/find-your-strain", permanent: true },
+
+      // Common WordPress / legacy info-page paths → semantic equivalent.
+      { source: "/contact-us", destination: "/visit", permanent: true },
+      { source: "/contact", destination: "/visit", permanent: true },
+      { source: "/location", destination: "/visit", permanent: true },
+      { source: "/locations", destination: "/visit", permanent: true },
+      { source: "/find-us", destination: "/visit", permanent: true },
+      { source: "/hours", destination: "/visit", permanent: true },
+      { source: "/our-story", destination: "/about", permanent: true },
+      { source: "/team", destination: "/about", permanent: true },
+      { source: "/staff", destination: "/about", permanent: true },
+
+      // /privacy + /terms aren't real pages on the new site (operating
+      // disclosures live on /about + the WSLCB-required posters in-store).
+      // Redirect to /about so old-indexed URLs land on something rather
+      // than 404.
+      { source: "/privacy-policy", destination: "/about", permanent: true },
+      { source: "/privacy", destination: "/about", permanent: true },
+      { source: "/terms-of-service", destination: "/about", permanent: true },
+      { source: "/terms-and-conditions", destination: "/about", permanent: true },
+      { source: "/terms", destination: "/about", permanent: true },
+      { source: "/tos", destination: "/about", permanent: true },
+
+      // WP author/category/tag archives — never had real customer value;
+      // collapse to /blog so inbound links don't dead-end.
+      { source: "/author/:slug*", destination: "/blog", permanent: true },
+      { source: "/blog/author/:slug*", destination: "/blog", permanent: true },
+      { source: "/blog/category/:slug*", destination: "/blog", permanent: true },
+      { source: "/blog/blog/:path*", destination: "/blog", permanent: true },
+      { source: "/tag/:slug*", destination: "/blog", permanent: true },
+      { source: "/category/:slug*", destination: "/blog", permanent: true },
     ];
   },
 };
