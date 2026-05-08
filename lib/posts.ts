@@ -97,7 +97,7 @@ If you're coming from elsewhere in the city: we're 10 minutes south of Beacon Hi
 
 ## Discounts
 
-- 15% off online orders placed at our pickup site
+- 20% off online orders placed at our pickup site
 - Veteran and active-duty military (with ID)
 - First-responder discount (with ID)
 - Loyalty rewards on every purchase
