@@ -18,11 +18,23 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       // Default crawler — Google, Bing, the long tail. /account is
       // user-specific (no SEO value). /api is internal noise; /sign-in
-      // + /sign-up are auth pages — keep them out of the crawl budget.
+      // + /sign-up are auth pages. /rewards/* is the SpringBig-cutover
+      // PWA (auth-gated, per-customer). /stash is a per-visitor
+      // localStorage view. /quiz/unsubscribe is a post-action surface.
+      // Page-level noindex already handles indexing but adding here
+      // saves the crawl request entirely.
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/account", "/api/", "/sign-in", "/sign-up"],
+        disallow: [
+          "/account",
+          "/api/",
+          "/quiz/unsubscribe",
+          "/rewards",
+          "/sign-in",
+          "/sign-up",
+          "/stash",
+        ],
       },
       // ── AI search engines — explicit allow ─────────────────────────
       // OpenAI: ChatGPT (incl. browse mode + Atlas)
