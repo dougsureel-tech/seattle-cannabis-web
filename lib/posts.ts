@@ -853,6 +853,132 @@ Cartridges store best **upright, away from heat and direct light**. Heat thins t
 [Browse vapes on the live menu](/menu) · [Cannabis vs dispensary 101](/blog/complete-guide-cannabis-rainier-valley)
 `,
   },
+  {
+    slug: "how-to-make-cannabis-edibles",
+    title: "How to Make Cannabis Edibles — A Beginner's Guide",
+    description:
+      "Make cannabis edibles at home: cannabutter and oil basics, dosing math, onset and duration, what to expect. A practical guide from a Seattle dispensary.",
+    category: "Education",
+    publishedAt: "2019-07-15",
+    updatedAt: "2026-05-08",
+    readingMinutes: 6,
+    body: `Edibles are cannabis you eat or drink rather than smoke. The mechanism is different — your liver metabolizes THC into 11-hydroxy-THC, which has a longer onset, longer duration, and a different feel than inhaled cannabis. This guide is the umbrella tutorial for making your own at home.
+
+Specific recipes: [cannabutter](/blog/how-to-make-cannabis-butter) · [cannabis cookies](/blog/how-to-make-cannabis-cookies)
+
+## How edibles differ from smoking flower
+
+| Trait | Smoked flower | Edibles |
+|---|---|---|
+| Onset | 5-10 minutes | 60-90 minutes (sometimes 2 hours) |
+| Peak | 30 minutes | 2-3 hours |
+| Duration | 1-2 hours | 4-8 hours |
+| Dose feel | Predictable, fades fast | Slow build, longer plateau |
+
+The slower onset is where most overdose stories start: someone takes a dose, doesn't feel anything at 30 minutes, takes another, then both kick in at hour 2. **Wait at least 90 minutes before re-dosing.** That's the rule.
+
+## The base ingredient: cannabutter (or cannabis oil)
+
+Most homemade edibles start with **cannabutter** (cannabis-infused butter) or **cannabis oil** (coconut, olive, or canola oil with cannabis simmered in). Once you have a batch, swap it 1:1 for regular butter or oil in any recipe — brownies, cookies, sauces, salad dressings.
+
+The full butter recipe lives at [how-to-make-cannabis-butter](/blog/how-to-make-cannabis-butter). The shortened version:
+
+1. **Decarb** flower at 240°F for 40 minutes (activates THC).
+2. **Simmer** with butter + water on low heat for 2-3 hours.
+3. **Strain** through cheesecloth, refrigerate overnight, lift the butter disc off.
+
+Cannabis oil follows the same process — substitute oil for butter in step 2.
+
+## Dose math
+
+The dose math is identical regardless of recipe:
+
+1. **Total THC in your flower** = grams × (THC% × 10). E.g., 7g of 20% flower = 7 × 200 = 1,400 mg theoretical max.
+2. **Real-world extraction** is 50-70% of theoretical with a home simmer. Call it 60% to be safe.
+3. **Total THC in your butter batch** = step 1 × 0.60.
+4. **Per-serving dose** = step 3 ÷ servings per recipe.
+
+Example: 7g of 20% flower simmered into 1 lb butter, used to make 24 brownies:
+- 1,400 × 0.60 = 840 mg THC in the whole pound
+- 840 ÷ 24 = **35 mg per brownie** (cut in half for ~17 mg, into quarters for ~9 mg)
+
+For a first-timer: **start at 2.5-5 mg.** You can always eat more at the 90-minute mark; you can't undo eating too much.
+
+## What flower to use
+
+The cooking process doesn't care if the flower is pretty. Older flower, shake, or trim works fine — extraction is the same. The flower section at ${STORE.name} carries singles, eighths, and ounce options at value pricing for cooking; tell a budtender you're making edibles and we'll point you at density-per-dollar options.
+
+## What if it goes wrong
+
+Too much THC at once is uncomfortable but not dangerous. Symptoms: anxiety, racing heart, paranoia, dry mouth, drowsiness. The classic remedies:
+
+- **Hydrate.** Sip water, not chug.
+- **Find a safe place.** Couch, blanket, dim lights.
+- **Eat something.** A real meal helps absorption normalize.
+- **CBD if you have it.** A 1:1 CBD:THC tincture can take the edge off.
+- **Sleep.** Most uncomfortable peaks pass during sleep.
+
+It will pass. Edibles overload is over within 4-8 hours. If anyone is in genuine medical distress (chest pain, can't breathe, etc.), call 911 — but the vast majority of "I ate too much" experiences are uncomfortable, not dangerous.
+
+[Cannabutter recipe](/blog/how-to-make-cannabis-butter) · [Cookies recipe](/blog/how-to-make-cannabis-cookies) · [Edibles dosing guide](/blog/edibles-dosing-honest-guide)
+`,
+  },
+  {
+    slug: "lighting-cannabis-flower",
+    title: "Lighting Cannabis Flower — Lighters, Hemp Wicks, Matches",
+    description:
+      "How to light cannabis flower in a pipe or joint: butane lighters, hemp wicks, matches, torches, and what to avoid.",
+    category: "Education",
+    publishedAt: "2019-04-03",
+    updatedAt: "2026-05-08",
+    readingMinutes: 3,
+    body: `The flame you use to light cannabis affects the flavor — and the smaller details matter more than people expect. This is a quick guide to the four common options.
+
+## Butane lighters
+
+The default. Bic, Clipper, Zippo (filled with butane, not naphtha). Cheap, reliable, available at every gas station.
+
+Two notes:
+- **Hold the flame above the flower, not directly on it.** Touching flame to flower scorches the surface and produces harsh smoke. The cherry should catch from radiant heat.
+- **Many smokers prefer to "corner" the bowl** — light just one section so the rest stays fresh for later hits. Pulls cleaner and tastes better.
+
+## Hemp wicks
+
+A length of cotton or hemp cord coated in beeswax. Light one end, then use the slow-burning wick to light bowls or joints. The reason people use them is taste — beeswax is closer to the flower flavor than butane, and the burn temperature is gentler.
+
+How to use:
+1. Light one end of the wick from a regular lighter (you need to spark it once).
+2. Hold the wick to the bowl or joint at an angle, drawing slowly.
+3. Tilt down to put it out, or wait for it to self-extinguish (it will after a minute if left alone).
+4. The wax can drip — don't set a lit wick on fabric or paper.
+
+Hemp wicks live in head shops or online. Most cannabis dispensaries (including ${STORE.name}) don't sell accessories under Washington retail license rules.
+
+## Matches
+
+Wooden matches work. Sulfur tip burns off in the first second; let it die down before bringing the match to your bowl. Cardboard matches are fine for joints but tend to burn out fast on a bowl.
+
+Practical: matches taste cleaner than butane to most palates, but they're slow and you'll go through a book quickly.
+
+## Torches (for concentrates / dabs)
+
+Butane torches (the kind you'd use for crème brûlée) are the standard for dab rigs and concentrate vapes that use a glass nail. **Not for flower** — too hot, burns through the bowl in a flash.
+
+A torch's flame is 2,000°F+; flower combusts cleanly at 600-900°F. Mismatching them just wastes flower.
+
+## What to avoid
+
+- **Aluminum-foil "emergency" pipes.** Don't. Aluminum vapor isn't something you want in your lungs. If you're improvising, an apple pipe works.
+- **Plastic lighters held inverted.** A few brands of cheap lighters can leak fluid when held upside-down — easy to scorch fingers + the flower.
+- **Car cigarette lighters** for bowl-lighting. They can spark a joint or hemp wick fine, but they don't reach the flower.
+
+## TL;DR
+
+If you want simple: butane lighter, light from above, corner the bowl. If you want flavor: hemp wick. If you want clean and slow: matches. If you're hitting concentrates: torch.
+
+[Browse the live flower menu](/menu) · [How to use a cannabis pipe](/blog/how-to-use-a-cannabis-pipe)
+`,
+  },
 ];
 
 export function getPost(slug: string): Post | undefined {

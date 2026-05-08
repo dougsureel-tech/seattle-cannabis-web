@@ -168,7 +168,7 @@ const nextConfig: NextConfig = {
       { source: "/buy-weed-in-seattle-5-reasons-to-choose-marijuana-over-alcohol", destination: "/blog", permanent: true },
       { source: "/cannabis-coffee-wake-and-bake-without-the-grogginess", destination: "/blog", permanent: true },
       { source: "/celebrate-420-with-scc", destination: "/blog", permanent: true },
-      { source: "/cooking-with-marijuana-how-to-make-weed-edibles", destination: "/blog", permanent: true },
+      { source: "/cooking-with-marijuana-how-to-make-weed-edibles", destination: "/blog/how-to-make-cannabis-edibles", permanent: true },
       { source: "/double-delicious", destination: "/blog", permanent: true },
       { source: "/grand-opening-this-saturday-february-28-2015", destination: "/blog", permanent: true },
       { source: "/harmony-farms", destination: "/blog", permanent: true },
@@ -186,7 +186,7 @@ const nextConfig: NextConfig = {
       { source: "/individual-care-and-exceptional-experience-is-our-goal-at-seattle-cannabis-co-marijuana-store", destination: "/blog", permanent: true },
       { source: "/interview-with-cannabis-update", destination: "/blog", permanent: true },
       { source: "/is-marijuana-legal-in-seattle-yes-how-to-buy-marijuana-in-seattle", destination: "/blog/is-cannabis-legal-in-seattle", permanent: true },
-      { source: "/lighting-weed-lighters-hemp-wicks-matches", destination: "/blog", permanent: true },
+      { source: "/lighting-weed-lighters-hemp-wicks-matches", destination: "/blog/lighting-cannabis-flower", permanent: true },
       { source: "/marijuana-breath-tests-currently-in-development-at-washington-state-university", destination: "/blog", permanent: true },
       { source: "/marijuana-inspired-christmas-holiday-stoner-gifts", destination: "/blog", permanent: true },
       // /marijuana-pipes + /marijuana-vaporizers upgraded to specific posts above (v8.295).
