@@ -107,6 +107,22 @@ export default async function middleware(req: NextRequest) {
     target.port = "";
     return NextResponse.redirect(target.toString(), 308);
   }
+
+  // /admin/* on the public customer site → brapp.seattlecannabis.co (the
+  // staff inventoryapp subdomain). Sister of greenlife-web v6.785. Doug
+  // 2026-05-08: "in case i forget to type brapp." Catches typos like
+  // `seattlecannabis.co/admin/portals` → `brapp.seattlecannabis.co/admin/portals`,
+  // where staff URLs aren't hosted on the public site at all and would
+  // otherwise 404. Query string + path preserved. 307 (not 308) so
+  // reversible if /admin paths ever become public-site-side.
+  if (url.pathname === "/admin" || url.pathname.startsWith("/admin/")) {
+    const target = new URL(req.url);
+    target.hostname = "brapp.seattlecannabis.co";
+    target.protocol = "https:";
+    target.port = "";
+    return NextResponse.redirect(target.toString(), 307);
+  }
+
   // TEMPORARY 2026-05-04 per Doug — Seattle inventoryapp DB has Wenatchee-
   // seeded prices on shared-ID products (OUTSTANDING_WORK 3.9 + INCIDENTS),
   // so the in-tree /order menu shows wrong prices. /menu (iHeartJane Boost
