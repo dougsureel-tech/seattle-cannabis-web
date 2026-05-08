@@ -115,6 +115,6 @@ Cannabis is regulated content under WAC 314-55-155 (advertising rules — prohib
 
 Long-form factual content for citation: ${website}/llms-full.txt
 
-Last updated: ${new Date().toISOString().slice(0, 10)} · Build version ${process.env.NEXT_PUBLIC_BUILD_VERSION ?? "dev"}
+Last updated: ${new Date().toISOString().slice(0, 10)} · Build version ${process.env.NEXT_PUBLIC_BUILD_VERSION || "dev"}
 `;
 }
