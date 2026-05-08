@@ -457,6 +457,208 @@ Nothing on this page is medical advice. Cannabis isn't FDA-approved for any cond
 [Browse the live menu](/menu) — every flower we carry has terpene info in the product detail card.
 `,
   },
+  {
+    slug: "how-to-roll-a-blunt",
+    title: "How to Roll a Blunt — A Step-by-Step Guide",
+    description:
+      "How to roll a blunt: pick the right cigar, prep the flower, and roll a clean blunt every time. A practical guide from a Seattle dispensary.",
+    category: "Education",
+    publishedAt: "2019-05-15",
+    updatedAt: "2026-05-08",
+    readingMinutes: 5,
+    body: `Rolling a blunt is a small skill with a big payoff: a clean roll burns evenly, tastes better, and lasts longer than a sloppy one. This is the version of the directions we'd give a friend at the counter — what to buy, what to do, and what most beginners get wrong.
+
+## What you'll need
+
+- **A cigar** — typically a Swisher Sweet, Backwoods, or any natural-leaf wrap. Tobacco-free hemp wraps (King Palm, OCB) work too if you want to skip the nicotine.
+- **Flower** — about a gram for a standard blunt, more for a fat one. The blunt-rolling section of the menu always works; we keep an eighth shelf for this.
+- **A grinder** — optional but makes things easier. Hand-broken flower works in a pinch.
+- **A lighter** — keep it nearby for the seal step at the end.
+- **A knife or your thumbnail** — for splitting the cigar.
+
+## Step-by-step
+
+1. **Grind the flower.** Medium-coarse, not powder. If you grind too fine the blunt smokes too fast and you'll pull tiny pieces into your mouth.
+2. **Split the cigar.** Run a knife (or your thumbnail) lengthwise down one side. Empty the tobacco out — slowly, so the wrap doesn't tear.
+3. **Moisten the wrap.** A light lick along the inside seam keeps the wrap pliable and helps it seal. Skip this if the wrap is already moist.
+4. **Pack the flower.** Spread it evenly along the wrap. Even distribution = even burn. Don't overpack the ends.
+5. **Roll it up.** Tuck the side closest to you under the flower, then roll forward, keeping it tight. The first half-rotation is the hardest.
+6. **Seal the seam.** Lick the top edge, press down. Run the lighter along the seal — flame near, not on, the wrap — to dry it out.
+7. **Bake the blunt.** Lightly toast the whole exterior with the lighter for 5-10 seconds. This dries the saliva and tightens the wrap.
+8. **Light it.** Hold the flame to the tip and rotate while drawing slowly. Don't rush — an evenly lit cherry burns smooth from the start.
+
+## Common beginner mistakes
+
+- **Grinding too fine.** Aim for coffee-ground texture, not powder. Powder pulls into your mouth and clogs.
+- **Rolling too loose.** A loose blunt canoes (burns down one side). Pack it firm but not crushed.
+- **Skipping the bake.** Saliva on the seam runs the wrap if you don't dry it. 10 seconds with a lighter is the difference between a tight burn and a flaky one.
+
+## What flower works best
+
+Cured indoor flower with some terpene density rolls cleaner than dry, leafy material. If you're picking up specifically to roll: ask a budtender for "something dense and a little sticky" — that's blunt-friendly. Anything in our **flower** section will work; if you want recommendations for a specific occasion, the staff can point you at the shelf.
+
+[Browse the live flower menu](/menu) · [Visit ${STORE.name} in Rainier Valley](/visit)
+`,
+  },
+  {
+    slug: "how-to-make-cannabis-butter",
+    title: "How to Make Cannabis Butter — The Beginner's Cannabutter Recipe",
+    description:
+      "How to make cannabis butter at home: ingredients, decarb, simmer time, dosing math. A practical cannabutter recipe from a Seattle dispensary.",
+    category: "Education",
+    publishedAt: "2019-08-12",
+    updatedAt: "2026-05-08",
+    readingMinutes: 7,
+    body: `Cannabutter is the foundation of most homemade edibles. Brownies, cookies, savory dishes, anything where butter is in the recipe — swap in cannabutter and you've got a cannabis-infused version of the same thing. The recipe is simple; the math on dosing is where most people slip.
+
+## Ingredients
+
+- **1/4 oz to 1 oz of flower** — see "How much cannabis to use" below.
+- **1 lb of unsalted butter** (4 sticks).
+- **2 cups of water.**
+- **A small saucepan or double-boiler.**
+- **Cheesecloth or a fine mesh strainer.**
+- **A storage container** (mason jar works).
+
+## Step 1: Decarb the flower
+
+Decarboxylation activates the THC. Without this step, the cannabis you cook is mostly THCA — which is _not_ psychoactive. To decarb:
+
+1. Preheat the oven to **240°F**.
+2. Break the flower into small pieces (don't grind to powder).
+3. Spread on a parchment-lined baking sheet.
+4. Bake for **40 minutes**, stirring once at the 20-minute mark.
+
+The flower will turn light brown and smell strongly cannabis-like. That's done.
+
+## Step 2: Simmer with butter
+
+1. In a saucepan, combine the butter + 2 cups of water on **low heat**. The water prevents the butter from scorching.
+2. Once the butter melts, add the decarbed flower.
+3. Simmer **uncovered, low heat, 2-3 hours**. Stir every 20 minutes.
+
+You're looking for a slow infusion — not a boil. The mixture should never bubble aggressively. Low and slow is the rule.
+
+## Step 3: Strain + cool
+
+1. Pour the hot butter mix through cheesecloth or a fine strainer into a storage container.
+2. Discard the spent flower (or compost it).
+3. Cover and refrigerate **overnight**. The water sinks to the bottom; the cannabutter floats and solidifies on top.
+4. Lift the butter disc off, drain the water, store in the fridge.
+
+Cannabutter keeps for **2-3 weeks in the fridge** or **6+ months in the freezer**.
+
+## How much cannabis to use
+
+This is the part most recipes skip — and it's the part that matters. The general rule:
+
+- **High-THC flower (20%+):** 1/4 to 1/2 oz per pound of butter
+- **Mid-grade flower (15-19%):** 1/2 to 3/4 oz per pound
+- **Low-grade or shake (10-15%):** 3/4 to 1 oz per pound
+
+The dose math:
+- 1 oz = 28 g = 28,000 mg
+- A 20% THC flower contains 28,000 × 0.20 = 5,600 mg THC per oz (theoretical max)
+- Real-world extraction efficiency is 50-70% with a home simmer
+- So 1 oz of 20% flower → roughly 2,800-3,900 mg THC in the finished butter
+- 1 lb of butter = 16 tablespoons = 48 teaspoons
+- A teaspoon of that butter ≈ 60-80 mg THC
+
+That's strong. **For a first batch, start with 1/4 oz of 20% flower per pound** and test conservatively before scaling.
+
+## Testing your batch
+
+The first time you use a new batch, **eat 1/4 of a normal serving and wait 90 minutes** before deciding. Edibles onset is slow (60-90 minutes), peak is 2-3 hours. Most overdose stories trace back to "I didn't feel anything so I ate more" — don't.
+
+## Storage + safety
+
+- Label the container clearly. "Cannabutter — keep away from kids/pets."
+- Store on the top shelf of the fridge, not in plain view.
+- If you have kids in the house, lock it up. Edibles look like normal food.
+
+## What flower to use
+
+Anything fresh enough to smoke also works for cannabutter. Older flower, shake, or trim works fine here too — the cooking process doesn't care if the buds are pretty. The flower section at ${STORE.name} carries singles, eighths, and ounce options; if you tell a budtender you're cooking, we'll point you at value-density options.
+
+[Browse the flower menu](/menu) · [Find an indica/sativa/hybrid match](/find-your-strain)
+`,
+  },
+  {
+    slug: "is-cannabis-legal-in-seattle",
+    title: "Is Cannabis Legal in Seattle? A Plain-English Guide",
+    description:
+      "Cannabis is legal in Seattle for adults 21+ since I-502 (2012). What's allowed, what's not, where to buy, where to consume — a clear guide.",
+    category: "Local",
+    publishedAt: "2019-03-20",
+    updatedAt: "2026-05-08",
+    readingMinutes: 6,
+    body: `Recreational cannabis has been legal in Washington State since voters passed Initiative 502 in November 2012. Sales started in July 2014. As of today, adults 21 and over can buy, possess, and consume cannabis under specific rules. Here's the practical version.
+
+## Who can buy
+
+You must be **21 or older with valid government-issued photo ID** at every visit. Driver's licenses, state IDs, passports, military IDs — any of those work. Vertical IDs (issued to people who were under 21 at issuance) trigger a two-employee verification at the counter, even if the customer is now over 21.
+
+There's no medical-card requirement for recreational purchases. Patients with a Washington Department of Health (DOH) medical authorization get specific tax exemptions but the same products are available either way.
+
+## How much you can buy
+
+Washington caps a single recreational transaction at:
+
+- **1 ounce** of usable cannabis flower
+- **7 grams** of concentrate (wax, shatter, rosin, live resin)
+- **16 ounces** of solid cannabis-infused product (or 72 ounces in liquid form)
+
+These are per-transaction caps — the state does not track total purchases across stores. Our POS hard-blocks anything over the cap; that's compliance, not a glitch.
+
+## Where you can buy
+
+Only **state-licensed retailers** — every dispensary in Washington holds a WSLCB retail license. Buying from anywhere else (including out-of-state delivery, "underground" sources, or unlicensed dispensaries operating in tribal lands without a WSLCB compact) is illegal under state law.
+
+${STORE.name} is licensed under WSLCB #${STORE.wslcbLicense}. We're at ${STORE.address.full} — Rainier Valley, between Columbia City and Seward Park.
+
+## Where you can consume
+
+This is where most people slip up:
+
+- **Allowed:** in your private residence (if you own it, or your landlord allows it)
+- **Not allowed:** in public spaces, in your car (open or closed), at the workplace, in stores, in parks, on tribal land without permission
+- **Not allowed at the dispensary:** the parking lot, the sidewalk, your car parked outside — all "on premises" under WSLCB rules
+
+Cannabis lounges and consumption sites do not exist in Washington as of 2026. State-level legalization for on-site consumption has been proposed multiple times but hasn't passed.
+
+Hotels and short-term rentals (Airbnb, VRBO) often prohibit cannabis use; check your rental agreement.
+
+## Driving + impairment
+
+Washington's DUI law applies to cannabis. The legal threshold is **5 ng/mL of active THC** in the blood. There is no "medical exemption" for driving while impaired. Edibles peak 2-3 hours after consumption and can stay above the legal threshold for many hours after that — plan ahead.
+
+## Federal law
+
+Cannabis remains a Schedule I controlled substance under federal law. Practical implications:
+
+- **Federal land** (national parks, federal buildings) — illegal regardless of state law
+- **Air travel** — TSA's stated policy is to defer to local law, but federal law applies in airports + on flights
+- **Federal jobs + federal financial aid** — disqualifying in many cases
+- **Banking** — most national banks won't process cannabis transactions, which is why most dispensaries (including ours) are cash-only
+
+## Medical patients
+
+Washington's medical cannabis program (RCW 69.51A) gives qualifying patients tax exemptions and access to higher purchase caps. To qualify, you need a written authorization from a healthcare provider for one of the listed conditions. The Washington DOH issues a recognition card ($1) that unlocks the tax exemption.
+
+## How to buy
+
+The simplest path:
+
+1. Walk into any licensed dispensary with valid ID
+2. Browse the menu (or order online ahead at our [/menu](/menu))
+3. Pay cash at the counter (most dispensaries are cash-only; we have an ATM on-site)
+4. Walk out with your purchase in tamper-evident packaging
+
+That's it. No referral. No waiting period. No quota.
+
+[Visit ${STORE.name}](/visit) · [Browse the live menu](/menu) · [First-time customer FAQ](/faq)
+`,
+  },
 ];
 
 export function getPost(slug: string): Post | undefined {

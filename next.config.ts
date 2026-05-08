@@ -174,13 +174,16 @@ const nextConfig: NextConfig = {
       { source: "/harmony-farms", destination: "/blog", permanent: true },
       { source: "/hempfest-2016", destination: "/blog", permanent: true },
       { source: "/house-of-cultivar", destination: "/blog", permanent: true },
-      { source: "/how-to-make-marijuana-butter-cooking-weed-butter", destination: "/blog", permanent: true },
-      { source: "/how-to-make-marijuana-cookies-cooking-weed-cookies", destination: "/blog", permanent: true },
-      { source: "/how-to-roll-a-blunt-blunt-rolling-directions", destination: "/blog", permanent: true },
+      // Restored content — these legacy URLs ranked in March 2026; instead of
+      // redirecting to /blog index, we ported the content to /blog/[slug] in
+      // SCC voice (no efficacy claims, no profanity, WAC 314-55-155 compliant).
+      { source: "/how-to-make-marijuana-butter-cooking-weed-butter", destination: "/blog/how-to-make-cannabis-butter", permanent: true },
+      { source: "/how-to-make-marijuana-cookies-cooking-weed-cookies", destination: "/blog/how-to-make-cannabis-butter", permanent: true },
+      { source: "/how-to-roll-a-blunt-blunt-rolling-directions", destination: "/blog/how-to-roll-a-blunt", permanent: true },
       { source: "/incredible-edibles-where-to-buy-edibles-in-seattle", destination: "/blog", permanent: true },
       { source: "/individual-care-and-exceptional-experience-is-our-goal-at-seattle-cannabis-co-marijuana-store", destination: "/blog", permanent: true },
       { source: "/interview-with-cannabis-update", destination: "/blog", permanent: true },
-      { source: "/is-marijuana-legal-in-seattle-yes-how-to-buy-marijuana-in-seattle", destination: "/blog", permanent: true },
+      { source: "/is-marijuana-legal-in-seattle-yes-how-to-buy-marijuana-in-seattle", destination: "/blog/is-cannabis-legal-in-seattle", permanent: true },
       { source: "/lighting-weed-lighters-hemp-wicks-matches", destination: "/blog", permanent: true },
       { source: "/marijuana-breath-tests-currently-in-development-at-washington-state-university", destination: "/blog", permanent: true },
       { source: "/marijuana-inspired-christmas-holiday-stoner-gifts", destination: "/blog", permanent: true },
