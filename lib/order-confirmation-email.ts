@@ -98,7 +98,7 @@ const WSLCB_LICENSE = "WSLCB License 426199";
 // `RESEND_REPLY_TO` env unset on Seattle (per inventoryapp v3.325
 // notes) so falls through to STORE.email = `rainier@seattlecannabis.co`
 // — the monitored inbox.
-const OPT_OUT_EMAIL = process.env.RESEND_REPLY_TO ?? STORE.email;
+const OPT_OUT_EMAIL = process.env.RESEND_REPLY_TO || STORE.email;
 
 function buildHtml(args: OrderConfirmationArgs): string {
   const {

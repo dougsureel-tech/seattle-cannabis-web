@@ -33,7 +33,7 @@ import "server-only";
 
 const API_KEY = process.env.RESEND_API_KEY;
 const DEFAULT_FROM =
-  process.env.RESEND_FROM ?? "Seattle Cannabis Co. <hi@seattlecannabis.co>";
+  process.env.RESEND_FROM || "Seattle Cannabis Co. <hi@seattlecannabis.co>";
 // Reply-To override. When set, customer replies to outbound mail land
 // here instead of the From address. Mirror of greenlife-web — kept
 // symmetric so both repos behave identically. Seattle's From

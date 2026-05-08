@@ -100,7 +100,7 @@ const WSLCB_LICENSE = "WSLCB License 426199";
 // memory, `rainier@` is the confirmed monitored inbox. Sister to
 // greenlife-web v3.335. RESEND_REPLY_TO unset on Seattle so falls
 // through to STORE.email = `rainier@seattlecannabis.co`.
-const OPT_OUT_EMAIL = process.env.RESEND_REPLY_TO ?? STORE.email;
+const OPT_OUT_EMAIL = process.env.RESEND_REPLY_TO || STORE.email;
 
 function buildHtml(args: WelcomeEmailArgs): string {
   const { firstName, storeName, storeAddress, mapUrl, hoursText, deepLinkOrder } = args;
