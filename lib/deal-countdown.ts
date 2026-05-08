@@ -5,6 +5,7 @@
 // component imports a value from a "use client" file).
 
 import { STORE_TZ } from "./store";
+import { HOUR_MS, DAY_MS } from "./time-constants";
 
 export type DealCountdownState = {
   label: string;
@@ -27,9 +28,9 @@ export function computeDealCountdown(endDate: string | null): DealCountdownState
   const now = Date.now();
   const ms = end - now;
   if (ms <= 0) return { label: "Ended", urgent: true };
-  const days = Math.ceil(ms / 86_400_000);
+  const days = Math.ceil(ms / DAY_MS);
   if (days === 1) {
-    const hours = Math.ceil(ms / 3_600_000);
+    const hours = Math.ceil(ms / HOUR_MS);
     if (hours <= 24 && hours > 0) {
       const todayPt = new Date(
         new Date().toLocaleString("en-US", { timeZone: STORE_TZ }),

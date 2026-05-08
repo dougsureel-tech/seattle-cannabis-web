@@ -30,6 +30,7 @@ import { NextRequest, NextResponse, after } from "next/server";
 import { getClient } from "@/lib/db";
 import { normalizeToE164 } from "@/lib/sms";
 import { createHash, createHmac, timingSafeEqual } from "node:crypto";
+import { DAY_MS } from "@/lib/time-constants";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -51,7 +52,7 @@ function makeSessionCookie(phoneE164: string, secret: string): string {
   const payload = {
     phone: phoneE164,
     issuedAt: Date.now(),
-    expiresAt: Date.now() + SESSION_TTL_DAYS * 86_400_000,
+    expiresAt: Date.now() + SESSION_TTL_DAYS * DAY_MS,
     purpose: "scc-rewards-v1",
   };
   const encoded = Buffer.from(JSON.stringify(payload)).toString("base64url");
