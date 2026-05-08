@@ -1399,6 +1399,9 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* ─── FAQ section — GEO + Google rich-result fuel ──────────────────── */}
+      <FaqSection />
+
       {/* ─── CTA band ───────────────────────────────────────────────────────── */}
       {/* Bottom-of-page CTA — same indigo→violet gradient identity as the
           AnnouncementBar / footer / hours card. Page bookends in matching
@@ -1422,5 +1425,93 @@ export default async function HomePage() {
         </div>
       </section>
     </>
+  );
+}
+
+// ──────────────────────────────────────────────────────────────────────────
+// FAQ section — answers the questions ChatGPT / Perplexity / Google AI
+// Overviews actually get asked about local dispensaries, paired with a
+// FAQPage JSON-LD payload. Sister to greenlife-web v4.665 + the homepage
+// HowTo schema shipped at v5.705. AI engines lift answers verbatim from
+// FAQPage schema when they trust the source, and Google's standard SERP
+// can render a rich-result expander from the same payload.
+// ──────────────────────────────────────────────────────────────────────────
+function FaqSection() {
+  const faqs: { q: string; a: string }[] = [
+    {
+      q: "Where is the best dispensary in Rainier Valley?",
+      a: "Seattle Cannabis Co is at 7266 Rainier Ave S in Seattle's Rainier Valley — closest dispensary to Seward Park, Rainier Beach, Beacon Hill, Mount Baker, Columbia City, Othello, and Hillman City. Open every day 8 AM to 11 PM, 365 days a year. We carry 100+ Washington brands, all WSLCB-licensed.",
+    },
+    {
+      q: "What time does Seattle Cannabis Co open?",
+      a: "8 AM to 11 PM every day, including holidays. The live status badge at the top of this page shows whether we're currently open and how long until we close.",
+    },
+    {
+      q: "Do I need cash to buy cannabis at Seattle Cannabis Co?",
+      a: "Yes — cannabis retailers in Washington can't accept credit or debit cards because cannabis is still federally illegal, so banks won't process card payments for plant-touching businesses. We have an ATM on-site, and free parking right at the door.",
+    },
+    {
+      q: "What's the legal age to buy cannabis in Washington?",
+      a: "21 with a valid government ID. WA also recognizes medical authorizations from age 18 with a parent or guardian for qualifying conditions. We card every customer at the door — please bring your ID before you walk in.",
+    },
+    {
+      q: "Can I order cannabis online for pickup at Seattle Cannabis Co?",
+      a: "Yes. Build your cart on /order, pay in-store when you arrive (cash only). Most orders are ready in 10–20 minutes. You'll get a text when it's packed and waiting at the counter. Online orders save 15% off.",
+    },
+    {
+      q: "What's the difference between sativa, indica, and hybrid?",
+      a: "Sativa is associated with uplift and focus, indica with relaxation and sleep, hybrids land somewhere in between. The truth is more about each strain's terpene profile and your individual response than the label — pick a vibe (Energize / Chill / Sleep / Creative / Focus / Relief) and we'll show you what's in stock that fits.",
+    },
+    {
+      q: "Do you sell cannabis edibles, vapes, and concentrates?",
+      a: "All of the above, plus pre-rolls, tinctures, and topicals. Browse the full menu at /menu — every product is sourced from a WSLCB-licensed Washington producer and lab-tested for potency and contaminants.",
+    },
+    {
+      q: "How are cannabis taxes handled at the register?",
+      a: "WA state cannabis excise tax (37%) and Seattle local sales tax (~10.25%) are baked into the shelf price you see — what's on the tag is what you pay at the counter. Medical patients with a valid card get exemptions on certified medical products.",
+    },
+  ];
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  };
+
+  return (
+    <section className="bg-stone-50 border-y border-stone-100">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
+        <div className="text-center mb-10">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-indigo-700">FAQ</p>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-stone-900 tracking-tight mt-1.5">
+            Common questions
+          </h2>
+          <p className="text-stone-600 mt-1.5 text-sm">
+            First-time? Returning? Either way, here&apos;s what people ask most.
+          </p>
+        </div>
+        <div className="space-y-3">
+          {faqs.map((f, i) => (
+            <details
+              key={i}
+              className="group bg-white rounded-2xl border border-stone-200 hover:border-indigo-300 transition-colors open:shadow-md"
+            >
+              <summary className="cursor-pointer list-none px-5 py-4 flex items-start justify-between gap-3">
+                <span className="font-semibold text-stone-900 text-sm sm:text-base">{f.q}</span>
+                <span className="shrink-0 mt-0.5 text-indigo-700 font-bold text-lg leading-none transition-transform group-open:rotate-45">
+                  +
+                </span>
+              </summary>
+              <div className="px-5 pb-4 -mt-1 text-sm text-stone-600 leading-relaxed">{f.a}</div>
+            </details>
+          ))}
+        </div>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      </div>
+    </section>
   );
 }
