@@ -68,6 +68,17 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
 
+  // Bound BEFORE normalizeToE164() — that helper runs a regex strip over
+  // the input string, so a 10MB phone payload would burn CPU before the
+  // length check below would reject. 32 chars covers any formatted
+  // international phone (E.164 max formatted ~17). Sister to
+  // verify-code (this turn) + inv v190.645.
+  if (typeof body.phone === "string" && body.phone.length > 32) {
+    return NextResponse.json(
+      { error: "Phone number doesn't look right." },
+      { status: 400 },
+    );
+  }
   const phoneE164 = normalizeToE164(body.phone ?? "");
   if (!phoneE164.startsWith("+") || phoneE164.length < 12) {
     return NextResponse.json(

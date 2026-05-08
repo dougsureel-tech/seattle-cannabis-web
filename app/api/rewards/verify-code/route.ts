@@ -67,6 +67,19 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
 
+  // Bound BEFORE downstream normalization + .trim() — without this, a
+  // 10MB phone or code payload would burn CPU on the regex strip inside
+  // normalizeToE164() / on the .trim() pass before the format checks
+  // below would reject. Same defense class as inv v190.645 (sister
+  // /api/customer/auth/verify input caps). Phone 32 chars (E.164 max
+  // formatted ~17), code 16 (6 digits + slack).
+  if (
+    (typeof body.phone === "string" && body.phone.length > 32) ||
+    (typeof body.code === "string" && body.code.length > 16)
+  ) {
+    return NextResponse.json({ error: "Code is invalid or expired. Request a new one." }, { status: 401 });
+  }
+
   const phoneE164 = normalizeToE164(body.phone ?? "");
   const supplied = (body.code ?? "").trim();
 
