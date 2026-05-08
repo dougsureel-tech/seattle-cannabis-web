@@ -3,6 +3,7 @@
 // comes from Vercel automatically on every deploy and is the authoritative
 // "did my push actually land" signal.
 
+// 5.715 — `/menu` + `MenuFallback` close-time copy now reads today's hours via new `todayCloseLabel()` helper instead of `STORE.hours[0]?.close`. Sea is uniform 11 PM every day today so this is defensive (no visible current drift), but the helper prevents the same bug class that hit Wen on Friday/Saturday when its hours diverge from Monday's row — `STORE.hours[0]?.close` always returns the Monday entry. Sister to greenlife-web v4.835 (which had the visible drift). tsc clean.
 // 5.705 — Homepage HowTo JSON-LD — closes SEO sister gap with Wen. Wen homepage has had a HowTo schema block (v4.665ish) for the 3-step pickup flow + a FAQPage schema (v3.x); SCC homepage had visible 3-step content but ZERO JSON-LD — meaning AI Overviews + ChatGPT couldn't cite or lift the steps verbatim, and Google's rich-result rendering had nothing to work with. Added the HowTo schema (mirrors Wen v4.665 with Sea-specific copy: 15% online discount, ${STORE.name}, /order route). Pre-fix SCC was the visible-content-but-no-schema state — content lift to AI engines = 0%. FaqSection mirror is a separate larger ship (FAQs are Sea-specific copy, ~120 LOC). tsc clean.
 // 5.665 — /treasure-chest added to sitemap. Surface shipped v5.045 + linked from /menu strip + homepage pill, but `app/sitemap.ts` was never updated — Google never crawl-discovered the clearance lane. Pre-fix only customers who navigated the homepage pill OR /menu strip ever saw it. Adding with daily changeFrequency (inventory turns) + 0.7 priority. Sister: glw v4.825. tsc clean.
 // 5.625 — /menu page now respects PWA install cookie for app-only deals — closes the install-incentive gap on the most-visited customer page. Pre-fix /menu called getActiveDeals() without args, so installed visitors saw the same `app_only=false` subset as browser-only — losing the install incentive on the deals strip. Fix: read `scc_pwa_installed` cookie, pass `includeAppOnly`. 4-surface coverage complete: /deals list (v5.345), /deals/[id] (v5.605), homepage strip (v5.525), /menu strip (this). Sister: glw v4.745. tsc clean.
@@ -121,7 +122,7 @@
 // 4.76 — /apply personality prompts: two optional written prompts (product-recommendation pitch + customer-recovery story) capture personality signal without the photo discrimination risk. Stored in applicants.metadata JSONB on inventoryapp side. Compliance: written-only — no photo (WA RCW 49.60 / EEOC pre-offer photo discrimination risk).
 // 4.465 — /order place-order error messages reassure customer their cart is preserved on failure. Mirror of greenlife-web v3.625.
 // 4.71 — Public /apply form: apply-to-work intake with resume upload + 3 references + 21+ confirmation. POSTs to inventoryapp /api/applications. Compliance: no photo / no SSN / no DOB.
-export const BUILD_VERSION = "5.705";
+export const BUILD_VERSION = "5.715";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ??

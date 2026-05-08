@@ -96,6 +96,14 @@ export function isOpenNow(): boolean {
   return cur >= toMin(hours.open) && cur < toMin(hours.close);
 }
 
+// Today's close-time string. Sea is uniform 11 PM today so this returns
+// the same value every day, but keeps customer copy day-aware so a
+// future Sat/Sun adjustment (matching Wen's pattern) doesn't reintroduce
+// the `STORE.hours[0]?.close` drift bug. Sister to greenlife-web v4.835.
+export function todayCloseLabel(): string {
+  return STORE.hours.find((h) => h.day === todayDay())?.close ?? "11:00 PM";
+}
+
 // "Closes at 11:00 PM" when open; "Opens at 8:00 AM" when before today's open;
 // "Opens tomorrow at 8:00 AM" otherwise.
 export function nextOpenLabel(): string {
