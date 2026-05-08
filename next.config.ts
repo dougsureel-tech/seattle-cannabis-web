@@ -109,8 +109,10 @@ const nextConfig: NextConfig = {
       { source: "/strain/:slug*", destination: "/find-your-strain", permanent: true },
 
       // Common WordPress / legacy info-page paths → semantic equivalent.
-      { source: "/contact-us", destination: "/visit", permanent: true },
-      { source: "/contact", destination: "/visit", permanent: true },
+      // /contact has a real page on the new site (linked from sitemap.ts +
+      // faq + structured-data canonical) — DO NOT redirect /contact, only
+      // redirect the legacy aliases that point AT it.
+      { source: "/contact-us", destination: "/contact", permanent: true },
       { source: "/location", destination: "/visit", permanent: true },
       { source: "/locations", destination: "/visit", permanent: true },
       { source: "/find-us", destination: "/visit", permanent: true },
