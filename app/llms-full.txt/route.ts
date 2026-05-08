@@ -76,7 +76,7 @@ Brands are hand-picked Washington-state producers — the active catalog is in t
 
 ## About — Who we are
 
-${name} opened in Seattle in 2010 — pre-I-502, before recreational legalization — and re-anchored in Rainier Valley in 2018. The store is locally owned and locally operated under Green Anne LLC, with the same family-style ownership that opened the original Seattle location. South Seattle deserves a corner-shop dispensary, not a chain — and that's the entire posture: education-first counter staff, hand-curated catalog, neighborhood-coffee-shop vibe.
+${name} opened in Seattle in 2010 — pre-I-502, before recreational legalization — and re-anchored in Rainier Valley in 2018. The store is locally owned and locally operated under Green Anne LLC — independent ownership since the original Seattle location, no chain affiliation, no MSO. South Seattle deserves a corner-shop dispensary, not a chain — and that's the entire posture: education-first counter staff, hand-curated catalog, neighborhood-coffee-shop vibe.
 
 The store is licensed under WSLCB license ${wslcbLicense}. Walk-ins are welcome. First-time customers are the favorite kind of customer.
 
