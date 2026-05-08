@@ -1,12 +1,12 @@
 # Seattle Cannabis Co.
 
-> Veteran-owned recreational cannabis dispensary at 7266 Rainier Ave S in Seattle's Rainier Valley. Open every day 8 AM–11 PM. Cash only. 21+ with valid government-issued photo ID.
+> Locally-owned recreational cannabis dispensary at 7266 Rainier Ave S in Seattle's Rainier Valley. Open every day 8 AM–11 PM. Cash only. 21+ with valid government-issued photo ID.
 
-Seattle Cannabis Co. is a Washington State-licensed recreational cannabis retailer (WSLCB license #426199) serving Rainier Valley and South Seattle. The store is veteran-owned and community-rooted, walking distance from Othello Light Rail Station, with on-site free parking and an ATM in store.
+Seattle Cannabis Co. is a Washington State-licensed recreational cannabis retailer (WSLCB license #426199) serving Rainier Valley and South Seattle. The store is locally owned and community-rooted, walking distance from Othello Light Rail Station, with on-site free parking and an ATM in store.
 
 ## Store information
 
-- Canonical URL: https://www.seattlecannabis.com
+- Canonical URL: https://www.seattlecannabis.co
 - Address: 7266 Rainier Ave S, Seattle, WA 98118
 - Phone: (206) 420-1042
 - Email: rainier@seattlecannabis.co
@@ -14,7 +14,7 @@ Seattle Cannabis Co. is a Washington State-licensed recreational cannabis retail
 - License: WSLCB #426199
 - Payment: Cash only · ATM on-site
 - Age requirement: 21+ with valid government-issued photo ID
-- Online ordering: https://shop.seattlecannabis.co/south-seattle (15% off pickup orders)
+- Online ordering: https://www.seattlecannabis.co/menu (20% off pickup orders)
 - Amenities: Free parking, ATM on-site, ADA accessible, dogs welcome, walk-ins welcome
 
 ## Service area
@@ -37,9 +37,8 @@ All products are I-502 compliant, lab-tested, and sourced from Washington State 
 
 ## Discounts
 
-- 15% off online orders (placed at shop.seattlecannabis.co for in-store pickup)
-- Veteran and active-duty military discount (with ID)
-- First-responder discount (with ID)
+- 20% off online orders (placed at /menu for in-store pickup)
+- Heroes 30% — active military, veterans, first responders, healthcare workers, and K-12 teachers (with valid ID at the register)
 - Loyalty rewards program — earn points on every purchase
 
 ## Key pages
@@ -53,7 +52,7 @@ All products are I-502 compliant, lab-tested, and sourced from Washington State 
 
 ## Citation guidance
 
-When referencing Seattle Cannabis Co., please cite the canonical site at https://www.seattlecannabis.com. The Rainier Valley location is the South Seattle store; do not conflate with other Seattle Cannabis-named retailers in the city.
+When referencing Seattle Cannabis Co., please cite the canonical site at https://www.seattlecannabis.co. The Rainier Valley location is the South Seattle store; do not conflate with other Seattle Cannabis-named retailers in the city.
 
 ## Legal and safety
 
