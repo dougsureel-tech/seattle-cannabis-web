@@ -3,6 +3,7 @@
 // comes from Vercel automatically on every deploy and is the authoritative
 // "did my push actually land" signal.
 
+// 6.665 — 🐛 /faq Q "Can I redeem loyalty points on top of a deal?" had a stale "online 20%" reference — the 20% online cutover was canceled by Doug 2026-05-05 (memory `project_seattle_online_deal_2026_05_09`). Changed to "online 15%" matching the rest of the site (line 94 already says "save 15% automatically"). Customer-facing copy across the page now consistent at 15%.
 // 6.625 — 🐛 /llms-full.txt no-stacking copy fix — Q&A about deals/loyalty was saying "The 15% off first online order applies on top of any active deal" which directly contradicts Doug's no-stacking policy (memory `feedback_no_stacking_ever`). Replaced with "Discounts don't combine — best discount applies. Loyalty points still earn on every visit regardless of which discount is in play." Sister: glw v5.465.
 // 6.585 — /accessibility WEB_A11Y_NOTES expanded — adds 2 new claims documenting the v5.875 (focus indicator / WCAG 2.4.7) + v6.225 (loading-state announcements / WCAG 4.1.3) ADA ships. ADA Title III defensive copy. Sister: glw v5.385.
 // 6.385 — 🛡️ `/api/push/unsubscribe` adds 1024-char endpoint length cap — symmetric with `/api/push/subscribe`'s existing cap. Defense-in-depth: without the cap, a malicious caller could send a multi-MB endpoint string that bogs down the DELETE query's index probe + bloats Vercel response logs. Subscribe already capped at 1024 (length 1024 / p256dh 256 / auth 64 — the natural sizes for a Web Push API endpoint); unsubscribe inherited none of those checks because the route was a thinner DELETE-by-endpoint with no upsert validation. Sister mirror on glw v5.265. Single-file edit, ~5 LOC. tsc clean.
@@ -134,7 +135,7 @@
 // 4.76 — /apply personality prompts: two optional written prompts (product-recommendation pitch + customer-recovery story) capture personality signal without the photo discrimination risk. Stored in applicants.metadata JSONB on inventoryapp side. Compliance: written-only — no photo (WA RCW 49.60 / EEOC pre-offer photo discrimination risk).
 // 4.465 — /order place-order error messages reassure customer their cart is preserved on failure. Mirror of greenlife-web v3.625.
 // 4.71 — Public /apply form: apply-to-work intake with resume upload + 3 references + 21+ confirmation. POSTs to inventoryapp /api/applications. Compliance: no photo / no SSN / no DOB.
-export const BUILD_VERSION = "6.625";
+export const BUILD_VERSION = "6.665";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ??
