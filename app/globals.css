@@ -336,3 +336,22 @@ details[open] > summary ~ * {
     animation: hero-particle-c 35s ease-in-out infinite;
   }
 }
+
+/* WCAG 2.4.7 — Focus Visible. Sister of glw v4.985+. Safety-net
+   `:focus-visible` ring for any keyboard-focused interactive element
+   that didn't get an explicit Tailwind `focus-visible:ring-...` class
+   (legacy/library buttons sometimes rely on browser default outlines
+   after `focus:outline-none` was set on a parent). Indigo ring matches
+   Sea brand. `:focus-visible` only matches keyboard focus, not mouse
+   clicks, so no cosmetic flicker on click. Components that paint a
+   custom ring can opt out via the `no-default-focus` class.
+   Doug 2026-05-07 ADA accessibility pass. */
+:focus-visible {
+  outline: 2px solid #4f46e5; /* tailwind indigo-600 */
+  outline-offset: 2px;
+}
+button:focus-visible.no-default-focus,
+a:focus-visible.no-default-focus,
+[tabindex]:focus-visible.no-default-focus {
+  outline: none;
+}
