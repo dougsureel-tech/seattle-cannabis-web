@@ -12,7 +12,7 @@ export const runtime = "nodejs";
 
 export async function POST() {
   const res = NextResponse.redirect(
-    new URL("/rewards/login", process.env.NEXT_PUBLIC_SITE_URL ?? "https://seattlecannabis.co"),
+    new URL("/rewards/login", process.env.NEXT_PUBLIC_SITE_URL || "https://seattlecannabis.co"),
   );
   res.cookies.set(REWARDS_COOKIE_NAME, "", {
     httpOnly: true,
