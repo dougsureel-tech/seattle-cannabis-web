@@ -28,9 +28,9 @@ import { useState, useRef, useEffect, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
-const API_URL = "https://inventoryapp-ivory.vercel.app/api/applications";
+const API_URL = "https://seattle-cannabis-co.vercel.app/api/applications";
 const POSITIONS_API =
-  "https://inventoryapp-ivory.vercel.app/api/positions/open?store=seattle";
+  "https://seattle-cannabis-co.vercel.app/api/positions/open?store=seattle";
 const SOURCE_ORIGIN = "seattle-cannabis-web";
 const MAX_RESUME_BYTES = 10 * 1024 * 1024; // 10MB (mirror API)
 

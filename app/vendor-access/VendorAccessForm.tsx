@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-const API_URL = "https://inventoryapp-ivory.vercel.app/api/vendor-access";
+const API_URL = "https://seattle-cannabis-co.vercel.app/api/vendor-access";
 const STORE_ORIGIN = "seattle";
 
 const ERROR_LABEL: Record<string, string> = {

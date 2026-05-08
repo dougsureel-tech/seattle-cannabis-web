@@ -7,7 +7,7 @@ import { STORE } from "@/lib/store";
 export const revalidate = 300;
 
 const POSITIONS_API =
-  "https://inventoryapp-ivory.vercel.app/api/positions/open?store=seattle";
+  "https://seattle-cannabis-co.vercel.app/api/positions/open?store=seattle";
 
 interface Position {
   id: string;
