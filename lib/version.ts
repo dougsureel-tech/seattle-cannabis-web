@@ -3,6 +3,7 @@
 // comes from Vercel automatically on every deploy and is the authoritative
 // "did my push actually land" signal.
 
+// 5.625 — /menu page now respects PWA install cookie for app-only deals — closes the install-incentive gap on the most-visited customer page. Pre-fix /menu called getActiveDeals() without args, so installed visitors saw the same `app_only=false` subset as browser-only — losing the install incentive on the deals strip. Fix: read `scc_pwa_installed` cookie, pass `includeAppOnly`. 4-surface coverage complete: /deals list (v5.345), /deals/[id] (v5.605), homepage strip (v5.525), /menu strip (this). Sister: glw v4.745. tsc clean.
 // 5.605 — /deals/[id] deep page now gates app-only deals on PWA install — closes the SMS-share leak that bypassed the install incentive. Pre-fix: getDealById() SQL didn't query the app_only column; hardcoded appOnly: false with comment "filter happens upstream in getActiveDeals." But the deep page calls getDealById DIRECTLY — so a customer sharing /deals/<app-only-id> via SMS, the recipient (not installed) could view the full discount + landing page, bypassing the install gate that's the whole point. Fix: (1) getDealById() SELECTs COALESCE(app_only, FALSE) + returns it. (2) /deals/[id]/page.tsx reads the scc_pwa_installed cookie post-fetch — if appOnly && !isInstalled, calls notFound() (same shape as stale share link). (3) generateMetadata does the same gate so the unfurl preview doesn't leak the discount in the OG card before install. Net effect: app-only deals opaque to non-installed visitors regardless of access path — list + deep-page + OG preview all gated. tsc clean.
 // 5.545 — **`cross_store_promo` slot mounted on homepage between brands and CTA band.** Mirror of glw v4.625. Slot was admin-pickable but had no public mount. tsc clean.
 // 5.525 — **Homepage Today's-deals strip respects the app-install cookie.** Mirror of glw v4.575. v5.345 added the cookie + filter on /deals; homepage was unconditionally fetching all active deals. Now reads `scc_pwa_installed` cookie + passes `includeAppOnly` to getActiveDeals. tsc clean.
@@ -118,7 +119,7 @@
 // 4.76 — /apply personality prompts: two optional written prompts (product-recommendation pitch + customer-recovery story) capture personality signal without the photo discrimination risk. Stored in applicants.metadata JSONB on inventoryapp side. Compliance: written-only — no photo (WA RCW 49.60 / EEOC pre-offer photo discrimination risk).
 // 4.465 — /order place-order error messages reassure customer their cart is preserved on failure. Mirror of greenlife-web v3.625.
 // 4.71 — Public /apply form: apply-to-work intake with resume upload + 3 references + 21+ confirmation. POSTs to inventoryapp /api/applications. Compliance: no photo / no SSN / no DOB.
-export const BUILD_VERSION = "5.605";
+export const BUILD_VERSION = "5.625";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ??

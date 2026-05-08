@@ -73,8 +73,15 @@ async function prewarmDutchieMenu(): Promise<void> {
 }
 
 export default async function MenuPage() {
+  // PWA-install detection — cookie set by /api/track-install on first
+  // standalone-mode launch. Same gate as /deals + homepage strip. Without
+  // this, installed visitors saw the same `app_only=false` deal subset
+  // as browser-only visitors — losing the install incentive on the most-
+  // visited customer page. Sister of glw v4.745.
+  const cookieStore = await import("next/headers").then((m) => m.cookies());
+  const isInstalled = cookieStore.get("scc_pwa_installed")?.value === "1";
   const [deals, closure, treasureChest] = await Promise.all([
-    getActiveDeals().catch(() => []),
+    getActiveDeals({ includeAppOnly: isInstalled }).catch(() => []),
     fetchClosureStatus(),
     getTreasureChestProducts(60).catch(() => []),
     prewarmDutchieMenu(),
