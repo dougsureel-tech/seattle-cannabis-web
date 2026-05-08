@@ -6,6 +6,7 @@ import { getOrCreatePortalUser, getOrders, notifyReadyOrders } from "@/lib/porta
 import { STORE, STORE_TZ } from "@/lib/store";
 import { OrderStatusRefresh } from "@/components/OrderStatusRefresh";
 import { NotifyMeButton } from "@/components/NotifyMeButton";
+import { MINUTE_MS } from "@/lib/time-constants";
 import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
@@ -79,7 +80,7 @@ export default async function OrderHistoryPage() {
   );
   const hasJustReady = orders.some(
     // eslint-disable-next-line react-hooks/purity -- Server Component renders per-request (`force-dynamic` page); intentional "just-flipped-ready in last 5 min" check drives the SMS-vs-page-banner branch.
-    (o) => o.status === "ready" && o.readyAt && Date.now() - new Date(o.readyAt).getTime() < 5 * 60_000,
+    (o) => o.status === "ready" && o.readyAt && Date.now() - new Date(o.readyAt).getTime() < 5 * MINUTE_MS,
   );
 
   // Fire web push for any order that flipped to "ready" within the last

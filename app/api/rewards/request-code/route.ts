@@ -28,6 +28,7 @@ import { getClient } from "@/lib/db";
 import { normalizeToE164, isSmsConfigured, sendSms } from "@/lib/sms";
 import { createHash, randomBytes } from "node:crypto";
 import { STORE } from "@/lib/store";
+import { MINUTE_MS } from "@/lib/time-constants";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -111,7 +112,7 @@ export async function POST(req: NextRequest) {
   const codeHash = hashCode(code);
 
   // expires_at computed app-side so the constant lives next to TTL_MINUTES.
-  const expiresAt = new Date(Date.now() + TTL_MINUTES * 60_000).toISOString();
+  const expiresAt = new Date(Date.now() + TTL_MINUTES * MINUTE_MS).toISOString();
 
   await sql`
     INSERT INTO loyalty_otp_codes
