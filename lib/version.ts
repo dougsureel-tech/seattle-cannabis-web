@@ -3,6 +3,7 @@
 // comes from Vercel automatically on every deploy and is the authoritative
 // "did my push actually land" signal.
 
+// 6.825 — 🛡️ `/api/orders` cart-item string-field length caps — defense-in-depth on the per-row INSERT to `online_order_items`. Pre-fix `productName` / `brand` / `category` / `strainType` / `productId` passed `typeof === "string"` checks but had no length bound. With `items.length > 50` already enforced, a malicious cart could send 50 × multi-MB strings to the DB INSERT row. Caps: productName 256, brand 128, category 64, strainType 32, productId 64 — all comfortable above natural cannabis product names (<100), brands (<40), categories (<16), strain-types (one of 3 words). In-place slice keeps the type check valid + doesn't reject — legitimate clients should never hit the cap. Sister mirror on glw v5.785. Single-file edit per repo, ~6 LOC. tsc clean.
 // 6.745 — 🚨 /account/heroes page body had a stale 20% — canonical Heroes discount is 30%. The Heroes 20→30% sweep at v4.40 updated everything customer-facing, but the dedicated /account/heroes self-attest page was created later with copy-paste from the pre-sweep /account page, so the sweep missed it. Same drift class as v6.705 (the /account page subtitle): customer arriving via /account → "Heroes program" link would see "20% off" body text but every OTHER surface (visit / faq / homepage / OG / heroes/[cohort] / rewards/redeem) advertises 30%. Single-line "20% off" → "30% off". Sister: glw v5.665. tsc clean.
 // 6.705 — 🚨 /account Heroes-program subtitle had a stale 20% — canonical Heroes discount is 30% across both stores (matches /heroes, /faq, /llms.txt, all other surfaces). Pre-fix the Account page was telling Heroes-eligible customers they'd save 20% — they'd arrive at the counter expecting 20%, customer would be confused. Sister: glw v5.625.
 // 6.665 — 🐛 /faq Q "Can I redeem loyalty points on top of a deal?" had a stale "online 20%" reference — the 20% online cutover was canceled by Doug 2026-05-05 (memory `project_seattle_online_deal_2026_05_09`). Changed to "online 15%" matching the rest of the site (line 94 already says "save 15% automatically"). Customer-facing copy across the page now consistent at 15%.
@@ -137,7 +138,7 @@
 // 4.76 — /apply personality prompts: two optional written prompts (product-recommendation pitch + customer-recovery story) capture personality signal without the photo discrimination risk. Stored in applicants.metadata JSONB on inventoryapp side. Compliance: written-only — no photo (WA RCW 49.60 / EEOC pre-offer photo discrimination risk).
 // 4.465 — /order place-order error messages reassure customer their cart is preserved on failure. Mirror of greenlife-web v3.625.
 // 4.71 — Public /apply form: apply-to-work intake with resume upload + 3 references + 21+ confirmation. POSTs to inventoryapp /api/applications. Compliance: no photo / no SSN / no DOB.
-export const BUILD_VERSION = "6.745";
+export const BUILD_VERSION = "6.825";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ??
