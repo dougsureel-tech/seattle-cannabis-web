@@ -97,7 +97,7 @@ export async function AnnouncementBar() {
         href={STORE.shopUrl}
         className="opacity-75 hover:opacity-100 transition-opacity hidden sm:block font-semibold"
       >
-        Order Online — Save 15% ↗
+        Order Online — Save 20% ↗
       </a>
       <span className="hidden sm:block opacity-40">|</span>
       <span className="opacity-75">Cash only · 21+ · ATM on site</span>

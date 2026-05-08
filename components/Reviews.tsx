@@ -43,7 +43,7 @@ const REVIEWS: Review[] = [
     author: "Jamal K.",
     city: "Columbia City",
     rating: 5,
-    text: "Locally owned and you can feel it — disciplined, well-run, no nonsense. 15% off online orders is the right move. I order ahead, swing by between meetings, in and out in 4 minutes flat.",
+    text: "Locally owned and you can feel it — disciplined, well-run, no nonsense. 20% off online orders is the right move. I order ahead, swing by between meetings, in and out in 4 minutes flat.",
     date: "2026-04-26",
   },
   {
