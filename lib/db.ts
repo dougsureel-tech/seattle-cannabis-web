@@ -515,6 +515,27 @@ export async function getTreasureChestProducts(limit = 60): Promise<MenuProduct[
   }));
 }
 
+// Hero-string builder for /deals cards. Doug 2026-05-08 (sister fix in
+// greenlife-web): the brand-specific Friday/Sat deals were rendering
+// "50% off edibles" in the giant hero text (built from applies_to=edibles)
+// instead of "50% off Dope Cooks" — the deal's `name` field already had
+// the brand. Fix: when the deal name already reads as marketing copy
+// (contains the discount % or $), use it directly (with day-of-week prefix
+// stripped). Falls back to the legacy applies_to shape only when the name
+// doesn't carry the discount itself.
+function buildDealShort(
+  name: string,
+  val: number | null,
+  dt: "percent" | "dollars",
+  applies: string | null,
+): string {
+  if (val == null) return name;
+  const cleaned = name.replace(/^(?:Mon|Tues|Wednes|Thurs|Fri|Satur|Sun)day:\s*/i, "").trim();
+  if (/\d+\s*%\s*off\b/i.test(cleaned) || /\$\d+\b/i.test(cleaned)) return cleaned;
+  const suffix = applies && applies !== "all" ? ` ${applies}` : "";
+  return dt === "percent" ? `${val}% off${suffix}` : `$${val.toFixed(0)} off${suffix}`;
+}
+
 // Order: today's day-specific deals FIRST so the daily-deal mailer headline
 // always ranks above the always-on tier (heroes-30, first-visit-30,
 // industry-20, etc.). LIMIT 20 to leave headroom for the daily seed
@@ -546,14 +567,7 @@ export async function getActiveDeals(opts?: { includeAppOnly?: boolean }): Promi
     const dt = (r.discount_type as string) === "dollars" ? "dollars" : "percent";
     const val = (r.discount_value ?? null) as number | null;
     const applies = (r.applies_to ?? null) as string | null;
-    let short: string;
-    if (val == null) {
-      short = r.name as string;
-    } else if (dt === "percent") {
-      short = `${val}% off${applies && applies !== "all" ? ` ${applies}` : ""}`;
-    } else {
-      short = `$${val.toFixed(0)} off${applies && applies !== "all" ? ` ${applies}` : ""}`;
-    }
+    const short = buildDealShort(r.name as string, val, dt, applies);
     return {
       id: r.id as string,
       name: r.name as string,
@@ -659,14 +673,7 @@ export async function getDealById(id: string): Promise<ActiveDeal | null> {
   const dt = (r.discount_type as string) === "dollars" ? "dollars" : "percent";
   const val = (r.discount_value ?? null) as number | null;
   const applies = (r.applies_to ?? null) as string | null;
-  let short: string;
-  if (val == null) {
-    short = r.name as string;
-  } else if (dt === "percent") {
-    short = `${val}% off${applies && applies !== "all" ? ` ${applies}` : ""}`;
-  } else {
-    short = `$${val.toFixed(0)} off${applies && applies !== "all" ? ` ${applies}` : ""}`;
-  }
+  const short = buildDealShort(r.name as string, val, dt, applies);
   return {
     id: r.id as string,
     name: r.name as string,
