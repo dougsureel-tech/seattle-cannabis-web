@@ -659,6 +659,200 @@ That's it. No referral. No waiting period. No quota.
 [Visit ${STORE.name}](/visit) · [Browse the live menu](/menu) · [First-time customer FAQ](/faq)
 `,
   },
+  {
+    slug: "how-to-make-cannabis-cookies",
+    title: "How to Make Cannabis Cookies — A Beginner's Recipe",
+    description:
+      "How to make cannabis cookies at home using cannabutter. Standard chocolate chip recipe + dosing math + safety guidance from a Seattle dispensary.",
+    category: "Education",
+    publishedAt: "2019-09-08",
+    updatedAt: "2026-05-08",
+    readingMinutes: 5,
+    body: `Cannabis cookies are the entry-level edible — easy to make once you have cannabutter on hand, and the dose-per-cookie is straightforward to calculate. This is a standard chocolate-chip recipe with cannabutter swapped in for regular butter.
+
+Read the [cannabutter recipe](/blog/how-to-make-cannabis-butter) first if you don't have a batch ready.
+
+## Ingredients (makes ~20 cookies)
+
+- **1/2 cup cannabutter** (1 stick)
+- **1/2 teaspoon salt**
+- **1 1/3 cup all-purpose flour**
+- **1/2 teaspoon baking soda**
+- **1/4 cup granulated sugar**
+- **1/2 cup brown sugar (packed)**
+- **2 cups chocolate chips** (semi-sweet works best)
+- **1 large egg**
+- **1 teaspoon vanilla** (optional)
+
+## Directions
+
+1. Preheat oven to **375°F**.
+2. In a large bowl, cream the cannabutter with both sugars until light and fluffy.
+3. Beat in the egg and vanilla.
+4. In a separate bowl, whisk together flour, salt, and baking soda.
+5. Add dry ingredients to wet, mixing slowly until combined. Don't overmix.
+6. Fold in chocolate chips.
+7. Roll dough into balls (about 1 tablespoon each), place on a parchment-lined cookie sheet, 2 inches apart.
+8. Bake **10-12 minutes** until edges are golden and centers are still soft. They'll firm up as they cool.
+9. Cool on the sheet for 5 minutes, then transfer to a wire rack.
+
+## Dose math
+
+The whole batch contains the THC from 1/2 cup (1 stick) of cannabutter. With 20 cookies in the batch:
+
+- Per-cookie dose ≈ (total mg THC in butter ÷ 20)
+- If your batch was 1/4 oz of 20% flower per pound of butter, the whole pound contains roughly 700-1,000 mg THC. 1 stick = 1/4 lb = 175-250 mg THC. **Per-cookie dose ≈ 9-12 mg.**
+
+That's a reasonable serving for someone with edibles experience. **For a first-timer, cut a cookie in quarters and start with one quarter (~2-3 mg).**
+
+## Safety
+
+- Edibles peak 2-3 hours after consumption. **Wait at least 90 minutes before re-dosing.** Most overdose stories trace back to "I didn't feel anything so I ate more."
+- Label the container clearly: "Cannabis cookies — keep away from kids/pets."
+- Lock them up if you have kids in the house. Cookies look like normal cookies.
+
+## What flower goes into the butter
+
+The butter recipe doesn't care if the flower is pretty. Older flower, shake, or trim works fine — the cooking process extracts THC regardless. The flower section at ${STORE.name} carries singles, eighths, and ounce options at a range of price points; if you tell a budtender you're cooking, we'll point you at value-density options.
+
+[Cannabutter recipe](/blog/how-to-make-cannabis-butter) · [Browse flower](/menu)
+`,
+  },
+  {
+    slug: "how-to-use-a-cannabis-pipe",
+    title: "How to Use a Cannabis Pipe — Beginner's Guide",
+    description:
+      "How to pack, light, and smoke a cannabis pipe. Beginner walkthrough — bowl, carb, draw technique, and what to avoid.",
+    category: "Education",
+    publishedAt: "2019-06-22",
+    updatedAt: "2026-05-08",
+    readingMinutes: 4,
+    body: `A pipe is the simplest way to smoke flower — fewer moving parts than a bong, less rolling skill than a joint or blunt. This walkthrough covers the basics: anatomy, packing, lighting, and the most common beginner mistakes.
+
+## Pipe anatomy
+
+A standard glass pipe has three parts:
+
+- **Bowl** — the small chamber where you pack the flower.
+- **Carb** — a small hole on the side of the bowl. Covering and uncovering it controls airflow (more on this below). Some pipes don't have a carb; they work fine without one.
+- **Mouthpiece** — the end you inhale from.
+
+Material matters. Glass is the standard — clean, neutral flavor, easy to inspect. Wood, ceramic, and silicone pipes work too. **Avoid aluminum** — including aluminum-foil "emergency" pipes. Aluminum vapors are not something you want in your lungs.
+
+## How to pack a bowl
+
+1. **Grind the flower.** Medium-coarse, not powder. A grinder helps; fingers work in a pinch.
+2. **Pack the bowl.** Drop a small "screen plug" of less-broken-up flower into the bowl first to keep small pieces from pulling through. Then add ground flower on top, packing lightly. Don't over-pack — airflow needs to get through.
+3. **Tap to settle.** A gentle tap evens out the surface so the cherry burns evenly.
+
+If you skip the screen plug, expect to inhale a small piece of flower at some point. Not dangerous, just unpleasant.
+
+## How to smoke
+
+1. **Hold the pipe** with the bowl tilted slightly toward your face, mouthpiece to your lips.
+2. **Cover the carb** with a thumb (if your pipe has one).
+3. **Light the corner** of the bowl while drawing in slowly. You don't need to torch the whole bowl — light a small section and let the cherry spread.
+4. **Release the carb** mid-draw to clear the chamber and pull the smoke into your lungs.
+5. **Exhale slowly.**
+
+The carb release is the key technique. Holding the carb closed builds smoke in the chamber; releasing pulls it cleanly into your lungs. Without a carb, you just keep drawing and the smoke flows through.
+
+## Common beginner mistakes
+
+- **Packing too tight.** Smoke can't get through. Loosen up.
+- **Torching the whole bowl.** "Cornering" — lighting a small section at a time — keeps the rest fresh for later hits and lets you taste the flower.
+- **Inhaling too hard.** Pipes hit harder than expected. Slow, controlled draws give a cleaner experience and don't waste flower as ash.
+- **Forgetting to exhale slowly.** Holding smoke in doesn't increase potency — most THC is absorbed in the first second or two. Hold-it-in is a myth.
+
+## Cleaning
+
+Resin builds up over time. Clean weekly if you smoke daily:
+
+1. Soak the pipe in **isopropyl alcohol (91%)** + a tablespoon of coarse salt for 30 minutes.
+2. Shake to scrub the inside.
+3. Rinse with hot water. Dry completely before next use.
+
+A clean pipe tastes like the flower it carries. A dirty pipe tastes like resin.
+
+## Where pipes live in the menu
+
+We don't sell pipes (Washington retail licenses are flower/concentrate/edible only — accessories are sold by separate accessory shops). The flower we carry is on [our menu](/menu). For pipes, your options are local head shops, smoke shops, or online retailers.
+
+[Browse flower](/menu) · [How to roll a blunt](/blog/how-to-roll-a-blunt)
+`,
+  },
+  {
+    slug: "cannabis-vaporizers-explained",
+    title: "Cannabis Vaporizers Explained — How They Work + What to Pick",
+    description:
+      "How dry-herb vaporizers, distillate carts, and live-resin vapes work. Beginner explainer + what to look for on a Seattle dispensary menu.",
+    category: "Education",
+    publishedAt: "2019-11-02",
+    updatedAt: "2026-05-08",
+    readingMinutes: 6,
+    body: `Vaporizers are one of the broadest categories on a cannabis menu — and one of the most confusing for beginners. "Vape" can mean a 510-thread distillate cart, a live-resin disposable, a dry-herb tabletop unit, or a portable convection device. They all heat cannabis to release vapor without combustion, but they're built differently and they hit differently.
+
+## How vaporizers work
+
+Combustion (smoking flower in a pipe, joint, or bong) reaches 600-900°F. That breaks down some of the cannabinoids and terpenes you wanted in the first place, and produces tar and carbon monoxide as byproducts.
+
+Vaporizers heat cannabis material to **325-430°F** — hot enough to release the cannabinoids and terpenes as vapor, cool enough to skip combustion. What you inhale is closer to steam than smoke.
+
+This is the technical reality. We'll skip the comparative health framing — there isn't enough long-term study data on vapor inhalation to make absolute claims, and Washington advertising rules ([WAC 314-55-155](https://app.leg.wa.gov/wac/default.aspx?cite=314-55-155)) limit what licensed retailers can claim about health effects. The factual difference is **temperature and combustion byproducts**, not "healthy vs unhealthy."
+
+## Categories
+
+### 1. Dry-herb vaporizers
+
+Heat ground flower directly. Two technologies:
+
+- **Conduction** — flower contacts a heated surface. Faster heat-up, less even.
+- **Convection** — hot air passes through the flower. Slower start, more even, generally cleaner flavor.
+
+Sizes range from pocket-portable (PAX, Storz & Bickel Mighty) to tabletop (Volcano). Higher temperatures release more cannabinoids; lower temperatures (around 350°F) emphasize terpene flavor.
+
+Dry-herb vapes use the same flower we sell — see the [flower menu](/menu).
+
+### 2. Distillate cartridges (510-thread)
+
+A small glass cartridge filled with **distilled THC oil** that screws onto a battery (the standard "510 thread"). The cartridge has a heating coil that vaporizes the oil when you draw.
+
+**Distillate** is highly refined cannabis oil — typically 80-90% THC, with terpenes added back for flavor. Consistent, potent, and the cheapest cannabis-per-mg-THC on most menus. Flavor profile is engineered (terpenes are added in measured ratios), so different brands taste meaningfully different.
+
+### 3. Live-resin + rosin cartridges
+
+Same form factor as distillate carts but **the oil is extracted from fresh-frozen flower** (live resin) or pressed under heat from flower or hash (rosin). The terpene profile is preserved from the original flower, not added back.
+
+Live resin and rosin carts cost more than distillate. The trade is flavor + a more "full-spectrum" experience for fewer mg of THC per dollar. If terpenes matter to you, this is the category.
+
+### 4. Disposable all-in-ones
+
+Self-contained, pre-charged, throw away when empty. Pre-filled with distillate or live-resin oil. Convenient if you don't want to deal with batteries; not refillable, so over time it's more expensive.
+
+### 5. Concentrate vapes (e-rigs, dab pens)
+
+Built for **concentrates** — wax, shatter, rosin — loaded by hand into a heating chamber. Higher learning curve, stronger hits, more cleanup. Not a beginner category.
+
+## What to ask for at the counter
+
+A budtender's first question is usually: **"Have you used vapes before?"**
+
+If new:
+- A 510-thread battery + a 0.5g distillate cart is the lowest-friction starting point. ~$30-50 total.
+- Pick a cart with terpene profile you'd be curious to taste — staff can recommend by flavor (citrus, berry, gas, woody, herbal).
+
+If experienced:
+- Live resin or rosin if flavor is the priority.
+- All-in-one disposables if you want to skip the battery + cart pairing.
+- Higher-cannabinoid carts (THCa diamonds, full-spectrum extracts) for advanced palates.
+
+## Storage
+
+Cartridges store best **upright, away from heat and direct light**. Heat thins the oil; cold thickens it. Room temperature is fine.
+
+[Browse vapes on the live menu](/menu) · [Cannabis vs dispensary 101](/blog/complete-guide-cannabis-rainier-valley)
+`,
+  },
 ];
 
 export function getPost(slug: string): Post | undefined {
