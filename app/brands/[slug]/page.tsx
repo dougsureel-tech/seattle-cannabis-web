@@ -356,13 +356,13 @@ export default async function BrandPage({ params }: Props) {
         <div className="rounded-2xl bg-gradient-to-r from-indigo-800 to-indigo-700 text-white px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
             <p className="font-bold text-base">Want to order {brand.name}?</p>
-            <p className="text-indigo-200/80 text-sm">Place a pickup order — save 15% online.</p>
+            <p className="text-indigo-200/80 text-sm">Place a pickup order — save 20% online.</p>
           </div>
           <a
             href={STORE.shopUrl}
             className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-500 hover:bg-indigo-400 text-white text-sm font-bold transition-all shadow-md hover:-translate-y-0.5"
           >
-            Order Online — 15% Off →
+            Order Online — 20% Off →
           </a>
         </div>
 

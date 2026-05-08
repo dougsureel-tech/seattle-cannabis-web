@@ -120,7 +120,7 @@ const STATS = [
   { val: "Open Daily", label: "8 AM – 11 PM" },
   { val: "Free Parking", label: "On-site lot" },
   { val: "16+ yrs", label: "Rainier Valley's longest-running" },
-  { val: "15% Off", label: "Online orders" },
+  { val: "20% Off", label: "Online orders" },
 ];
 
 export default async function HomePage() {
@@ -268,7 +268,7 @@ export default async function HomePage() {
                   </svg>
                 </PrimaryCTA>
                 <PrimaryCTA href={withAttr(STORE.shopUrl, "home", "hero-order")} variant="secondary">
-                  Order Online — 15% Off
+                  Order Online — 20% Off
                 </PrimaryCTA>
               </div>
 
@@ -563,7 +563,7 @@ export default async function HomePage() {
                 href: "/heroes",
               },
               {
-                title: "15% Off Online Orders",
+                title: "20% Off Online Orders",
                 body: "Order ahead, save automatically, walk in and walk out. Pickup window stays warm in the bag.",
                 iconPath:
                   "M7 4V2h10v2h5v2h-2v15a2 2 0 01-2 2H6a2 2 0 01-2-2V6H2V4h5zm2 4v11h2V8H9zm4 0v11h2V8h-2z",
@@ -926,7 +926,7 @@ export default async function HomePage() {
       {/* ─── How Pickup Works ───────────────────────────────────────────────── */}
       <section className="bg-stone-50 border-y border-stone-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
-          <SectionHeading className="mb-10" kicker="Order online, skip the wait, save 15%">
+          <SectionHeading className="mb-10" kicker="Order online, skip the wait, save 20%">
             How Pickup Works
           </SectionHeading>
           <div className="relative grid grid-cols-1 sm:grid-cols-3 gap-8">
@@ -936,7 +936,7 @@ export default async function HomePage() {
                 icon: "📱",
                 step: "1",
                 title: "Browse & Order",
-                body: "Shop our full menu online and place a pickup order — 15% off automatically applied.",
+                body: "Shop our full menu online and place a pickup order — 20% off automatically applied.",
               },
               {
                 icon: "✅",
@@ -968,7 +968,7 @@ export default async function HomePage() {
             ))}
           </div>
           <div className="text-center mt-10">
-            <PrimaryCTA href={STORE.shopUrl}>Order Online — 15% Off →</PrimaryCTA>
+            <PrimaryCTA href={STORE.shopUrl}>Order Online — 20% Off →</PrimaryCTA>
           </div>
           {/* HowTo JSON-LD — AI engines + Google rich-result fuel for "how
               do I order from Seattle Cannabis Co" type queries. Mirrors the
@@ -985,7 +985,7 @@ export default async function HomePage() {
                 "@type": "HowTo",
                 name: `How to order cannabis for pickup at ${STORE.name}`,
                 description:
-                  "Three-step pickup flow: build your cart online with 15% off, we prep it, you pay cash and walk out. Most orders ready in 10–20 minutes.",
+                  "Three-step pickup flow: build your cart online with 20% off, we prep it, you pay cash and walk out. Most orders ready in 10–20 minutes.",
                 totalTime: "PT15M",
                 supply: [
                   { "@type": "HowToSupply", name: "Valid government ID (21+)" },
@@ -996,7 +996,7 @@ export default async function HomePage() {
                     "@type": "HowToStep",
                     position: 1,
                     name: "Browse & Order",
-                    text: "Shop the full menu and place a pickup order. 15% off applies automatically — pay nothing until you arrive.",
+                    text: "Shop the full menu and place a pickup order. 20% off applies automatically — pay nothing until you arrive.",
                     url: `${STORE.website}/order`,
                   },
                   {
@@ -1212,7 +1212,7 @@ export default async function HomePage() {
               ))}
             </div>
             <div className="text-center mt-10">
-              <PrimaryCTA href={STORE.shopUrl}>Order Online — 15% Off →</PrimaryCTA>
+              <PrimaryCTA href={STORE.shopUrl}>Order Online — 20% Off →</PrimaryCTA>
             </div>
           </div>
         </section>
@@ -1411,7 +1411,7 @@ export default async function HomePage() {
           <div className="space-y-2 text-center sm:text-left">
             <h2 className="text-2xl sm:text-3xl font-extrabold">Ready to order?</h2>
             <p className="text-indigo-300/80 text-sm">
-              Order online and save 15% — pick up in store on Rainier Ave S.
+              Order online and save 20% — pick up in store on Rainier Ave S.
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 shrink-0">
@@ -1419,7 +1419,7 @@ export default async function HomePage() {
               Browse Menu
             </PrimaryCTA>
             <PrimaryCTA href={withAttr(STORE.shopUrl, "home", "bottom-order")} variant="secondary">
-              Order Online — 15% Off
+              Order Online — 20% Off
             </PrimaryCTA>
           </div>
         </div>
@@ -1456,7 +1456,7 @@ function FaqSection() {
     },
     {
       q: "Can I order cannabis online for pickup at Seattle Cannabis Co?",
-      a: "Yes. Build your cart on /order, pay in-store when you arrive (cash only). Most orders are ready in 10–20 minutes. You'll get a text when it's packed and waiting at the counter. Online orders save 15% off.",
+      a: "Yes. Build your cart on /order, pay in-store when you arrive (cash only). Most orders are ready in 10–20 minutes. You'll get a text when it's packed and waiting at the counter. Online orders save 20% off.",
     },
     {
       q: "What's the difference between sativa, indica, and hybrid?",

@@ -351,7 +351,7 @@ export default function AboutPage() {
               href={withAttr(STORE.shopUrl, "menu", "about-bottom")}
               className="px-5 py-2.5 rounded-xl bg-indigo-300 hover:bg-indigo-200 text-indigo-950 text-sm font-bold transition-all shadow-md hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300 focus-visible:ring-offset-2 focus-visible:ring-offset-indigo-950"
             >
-              Order Online — 15% Off
+              Order Online — 20% Off
             </a>
             <Link
               href={withAttr("/contact", "header", "about-bottom")}

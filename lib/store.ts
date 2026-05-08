@@ -53,7 +53,7 @@ export const STORE = {
     "Walk-ins welcome",
     "Online ordering",
   ],
-  perks: ["Open since 2010", "Service discounts", "Loyalty rewards", "15% off online orders"],
+  perks: ["Open since 2010", "Service discounts", "Loyalty rewards", "20% off online orders"],
 } as const;
 
 // Pacific Time SSoT — single source of truth for the store's timezone.
