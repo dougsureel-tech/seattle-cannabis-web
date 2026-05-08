@@ -30,9 +30,42 @@ import crypto from "crypto";
 // to set customers.scc_app_installed_at via the portal_user → customers
 // phone/email match.
 
+// Per-IP rate limit on the anon POST. Each call writes an audit_log row +
+// sometimes a customers UPDATE. Without a limit, a scripted spammer can
+// inflate the install counter + balloon audit_log indefinitely. 10/min
+// is generous (real PWA install fires once on accept + once per cold
+// standalone-launch); blocks scripted abuse. Sister to /api/quiz/capture
+// 5/min/IP and the inv /api/marketing/subscribe 3/min/IP defenses.
+const installRateMap = new Map<string, { count: number; resetAt: number }>();
+function checkInstallRate(ip: string): boolean {
+  const now = Date.now();
+  const entry = installRateMap.get(ip);
+  if (!entry || entry.resetAt < now) {
+    installRateMap.set(ip, { count: 1, resetAt: now + 60_000 });
+    return true;
+  }
+  if (entry.count >= 10) return false;
+  entry.count++;
+  return true;
+}
+
 export async function POST(req: NextRequest) {
   const sql = getClient();
-  const source = req.nextUrl.searchParams.get("source")?.trim().slice(0, 60) ?? "organic";
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0].trim() ?? "unknown";
+  if (!checkInstallRate(ip)) {
+    return NextResponse.json(
+      { error: "Too many requests" },
+      { status: 429, headers: { "Retry-After": "60" } },
+    );
+  }
+  // Cap source BEFORE .trim() — Next URL parsing already bounds query
+  // strings, but defense-in-depth is cheap and the route is anonymous.
+  // 256 char raw cap is well above any sane funnel-source string.
+  const sourceRaw = req.nextUrl.searchParams.get("source");
+  const source =
+    typeof sourceRaw === "string" && sourceRaw.length <= 256
+      ? sourceRaw.trim().slice(0, 60) || "organic"
+      : "organic";
 
   // Resolve customer ID if signed in.
   let customerId: string | null = null;
