@@ -16,6 +16,7 @@ import Link from "next/link";
 import { readRewardsSession, REWARDS_COOKIE_NAME } from "@/lib/rewards-session";
 import { getClient } from "@/lib/db";
 import { getTierProgress } from "@/lib/loyalty-tiers";
+import { STORE_TZ } from "@/lib/store";
 import { AddToHomeScreen } from "../AddToHomeScreen";
 import { RewardsBottomNav } from "../RewardsBottomNav";
 import type { Metadata } from "next";
@@ -95,6 +96,7 @@ export default async function RewardsDashboardPage() {
     ? new Date(memberSinceMs).toLocaleDateString("en-US", {
         month: "short",
         year: "numeric",
+        timeZone: STORE_TZ,
       })
     : null;
 
