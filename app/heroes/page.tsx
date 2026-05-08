@@ -75,7 +75,7 @@ const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "What if my ID is expired?",
-    a: "Active military / law enforcement / fire-EMS need a current credential. Veterans with a DD-214, VA card, or VHIC are good even if other IDs expire.",
+    a: "Active military / law enforcement / fire-EMS need a current credential. Veterans with a DD-214, VA card, or VHIC are good even if other IDs expire — those are permanent records.",
   },
   {
     q: "Does my spouse or family qualify?",
@@ -87,7 +87,7 @@ const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "Why two IDs?",
-    a: "State law requires a 21+ government photo ID for every cannabis purchase, every visit. The service or work ID is what proves your Heroes eligibility.",
+    a: "State law requires a 21+ government photo ID for every cannabis purchase, every visit. The service or work ID is what proves your Heroes eligibility. Both are needed.",
   },
 ];
 
