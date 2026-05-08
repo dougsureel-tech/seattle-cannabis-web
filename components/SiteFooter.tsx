@@ -40,12 +40,12 @@ export function SiteFooter() {
           <div>
             <p className="font-bold text-white text-sm">Ready to order?</p>
             <p className="text-indigo-400/70 text-xs mt-0.5">
-              Save 15% online · {STORE.neighborhood}, Seattle
+              Save 20% online · {STORE.neighborhood}, Seattle
             </p>
           </div>
           <div className="flex gap-3 shrink-0">
             <PrimaryCTA href={withAttr(STORE.shopUrl, "footer", "order")} variant="light" size="sm">
-              Order Online — 15% Off
+              Order Online — 20% Off
             </PrimaryCTA>
             <PrimaryCTA href={withAttr("/menu", "footer", "browse")} variant="secondary" size="sm">
               Browse Menu
