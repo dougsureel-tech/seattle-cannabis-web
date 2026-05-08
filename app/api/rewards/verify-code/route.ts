@@ -29,7 +29,7 @@
 import { NextRequest, NextResponse, after } from "next/server";
 import { getClient } from "@/lib/db";
 import { normalizeToE164 } from "@/lib/sms";
-import { createHash, createHmac } from "node:crypto";
+import { createHash, createHmac, timingSafeEqual } from "node:crypto";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -126,8 +126,19 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  // Constant-time comparison so a timing attack can't leak the hash
+  // byte-by-byte. Practical risk here is ~zero (MAX_ATTEMPTS=5 + 10-min
+  // TTL caps the number of probes far below what's needed to extract
+  // bytes via timing, and network jitter dwarfs any per-byte signal),
+  // but `timingSafeEqual` is the right pattern for any hash/HMAC
+  // comparison — defense-in-depth + matches the rest of the codebase's
+  // auth-class hash patterns.
   const suppliedHash = hashCode(supplied);
-  const ok = suppliedHash === row.code_hash;
+  const suppliedBuf = Buffer.from(suppliedHash, "hex");
+  const storedBuf = Buffer.from(row.code_hash, "hex");
+  const ok =
+    suppliedBuf.length === storedBuf.length &&
+    timingSafeEqual(suppliedBuf, storedBuf);
 
   if (!ok) {
     await sql`
