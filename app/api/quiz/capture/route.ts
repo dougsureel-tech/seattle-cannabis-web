@@ -40,9 +40,37 @@ const MAX_EMAIL_LEN = 254;
 const EMAIL_RE = /^[^\s@<>"'`\\;]+@[^\s@<>"'`\\;]+\.[^\s@<>"'`\\;]+$/;
 const MAX_FIELD_LEN = 64;
 
+// Per-IP rate limit on quiz captures. Each call inserts a quiz_captures
+// row + fires `sendQuizMatchEmail()` via Resend (per-email billing).
+// 7-day dedupe per (email, source) prevents repeat sends to the same
+// inbox, but different emails from one IP can still loop. 5/min/IP is
+// generous (a single visitor never legitimately submits 5 captures in
+// 60s) and blocks scripted abuse. Sister to /api/marketing/subscribe
+// (3/min/IP) — same defense class.
+const captureRateMap = new Map<string, { count: number; resetAt: number }>();
+function checkCaptureRate(ip: string): boolean {
+  const now = Date.now();
+  const entry = captureRateMap.get(ip);
+  if (!entry || entry.resetAt < now) {
+    captureRateMap.set(ip, { count: 1, resetAt: now + 60_000 });
+    return true;
+  }
+  if (entry.count >= 5) return false;
+  entry.count++;
+  return true;
+}
+
 export async function POST(req: NextRequest) {
   if (process.env.QUIZ_NURTURE_ENABLED !== "true") {
     return NextResponse.json({ ok: true, skipped: "feature_disabled" });
+  }
+
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0].trim() ?? "unknown";
+  if (!checkCaptureRate(ip)) {
+    return NextResponse.json(
+      { error: "Too many requests. Try again in a minute." },
+      { status: 429, headers: { "Retry-After": "60" } },
+    );
   }
 
   let body: unknown;
