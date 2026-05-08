@@ -25,6 +25,7 @@ Verified deploy = (a) HTTP 200, (b) `ok: true`, (c) `sha` matches what was just 
 
 | Date (PT) | Version | SHA | Notes |
 |---|---|---|---|
+| 2026-05-08 | v7.835 | ff221b5 | 💰 GH Actions duplicate-deploy fix — disabled `push: branches: [main]` trigger on `.github/workflows/deploy.yml`; Vercel-native auto-deploy is now the sole deploy path. Per Shohei Maeda (Vercel Compute) 2026-05-07 advisory: scc-web was running ~3 deploys per commit. Estimated savings: 30-50% off build-minutes. Workflow kept as `workflow_dispatch:`-only manual-trigger backup. Verify-via-curl confirmed v7.835/sha=ff221b5/ok=true; bonus signal: `smsConfigured:true` + `emailConfigured:true` (Twilio + Resend env vars landed since queue audit). |
 | 2026-05-07 | v4.945 | d493d95 | Kat-feedback batch 1: no-stacking sweep (mirror of greenlife-web v4.315). Strips "stacks with loyalty" / "stackable with loyalty" copy from page.tsx, deals/{[id],page}, heroes/{[cohort],page}, faq, llms-full.txt, LoyaltyArc, MenuActiveDealsStrip. New copy frames "Best deal applies — earn loyalty points either way." Pinned `feedback_no_stacking_ever` + `feedback_no_giveaways_period.md`. |
 | 2026-05-07 | v4.935 | 4d0cc43 | `lib/loyalty-redemption.ts` field rename `discountFraction` → `discountPct` to match canonical inventoryapp. SSoT-tightening only — same numeric values + no consumer reads the field directly. |
 | 2026-05-07 | v4.925 | e0bc3c8 | `/rewards/balance` drops local 13-line `normalizeToE164` duplicate, imports canonical from `@/lib/sms`. Pure SSoT-tightening. |
