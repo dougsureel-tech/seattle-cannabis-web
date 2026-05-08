@@ -131,11 +131,28 @@ details[open] > summary ~ * {
   animation: glow-pulse 2.4s ease-in-out infinite;
 }
 
-/* Respect prefers-reduced-motion for both new animations. */
+/* Respect prefers-reduced-motion. WCAG 2.3.3 — covers OS-level "Reduce
+   motion" accessibility preference. Sister of glw v4.865. Pre-fix,
+   ~20 customer-facing sites used animate-pulse / animate-spin /
+   animate-bounce decorations without a motion-reduce: Tailwind variant.
+   Users with vestibular conditions / migraine triggers / motion
+   sensitivity would see all these animations regardless of OS pref.
+   Blanket override slows everything to near-static when the OS pref
+   is set. Doug 2026-05-07 ADA accessibility pass. */
 @media (prefers-reduced-motion: reduce) {
   .animate-gradient,
-  .animate-glow {
-    animation: none;
+  .animate-glow,
+  .animate-pulse,
+  .animate-spin,
+  .animate-bounce,
+  .animate-ping {
+    animation: none !important;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
