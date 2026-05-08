@@ -84,12 +84,11 @@ const COLORS = {
   divider: "#e7e5e4",
 } as const;
 
-// Seattle static facts — kept in-file so the footer renders without
-// pulling more from STORE than the args already give us. License is the
+// Footer constants derived from STORE SSoT (lib/store.ts). License is the
 // WSLCB retailer license issued to Green Anne LLC (dba Seattle Cannabis Co.).
-const PHONE_DISPLAY = "(206) 420-1042";
-const PHONE_TEL = "+12064201042";
-const WSLCB_LICENSE = "WSLCB License 426199";
+const PHONE_DISPLAY = STORE.phone;
+const PHONE_TEL = STORE.phoneTel;
+const WSLCB_LICENSE = `WSLCB License ${STORE.wslcbLicense}`;
 // Customer-facing opt-out address. Pre-fix the body said "reply STOP
 // or email hi@seattlecannabis.co" — but `hi@` is the FROM address
 // (RESEND_FROM_SEATTLE), not necessarily the monitored inbox. Per
