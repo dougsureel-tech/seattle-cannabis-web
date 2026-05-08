@@ -140,6 +140,70 @@ const nextConfig: NextConfig = {
       { source: "/blog/blog/:path*", destination: "/blog", permanent: true },
       { source: "/tag/:slug*", destination: "/blog", permanent: true },
       { source: "/category/:slug*", destination: "/blog", permanent: true },
+
+      // ── SEO recovery: WordPress-era blog posts at root (Doug 2026-05-08)
+      // Wayback CDX confirmed 30+ blog post URLs at root were still being
+      // crawled in March 2026 (last month before the Next.js switchover).
+      // Each had its own SEO weight and inbound-link history. Without
+      // these redirects all 30+ would 404 and Google would de-index, losing
+      // the trickle of "how to roll a blunt" / "how to make weed butter" /
+      // "is marijuana legal in Seattle" long-tail traffic that drove
+      // discovery for new customers. Each → /blog (the new article hub)
+      // so any reader following an old Google result lands on something
+      // useful rather than a dead page. /blog has its own SEO authority
+      // for cannabis-education content; consolidating the link equity is
+      // the right move post-WP-cutover.
+      { source: "/3-healthy-ways-to-use-seattle-cannabis-vapes-bongs-and-edibles", destination: "/blog", permanent: true },
+      { source: "/4-important-traits-of-a-seattle-cannabis-store", destination: "/blog", permanent: true },
+      { source: "/420-in-seattle-make-this-years-420-event-the-best-yet", destination: "/blog", permanent: true },
+      { source: "/5-in-demand-cannabis-strains-at-our-seattle-cannabis-store", destination: "/blog", permanent: true },
+      { source: "/5-innovative-ways-a-seattle-marijuana-store-can-attract-new-customers", destination: "/blog", permanent: true },
+      { source: "/5-reasons-seattle-cannabis-is-the-top-seattle-marijuana-company", destination: "/blog", permanent: true },
+      { source: "/5-reasons-to-have-cannabis-in-your-life", destination: "/blog", permanent: true },
+      { source: "/5-reasons-why-seattle-cannabis-company-is-the-best-seattle-marijuana-store", destination: "/blog", permanent: true },
+      { source: "/7-seattle-cannabis-products-designed-for-marijuana-enthusiasts", destination: "/blog", permanent: true },
+      { source: "/a-plethora-of-recreational-marijuana-products-under-one-roof", destination: "/blog", permanent: true },
+      { source: "/bill-to-transform-marijuana-regulation-from-state-sen-kohl-welles", destination: "/blog", permanent: true },
+      { source: "/bob-marleys-global-marijuana-brand-family-helped-by-seattle-company", destination: "/blog", permanent: true },
+      { source: "/buy-weed-in-seattle-5-reasons-to-choose-marijuana-over-alcohol", destination: "/blog", permanent: true },
+      { source: "/cannabis-coffee-wake-and-bake-without-the-grogginess", destination: "/blog", permanent: true },
+      { source: "/celebrate-420-with-scc", destination: "/blog", permanent: true },
+      { source: "/cooking-with-marijuana-how-to-make-weed-edibles", destination: "/blog", permanent: true },
+      { source: "/double-delicious", destination: "/blog", permanent: true },
+      { source: "/grand-opening-this-saturday-february-28-2015", destination: "/blog", permanent: true },
+      { source: "/harmony-farms", destination: "/blog", permanent: true },
+      { source: "/hempfest-2016", destination: "/blog", permanent: true },
+      { source: "/house-of-cultivar", destination: "/blog", permanent: true },
+      { source: "/how-to-make-marijuana-butter-cooking-weed-butter", destination: "/blog", permanent: true },
+      { source: "/how-to-make-marijuana-cookies-cooking-weed-cookies", destination: "/blog", permanent: true },
+      { source: "/how-to-roll-a-blunt-blunt-rolling-directions", destination: "/blog", permanent: true },
+      { source: "/incredible-edibles-where-to-buy-edibles-in-seattle", destination: "/blog", permanent: true },
+      { source: "/individual-care-and-exceptional-experience-is-our-goal-at-seattle-cannabis-co-marijuana-store", destination: "/blog", permanent: true },
+      { source: "/interview-with-cannabis-update", destination: "/blog", permanent: true },
+      { source: "/is-marijuana-legal-in-seattle-yes-how-to-buy-marijuana-in-seattle", destination: "/blog", permanent: true },
+      { source: "/lighting-weed-lighters-hemp-wicks-matches", destination: "/blog", permanent: true },
+      { source: "/marijuana-breath-tests-currently-in-development-at-washington-state-university", destination: "/blog", permanent: true },
+      { source: "/marijuana-inspired-christmas-holiday-stoner-gifts", destination: "/blog", permanent: true },
+      { source: "/marijuana-pipes-how-to-smoke-from-and-use-a-weed-pipe", destination: "/blog", permanent: true },
+      { source: "/marijuana-seattle-how-to-purchase-marijuana-in-seattle-legally", destination: "/blog", permanent: true },
+      { source: "/marijuana-vaporizers-the-benefits-of-a-weed-vaporizer", destination: "/blog", permanent: true },
+
+      // ── SEO recovery: legacy iHeartJane menu URLs (Doug 2026-05-08)
+      // /menu-scc + /menu-scc-3 were the old iHJ subdir paths; Wayback
+      // confirmed dozens of /menu-scc-3/menu/products/<id>/<slug>/ URLs
+      // were crawled in March 2026 (each individual product detail had
+      // its own SEO landing). All collapse to /menu (the live Boost embed).
+      { source: "/menu-scc-3/:path*", destination: "/menu", permanent: true },
+      { source: "/menu-scc/:path*", destination: "/menu", permanent: true },
+      { source: "/menu/products/:path*", destination: "/menu", permanent: true },
+
+      // ── SEO recovery: WordPress structural URLs (Doug 2026-05-08)
+      { source: "/home", destination: "/", permanent: true },
+      { source: "/feed", destination: "/blog", permanent: true },
+      { source: "/medical", destination: "/faq", permanent: true },
+      { source: "/hello-world", destination: "/blog", permanent: true },
+      { source: "/my-account/:path*", destination: "/account", permanent: true },
+      { source: "/sitemap", destination: "/sitemap.xml", permanent: true },
     ];
   },
 };
