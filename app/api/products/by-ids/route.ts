@@ -15,6 +15,14 @@ import { getProductsByIds } from "@/lib/db";
 //    the DB at most once a minute regardless of traffic.
 export async function GET(req: NextRequest) {
   const raw = req.nextUrl.searchParams.get("ids") ?? "";
+  // Cap raw query-string length BEFORE the .split() / .trim() / .test()
+  // pipeline runs over arbitrary input. 16 ids × 64 chars × 1 comma =
+  // ~1KB ceiling for legit traffic; 4KB raw cap is generous headroom
+  // while bounding the per-call CPU. Sister to inv /api/admin/sparklines
+  // 16KB cap (v204.405).
+  if (raw.length > 4096) {
+    return NextResponse.json({ products: [] }, { status: 400 });
+  }
   const ids = raw
     .split(",")
     .map((s) => s.trim())
