@@ -1,9 +1,28 @@
-# Auto-deploys seattle-cannabis-web (Vercel project `seattle-cannabis-web`)
-# on every push to `main`. Mirrors the inventoryapp Seattle workflow added
-# in v6.217.
+# ════════════════════════════════════════════════════════════════════════
+# REDUNDANT AS OF 2026-05-08 — Sea public site uses Vercel-native GitHub
+# integration. Push trigger DISABLED to stop duplicating deploys.
 #
-# Required GitHub secret:
-#   VERCEL_TOKEN — create at https://vercel.com/account/tokens
+# The seattle-cannabis-web Vercel project is directly connected to this
+# GitHub repo (Settings → Git on the Vercel UI). Vercel auto-deploys on
+# every push to main without ever touching GH Actions. Running this
+# workflow on push triggered THREE deploys per commit hash (Vercel-native
+# + this CLI deploy + a third path), which Shohei Maeda (Vercel Compute,
+# Tokyo) flagged as billing waste in 2026-05-07 advisory.
+#
+# Estimated savings: 30-50% off build-minutes (per Shohei's audit).
+#
+# This file is kept as a manual-trigger backup in case the Vercel-native
+# integration ever needs a fallback. Trigger via:
+#   gh workflow run Deploy --ref main
+# Deletion candidate at next cleanup pass once integration is confirmed
+# stable for ~1 week (i.e., after 2026-05-15).
+#
+# History:
+#   - 2026-05-05: Created — `push: branches: [main]` auto-deploy (mirror of inv Seattle)
+#   - 2026-05-08 ~11:10 PT: push trigger removed; Vercel-native is the canonical deploy path
+#
+# Required secrets (only needed if anyone manually triggers via gh CLI):
+#   VERCEL_TOKEN — create at https://vercel.com/account/tokens (scope: full account)
 #
 # Project IDs are not secrets and live in env. Org is dougsureel's team
 # `team_BLtIFVlMFAktBg7mSnPWwZml`.
@@ -11,8 +30,8 @@
 name: Deploy
 
 on:
-  push:
-    branches: [main]
+  # push: branches: [main] — DISABLED 2026-05-08; Vercel-native auto-deploy
+  # is the canonical path. Re-enable only if native integration breaks.
   workflow_dispatch:
 
 env:
