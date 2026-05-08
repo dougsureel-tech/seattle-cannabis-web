@@ -970,6 +970,53 @@ export default async function HomePage() {
           <div className="text-center mt-10">
             <PrimaryCTA href={STORE.shopUrl}>Order Online — 15% Off →</PrimaryCTA>
           </div>
+          {/* HowTo JSON-LD — AI engines + Google rich-result fuel for "how
+              do I order from Seattle Cannabis Co" type queries. Mirrors the
+              visible 3-step block above. Sister of glw v4.665 (which added
+              the same schema to Wen homepage). Closes the SCC SEO gap where
+              the homepage had the visible HowTo content but no machine-
+              readable schema, so AI Overviews + ChatGPT could neither cite
+              nor lift the steps verbatim from this page. */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "HowTo",
+                name: `How to order cannabis for pickup at ${STORE.name}`,
+                description:
+                  "Three-step pickup flow: build your cart online with 15% off, we prep it, you pay cash and walk out. Most orders ready in 10–20 minutes.",
+                totalTime: "PT15M",
+                supply: [
+                  { "@type": "HowToSupply", name: "Valid government ID (21+)" },
+                  { "@type": "HowToSupply", name: "Cash" },
+                ],
+                step: [
+                  {
+                    "@type": "HowToStep",
+                    position: 1,
+                    name: "Browse & Order",
+                    text: "Shop the full menu and place a pickup order. 15% off applies automatically — pay nothing until you arrive.",
+                    url: `${STORE.website}/order`,
+                  },
+                  {
+                    "@type": "HowToStep",
+                    position: 2,
+                    name: "We Prepare It",
+                    text: "Our team gets your order ready. You'll get a status update in your account when it's packed and waiting at the counter.",
+                    url: `${STORE.website}/order`,
+                  },
+                  {
+                    "@type": "HowToStep",
+                    position: 3,
+                    name: "Pay Cash & Go",
+                    text: "Show valid ID at the door, head to the counter, pay cash, and you're out. Most pickups are 10–20 minutes from order to in-hand.",
+                    url: STORE.website,
+                  },
+                ],
+              }),
+            }}
+          />
         </div>
       </section>
 
