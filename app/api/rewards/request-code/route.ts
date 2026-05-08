@@ -118,8 +118,20 @@ export async function POST(req: NextRequest) {
   // code in the response so the dev can complete the flow without
   // an external SMS — still useful for end-to-end testing of the
   // verify path. Production builds always have Twilio configured;
-  // this leak path is preview-only.
+  // this leak path is preview-only — and explicitly gated on
+  // VERCEL_ENV !== "production" as belt-and-suspenders so if env
+  // vars ever drift on prod (e.g. partial restore, accidental
+  // unset) the OTP code can't leak in the API response. In that
+  // case prod returns a generic 500 instead.
   if (!isSmsConfigured()) {
+    const isProd = process.env.VERCEL_ENV === "production";
+    if (isProd) {
+      console.error("[request-code] SMS unconfigured on PRODUCTION — refusing to leak OTP in response");
+      return NextResponse.json(
+        { error: "Could not send code. Please try again or contact us." },
+        { status: 500 },
+      );
+    }
     return NextResponse.json({ ok: true, demoCode: code });
   }
 
