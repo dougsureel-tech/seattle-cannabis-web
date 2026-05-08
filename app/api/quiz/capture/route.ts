@@ -56,7 +56,14 @@ export async function POST(req: NextRequest) {
   }
 
   const b = body as Record<string, unknown>;
-  const rawEmail = typeof b.email === "string" ? b.email.trim() : "";
+  // Bound BEFORE the .trim() — without this, a 10MB email payload would
+  // burn CPU running .trim() over arbitrary input before the length check
+  // below would reject it. MAX_EMAIL_LEN is 254 (RFC 5321); 2× cap on
+  // raw input is comfortable above that for trimmable whitespace.
+  const rawEmail =
+    typeof b.email === "string" && b.email.length <= MAX_EMAIL_LEN * 2
+      ? b.email.trim()
+      : "";
   if (!rawEmail) {
     return NextResponse.json({ error: "Email required" }, { status: 400 });
   }
@@ -72,6 +79,10 @@ export async function POST(req: NextRequest) {
 
   const sanitize = (v: unknown): string | null => {
     if (typeof v !== "string") return null;
+    // Length check BEFORE trim — without this, a 10MB field would burn
+    // CPU on .trim() before the slice could cap it. 2× MAX_FIELD_LEN
+    // (= 128) is comfortable above the 64-char cap with whitespace room.
+    if (v.length > MAX_FIELD_LEN * 2) return null;
     const t = v.trim().slice(0, MAX_FIELD_LEN);
     return t.length > 0 ? t : null;
   };
