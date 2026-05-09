@@ -1470,7 +1470,7 @@ function FaqSection() {
     },
     {
       q: "How are cannabis taxes handled at the register?",
-      a: "WA state cannabis excise tax (37%) and Seattle local sales tax (~10.25%) are baked into the shelf price you see — what's on the tag is what you pay at the counter. Medical patients with a valid card get exemptions on certified medical products.",
+      a: "WA state cannabis excise tax (37%) and Seattle local sales tax (~10.55%) are baked into the shelf price you see — what's on the tag is what you pay at the counter. Medical patients with a valid card get exemptions on certified medical products.",
     },
   ];
 
