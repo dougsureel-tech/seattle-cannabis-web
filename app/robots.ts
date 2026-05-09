@@ -1,6 +1,11 @@
 import type { MetadataRoute } from "next";
 import { STORE } from "@/lib/store";
 
+// Revalidate every hour at CDN edge — robots.txt is fully static
+// (rules only change at deploy boundary). Sister of inv v342.605
+// + glw v8.165 cross-repo port.
+export const revalidate = 3600;
+
 // Cannabis is regulated content. Some bot allowlists default to blocking
 // regulated verticals — explicit allow ensures Claude / ChatGPT / Atlas /
 // Perplexity / Gemini / Apple Intelligence can crawl and cite us. WAC +

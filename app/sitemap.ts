@@ -4,6 +4,14 @@ import { STORE } from "@/lib/store";
 import { getPosts } from "@/lib/posts";
 import { NEAR_TOWNS } from "@/lib/near-towns";
 
+// Revalidate every 30 minutes at CDN edge — sitemap pulls from DB
+// (brands, deals, posts) but those change rarely (deals daily at most;
+// brands/posts even less). Pre-fix served `cache-control: public,
+// max-age=0, must-revalidate` (Next.js default for metadata routes) →
+// every Google/Bing/AI-bot crawl re-rendered + re-queried Postgres.
+// Sister of inv v342.605 + glw v8.165 cross-repo port.
+export const revalidate = 1800;
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [brands, deals] = await Promise.all([
     getActiveBrands().catch(() => []),
