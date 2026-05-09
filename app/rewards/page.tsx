@@ -39,7 +39,11 @@ export const metadata: Metadata = {
   title: "Rewards — your points balance",
   description:
     "Seattle Cannabis Co rewards. Sign in with your phone to see your points balance, tier, and lifetime stats.",
-  robots: { index: false },
+  // follow:false matches sister /rewards/* pages (login/verify/dashboard/redeem/
+  // history/balance) — every linked sub-page is itself noindex, so following
+  // them wastes Google's crawl budget. Tightens to consistency with the
+  // 6 sibling pages that all use { index: false, follow: false }.
+  robots: { index: false, follow: false },
 };
 
 // Migration-banner sunset. Seattle cutover lands ~2026-06-25 per
