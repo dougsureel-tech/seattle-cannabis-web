@@ -38,9 +38,20 @@ export default function BlogIndex() {
     })),
   };
 
+  // BreadcrumbList — earns SERP path rendering (Home › Blog).
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: STORE.website },
+      { "@type": "ListItem", position: 2, name: "Blog", item: `${STORE.website}/blog` },
+    ],
+  };
+
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(blogSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbLd) }} />
 
       {/* Hero — gradient bookend matching the rest of the site. */}
       <div className="relative overflow-hidden bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white py-10 sm:py-14">

@@ -43,9 +43,20 @@ export default function PressPage() {
     about: { "@id": `${STORE.website}/#dispensary` },
   };
 
+  // BreadcrumbList — earns SERP path rendering (Home › Press).
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: STORE.website },
+      { "@type": "ListItem", position: 2, name: "Press", item: `${STORE.website}/press` },
+    ],
+  };
+
   return (
     <div className="bg-stone-50 min-h-screen">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(orgSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbLd) }} />
 
       <section className="bg-indigo-950 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-16 sm:py-24">

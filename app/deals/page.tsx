@@ -93,6 +93,16 @@ export default async function DealsPage({ searchParams }: Props) {
         }))
       : [];
 
+  // BreadcrumbList — earns SERP path rendering (Home › Deals).
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: STORE.website },
+      { "@type": "ListItem", position: 2, name: "Deals", item: `${STORE.website}/deals` },
+    ],
+  };
+
   return (
     <div className="min-h-screen bg-stone-50">
       {dealsSchema.length > 0 && (
@@ -101,6 +111,10 @@ export default async function DealsPage({ searchParams }: Props) {
           dangerouslySetInnerHTML={{ __html: safeJsonLd(dealsSchema) }}
         />
       )}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbLd) }}
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-3">
         <VendorAdSlot slot="deals_page_top" />
