@@ -30,11 +30,23 @@
 // testing window and is slated for deletion once the OTP flow is
 // verified end-to-end against real customer data.
 
+import type { Metadata } from "next";
 import Link from "next/link";
 import { getClient } from "@/lib/db";
 import { normalizeToE164 } from "@/lib/sms";
 
 export const dynamic = "force-dynamic";
+
+// Privacy two-layer defense: robots.txt has `Disallow: /rewards` (prefix
+// match covers this route) BUT every sister rewards page emits page-level
+// `robots: { index: false }` for the second layer (Google occasionally
+// indexes-despite-disallow on heavily-linked URLs). This page was shipped
+// without metadata and relied solely on the robots.txt prefix — closing
+// that gap so a phone-in-querystring URL leaked via screenshot/social
+// won't ever land in the SERP. follow: false matches the rest of /rewards/*.
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 type Props = { searchParams: Promise<{ phone?: string }> };
 
