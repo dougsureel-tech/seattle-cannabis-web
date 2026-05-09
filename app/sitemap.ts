@@ -20,7 +20,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Organization + WebSite JSON-LD in app/layout.tsx anchoring / as
     // the entity hub.
     { url: `${STORE.website}/menu`, lastModified: new Date(), changeFrequency: "daily", priority: 0.85 },
-    { url: `${STORE.website}/order`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
+    // /order REMOVED from sitemap — proxy.ts 307-redirects /order/* → /menu.
+    // Listing redirected URLs wastes Google crawl budget. Restore when
+    // proxy redirect is removed. Sister glw v7.665. (v8.805)
     { url: `${STORE.website}/deals`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
     // /treasure-chest = clearance-lane surface (v5.045). Was missing from
     // the sitemap → Google never indexed it. Daily changeFrequency since
