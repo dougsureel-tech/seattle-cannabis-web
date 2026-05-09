@@ -168,6 +168,18 @@ const nextConfig: NextConfig = {
       // since glw doesn't have a /rewards portal).
       { source: "/loyalty", destination: "/rewards", permanent: true },
 
+      // Auth-URL alias normalization. Clerk uses `/sign-in` + `/sign-up`
+      // (hyphenated). The unhyphenated forms + `/login` are the most
+      // common legacy variants. Pre-fix all four 404'd. Sister glw v9.205.
+      { source: "/login", destination: "/sign-in", permanent: true },
+      { source: "/signin", destination: "/sign-in", permanent: true },
+      { source: "/signup", destination: "/sign-up", permanent: true },
+
+      // Generic legacy aliases: /sale is a common e-commerce deals page
+      // alias from prior platforms. (Skip /home — scc /home returns 200
+      // already since `app/home/page.tsx` exists; only glw 404'd.)
+      { source: "/sale", destination: "/deals", permanent: true },
+
       // Common WordPress / legacy info-page paths → semantic equivalent.
       // /contact has a real page on the new site (linked from sitemap.ts +
       // faq + structured-data canonical) — DO NOT redirect /contact, only
