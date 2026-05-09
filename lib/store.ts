@@ -11,7 +11,12 @@ export const STORE = {
   phone: "(206) 420-1042",
   phoneTel: "+12064201042",
   email: "rainier@seattlecannabis.co",
-  website: "https://seattlecannabis.co",
+  // www, not apex — apex 308's to www per proxy.ts CANONICAL_HOST. Pre-
+  // fix `STORE.website` was apex, so every sitemap URL + <link rel="canonical">
+  // + JSON-LD URL referenced apex; Google bot then fetched apex, hit a
+  // 308, and landed on www anyway. Aligning SSoT to the canonical-host
+  // makes every emitted URL hit www first-shot. Sister glw same wave.
+  website: "https://www.seattlecannabis.co",
   geo: { lat: 47.5345, lng: -122.2773 },
   googleMapsUrl: "https://maps.google.com/?q=7266+Rainier+Ave+S+Seattle+WA+98118",
   googleMapsEmbed: "",
