@@ -981,10 +981,30 @@ If you want simple: butane lighter, light from above, corner the bowl. If you wa
   },
 ];
 
+// Stage-by-publishedAt — posts dated in the future are excluded from
+// list + slug-lookup until their publishedAt date arrives. Pre-fix
+// future-dated posts (PLAN_WEEKLY_GUIDES staggered-release pattern)
+// appeared in sitemap.xml with future lastmod values (Google flags
+// future-dated lastmod as spammy) AND were reachable at /blog/[slug]
+// before their stated publish date (reader sees "Published 2026-05-12"
+// when reading on 2026-05-08). Filter at runtime so a post auto-
+// becomes-visible on its publish day without redeploy (the consuming
+// pages set revalidate so the filter re-evaluates).
+function isPublished(p: Post, asOf: Date = new Date()): boolean {
+  // Date-only compare (YYYY-MM-DD lexicographic). Asia-Pacific time
+  // zones could see a post 1 day "late" — accept that vs the
+  // alternative of timezone-shifting per-reader.
+  const today = asOf.toISOString().slice(0, 10);
+  return p.publishedAt <= today;
+}
+
 export function getPost(slug: string): Post | undefined {
-  return POSTS.find((p) => p.slug === slug);
+  const post = POSTS.find((p) => p.slug === slug);
+  return post && isPublished(post) ? post : undefined;
 }
 
 export function getPosts(): Post[] {
-  return [...POSTS].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
+  return [...POSTS]
+    .filter((p) => isPublished(p))
+    .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
 }
