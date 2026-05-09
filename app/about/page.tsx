@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { STORE, STORE_TZ } from "@/lib/store";
 import { withAttr } from "@/lib/attribution";
+import { safeJsonLd } from "@/lib/json-ld-safe";
 
 // ISR — content rarely changes; today-row highlight is the only dynamic
 // bit and a 5-minute cache window is plenty.
@@ -55,10 +56,10 @@ const breadcrumbSchema = {
 export default function AboutPage() {
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(aboutSchema) }} />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbSchema) }}
       />
 
       {/* Hero — gradient bookend matching homepage / visit / footer. */}

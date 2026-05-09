@@ -21,6 +21,7 @@ import GreenRevolutionBrandPage from "./_brands/green-revolution";
 import FiftyFoldBrandPage from "./_brands/fifty-fold";
 import MinglewoodBrandPage from "./_brands/minglewood-brands";
 import AvitasBrandPage from "./_brands/avitas";
+import { safeJsonLd } from "@/lib/json-ld-safe";
 
 // ISR: brand detail pages are pre-rendered for known slugs (via
 // `generateStaticParams` below) and refreshed every 5 min. Was force-dynamic
@@ -217,16 +218,16 @@ export default async function BrandPage({ params }: Props) {
       <>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(brandSchema) }}
+          dangerouslySetInnerHTML={{ __html: safeJsonLd(brandSchema) }}
         />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
+          dangerouslySetInnerHTML={{ __html: safeJsonLd(collectionSchema) }}
         />
         {productSchemas.length > 0 && (
           <script
             type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchemas) }}
+            dangerouslySetInnerHTML={{ __html: safeJsonLd(productSchemas) }}
           />
         )}
         <Override brand={brand} products={products} />
@@ -236,15 +237,15 @@ export default async function BrandPage({ params }: Props) {
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(brandSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(brandSchema) }} />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(collectionSchema) }}
       />
       {productSchemas.length > 0 && (
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchemas) }}
+          dangerouslySetInnerHTML={{ __html: safeJsonLd(productSchemas) }}
         />
       )}
 
