@@ -64,6 +64,15 @@ export const metadata: Metadata = {
     statusBarStyle: "black-translucent",
     title: "Seattle Cannabis",
   },
+  // Explicit apple-touch-icon link — Next 16 doesn't auto-emit `<link
+  // rel="apple-touch-icon">` for route-handler-based icons (we use
+  // `app/apple-icon.png/route.tsx` for dynamic ImageResponse generation,
+  // not a static binary). Without this, iOS Safari "Add to Home Screen"
+  // falls back to a generic globe icon. The route already serves 200 +
+  // 180×180 PNG; this just points iOS at it. Sister glw fix.
+  icons: {
+    apple: { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
+  },
   other: {
     rating: "adult",
     "mobile-web-app-capable": "yes",
