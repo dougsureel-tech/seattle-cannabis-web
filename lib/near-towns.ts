@@ -100,6 +100,56 @@ export const NEAR_TOWNS: readonly NearArea[] = [
       "Rainier Beach to 7266 Rainier Ave S is a one-shot drive — same arterial, no turns. Closest legal dispensary north of Rainier Beach inside Seattle city limits.",
     notableNeighbors: ["Othello", "Skyway", "Rainier Valley"],
   },
+  {
+    slug: "skyway",
+    name: "Skyway",
+    driveMins: 10,
+    transit: "106 bus from Rainier Beach Light Rail, or up Renton Ave S into Rainier Valley",
+    pitch: "Skyway to Rainier Valley is 10 min — closest in-Seattle dispensary to West Hill.",
+    whyStop:
+      "Skyway sits unincorporated between Seattle and Renton; the closest legal dispensary inside Seattle is us. Most Skyway regulars come up Renton Ave S into Rainier Valley. The 106 bus + a short walk works too.",
+    notableNeighbors: ["Rainier Beach", "Renton", "Rainier Valley"],
+  },
+  {
+    slug: "tukwila",
+    name: "Tukwila",
+    driveMins: 15,
+    transit: "Tukwila Light Rail or 124 bus",
+    pitch: "Tukwila to Rainier Ave is 15 min north — closest in-Seattle dispensary if you're south of the city line.",
+    whyStop:
+      "Tukwila is a county-island catchment — different city, different sales-tax rate (Tukwila vs Seattle), but a short drive. We're a 15-min run up MLK or via I-5 + Rainier Ave. Customers from Southcenter and Foster pair us with a Seattle errand.",
+    notableNeighbors: ["Skyway", "Renton", "Rainier Beach"],
+  },
+  {
+    slug: "renton",
+    name: "Renton",
+    driveMins: 20,
+    transit: "I-405 to MLK + Rainier",
+    pitch: "Renton to Rainier Valley is a 20-min I-405 + MLK shot — pair us with a downtown-Seattle errand.",
+    whyStop:
+      "Renton has its own dispensaries; we're not the closest, but we ARE the closest one inside Seattle city limits. Renton residents commuting north for work or weekend trips pair us with the Costco / IKEA / SODO run. Free parking, no parking-meter scramble.",
+    notableNeighbors: ["Tukwila", "Skyway", "Rainier Beach"],
+  },
+  {
+    slug: "georgetown",
+    name: "Georgetown",
+    driveMins: 12,
+    transit: "60 bus from Beacon Hill, or down Airport Way + I-5 to MLK",
+    pitch: "Georgetown to Rainier Valley is 12 min — across the I-5 corridor.",
+    whyStop:
+      "Georgetown is its own world south of SODO. Closest legal dispensary east of the freeway is us. Pair with a Boeing-Field-side coffee stop or a Stumbling Monk after.",
+    notableNeighbors: ["Beacon Hill", "SODO", "International District"],
+  },
+  {
+    slug: "international-district",
+    name: "International District",
+    driveMins: 15,
+    transit: "ID/Chinatown Light Rail → 7 bus south to Rainier Valley",
+    pitch: "ID/Chinatown to Rainier Ave is 15 min — Light Rail or south on Rainier.",
+    whyStop:
+      "Chinatown-International District residents and downtown workers pair us with a south-end errand or commute home. Light Rail to Mt Baker + a 7-bus transfer south, or just Rainier Ave the whole way.",
+    notableNeighbors: ["Beacon Hill", "Mt Baker", "SODO"],
+  },
 ];
 
 export function getTown(slug: string): NearArea | null {
