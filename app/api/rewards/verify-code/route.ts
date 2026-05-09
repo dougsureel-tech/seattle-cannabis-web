@@ -30,7 +30,8 @@ import { NextRequest, NextResponse, after } from "next/server";
 import { getClient } from "@/lib/db";
 import { normalizeToE164 } from "@/lib/sms";
 import { createHash, createHmac, timingSafeEqual } from "node:crypto";
-import { DAY_MS } from "@/lib/time-constants";
+import { DAY_MS, MINUTE_MS } from "@/lib/time-constants";
+import { createRateLimiter } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -38,6 +39,24 @@ export const runtime = "nodejs";
 const MAX_ATTEMPTS = 5;
 const SESSION_TTL_DAYS = 30;
 const COOKIE_NAME = "scc_rewards_session";
+
+// Per-IP rate limit on verify-code POSTs. Each call runs a DB SELECT on
+// loyalty_otp_codes by phone (composite-indexed but still a DB hop) +
+// possibly a UPDATE on attempts. Without a per-IP cap, an attacker can
+// fire 1000 req/s from one IP → DB load DoS, even though MAX_ATTEMPTS=5
+// per row makes brute-force infeasible. 20/min/IP is generous (legit
+// users enter 1-3 attempts per OTP) and caps DB load. Sister of
+// /api/rewards/request-code's DB-backed 5/hr/IP limit (different shape:
+// COUNT-based on persisted rows there, in-memory here for speed since
+// verify-code traffic is much higher).
+const verifyLimiter = createRateLimiter({ limit: 20, windowMs: MINUTE_MS });
+function clientIp(req: NextRequest): string {
+  const xff = req.headers.get("x-forwarded-for");
+  if (xff) return xff.split(",")[0].trim();
+  const real = req.headers.get("x-real-ip");
+  if (real) return real;
+  return "unknown";
+}
 
 function hashCode(code: string): string {
   return createHash("sha256").update(code).digest("hex");
@@ -61,6 +80,13 @@ function makeSessionCookie(phoneE164: string, secret: string): string {
 }
 
 export async function POST(req: NextRequest) {
+  if (!verifyLimiter.check(clientIp(req))) {
+    return NextResponse.json(
+      { error: "Too many attempts. Wait a minute and try again." },
+      { status: 429, headers: { "Retry-After": "60" } },
+    );
+  }
+
   let body: { phone?: string; code?: string };
   try {
     body = await req.json();
