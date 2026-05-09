@@ -150,6 +150,8 @@ export default async function BlogPost({ params }: Props) {
     author: { "@type": "Organization", name: STORE.name, url: STORE.website },
     articleSection: post.category,
     wordCount: post.body.split(/\s+/).length,
+    // Article rich-result eligibility requires `image`. Sister glw v7.625.
+    image: [`${STORE.website}/opengraph-image`],
   };
 
   const breadcrumbSchema = {
