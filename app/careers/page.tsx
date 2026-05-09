@@ -6,8 +6,10 @@ import { STORE } from "@/lib/store";
 // the source of truth; a stale cache for up to 5 min is fine for a careers page.
 export const revalidate = 300;
 
+// Canonical staff URL (brapp.*), not the Vercel-internal alias. Sister of
+// glw same-day fix. Same Vercel deployment, just stable DNS.
 const POSITIONS_API =
-  "https://seattle-cannabis-co.vercel.app/api/positions/open?store=seattle";
+  "https://brapp.seattlecannabis.co/api/positions/open?store=seattle";
 
 interface Position {
   id: string;

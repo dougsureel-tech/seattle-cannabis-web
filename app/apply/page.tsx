@@ -28,9 +28,15 @@ import { useState, useRef, useEffect, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
-const API_URL = "https://seattle-cannabis-co.vercel.app/api/applications";
+// Canonical staff URL (brapp.seattlecannabis.co), not the Vercel-internal
+// alias. Per memory `feedback_canonical_url_for_prod_verification.md`: alias
+// can lag canonical when Vercel auto-promote misbehaves — applications
+// submitted during that window would post to a stale build. /api/applications
+// CORS allowlist already accepts both seattlecannabis.co origins; switching
+// the target hostname doesn't change the Origin header.
+const API_URL = "https://brapp.seattlecannabis.co/api/applications";
 const POSITIONS_API =
-  "https://seattle-cannabis-co.vercel.app/api/positions/open?store=seattle";
+  "https://brapp.seattlecannabis.co/api/positions/open?store=seattle";
 const SOURCE_ORIGIN = "seattle-cannabis-web";
 const MAX_RESUME_BYTES = 10 * 1024 * 1024; // 10MB (mirror API)
 

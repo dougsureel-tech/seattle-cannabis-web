@@ -3,7 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-const API_URL = "https://seattle-cannabis-co.vercel.app/api/vendor-access";
+// Canonical staff URL (brapp.*), not the Vercel-internal alias. Sister of
+// glw same-day. Same Vercel deployment, just stable DNS alias.
+const API_URL = "https://brapp.seattlecannabis.co/api/vendor-access";
 const STORE_ORIGIN = "seattle";
 
 const ERROR_LABEL: Record<string, string> = {
