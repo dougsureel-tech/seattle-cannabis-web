@@ -183,7 +183,8 @@
 // 4.76 — /apply personality prompts: two optional written prompts (product-recommendation pitch + customer-recovery story) capture personality signal without the photo discrimination risk. Stored in applicants.metadata JSONB on inventoryapp side. Compliance: written-only — no photo (WA RCW 49.60 / EEOC pre-offer photo discrimination risk).
 // 4.465 — /order place-order error messages reassure customer their cart is preserved on failure. Mirror of greenlife-web v3.625.
 // 4.71 — Public /apply form: apply-to-work intake with resume upload + 3 references + 21+ confirmation. POSTs to inventoryapp /api/applications. Compliance: no photo / no SSN / no DOB.
-export const BUILD_VERSION = "8.505";
+// 8.515 — 🛡️ NEW build-gate `scripts/check-site-url-defense.mjs` — pins the v8.375 (welcome-email) → v8.415 (quiz-nurture + rewards/sign-out) vercel.app-defense pattern against regression. Sister of GW v2.82.80 + glw v7.375 cross-repo arc gates. Scans `app/` + `lib/` + `components/` for inline `process.env.NEXT_PUBLIC_SITE_URL || "<canonical>"` / `NEXT_PUBLIC_SITE_ORIGIN || "<canonical>"` (without the `.includes(".vercel.app")` rejection layer). Exempts the 3 SSoT-aware files that already implement defense (welcome-email + quiz-nurture-email + rewards/sign-out) + lib/version.ts (build-version pin, no canonical pollution risk). **Wired**: `pnpm check:site-url-defense` (manual run; scc has no pre-push hook to wire into yet). **Verified**: 0 offenders across 190 files. tsc clean.
+export const BUILD_VERSION = "8.515";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ||
