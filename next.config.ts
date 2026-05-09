@@ -87,6 +87,12 @@ const nextConfig: NextConfig = {
     return [
       // Same-content-different-name swaps.
       { source: "/about-us", destination: "/about", permanent: true },
+      // Mirror parity from glw same-day fix — pre-fix `/about/mission` + `/about/location`
+      // 404'd on Sea even though they were already 308'd on Wen. Common
+      // WP-era nested-about URL patterns; keep stale Google index entries +
+      // partner-directory listings landing on a real page.
+      { source: "/about/mission", destination: "/about", permanent: true },
+      { source: "/about/location", destination: "/visit", permanent: true },
 
       // Legacy e-commerce paths -> /menu (the canonical product surface,
       // iHeartJane Boost embed). All 404'd on the new site pre-fix.
