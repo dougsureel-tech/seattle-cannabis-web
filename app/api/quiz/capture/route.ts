@@ -167,15 +167,19 @@ export async function POST(req: NextRequest) {
           mapUrl: STORE.googleMapsUrl,
         });
       } catch (err) {
-        const msg = err instanceof Error ? err.message : String(err);
-        console.error(`[quiz/capture] D+0 dispatch failed: ${msg}`);
+        // err.name only — Resend errors echo recipient email + sender
+        // domain in err.message. Sister of glw v7.745 + the wrapper-
+        // source fix at v8.865 (different code path: this route does
+        // not go through lib/email.ts).
+        console.error(`[quiz/capture] D+0 dispatch failed err=${err instanceof Error ? err.name : "unknown"}`);
       }
     });
 
     return NextResponse.json({ ok: true });
   } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err);
-    console.error(`[quiz/capture] insert failed: ${msg}`);
+    // err.name only — Drizzle wraps Postgres errors and the message
+    // can echo the conflicting row data (`(email)=(alice@example.com)`).
+    console.error(`[quiz/capture] insert failed err=${err instanceof Error ? err.name : "unknown"}`);
     return NextResponse.json({ error: "Couldn't save your email. Try again." }, { status: 500 });
   }
 }
