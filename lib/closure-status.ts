@@ -11,7 +11,12 @@ export type ClosureStatus = {
   reason: string | null;
 };
 
-const DEFAULT_INVENTORYAPP_URL = "https://seattle-cannabis-co.vercel.app";
+// Canonical staff URL (brapp.seattlecannabis.co), not the Vercel-internal
+// alias (seattle-cannabis-co.vercel.app) — per memory
+// `feedback_canonical_url_for_prod_verification.md`, the alias can lag the
+// canonical when Vercel auto-promote doesn't cleanly hand off. Both URLs
+// serve the same Next.js app; the canonical is just the customer-stable one.
+const DEFAULT_INVENTORYAPP_URL = "https://brapp.seattlecannabis.co";
 
 function inventoryappBase(): string {
   const env =
