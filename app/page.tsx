@@ -173,7 +173,7 @@ export default async function HomePage() {
       {/* Vendor / house ad slot — top of page (above hero) */}
       <section className="bg-stone-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3">
-          <VendorAdSlot slot="homepage_top" />
+          <VendorAdSlot slot="homepage_top" loading="eager" />
         </div>
       </section>
       {/* ─── Hero ─────────────────────────────────────────────────────────── */}
@@ -1066,6 +1066,7 @@ export default async function HomePage() {
                       <img
                         src={p.imageUrl}
                         alt={p.name}
+                        loading="lazy"
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                     ) : (
