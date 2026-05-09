@@ -159,6 +159,15 @@ const nextConfig: NextConfig = {
       { source: "/pickup", destination: "/menu", permanent: true },
       { source: "/preroll", destination: "/menu", permanent: true },
 
+      // Legacy loyalty bookmarks → /rewards (canonical customer portal —
+      // OTP-gated on /api/rewards/request-code → /api/rewards/verify-code,
+      // session-cookie issues a 30-day Rewards session). Pre-fix /loyalty
+      // 404'd; legacy bookmarks from the SpringBig era hit a dead URL.
+      // Caught by /loop saturation grind 2026-05-09 customer-flow smoke
+      // test. Sister glw same wave (which routes /loyalty → /account
+      // since glw doesn't have a /rewards portal).
+      { source: "/loyalty", destination: "/rewards", permanent: true },
+
       // Common WordPress / legacy info-page paths → semantic equivalent.
       // /contact has a real page on the new site (linked from sitemap.ts +
       // faq + structured-data canonical) — DO NOT redirect /contact, only
