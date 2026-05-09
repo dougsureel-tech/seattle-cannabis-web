@@ -26,6 +26,13 @@ export const metadata: Metadata = {
     "Beacon Hill cannabis",
     "Mt Baker dispensary",
   ],
+  openGraph: {
+    title: `Service Area · ${STORE.name}`,
+    description: `${STORE.name} serves ${NEAR_TOWNS.length} Seattle-area neighborhoods + south-of-city catchments.`,
+    url: `${STORE.website}/near`,
+    siteName: STORE.name,
+    images: ["/opengraph-image"],
+  },
 };
 
 export default function NearIndexPage() {

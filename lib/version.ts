@@ -3,6 +3,7 @@
 // comes from Vercel automatically on every deploy and is the authoritative
 // "did my push actually land" signal.
 
+// 8.705 — 🥼 OG image on /near pages — Next 16 metadata cascade quirk: page-level `openGraph: {...}` fully REPLACES parent's auto-injected images. Pre-fix `/near/<area>` + `/near` index pages had no `og:image`, so Slack/iMessage/Facebook share previews rendered imageless. Single-line `images: ["/opengraph-image"]` on each metadata block. 24 area pages + 1 index hub now share-previewed correctly. Sister glw v7.565. tsc clean.
 // 8.685 — 🥇 apex → www sister sweep — 3 more sites: `lib/welcome-email.ts` + `lib/quiz-nurture-email.ts` + `app/api/rewards/sign-out/route.ts` URL fallbacks. All three used `"https://seattlecannabis.co"` as vercel.app-defense fallback; apex 308's to www. Now all fall through to www. CAN-SPAM compliance benefits on the email surfaces (direct-resolve unsub). Sister of v8.665 STORE.website fix + glw v7.545 same wave. tsc clean.
 // 8.665 — 🥇 STORE.website apex → www SSoT fix. Pre-fix `STORE.website` was set to `https://seattlecannabis.co` (apex), but apex 308's to www per `proxy.ts` CANONICAL_HOST. Result: every emitted URL (151 sitemap entries, every `<link rel="canonical">`, every JSON-LD `url`, every OG `url`, every welcome-email deep-link) referenced apex, then Google bot fetched apex, hit a 308, and landed on www anyway. Redirect chain = wasted crawl budget + slightly-muddled canonical signal. One-line change at `lib/store.ts` aligns SSoT to the actual canonical-host. Sister glw v7.525. tsc clean.
 // 8.645 — 🛍️ CollectionPage + ItemList + BreadcrumbList JSON-LD on /menu — earns Google site-link / category-carousel eligibility on the highest-traffic page on the site. Boost embed makes per-product LD impossible without product-feed access; instead we expose the canonical 8-category set (Flower / Pre-rolls / Vapes / Concentrates / Edibles / Tinctures / Topicals / Accessories) wrapped in CollectionPage so Google understands /menu is a structured product collection. Plus BreadcrumbList. Sister glw v7.505. tsc clean.
@@ -193,7 +194,7 @@
 // 4.465 — /order place-order error messages reassure customer their cart is preserved on failure. Mirror of greenlife-web v3.625.
 // 4.71 — Public /apply form: apply-to-work intake with resume upload + 3 references + 21+ confirmation. POSTs to inventoryapp /api/applications. Compliance: no photo / no SSN / no DOB.
 // 8.515 — 🛡️ NEW build-gate `scripts/check-site-url-defense.mjs` — pins the v8.375 (welcome-email) → v8.415 (quiz-nurture + rewards/sign-out) vercel.app-defense pattern against regression. Sister of GW v2.82.80 + glw v7.375 cross-repo arc gates. Scans `app/` + `lib/` + `components/` for inline `process.env.NEXT_PUBLIC_SITE_URL || "<canonical>"` / `NEXT_PUBLIC_SITE_ORIGIN || "<canonical>"` (without the `.includes(".vercel.app")` rejection layer). Exempts the 3 SSoT-aware files that already implement defense (welcome-email + quiz-nurture-email + rewards/sign-out) + lib/version.ts (build-version pin, no canonical pollution risk). **Wired**: `pnpm check:site-url-defense` (manual run; scc has no pre-push hook to wire into yet). **Verified**: 0 offenders across 190 files. tsc clean.
-export const BUILD_VERSION = "8.685";
+export const BUILD_VERSION = "8.705";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ||
