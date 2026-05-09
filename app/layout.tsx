@@ -277,7 +277,7 @@ const localBusinessSchema = {
   hasMenu: `${STORE.website}/menu`,
   potentialAction: {
     "@type": "OrderAction",
-    target: STORE.shopUrl,
+    target: `${STORE.website}${STORE.shopUrl}`,
     deliveryMethod: "http://purl.org/goodrelations/v1#DeliveryModePickUp",
   },
   // Speakable spec — tells voice assistants (Siri / Google Assistant /
