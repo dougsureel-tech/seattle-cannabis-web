@@ -91,7 +91,14 @@ export async function POST(req: NextRequest) {
         if (status === 404 || status === 410) {
           dead.push(s.endpoint);
         } else {
-          console.error("[push/send] error for endpoint", s.endpoint.slice(0, 60), status, err);
+          // Format-only — webpush errors echo the full subscription
+          // (endpoint URL = device ID + auth keys = decryption material).
+          // Log host + status + err.name. Sister of glw same-file pattern.
+          const reason = err instanceof Error ? err.name : "unknown";
+          const host = (() => {
+            try { return new URL(s.endpoint).host; } catch { return "?"; }
+          })();
+          console.error(`[push/send] error host=${host} status=${status} reason=${reason}`);
         }
       }
     }),
