@@ -29,6 +29,8 @@ export default function robots(): MetadataRoute.Robots {
         disallow: [
           "/account",
           "/api/",
+          "/order/confirmation/", // v8.825 — per-order privacy. Sister
+                                  // glw v7.685.
           "/quiz/unsubscribe",
           "/rewards",
           "/sign-in",

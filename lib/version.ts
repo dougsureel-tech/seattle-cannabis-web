@@ -3,6 +3,8 @@
 // comes from Vercel automatically on every deploy and is the authoritative
 // "did my push actually land" signal.
 
+// 8.845 — 🔒 /order/confirmation/[id] now `robots: noindex` + Disallow in app/robots.ts. Privacy-sensitive per-order page. Two-layer defense. Sister glw v7.705. tsc clean.
+// 8.825 — 🏷️ %-off overlay on /devmenu + /order product cards (Doug 2026-05-08: "put the % off overlay on top of the product that is on sale similar to iheartjane"). Replaces the bottom-right "On Sale" chip (was UX_AUDIT_2026_05_03 P1-4 — sat too close to +Add and caused mistaps) with a prominent top-left red %-off badge that shows the actual discount magnitude (`20% OFF` or `$5 OFF` from `deal.discountType + discountValue`). At thumbnail scale a corner badge converts harder than a footer chip — the iHeartJane Boost embed on /menu uses this exact pattern, so customers already recognize it. Strain chip auto-displaces to bottom-right when a deal is present so corners stay non-overlapping (top-left = %-off, top-right = New / cart-quantity, bottom-left = weight, bottom-right = strain). Single-component edit at `app/order/OrderMenu.tsx`. Refactor: `findDealForProduct(...)` lifted out of nested IIFE to outer map closure (was being called inline; now memoized once per row). Sister glw v7.685. tsc clean.
 // 8.805 — 🗺️ /order REMOVED from sitemap — proxy.ts 307-redirects /order/* → /menu. Listing redirected URLs in sitemap wastes Google crawl budget. Sister glw v7.665. tsc clean.
 // 8.785 — 🔗 LocalBusiness @id graph-consolidation on /near pages — pre-fix each /near/<area> declared a separate LocalBusiness entity. Google's Knowledge Graph would treat each as a chain branch. Now @id references canonical home-page entity and `mainEntityOfPage` carries the per-page binding. Net effect: Google sees ONE business with 24 area-served declarations instead of 24 phantom branches. Sister glw v7.645. tsc clean.
 // 8.765 — 📰 Article rich-result eligibility — `/blog/[slug]` Article LD now includes `image` field. Pre-fix no `image` so Google can't promote to article-card SERP styling. Sister glw v7.625. tsc clean.
@@ -199,7 +201,7 @@
 // 4.465 — /order place-order error messages reassure customer their cart is preserved on failure. Mirror of greenlife-web v3.625.
 // 4.71 — Public /apply form: apply-to-work intake with resume upload + 3 references + 21+ confirmation. POSTs to inventoryapp /api/applications. Compliance: no photo / no SSN / no DOB.
 // 8.515 — 🛡️ NEW build-gate `scripts/check-site-url-defense.mjs` — pins the v8.375 (welcome-email) → v8.415 (quiz-nurture + rewards/sign-out) vercel.app-defense pattern against regression. Sister of GW v2.82.80 + glw v7.375 cross-repo arc gates. Scans `app/` + `lib/` + `components/` for inline `process.env.NEXT_PUBLIC_SITE_URL || "<canonical>"` / `NEXT_PUBLIC_SITE_ORIGIN || "<canonical>"` (without the `.includes(".vercel.app")` rejection layer). Exempts the 3 SSoT-aware files that already implement defense (welcome-email + quiz-nurture-email + rewards/sign-out) + lib/version.ts (build-version pin, no canonical pollution risk). **Wired**: `pnpm check:site-url-defense` (manual run; scc has no pre-push hook to wire into yet). **Verified**: 0 offenders across 190 files. tsc clean.
-export const BUILD_VERSION = "8.805";
+export const BUILD_VERSION = "8.845";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ||

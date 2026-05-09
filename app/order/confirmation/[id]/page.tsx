@@ -10,7 +10,11 @@ import { OrderStatusRefresh } from "@/components/OrderStatusRefresh";
 import { NotifyMeButton } from "@/components/NotifyMeButton";
 
 export const dynamic = "force-dynamic";
-export const metadata: Metadata = { title: "Order confirmed" };
+// Privacy-sensitive per-order page. Sister glw v7.685.
+export const metadata: Metadata = {
+  title: "Order confirmed",
+  robots: { index: false, follow: false },
+};
 
 const STAGES = [
   { key: "pending", label: "Placed" },
