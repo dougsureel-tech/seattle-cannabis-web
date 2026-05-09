@@ -102,8 +102,14 @@ export async function sendEmail(args: SendEmailArgs): Promise<SendEmailResult> {
     }
     return { ok: true, id };
   } catch (e) {
-    const message = e instanceof Error ? e.message : String(e);
-    console.error("[email] send failed:", message);
-    return { ok: false, error: message };
+    // Format-only — Resend SDK errors echo the recipient address in
+    // .message ("domain not verified for foo@example.com" / "rate
+    // limited 3000/day for foo@example.com"). Vercel logs aren't
+    // sensitive-PII-segregated; logging full error surfaces customer
+    // email PII. Return + log err.name (class only). All callers inherit
+    // the tightened result.error string. Sister of glw same-file fix.
+    const errName = e instanceof Error ? e.name : "Error";
+    console.error(`[email] send failed: ${errName}`);
+    return { ok: false, error: errName };
   }
 }
