@@ -35,6 +35,13 @@ export const metadata: Metadata = {
     description: `Live cannabis menu — prices, THC/CBD, lab data. ${STORE.address.full}.`,
     url: `${STORE.website}/menu`,
     type: "website",
+    // Next 16 metadata cascade quirk: page-level `openGraph: {...}` fully
+    // REPLACES parent's auto-injected images. Without this, /menu share
+    // previews render imageless. glw has `app/menu/opengraph-image.tsx`
+    // (per-route image) which Next auto-injects despite the override; scc
+    // never grew that file, so we reference the root /opengraph-image
+    // directly. Sister of v8.745 fix on /order /careers /heroes /blog.
+    images: ["/opengraph-image"],
   },
   // Partner-presence signal the WP plugin emits. The WP origin (208.109.64.51)
   // shipped <meta name="jane:version" content="1.4.7"/> on every /menu page;
