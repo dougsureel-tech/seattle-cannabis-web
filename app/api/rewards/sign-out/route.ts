@@ -10,10 +10,17 @@ import { REWARDS_COOKIE_NAME } from "@/lib/rewards-session";
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
+// Defensive: if NEXT_PUBLIC_SITE_URL is ever set to a *.vercel.app URL
+// (drift class), fall through to canonical so the post-sign-out redirect
+// never lands customers on a non-brand hostname. Sister of welcome-email
+// v8.375 pattern.
+function siteOrigin(): string {
+  const env = process.env.NEXT_PUBLIC_SITE_URL;
+  return env && !env.includes(".vercel.app") ? env : "https://seattlecannabis.co";
+}
+
 export async function POST() {
-  const res = NextResponse.redirect(
-    new URL("/rewards/login", process.env.NEXT_PUBLIC_SITE_URL || "https://seattlecannabis.co"),
-  );
+  const res = NextResponse.redirect(new URL("/rewards/login", siteOrigin()));
   res.cookies.set(REWARDS_COOKIE_NAME, "", {
     httpOnly: true,
     secure: true,
