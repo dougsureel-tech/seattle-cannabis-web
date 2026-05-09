@@ -201,8 +201,9 @@ export default function AvitasBrandPage({
           Twelve-plus years on the WA market, recognizable to anyone who&apos;s ever walked
           into a {STORE.address.state} dispensary, and the cure quality has held up across the
           years where a lot of 2014-vintage brands have drifted. The PNW landscape on their
-          packaging — Mt. Hood, Three Sisters, the kind of view you actually get in
-          Wenatchee&apos;s back yard — reads honest because the cultivation is local.
+          packaging — Mt. Hood, Three Sisters, the kind of view that holds across western
+          Washington — reads honest because the cultivation is local (Arlington, an hour
+          up I-5 from us).
         </p>
       </BrandStory>
 
