@@ -5,6 +5,7 @@ import { validatePickupTime, pickupTimeToISO, STORE, STORE_TZ } from "@/lib/stor
 import { sendSms, isSmsConfigured, normalizePhone } from "@/lib/sms";
 import { sendOrderConfirmationEmail } from "@/lib/order-confirmation-email";
 import { MINUTE_MS } from "@/lib/time-constants";
+import { createRateLimiter } from "@/lib/rate-limit";
 
 // Per-user rate limit on order placement. Clerk auth gates the surface
 // to signed-in customers but each call triggers an INSERT + SMS confirm
@@ -14,17 +15,9 @@ import { MINUTE_MS } from "@/lib/time-constants";
 // orders in 60s) and catches loop-induced fires. Sister to inv
 // /api/customer/orders rate limit (5/min/IP) — public-site sister
 // previously had only Vercel-edge body-size as defense.
-const orderRateMap = new Map<string, { count: number; resetAt: number }>();
+const orderLimiter = createRateLimiter({ limit: 5, windowMs: MINUTE_MS });
 function checkOrderRate(userId: string): boolean {
-  const now = Date.now();
-  const entry = orderRateMap.get(userId);
-  if (!entry || entry.resetAt < now) {
-    orderRateMap.set(userId, { count: 1, resetAt: now + MINUTE_MS });
-    return true;
-  }
-  if (entry.count >= 5) return false;
-  entry.count++;
-  return true;
+  return orderLimiter.check(userId);
 }
 
 export async function POST(req: NextRequest) {

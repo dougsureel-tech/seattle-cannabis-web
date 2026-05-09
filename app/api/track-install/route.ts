@@ -4,6 +4,7 @@ import { getClient } from "@/lib/db";
 import { getOrCreatePortalUser } from "@/lib/portal";
 import crypto from "crypto";
 import { MINUTE_MS } from "@/lib/time-constants";
+import { createRateLimiter } from "@/lib/rate-limit";
 
 // POST /api/track-install
 //
@@ -37,17 +38,9 @@ import { MINUTE_MS } from "@/lib/time-constants";
 // is generous (real PWA install fires once on accept + once per cold
 // standalone-launch); blocks scripted abuse. Sister to /api/quiz/capture
 // 5/min/IP and the inv /api/marketing/subscribe 3/min/IP defenses.
-const installRateMap = new Map<string, { count: number; resetAt: number }>();
+const installLimiter = createRateLimiter({ limit: 10, windowMs: MINUTE_MS });
 function checkInstallRate(ip: string): boolean {
-  const now = Date.now();
-  const entry = installRateMap.get(ip);
-  if (!entry || entry.resetAt < now) {
-    installRateMap.set(ip, { count: 1, resetAt: now + MINUTE_MS });
-    return true;
-  }
-  if (entry.count >= 10) return false;
-  entry.count++;
-  return true;
+  return installLimiter.check(ip);
 }
 
 export async function POST(req: NextRequest) {
