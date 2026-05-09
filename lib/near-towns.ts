@@ -150,6 +150,56 @@ export const NEAR_TOWNS: readonly NearArea[] = [
       "Chinatown-International District residents and downtown workers pair us with a south-end errand or commute home. Light Rail to Mt Baker + a 7-bus transfer south, or just Rainier Ave the whole way.",
     notableNeighbors: ["Beacon Hill", "Mt Baker", "SODO"],
   },
+  {
+    slug: "west-seattle",
+    name: "West Seattle",
+    driveMins: 25,
+    transit: "Water Taxi to downtown + Light Rail south, or West Seattle Bridge → I-5 → MLK",
+    pitch: "West Seattle has its own dispensaries; we're the closest legal cannabis east of I-5 if you're heading downtown anyway.",
+    whyStop:
+      "West Seattle locals making the I-5 + downtown loop pair us with a Beacon Hill or SODO errand. Not the shortest run — but if you're already eastbound, Rainier Valley is on the way home.",
+    notableNeighbors: ["SODO", "Georgetown", "Beacon Hill"],
+  },
+  {
+    slug: "capitol-hill",
+    name: "Capitol Hill",
+    driveMins: 18,
+    transit: "Capitol Hill Light Rail → 3 stops south to Mt Baker → 7 bus",
+    pitch: "Capitol Hill to Rainier Valley is 18 min — Light Rail or down 23rd Ave South.",
+    whyStop:
+      "Capitol Hill has its own selection up north; we're the south-side counterpart. Most Capitol Hill regulars at SCC are coming through on a Mt Baker / Columbia City weekend errand. Three stops on Light Rail + a 7-bus transfer.",
+    notableNeighbors: ["Central District", "International District", "Mt Baker"],
+  },
+  {
+    slug: "central-district",
+    name: "Central District",
+    driveMins: 12,
+    transit: "Down 23rd Ave S to Rainier, or 48 bus",
+    pitch: "Central District to Rainier Valley is 12 min — straight down 23rd or the 48 bus.",
+    whyStop:
+      "Central District + Madrona share 23rd Ave S as the natural artery to us. Direct shot down to Rainier Ave — no freeway needed, no parking-meter scramble at our end.",
+    notableNeighbors: ["Capitol Hill", "Mt Baker", "Madrona"],
+  },
+  {
+    slug: "burien",
+    name: "Burien",
+    driveMins: 25,
+    transit: "I-5 + I-405 north + MLK; or 131 bus + transfer",
+    pitch: "Burien to Rainier Ave is 25 min via I-5 or surface streets — closest in-Seattle dispensary going north.",
+    whyStop:
+      "Burien is its own city with its own retail; we're the closest in-Seattle option. Burien regulars coming up for a Sodo, Costco, or downtown trip pair us with the errand chain.",
+    notableNeighbors: ["Tukwila", "White Center", "SeaTac"],
+  },
+  {
+    slug: "mercer-island",
+    name: "Mercer Island",
+    driveMins: 18,
+    transit: "I-90 west + I-5 south + MLK, or Mercer Island Light Rail (East Link)",
+    pitch: "Mercer Island to Rainier Valley is 18 min via I-90 + south on Rainier.",
+    whyStop:
+      "Mercer Island is dry — no recreational dispensary on the island. Closest in-Seattle option is us, 18 min via I-90. Pair with a downtown errand on the way back.",
+    notableNeighbors: ["Bellevue", "Mt Baker", "International District"],
+  },
 ];
 
 export function getTown(slug: string): NearArea | null {
