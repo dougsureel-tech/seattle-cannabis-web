@@ -212,6 +212,32 @@ const nextConfig: NextConfig = {
       { source: "/opt-out", destination: "/rewards", permanent: true },
       { source: "/unsubscribe", destination: "/rewards", permanent: true },
 
+      // Round-3 legacy alias sweep (caught by /loop saturation grind
+      // 2026-05-09 wide-path probe round 3). Sister glw v9.605.
+      { source: "/lost-password", destination: "/sign-in", permanent: true },
+      { source: "/first-time", destination: "/menu", permanent: true },
+      { source: "/new-customer", destination: "/menu", permanent: true },
+      { source: "/first-visit", destination: "/menu", permanent: true },
+      { source: "/military", destination: "/deals", permanent: true },
+      { source: "/veterans", destination: "/deals", permanent: true },
+      { source: "/senior", destination: "/deals", permanent: true },
+      { source: "/promo", destination: "/deals", permanent: true },
+      { source: "/promos", destination: "/deals", permanent: true },
+      { source: "/offers", destination: "/deals", permanent: true },
+      { source: "/coupons", destination: "/deals", permanent: true },
+      { source: "/coupon", destination: "/deals", permanent: true },
+      { source: "/strain-finder", destination: "/find-your-strain", permanent: true },
+      { source: "/quiz", destination: "/find-your-strain", permanent: true },
+      { source: "/book-online", destination: "/menu", permanent: true },
+      { source: "/reserve", destination: "/menu", permanent: true },
+      { source: "/pre-order", destination: "/menu", permanent: true },
+      { source: "/preorder", destination: "/menu", permanent: true },
+      { source: "/pickup-order", destination: "/menu", permanent: true },
+      { source: "/location-map", destination: "/visit", permanent: true },
+      { source: "/education", destination: "/learn", permanent: true },
+      { source: "/cookie-policy", destination: "/privacy", permanent: true },
+      { source: "/privacy-statement", destination: "/privacy", permanent: true },
+
       // Common WordPress / legacy info-page paths → semantic equivalent.
       // /contact has a real page on the new site (linked from sitemap.ts +
       // faq + structured-data canonical) — DO NOT redirect /contact, only
