@@ -11,6 +11,9 @@ import { safeJsonLd } from "@/lib/json-ld-safe";
 
 export const dynamic = "force-static";
 export const revalidate = false;
+// dynamicParams=false: unknown :town slugs return proper HTTP 404 instead
+// of rendering a 200-status "Not found" page. Sister glw fix.
+export const dynamicParams = false;
 
 export function generateStaticParams() {
   return NEAR_TOWNS.map((t) => ({ town: t.slug }));
