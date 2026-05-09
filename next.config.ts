@@ -108,11 +108,14 @@ const nextConfig: NextConfig = {
       // than /menu for the "/strains" inbound (search-intent matches).
       { source: "/strains", destination: "/find-your-strain", permanent: true },
 
-      // Booking-style legacy URL — /order is the pickup-cart flow (already
-      // 307-redirects to /menu via proxy.ts until the native cart goes live;
-      // this preserves the future-correct landing).
-      { source: "/book", destination: "/order", permanent: true },
-      { source: "/book-now", destination: "/order", permanent: true },
+      // Booking-style legacy URLs. Destination flattened from `/order` →
+      // `/menu` direct (v9.225): /order itself 307s → /menu via proxy.ts
+      // during the iHJ-Boost era, so chaining /book → /order → /menu was
+      // a 3-hop redirect (extra Google crawl cycle + customer latency).
+      // When the native /order eventually replaces iHJ, this map gets
+      // updated as a wave alongside the proxy.ts /order rewrite removal.
+      { source: "/book", destination: "/menu", permanent: true },
+      { source: "/book-now", destination: "/menu", permanent: true },
 
       // Round-2 e-comm path expansion + WP-legacy info paths (Doug
       // 2026-05-07: "same with seattle" — mirror of glw v6.165). Catches

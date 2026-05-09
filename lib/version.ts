@@ -3,6 +3,7 @@
 // comes from Vercel automatically on every deploy and is the authoritative
 // "did my push actually land" signal.
 
+// 9.225 — 🔁 Redirect-chain flatten — `/book` + `/book-now` were chaining 308 → /order → 307 /menu (3 hops). Now → /menu direct (single hop). Sister glw v8.025. tsc clean.
 // 9.205 — 🔍 /brands/[slug] soft-404 mitigation — sister glw v8.005. generateMetadata now returns `robots: { index: false, follow: false }` on brand-not-found instead of empty `{}`. Prevents Google from indexing the ISR-cached not-found.tsx body served at HTTP 200. Brands can't use dynamicParams=false (active list is ISR-dynamic); noindex is the right defense for this shape. tsc clean.
 // 9.185 — 🔍 /near/[town] soft-404 fix — added `export const dynamicParams = false`. Sister glw v7.985. Pre-fix /near/seattle + /near/wenatchee returned HTTP 200 with "Not found" content (soft-404, Google penalty class). Now any slug not in NEAR_TOWNS returns proper HTTP 404. tsc clean.
 // 9.165 — ♿ /apply Suspense skeleton now ships an h1 — sister of glw v7.965. Pre-fix: ApplyPage wraps ApplyForm in `<Suspense fallback={<ApplyFormSkeleton/>}>` (Next 16 requires this for client-side useSearchParams). Skeleton had no h1 — initial SSR HTML had zero h1 tags. Crawlers + Lighthouse + screen-readers saw an h1-less page on first paint; h1 only appeared post-hydration. Now skeleton carries the same hero block as the form. tsc clean.
@@ -219,7 +220,7 @@
 // 4.465 — /order place-order error messages reassure customer their cart is preserved on failure. Mirror of greenlife-web v3.625.
 // 4.71 — Public /apply form: apply-to-work intake with resume upload + 3 references + 21+ confirmation. POSTs to inventoryapp /api/applications. Compliance: no photo / no SSN / no DOB.
 // 8.515 — 🛡️ NEW build-gate `scripts/check-site-url-defense.mjs` — pins the v8.375 (welcome-email) → v8.415 (quiz-nurture + rewards/sign-out) vercel.app-defense pattern against regression. Sister of GW v2.82.80 + glw v7.375 cross-repo arc gates. Scans `app/` + `lib/` + `components/` for inline `process.env.NEXT_PUBLIC_SITE_URL || "<canonical>"` / `NEXT_PUBLIC_SITE_ORIGIN || "<canonical>"` (without the `.includes(".vercel.app")` rejection layer). Exempts the 3 SSoT-aware files that already implement defense (welcome-email + quiz-nurture-email + rewards/sign-out) + lib/version.ts (build-version pin, no canonical pollution risk). **Wired**: `pnpm check:site-url-defense` (manual run; scc has no pre-push hook to wire into yet). **Verified**: 0 offenders across 190 files. tsc clean.
-export const BUILD_VERSION = "9.205";
+export const BUILD_VERSION = "9.225";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ||
