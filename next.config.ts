@@ -238,6 +238,35 @@ const nextConfig: NextConfig = {
       { source: "/cookie-policy", destination: "/privacy", permanent: true },
       { source: "/privacy-statement", destination: "/privacy", permanent: true },
 
+      // Round-4 legacy alias sweep. Sister glw v9.805.
+      // Generic-cannabis SEO-term aliases:
+      { source: "/weed", destination: "/", permanent: true },
+      { source: "/marijuana", destination: "/", permanent: true },
+      { source: "/cannabis", destination: "/", permanent: true },
+      { source: "/dispensary", destination: "/", permanent: true },
+      // PWA install flow happens via the customer rewards portal on scc:
+      { source: "/app", destination: "/rewards", permanent: true },
+      { source: "/download", destination: "/rewards", permanent: true },
+      { source: "/install", destination: "/rewards", permanent: true },
+      // Deal-page aliases:
+      { source: "/happy-hour", destination: "/deals", permanent: true },
+      { source: "/daily-deal", destination: "/deals", permanent: true },
+      { source: "/daily-deals", destination: "/deals", permanent: true },
+      { source: "/early-bird", destination: "/deals", permanent: true },
+      // Loyalty-program aliases (scc uses /rewards — OTP portal):
+      { source: "/points", destination: "/rewards", permanent: true },
+      { source: "/rewards-program", destination: "/rewards", permanent: true },
+      { source: "/member", destination: "/rewards", permanent: true },
+      { source: "/membership", destination: "/rewards", permanent: true },
+      // Form-submission post-redirect aliases:
+      { source: "/success", destination: "/", permanent: true },
+      { source: "/confirmed", destination: "/", permanent: true },
+      { source: "/confirmation", destination: "/", permanent: true },
+      // Legacy `.html`-extension URLs:
+      { source: "/index.html", destination: "/", permanent: true },
+      { source: "/home.html", destination: "/", permanent: true },
+      { source: "/menu.html", destination: "/menu", permanent: true },
+
       // Common WordPress / legacy info-page paths → semantic equivalent.
       // /contact has a real page on the new site (linked from sitemap.ts +
       // faq + structured-data canonical) — DO NOT redirect /contact, only
