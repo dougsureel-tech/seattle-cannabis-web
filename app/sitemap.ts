@@ -147,5 +147,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  return [...staticPages, ...dealPages, ...brandPages, ...postPages, ...nearTownPages];
+  // /near index page — hub for all /near/<area> pages, ItemList
+  // JSON-LD eligible.
+  const nearIndexPage: MetadataRoute.Sitemap = [
+    {
+      url: `${STORE.website}/near`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.85,
+    },
+  ];
+
+  return [...staticPages, ...dealPages, ...brandPages, ...postPages, ...nearIndexPage, ...nearTownPages];
 }

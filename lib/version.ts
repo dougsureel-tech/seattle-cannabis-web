@@ -3,6 +3,7 @@
 // comes from Vercel automatically on every deploy and is the authoritative
 // "did my push actually land" signal.
 
+// 8.545 — 🌍 NEW /near index page — hub for all 20 /near/<area> subpages. Static, ItemList JSON-LD listing all neighborhoods (carousel-result eligible), BreadcrumbList for SERP path rendering, sorted-by-drive-time grid. Closes the neighborhood arc: per-area pages + index hub. Sitemap pulls /near at priority 0.85. 20 → 21 sitemap delta. Sister glw v7.405. tsc clean.
 // 8.525 — 🥇 BreadcrumbList JSON-LD sweep — 4 more pages: /press, /blog, /deals, /heroes. All had partial JSON-LD (Org / Blog / Offer / FAQPage) but no breadcrumb path. Earns SERP path rendering on all 4 (Google shows Home › Press / Home › Blog / Home › Deals / Home › Heroes under the result instead of raw URL — 1-2% CTR lift). Sister glw v7.385. tsc clean.
 // 8.505 — 🥇 BreadcrumbList JSON-LD on /near/<area> template — earns SERP breadcrumb-rendering eligibility (Google shows Home › Visit › Area path under the result instead of the URL string; 1-2% CTR lift per Search Console A/Bs). Single edit on the dynamic template — applies to all 20 /near pages at once. Mirrors the visible Breadcrumb nav already rendered. Sister glw v7.365 same wave. tsc clean.
 // 8.485 — 🌍 /near/<area> wave 3 — 6 more areas appended: West Seattle, Capitol Hill, Central District, Burien, Mercer Island. Sitemap auto-grows from 142 → 148 URLs. **Coverage now: 20 areas total** spanning Rainier Valley + south-of-city catchments (Skyway, Tukwila, Renton, Burien) + central-Seattle (Beacon Hill, Mt Baker, Capitol Hill, Central District, ID, Georgetown) + island/east (Mercer Island) + west-of-I5 (West Seattle). Sister of glw v7.345. Memory `project_seo_city_landing_pages_2026_05_06` queue marker: 20/19+ — exceeded the originally-planned wave by 1 since Seattle's broader catchment reads as more high-leverage neighborhoods than the original Wenatchee-region count. tsc clean.
@@ -185,7 +186,7 @@
 // 4.465 — /order place-order error messages reassure customer their cart is preserved on failure. Mirror of greenlife-web v3.625.
 // 4.71 — Public /apply form: apply-to-work intake with resume upload + 3 references + 21+ confirmation. POSTs to inventoryapp /api/applications. Compliance: no photo / no SSN / no DOB.
 // 8.515 — 🛡️ NEW build-gate `scripts/check-site-url-defense.mjs` — pins the v8.375 (welcome-email) → v8.415 (quiz-nurture + rewards/sign-out) vercel.app-defense pattern against regression. Sister of GW v2.82.80 + glw v7.375 cross-repo arc gates. Scans `app/` + `lib/` + `components/` for inline `process.env.NEXT_PUBLIC_SITE_URL || "<canonical>"` / `NEXT_PUBLIC_SITE_ORIGIN || "<canonical>"` (without the `.includes(".vercel.app")` rejection layer). Exempts the 3 SSoT-aware files that already implement defense (welcome-email + quiz-nurture-email + rewards/sign-out) + lib/version.ts (build-version pin, no canonical pollution risk). **Wired**: `pnpm check:site-url-defense` (manual run; scc has no pre-push hook to wire into yet). **Verified**: 0 offenders across 190 files. tsc clean.
-export const BUILD_VERSION = "8.525";
+export const BUILD_VERSION = "8.545";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ||
