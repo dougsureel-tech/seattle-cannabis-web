@@ -158,7 +158,7 @@ export default async function NearTownPage({
       <section className="prose prose-zinc max-w-none mb-10">
         <p>{area.whyStop}</p>
         <p>
-          We're at <strong>{STORE.address.full}</strong>. ATM in-store, free parking out front, ADA accessible.
+          We&apos;re at <strong>{STORE.address.full}</strong>. ATM in-store, free parking out front, ADA accessible.
           Cash only at the counter — browse the live menu and place a pickup order before you head over.
         </p>
       </section>
@@ -166,7 +166,7 @@ export default async function NearTownPage({
       <section className="rounded-lg border-2 border-emerald-700 bg-emerald-50 p-5 mb-10">
         <div className="text-emerald-900 font-semibold mb-2">Coming from {area.name}?</div>
         <p className="text-sm text-emerald-900/80 mb-4">
-          Place a pickup order on the way — we'll have it ready when you arrive. Cash only at pickup.
+          Place a pickup order on the way — we&apos;ll have it ready when you arrive. Cash only at pickup.
         </p>
         <div className="flex flex-wrap gap-2">
           <Link
