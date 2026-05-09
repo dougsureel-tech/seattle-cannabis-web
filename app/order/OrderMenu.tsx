@@ -964,6 +964,7 @@ export function OrderMenu({
                       const cartItem = cart.find((i) => i.id === product.id);
                       const strain = product.strainType ? STRAIN_COLORS[product.strainType] : null;
                       const parsed = parseProductName(product);
+                      const deal = findDealForProduct(product, activeDeals);
                       return (
                         <div
                           key={product.id}
@@ -976,9 +977,30 @@ export function OrderMenu({
                               alt={product.name}
                               category={product.category}
                             />
+                            {deal && (
+                              // %-off overlay top-left — iHeartJane-style
+                              // conversion signal (Doug 2026-05-08: "put
+                              // the % off overlay on top of the product
+                              // that is on sale similar to iheartjane").
+                              // Replaces the bottom-right "On Sale" chip
+                              // that sat near +Add and caused mistaps
+                              // (UX_AUDIT_2026_05_03 P1-4). Strain chip
+                              // displaces to bottom-right when a deal is
+                              // present so corners stay non-overlapping.
+                              <span
+                                aria-label={`On sale: ${deal.short}`}
+                                className="absolute top-2.5 left-2.5 inline-flex items-center text-xs px-2 py-1 rounded-md font-extrabold bg-red-600 text-white shadow-md uppercase tracking-wide pointer-events-none"
+                              >
+                                {deal.discountType === "percent" && deal.discountValue != null
+                                  ? `${deal.discountValue}% OFF`
+                                  : deal.discountType === "dollars" && deal.discountValue != null
+                                  ? `$${deal.discountValue} OFF`
+                                  : "SALE"}
+                              </span>
+                            )}
                             {strain && (
                               <span
-                                className={`absolute top-2.5 left-2.5 text-xs px-2.5 py-1 rounded-full font-semibold border ${strain.badge}`}
+                                className={`absolute ${deal ? "bottom-2.5 right-2.5" : "top-2.5 left-2.5"} text-xs px-2.5 py-1 rounded-full font-semibold border ${strain.badge}`}
                               >
                                 <span
                                   className={`inline-block w-1.5 h-1.5 rounded-full mr-1 ${strain.dot}`}
@@ -991,22 +1013,6 @@ export function OrderMenu({
                                 {parsed.weight}
                               </span>
                             )}
-                            {(() => {
-                              const deal = findDealForProduct(product, activeDeals);
-                              // Non-interactive chip — was a Link but customers
-                              // tapping "+ Add" near the bottom-right corner kept
-                              // mistapping into the deal landing instead.
-                              // Per UX_AUDIT_2026_05_03 P1-4.
-                              return deal ? (
-                                <span
-                                  aria-label={`On sale: ${deal.short}`}
-                                  className="absolute bottom-2.5 right-2.5 inline-flex items-center gap-1 text-[10px] px-2 py-1 rounded-full font-extrabold bg-indigo-600 text-white shadow-md uppercase tracking-wide pointer-events-none"
-                                >
-                                  <span aria-hidden>★</span>
-                                  {deal.short}
-                                </span>
-                              ) : null;
-                            })()}
                             {product.isNew && (
                               <span className="absolute top-2.5 right-2.5 text-[10px] px-2 py-0.5 rounded-full font-bold bg-indigo-700 text-white shadow-md uppercase tracking-wide">
                                 New
