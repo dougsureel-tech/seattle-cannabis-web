@@ -61,7 +61,9 @@ export type WelcomeEmailArgs = {
 // non-brand hostname (sister of GW v2.78.90 canonicalBase pattern).
 const SITE_ORIGIN = ((): string => {
   const env = process.env.NEXT_PUBLIC_SITE_URL;
-  const base = env && !env.includes(".vercel.app") ? env : "https://seattlecannabis.co";
+  // Canonical-host fallback: www, not apex — apex 308's to www per
+  // proxy.ts. Sister of v8.665 STORE.website apex→www SSoT fix.
+  const base = env && !env.includes(".vercel.app") ? env : "https://www.seattlecannabis.co";
   return base.replace(/\/+$/, "");
 })();
 

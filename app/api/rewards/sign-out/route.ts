@@ -16,7 +16,8 @@ export const runtime = "nodejs";
 // v8.375 pattern.
 function siteOrigin(): string {
   const env = process.env.NEXT_PUBLIC_SITE_URL;
-  return env && !env.includes(".vercel.app") ? env : "https://seattlecannabis.co";
+  // Canonical-host fallback: www, not apex (sister of v8.665).
+  return env && !env.includes(".vercel.app") ? env : "https://www.seattlecannabis.co";
 }
 
 export async function POST() {

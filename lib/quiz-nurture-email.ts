@@ -74,7 +74,8 @@ const COLORS = {
 // GW v2.78.90 canonicalBase pattern).
 const PUBLIC_ORIGIN = ((): string => {
   const env = process.env.NEXT_PUBLIC_SITE_ORIGIN;
-  const base = env && !env.includes(".vercel.app") ? env : "https://seattlecannabis.co";
+  // Canonical-host fallback: www, not apex (sister of v8.665).
+  const base = env && !env.includes(".vercel.app") ? env : "https://www.seattlecannabis.co";
   return base.replace(/\/+$/, "");
 })();
 
