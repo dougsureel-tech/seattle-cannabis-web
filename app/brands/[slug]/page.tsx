@@ -87,7 +87,12 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const brand = await getBrandBySlug(slug).catch(() => null);
-  if (!brand) return {};
+  if (!brand) {
+    // Soft-404 mitigation — sister glw fix. ISR + page-level notFound()
+    // produces HTTP 200 with not-found.tsx body for unknown slugs; the
+    // `robots: noindex` hint prevents Google from indexing the soft-404.
+    return { robots: { index: false, follow: false } };
+  }
   return {
     title: brand.name,
     description: `Shop ${brand.name} cannabis products at ${STORE.name} in Rainier Valley, Seattle WA. ${brand.activeSkus} products in stock.`,
