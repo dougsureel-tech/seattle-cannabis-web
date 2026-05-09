@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { getActiveBrands, getActiveDeals } from "@/lib/db";
 import { STORE } from "@/lib/store";
 import { getPosts } from "@/lib/posts";
+import { NEAR_TOWNS } from "@/lib/near-towns";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [brands, deals] = await Promise.all([
@@ -136,5 +137,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.85,
   }));
 
-  return [...staticPages, ...dealPages, ...brandPages, ...postPages];
+  // /near/<area> service-area landing pages — sister of glw v7.305.
+  // Static, neighborhood-data driven from `lib/near-towns.ts`. priority
+  // 0.8 — geo-search lift for "<neighborhood> dispensary" queries.
+  const nearTownPages: MetadataRoute.Sitemap = NEAR_TOWNS.map((t) => ({
+    url: `${STORE.website}/near/${t.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  }));
+
+  return [...staticPages, ...dealPages, ...brandPages, ...postPages, ...nearTownPages];
 }
