@@ -180,6 +180,38 @@ const nextConfig: NextConfig = {
       // already since `app/home/page.tsx` exists; only glw 404'd.)
       { source: "/sale", destination: "/deals", permanent: true },
 
+      // Round-2 legacy alias sweep (caught by /loop saturation grind
+      // 2026-05-09 wide-path probe). Sister glw v9.405. Same intent:
+      // map frequently-bookmarked aliases to canonical surfaces.
+      // Product/menu aliases:
+      { source: "/jobs", destination: "/careers", permanent: true },
+      { source: "/catalog", destination: "/menu", permanent: true },
+      { source: "/checkout", destination: "/menu", permanent: true },
+      { source: "/search", destination: "/menu", permanent: true },
+      // Form-submission redirect targets:
+      { source: "/thanks", destination: "/", permanent: true },
+      { source: "/thank-you", destination: "/", permanent: true },
+      { source: "/thankyou", destination: "/", permanent: true },
+      // Help / support / news:
+      { source: "/help", destination: "/contact", permanent: true },
+      { source: "/support", destination: "/contact", permanent: true },
+      { source: "/news", destination: "/blog", permanent: true },
+      { source: "/story", destination: "/about", permanent: true },
+      // Visit-page aliases:
+      { source: "/map", destination: "/visit", permanent: true },
+      { source: "/directions", destination: "/visit", permanent: true },
+      { source: "/hours", destination: "/visit", permanent: true },
+      // Age-gate aliases:
+      { source: "/age-verify", destination: "/", permanent: true },
+      { source: "/21", destination: "/", permanent: true },
+      { source: "/verify", destination: "/", permanent: true },
+      // Email/SMS preferences live in /rewards on scc (OTP-gated portal,
+      // unlike glw which uses Clerk-managed /account):
+      { source: "/preferences", destination: "/rewards", permanent: true },
+      { source: "/optout", destination: "/rewards", permanent: true },
+      { source: "/opt-out", destination: "/rewards", permanent: true },
+      { source: "/unsubscribe", destination: "/rewards", permanent: true },
+
       // Common WordPress / legacy info-page paths → semantic equivalent.
       // /contact has a real page on the new site (linked from sitemap.ts +
       // faq + structured-data canonical) — DO NOT redirect /contact, only
