@@ -128,6 +128,17 @@ const nextConfig: NextConfig = {
       { source: "/accessories", destination: "/menu", permanent: true },
       { source: "/strain/:slug*", destination: "/find-your-strain", permanent: true },
 
+      // Common e-commerce-platform legacy URL patterns that 404'd pre-fix.
+      // /cart + /buy are universal Shopify/WooCommerce legacy aliases;
+      // /pickup matches customer-intent URLs that some loyalty/POS
+      // platforms emit; /preroll is the singular sister of /prerolls
+      // (already in the existing /pre-rolls map). All redirect to /menu.
+      // Sister glw same wave.
+      { source: "/cart", destination: "/menu", permanent: true },
+      { source: "/buy", destination: "/menu", permanent: true },
+      { source: "/pickup", destination: "/menu", permanent: true },
+      { source: "/preroll", destination: "/menu", permanent: true },
+
       // Common WordPress / legacy info-page paths → semantic equivalent.
       // /contact has a real page on the new site (linked from sitemap.ts +
       // faq + structured-data canonical) — DO NOT redirect /contact, only
