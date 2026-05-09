@@ -200,6 +200,46 @@ export const NEAR_TOWNS: readonly NearArea[] = [
       "Mercer Island is dry — no recreational dispensary on the island. Closest in-Seattle option is us, 18 min via I-90. Pair with a downtown errand on the way back.",
     notableNeighbors: ["Bellevue", "Mt Baker", "International District"],
   },
+  {
+    slug: "white-center",
+    name: "White Center",
+    driveMins: 20,
+    transit: "120 bus across to Rainier Valley, or up MLK from West Seattle",
+    pitch: "White Center to Rainier Valley is 20 min — across the city, same south-end vibe.",
+    whyStop:
+      "White Center has its own retail south of city limits; we're the closest in-Seattle option going east. Locals pairing a downtown or SODO errand with the run home stop in. Cash only at the till; ATM in-store.",
+    notableNeighbors: ["Burien", "West Seattle", "Tukwila"],
+  },
+  {
+    slug: "seatac",
+    name: "SeaTac",
+    driveMins: 22,
+    transit: "SeaTac/Airport Light Rail → 5 stops north to Mt Baker → 7 bus south",
+    pitch: "SeaTac to Rainier Valley is 22 min — flight-out errand or pick-up-on-the-way-home.",
+    whyStop:
+      "SeaTac airport-area customers pair us with a flight or a hotel stay. Light Rail is the easy path: Airport Station → Mt Baker → 7 bus south, or just up I-5 to MLK and over to Rainier.",
+    notableNeighbors: ["Tukwila", "Burien", "Federal Way"],
+  },
+  {
+    slug: "federal-way",
+    name: "Federal Way",
+    driveMins: 30,
+    transit: "I-5 north + MLK, or Federal Way Light Rail (Sounder corridor) → transfer",
+    pitch: "Federal Way to Rainier Valley is 30 min north on I-5 — closest in-Seattle dispensary going up.",
+    whyStop:
+      "Federal Way is its own city with retail; we're the closest in-Seattle option going north. Federal Way regulars at SCC pair us with a downtown / SODO / Mariners-or-Sounders-game errand chain. Free parking at our end (no meter scramble).",
+    notableNeighbors: ["SeaTac", "Tukwila", "Burien"],
+  },
+  {
+    slug: "bellevue",
+    name: "Bellevue",
+    driveMins: 22,
+    transit: "I-90 west + I-5 south + MLK, or Bellevue Light Rail (East Link) when running",
+    pitch: "Bellevue to Rainier Valley is 22 min via I-90 — quick across the bridge + south.",
+    whyStop:
+      "Bellevue has limited recreational retail; many Bellevue regulars cross I-90 for a Seattle-side run. We're a 22-min I-90 + Rainier Ave shot. Pair with a downtown stop or a Mercer Island detour.",
+    notableNeighbors: ["Mercer Island", "Mt Baker", "Capitol Hill"],
+  },
 ];
 
 export function getTown(slug: string): NearArea | null {
