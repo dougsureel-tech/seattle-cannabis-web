@@ -61,6 +61,23 @@ const nextConfig: NextConfig = {
           // frame-busting). Sister of glw same-day. If /menu regresses
           // post-deploy, single-line revert: drop this header back out.
           { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          // Referrer-Policy strict-origin-when-cross-origin — the lone
+          // remaining 2026-05-01-removed header. Restored 2026-05-09 per
+          // the same Doug directive that brought back X-Frame-Options.
+          // Why safe vs iHJ Boost: Referrer-Policy controls what WE tell
+          // external sites about where the user came from on outbound
+          // requests — has zero interaction with iHJ's inbound trust-
+          // token redemption (Permissions-Policy gated; already in place).
+          // Default browser behavior without this header sends full
+          // URL+query string to external image hosts / analytics — a
+          // privacy leak on customer-facing /rewards?token=… surfaces
+          // and any session-token-bearing query params. strict-origin-
+          // when-cross-origin sends origin-only on cross-origin (path
+          // + query stripped). Already in place on inv + GW + cannagent
+          // + glw (sister-shipped same day). Closes the cross-site
+          // drift caught by /loop saturation grind 2026-05-09 security-
+          // header audit.
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
         ],
       },
     ];
