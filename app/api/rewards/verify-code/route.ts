@@ -221,7 +221,10 @@ export async function POST(req: NextRequest) {
         `;
       }
     } catch (err) {
-      console.error("[verify-code] rewards_signed_in_at update failed:", err);
+      // Format-only — DB errors echo the WHERE phone=${phoneE164} clause
+      // (customer phone PII). Sister of v8.575 / v8.625 PII-leak hardening.
+      const reason = err instanceof Error ? err.name : "unknown";
+      console.error(`[verify-code] rewards_signed_in_at update failed: ${reason}`);
     }
   });
 

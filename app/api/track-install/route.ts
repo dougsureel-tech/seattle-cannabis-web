@@ -99,7 +99,7 @@ export async function POST(req: NextRequest) {
     }
   } catch (err) {
     // Auth lookup failed — proceed as anonymous, log to audit only
-    console.error("[track-install] auth lookup:", err);
+    { const reason = err instanceof Error ? err.name : "unknown"; console.error(`[track-install] auth lookup: ${reason}`); }
   }
 
   // Audit-log row — always written, drives the download counter
@@ -119,7 +119,7 @@ export async function POST(req: NextRequest) {
       )
     `;
   } catch (err) {
-    console.error("[track-install] audit insert:", err);
+    { const reason = err instanceof Error ? err.name : "unknown"; console.error(`[track-install] audit insert: ${reason}`); }
     // Don't fail the response — the client doesn't need to know
   }
 
@@ -133,7 +133,7 @@ export async function POST(req: NextRequest) {
         WHERE id = ${customerId}
       `;
     } catch (err) {
-      console.error("[track-install] customer update:", err);
+      { const reason = err instanceof Error ? err.name : "unknown"; console.error(`[track-install] customer update: ${reason}`); }
     }
   }
 

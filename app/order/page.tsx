@@ -12,6 +12,9 @@ export const metadata: Metadata = {
     description: `Pickup-ready cannabis menu in ${STORE.neighborhood}, Seattle. Cash in store, points on every order.`,
     url: `${STORE.website}/order`,
     type: "website",
+    // Sister of glw v7.585. Next 16 metadata cascade replaces parent
+    // images; explicit ref keeps share-previews image-correct.
+    images: ["/opengraph-image"],
   },
 };
 

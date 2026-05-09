@@ -56,6 +56,7 @@ export const metadata: Metadata = {
     description: `Open positions at Seattle Cannabis Co. — Rainier Valley, since 2018; same crew, since 2010.`,
     url: `${STORE.website}/careers`,
     type: "website",
+    images: ["/opengraph-image"],
   },
 };
 
