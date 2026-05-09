@@ -100,8 +100,8 @@ const QUINCY_CARDS = [
   },
   {
     emoji: "🚚",
-    title: "120 Miles East",
-    body: "Quincy to Wenatchee is two hours down US-2. Flower lands at our receiving fresh — short truck means a tighter bag, less travel oxidation.",
+    title: "150 Miles East",
+    body: "Quincy to Seattle is about three hours down I-90. Flower lands at our receiving fresh — direct cross-state truck means a tighter bag, less travel oxidation.",
   },
 ];
 
@@ -212,10 +212,10 @@ export default function TwoKGardensBrandPage({
         </p>
         <p>
           We carry 2K Gardens at {STORE.name} because the price-to-quality math is real and
-          they&apos;re local in the way that matters — Quincy is two hours down the road
-          from Wenatchee, both ends of the same agricultural corridor. The flower lands at
-          our receiving fresh, the pre-rolls move fast on the shelf, and the bulk ounce is
-          regularly the best value in the case.
+          they&apos;re Washington-grown — Quincy is about three hours east of Seattle on I-90,
+          a direct cross-state delivery. The flower lands at our receiving fresh, the
+          pre-rolls move fast on the shelf, and the bulk ounce is regularly the best value
+          in the case.
         </p>
       </BrandStory>
 
