@@ -10,7 +10,8 @@ export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "About — Locally Owned Rainier Valley Dispensary Since 2010",
-  description: `Learn about ${STORE.name} — Rainier Valley's locally-owned neighborhood cannabis dispensary. Founded 2010 (pre-I-502), in Rainier Valley since 2018. Knowledgeable budtenders, carefully curated Washington-state products.`,
+  // ~155 chars — v11.005 length sweep.
+  description: `Learn about ${STORE.name} — Rainier Valley's locally-owned cannabis dispensary. Founded 2010 (pre-I-502), in Rainier Valley since 2018.`,
   alternates: { canonical: "/about" },
   keywords: [
     "Rainier Valley dispensary",

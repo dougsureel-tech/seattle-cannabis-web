@@ -37,7 +37,8 @@ export const metadata: Metadata = {
   // landing and /menu shows up as a sitelink underneath. Founded year +
   // neighborhood anchor signals "this is the canonical entity page."
   title: `${STORE.name} | Cannabis Dispensary in ${STORE.neighborhood}, Seattle — Founded 2010`,
-  description: `${STORE.name} at ${STORE.address.full}. Closest shop to ${NEIGHBORHOOD_NAMES}. Five min from Othello Light Rail. Founded 2010, in Rainier Valley since 2018. Open daily 8 AM–11 PM. Cash only, 21+.`,
+  // ~150 chars — v11.005 length sweep.
+  description: `${STORE.name} at ${STORE.address.full}. 5 min from Othello Light Rail. Founded 2010, Rainier Valley since 2018. Open 8 AM–11 PM. Cash only, 21+.`,
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",

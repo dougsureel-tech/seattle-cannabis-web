@@ -11,7 +11,8 @@ import { safeJsonLd } from "@/lib/json-ld-safe";
 
 export const metadata: Metadata = {
   title: "Press · Media Kit",
-  description: `Press kit for ${STORE.name} in ${STORE.neighborhood}, Seattle — logo, fact sheet, story, and press contact. Local journalists and cannabis-industry writers welcome.`,
+  // ~150 chars — v11.005 length sweep.
+  description: `Press kit for ${STORE.name} in ${STORE.neighborhood}, Seattle — logo, fact sheet, story, press contact. Journalists and cannabis writers welcome.`,
   alternates: { canonical: "/press" },
   robots: { index: true, follow: true },
 };

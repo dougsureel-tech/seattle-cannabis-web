@@ -29,7 +29,10 @@ export const metadata: Metadata = {
     default: `${STORE.name} | Cannabis Dispensary in ${STORE.neighborhood}, Seattle — Founded 2010`,
     template: `%s | ${STORE.name}`,
   },
-  description: `${STORE.name} — ${STORE.neighborhood} cannabis dispensary at ${STORE.address.full}. Open daily 8 AM–11 PM. Founded 2010, rooted in Rainier Valley since 2018. Serving Rainier Valley, Seward Park, Beacon Hill, Mount Baker, Columbia City & Othello. Cash only, 21+.`,
+  // 158 chars (within Google's 160 SERP cap). Compresses the long form
+  // to brand + neighborhood + founded year + heritage + cash-only signal.
+  // Sister of GW + glw v10.105 length sweep. v11.005.
+  description: `${STORE.name} — ${STORE.neighborhood} cannabis dispensary since 2010, rooted in Rainier Valley. Open 8 AM–11 PM daily. Cash only, 21+.`,
   keywords: [
     "cannabis dispensary Seattle",
     "cannabis dispensary Rainier Valley",
