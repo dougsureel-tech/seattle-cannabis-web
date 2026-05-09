@@ -175,6 +175,10 @@ export function MenuSearch({ categories }: { categories: { slug: string; name: s
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search products, brands, or strains…"
+            autoCorrect="off"
+            autoCapitalize="off"
+            spellCheck={false}
+            enterKeyHint="search"
             className="w-full pl-10 pr-10 py-3 rounded-2xl border border-stone-200 bg-white text-stone-800 text-sm placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
             aria-label="Search menu"
           />
