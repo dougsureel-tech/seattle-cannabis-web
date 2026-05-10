@@ -103,6 +103,9 @@ export const metadata: Metadata = {
     statusBarStyle: "black-translucent",
     title: "Seattle Cannabis",
   },
+  // applicationName — Microsoft Edge / Windows Start menu pinning
+  // identifier. Sister glw + GW. Caught by /loop tick 56.
+  applicationName: "Seattle Cannabis Co.",
   // iOS auto-format-detection disable. Sister glw v16.405. Already use
   // explicit `<a href="tel:…">` for actual phone (3+ hits); body text
   // with zip codes, prices, dates, license numbers gets auto-tap-target
