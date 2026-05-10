@@ -45,7 +45,7 @@ const COHORTS: Record<string, Cohort> = {
   veterans: {
     slug: "veterans",
     label: "Veterans",
-    metaTitle: `Veteran Cannabis Discount in Seattle / Rainier Valley — ${STORE.name}`,
+    metaTitle: `Veteran Discount Seattle — ${STORE.name}`,
     metaDescription: `${STORE.name} thanks Seattle-area veterans with 30% off every visit. DD-214, VA card, or VHIC accepted. Any branch, any era. Rainier Valley dispensary.`,
     heroEyebrow: "For veterans",
     heroH1: "Thank you for your service.",
@@ -83,7 +83,7 @@ const COHORTS: Record<string, Cohort> = {
   military: {
     slug: "military",
     label: "Active Military",
-    metaTitle: `Active Military Cannabis Discount Seattle — ${STORE.name}`,
+    metaTitle: `Active Military Discount Seattle — ${STORE.name}`,
     // Trimmed 173 → 152 chars 2026-05-10 — was over Google ~160 SERP cap.
     metaDescription: `Active-duty service members get 30% off every visit at ${STORE.name}. CAC, military ID, or current orders accepted. Guard + Reserves welcome.`,
     heroEyebrow: "For active duty",
@@ -118,7 +118,7 @@ const COHORTS: Record<string, Cohort> = {
   "first-responders": {
     slug: "first-responders",
     label: "First Responders",
-    metaTitle: `First Responder Cannabis Discount Seattle — ${STORE.name}`,
+    metaTitle: `First Responder Discount Seattle — ${STORE.name}`,
     // Trimmed 175 → 156 chars 2026-05-10.
     metaDescription: `Seattle-area first responders get 30% off every visit at ${STORE.name}. SPD, KCSO, Seattle Fire, AMR — show your badge or department ID.`,
     heroEyebrow: "For first responders",
@@ -158,7 +158,7 @@ const COHORTS: Record<string, Cohort> = {
   healthcare: {
     slug: "healthcare",
     label: "Healthcare Workers",
-    metaTitle: `Healthcare Worker Cannabis Discount Seattle — ${STORE.name}`,
+    metaTitle: `Healthcare Worker Discount Seattle — ${STORE.name}`,
     // Trimmed 172 → 158 chars 2026-05-10.
     metaDescription: `Nurses, doctors, hospital + clinic staff get 30% off at ${STORE.name}. UW Medicine, Swedish, Virginia Mason, Harborview, Kaiser — show your badge.`,
     heroEyebrow: "For healthcare",
@@ -202,7 +202,7 @@ const COHORTS: Record<string, Cohort> = {
   teachers: {
     slug: "teachers",
     label: "K-12 Teachers",
-    metaTitle: `Teacher Cannabis Discount Seattle — ${STORE.name}`,
+    metaTitle: `Teacher Discount Seattle — ${STORE.name}`,
     // Trimmed 179 → 156 chars 2026-05-10.
     metaDescription: `Seattle Public Schools + WA K-12 teachers get 30% off at ${STORE.name}. Show your district ID or pay stub. Public, private, charter — all welcome.`,
     heroEyebrow: "For teachers",

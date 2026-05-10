@@ -8,7 +8,10 @@ import { safeJsonLd } from "@/lib/json-ld-safe";
 // "We support local heroes" framing applies cross-store.
 
 export const metadata: Metadata = {
-  title: "Heroes Discount — Service & Industry",
+  // title.absolute drops template suffix `| Seattle Cannabis Co.` so /heroes
+  // stays under Google's ~60-char SERP cap. Pre-fix the template-appended
+  // version was 64 chars. Sister glw same-push.
+  title: { absolute: "Heroes Discount — Service & Industry · SCC" },
   // ~155 chars — v11.005 length sweep.
   description: `${STORE.name} Heroes program — military, veterans, first responders, healthcare, K-12 teachers. 30% off every visit with valid ID. Seattle.`,
   alternates: { canonical: "/heroes" },
