@@ -6,7 +6,12 @@ import { safeJsonLd } from "@/lib/json-ld-safe";
 
 export const metadata: Metadata = {
   title: "Cannabis Guides + Vendor Spotlights",
-  description: `Long-form guides, education, and vendor spotlights from ${STORE.name} — Rainier Valley's cannabis dispensary. Written by people who actually work the counter.`,
+  // T62: 170c rendered → 145c. Trimmed redundant "from ${STORE.name}"
+  // (brand already on every SERP via title-template) + dropped "Written
+  // by people who actually work the counter" (kept lighter "by the
+  // counter team" phrasing). Apostrophe in "Valley's" is a +5 entity
+  // inflation but stays since it's central to the value prop.
+  description: `Long-form cannabis guides, education, and vendor spotlights — Rainier Valley's dispensary, written by the counter team.`,
   alternates: { canonical: "/blog" },
 };
 
