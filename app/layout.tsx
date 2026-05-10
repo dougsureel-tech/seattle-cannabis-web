@@ -103,6 +103,16 @@ export const metadata: Metadata = {
     statusBarStyle: "black-translucent",
     title: "Seattle Cannabis",
   },
+  // iOS auto-format-detection disable. Sister glw v16.405. Already use
+  // explicit `<a href="tel:…">` for actual phone (3+ hits); body text
+  // with zip codes, prices, dates, license numbers gets auto-tap-target
+  // styling without this. Caught by /loop tick 42 cross-stack audit.
+  formatDetection: {
+    telephone: false,
+    date: false,
+    address: false,
+    email: false,
+  },
   // Explicit apple-touch-icon link — Next 16 doesn't auto-emit `<link
   // rel="apple-touch-icon">` for route-handler-based icons (we use
   // `app/apple-icon.png/route.tsx` for dynamic ImageResponse generation,
