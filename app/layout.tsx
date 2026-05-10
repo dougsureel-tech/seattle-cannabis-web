@@ -221,11 +221,15 @@ const websiteSchema = {
   description: `${STORE.name} — ${STORE.neighborhood} cannabis dispensary since 2010.`,
   publisher: { "@id": ORG_ID },
   inLanguage: "en-US",
+  // Sitelinks Searchbox endpoint. /order is the real search surface
+  // (OrderMenu.tsx reads `?q=` from URL). Pre-fix template pointed at
+  // /menu which is the iHJ Boost embed — does NOT consume `?q=`. Sister
+  // glw same-fix v15.305. Caught by /loop tick 33.
   potentialAction: {
     "@type": "SearchAction",
     target: {
       "@type": "EntryPoint",
-      urlTemplate: `${STORE.website}/menu?q={search_term_string}`,
+      urlTemplate: `${STORE.website}/order?q={search_term_string}`,
     },
     "query-input": "required name=search_term_string",
   },
