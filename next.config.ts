@@ -96,6 +96,10 @@ const nextConfig: NextConfig = {
           // www) at https://hstspreload.org/ when ready. Hard-to-reverse
           // (≥6mo delist).
           { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
+          // COOP same-origin. Sister glw same-fix. cannagent + GW + sureel
+          // + vrg already serve this; scc + glw were lone outliers. Safe
+          // vs iHJ Boost (iframes, not popups). Caught by /loop tick 44.
+          { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
         ],
       },
       // Edge-cache pin for crawler-facing files. Sister of glw v11.605 +
