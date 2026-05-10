@@ -48,9 +48,22 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
       };
     }
   }
-  const desc = deal.description ?? `${deal.short} at ${STORE.name} in ${STORE.address.city}, WA.`;
+  const rawDesc = deal.description ?? `${deal.short} at ${STORE.name} in ${STORE.address.city}, WA.`;
+  // Auto-truncate description over 160 chars (Google SERP cap). Sister glw
+  // v13.205 same-class — was missing on scc until /loop deep title sweep
+  // 2026-05-10 caught /deals/heroes-20 over cap.
+  const desc = rawDesc.length > 160 ? rawDesc.slice(0, 157).trimEnd() + "…" : rawDesc;
   return {
-    title: `${deal.short} — ${deal.name}`,
+    // title.absolute — pre-fix `${deal.short} — ${deal.name}` rendered as
+    // "X — X | Seattle Cannabis Co." because deal.short and deal.name are
+    // typically identical strings in DB. /deals/birthday-20 hit 102 chars
+    // ("Birthday Bud — 20% Off (Birthday Week) — Birthday Bud — 20% Off
+    // (Birthday Week) | Seattle Cannabis Co."). Switched to title.absolute
+    // = `${deal.short} | ${STORE.name}` (matches OG title pattern below).
+    // Sister glw v13.205 — fixed there 2026-05-10 but scc never got the
+    // same-push despite the v13.205 commit message claiming it did.
+    // Caught 2026-05-10 by /loop deep title sweep on random sitemap samples.
+    title: { absolute: `${deal.short} | ${STORE.name}` },
     description: desc,
     alternates: { canonical: `/deals/${deal.id}` },
     openGraph: {

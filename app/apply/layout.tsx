@@ -25,7 +25,9 @@ export const metadata: Metadata = {
   // so the body baking it in creates duplicate. Sister glw same-push +
   // GW v2.94.60. Caught by /loop tick 25 duplicate-brand sweep.
   title: "Apply for a Job",
-  description: `Apply for a position at ${STORE.name} in ${STORE.neighborhood}, Seattle WA. Budtender, lead, inventory and more — open roles + general intake. 21+ required (WAC 314-55-115).`,
+  // Trim 173 → 158 chars: drop verbose "in Seattle WA" + "general intake" +
+  // shorten role list. Caught 2026-05-10 by /loop deep desc sweep.
+  description: `Apply for a position at ${STORE.name}, ${STORE.neighborhood}. Budtender, lead, inventory + more — open roles. 21+ required (WAC 314-55-115).`,
   alternates: { canonical: "/apply" },
   openGraph: {
     type: "website",

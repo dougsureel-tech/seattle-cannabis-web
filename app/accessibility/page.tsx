@@ -6,7 +6,11 @@ import { safeJsonLd } from "@/lib/json-ld-safe";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "Accessibility & Health Information",
+  // title.absolute drops template suffix `| Seattle Cannabis Co.` so this
+  // page stays under Google's ~60-char SERP cap. Pre-fix was 61 chars from
+  // the `&` HTML-encoded as `&amp;` inflating the rendered <title>. Caught
+  // 2026-05-10 by /loop deep title sweep. Sister glw v13.705 same-class.
+  title: { absolute: "Accessibility & Health Info — Seattle Cannabis Co." },
   description: `Accessibility statement, ADA accommodations, and Washington-state cannabis health information for ${STORE.name} in ${STORE.address.city}, WA.`,
   alternates: { canonical: "/accessibility" },
 };

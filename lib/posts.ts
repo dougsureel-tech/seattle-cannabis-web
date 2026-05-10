@@ -502,7 +502,11 @@ Cured indoor flower with some terpene density rolls cleaner than dry, leafy mate
   },
   {
     slug: "how-to-make-cannabis-butter",
-    title: "How to Make Cannabis Butter — The Beginner's Cannabutter Recipe",
+    // Trim 63 → 47 chars (HTML-escaped 67 → 51 because of `'` → `&#x27;`).
+    // Drop "How to Make" prefix + "The Beginner's" qualifier. Slug + h1
+    // still carry full intent; SERP title is cleaner under cap. Caught
+    // 2026-05-10 by /loop deep title sweep.
+    title: "Cannabis Butter Recipe — Cannabutter at Home",
     description:
       "How to make cannabis butter at home: ingredients, decarb, simmer time, dosing math. A practical cannabutter recipe from a Seattle dispensary.",
     category: "Education",
