@@ -57,7 +57,11 @@ const CSP_REPORT_ONLY =
   "object-src 'none'; " +
   "base-uri 'self'; " +
   "form-action 'self'; " +
-  "frame-ancestors 'self'";
+  "frame-ancestors 'self'; " +
+  // T109 sister glw — report-uri directs browsers to POST violation
+  // reports to /api/csp-report (NEW edge route). Vercel Runtime Logs
+  // capture violations cross-visitor for centralized observation.
+  "report-uri /api/csp-report";
 
 const PERMISSIONS_POLICY =
   'private-state-token-redemption=(self "https://www.google.com" "https://www.gstatic.com" "https://recaptcha.net" "https://challenges.cloudflare.com" "https://hcaptcha.com"), ' +

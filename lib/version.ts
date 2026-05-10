@@ -332,7 +332,8 @@
 // 13.7505 — 🎨 Per-cohort OG share-cards on /heroes/[cohort] — sister glw v19.805. Pre-T99 all 5 cohorts fell back to generic homepage OG. NEW `app/heroes/[cohort]/opengraph-image.tsx` (indigo/violet/fuchsia palette mirroring parent /heroes OG) + page-level metadata rewired with explicit per-cohort URL. tsc clean.
 // 13.7605 — 🚀 T99 self-regression caught + fixed: per-cohort OG share-cards were serving `cache-control: public, max-age=0` (no CDN cache) — sister glw v19.905. Vercel stripped s-maxage. Adopted proven blog OG pattern (max-age=86400, s-maxage=86400, stale-while-revalidate=604800). tsc clean.
 // 13.7705 — 🛡️ CSP Report-Only header added — sister glw v20.005. Doug-action #2 kickoff. Permissive starting policy; report-only CANNOT block. tsc clean.
-export const BUILD_VERSION = "13.7705";
+// 13.7805 — 🛡️ NEW /api/csp-report endpoint + report-uri directive — sister glw v20.105. Completes T108 CSP-RO observation infrastructure. tsc clean.
+export const BUILD_VERSION = "13.7805";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ||
