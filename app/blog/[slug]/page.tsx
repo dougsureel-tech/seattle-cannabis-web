@@ -40,6 +40,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url: `${STORE.website}/blog/${slug}`,
       publishedTime: post.publishedAt,
       ...(post.updatedAt ? { modifiedTime: post.updatedAt } : {}),
+      // article:section + article:tag — Facebook/LinkedIn render the
+      // section as a small pill above the share-card title; tags help
+      // taxonomic clustering. Sister glw + GW same-push.
+      section: post.category,
+      tags: [post.category],
       images: [DEFAULT_OG_IMAGE],
     },
   };
