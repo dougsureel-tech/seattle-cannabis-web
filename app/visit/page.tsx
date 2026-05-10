@@ -91,8 +91,16 @@ export default async function VisitPage() {
   const todayHours = STORE.hours.find((h) => h.day === today);
   // Customers landing here pre-drive should know if we've flagged today
   // closed via /admin/hours-override even when our static configured hours
-  // would normally say "open". 5-min ISR on the page bounds fetch frequency.
-  const closure = await fetchClosureStatus();
+  // would normally say "open". `{ revalidate: 60 }` opts the inner fetch
+  // into Next's data cache: pre-fix the default `cache: "no-store"` was
+  // forcing the whole page into full-dynamic mode (verified via curl —
+  // `cache-control: private, no-cache, no-store, max-age=0` + `x-vercel-
+  // cache: MISS` on every hit) DESPITE the `export const revalidate = 300`
+  // at the top — `cache: "no-store"` on any internal fetch overrides the
+  // page-level revalidate per Next 16 docs. Sister of glw v18.805 same
+  // shape. /menu + /order intentionally keep `no-store` on this fetch —
+  // those need freshest signal so a customer can't order during a closure.
+  const closure = await fetchClosureStatus({ revalidate: 60 });
 
   return (
     <>
