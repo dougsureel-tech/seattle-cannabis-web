@@ -102,6 +102,7 @@ export default function AccessibilityPage() {
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
+    "@id": `${STORE.website}/accessibility#faq`,
     mainEntity: HEALTH_WARNINGS.map((w) => ({
       "@type": "Question",
       name: w.heading,
@@ -109,11 +110,26 @@ export default function AccessibilityPage() {
     })),
   };
 
+  // T96 sister of glw v19.605.
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "@id": `${STORE.website}/accessibility#breadcrumb`,
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: STORE.website },
+      { "@type": "ListItem", position: 2, name: "Accessibility", item: `${STORE.website}/accessibility` },
+    ],
+  };
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbSchema) }}
       />
 
       <div className="min-h-screen bg-stone-50">

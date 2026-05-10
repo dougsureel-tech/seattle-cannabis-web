@@ -327,7 +327,8 @@
 // 13.7005 — 🌐 BreadcrumbList @id swept across 7 more scc inner pages — /about, /faq, /learn, /heroes, /find-your-strain, /press, /deals. Sister of glw v19.305 — same Python sweep. 7 of 9 probed pages had MISSING @id (contact + our-story had no breadcrumb at all). tsc clean.
 // 13.7105 — 🌐 BreadcrumbList @id swept across 3 more scc inner pages — /community, /visit, /menu. Sister of glw v19.405 same shape. tsc clean.
 // 13.7205 — 🌐 NEW BreadcrumbList added on /treasure-chest + /vendor-access (sister glw v19.505). tsc clean.
-export const BUILD_VERSION = "13.7205";
+// 13.7305 — 🌐 BreadcrumbList @id on /contact + NEW BreadcrumbList on /accessibility + FAQPage @id (sister glw v19.605). Closes inner-page BreadcrumbList sweep. tsc clean.
+export const BUILD_VERSION = "13.7305";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ||
