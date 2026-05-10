@@ -31,6 +31,8 @@ export const metadata: Metadata = {
     locale: "en_US",
     title: "Cannabis 101 · Learn the Basics",
     description: "Indica vs sativa, dosing, THC %, terpenes — plain-English answers.",
+    // og:url added 2026-05-10 (T21) — sister of glw same-fix.
+    url: `${STORE.website}/learn`,
     images: ["/opengraph-image"],
   },
 };
