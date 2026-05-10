@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPost, getPosts } from "@/lib/posts";
-import { STORE, STORE_TZ, DEFAULT_OG_IMAGE} from "@/lib/store";
+import { STORE, STORE_TZ } from "@/lib/store";
 import { safeJsonLd } from "@/lib/json-ld-safe";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -45,7 +45,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       // taxonomic clustering. Sister glw + GW same-push.
       section: post.category,
       tags: [post.category],
-      images: [DEFAULT_OG_IMAGE],
+      // Per-post OG image at /blog/{slug}/opengraph-image (per-route file
+      // convention). Pre-fix DEFAULT_OG_IMAGE override made the per-route
+      // file dead code — share-cards rendered homepage OG instead of
+      // post-specific. Sister glw same-fix. Caught by /loop tick 48.
+      images: [
+        {
+          url: `/blog/${slug}/opengraph-image`,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
     },
   };
 }
