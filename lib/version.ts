@@ -329,7 +329,8 @@
 // 13.7105 — 🌐 BreadcrumbList @id swept across 3 more scc inner pages — /community, /visit, /menu. Sister of glw v19.405 same shape. tsc clean.
 // 13.7205 — 🌐 NEW BreadcrumbList added on /treasure-chest + /vendor-access (sister glw v19.505). tsc clean.
 // 13.7305 — 🌐 BreadcrumbList @id on /contact + NEW BreadcrumbList on /accessibility + FAQPage @id (sister glw v19.605). Closes inner-page BreadcrumbList sweep. tsc clean.
-export const BUILD_VERSION = "13.7405";
+// 13.7505 — 🎨 Per-cohort OG share-cards on /heroes/[cohort] — sister glw v19.805. Pre-T99 all 5 cohorts fell back to generic homepage OG. NEW `app/heroes/[cohort]/opengraph-image.tsx` (indigo/violet/fuchsia palette mirroring parent /heroes OG) + page-level metadata rewired with explicit per-cohort URL. tsc clean.
+export const BUILD_VERSION = "13.7505";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ||
