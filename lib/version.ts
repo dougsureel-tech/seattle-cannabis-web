@@ -339,7 +339,8 @@
 // 13.8205 — 🚀 /menu CDN-cache fix (sister glw v20.505) — port homepage pattern to scc's most-trafficked customer page. Removed `cookies()` reading `scc_pwa_installed`; fetch all deals server-side; pass `appOnly` flag through MenuFallback's `featuredDeal` + add `data-app-only` to MenuActiveDealsStrip + MenuFallback deal pill; mount `<AppOnlyDealsFilter />` for client-side hide of PWA-only cards. Plus pass `{revalidate:60}` to fetchClosureStatus. ISR now engages on /menu. tsc clean.
 // 13.8305 — 🚀 /menu CDN-cache part 2 (sister glw v20.605) — third culprit found post-deploy: `prewarmDutchieMenu()` at `app/menu/page.tsx:80` used `cache: "no-store"` to fire-and-forget warm Jane's CDN. Same poison-the-tree pattern. Switched to `next: { revalidate: 60 }`. Memory pin `feedback_isr_killed_by_no_store_fetch` now lists `prewarm` as a sister-pattern beyond closure-status. tsc clean.
 // 13.8405 — 🛡️ NEW pre-push gates infrastructure on scc — sister glw v20.705. All 9 arc-guards now run on `git push` via `.githooks/pre-push` + `scripts/setup-hooks.sh`. Verified clean 9/9. tsc clean.
-export const BUILD_VERSION = "13.8405";
+// 13.8505 — 🌐 PWA manifest `id: "/"` field added — sister glw v20.805. Chrome PWA install detection across www→apex redirects. tsc clean.
+export const BUILD_VERSION = "13.8505";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ||

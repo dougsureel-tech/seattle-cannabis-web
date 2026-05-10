@@ -8,6 +8,9 @@ export const revalidate = 3600;
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
+    // Stable `id` — sister glw v20.X same-fix. Chrome uses for "already
+    // installed" detection across www→apex redirects.
+    id: "/",
     name: STORE.name,
     short_name: "Seattle Cannabis",
     description: `${STORE.tagline}. ${STORE.address.full}.`,
