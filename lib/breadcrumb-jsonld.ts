@@ -15,9 +15,18 @@ import { STORE } from "@/lib/store";
 export type Crumb = { name: string; url: string };
 
 export function breadcrumbJsonLd(crumbs: Crumb[]) {
+  // Stable @id derived from the LAST crumb's URL (sister of glw v19.105
+  // same-fix). Lets sibling JSON-LD nodes reference the breadcrumb via
+  // @id without duplicating the path. Entity-graph @id linking pattern
+  // T85 → T87 → T88 → T89 → T90 → T91 close-out.
+  const last = crumbs[crumbs.length - 1];
+  const lastAbs = last
+    ? (last.url.startsWith("http") ? last.url : `${STORE.website}${last.url.startsWith("/") ? "" : "/"}${last.url}`)
+    : STORE.website;
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
+    "@id": `${lastAbs}#breadcrumb`,
     itemListElement: crumbs.map((c, i) => ({
       "@type": "ListItem",
       position: i + 1,

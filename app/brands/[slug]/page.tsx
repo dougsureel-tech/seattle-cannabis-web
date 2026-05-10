@@ -280,9 +280,12 @@ export default async function BrandPage({ params }: Props) {
     },
     breadcrumb: {
       "@type": "BreadcrumbList",
+      // T91 sister of glw v19.105 — @id + middle "Brands" level.
+      "@id": `${brandUrl}#breadcrumb`,
       itemListElement: [
         { "@type": "ListItem", position: 1, name: "Home", item: STORE.website },
-        { "@type": "ListItem", position: 2, name: brand.name, item: brandUrl },
+        { "@type": "ListItem", position: 2, name: "Brands", item: `${STORE.website}/brands` },
+        { "@type": "ListItem", position: 3, name: brand.name, item: brandUrl },
       ],
     },
   };
