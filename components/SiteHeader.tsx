@@ -199,7 +199,7 @@ export function SiteHeader() {
           </div>
 
           {/* Mobile hamburger */}
-          <button
+          <button type="button"
             className={`md:hidden p-2 rounded-lg transition-colors ${dark ? "text-white/80 hover:bg-white/10" : "text-stone-600 hover:bg-stone-100"}`}
             onClick={() => setOpen((v) => !v)}
             aria-label={open ? "Close menu" : "Open menu"}
@@ -239,7 +239,7 @@ export function SiteHeader() {
             </div>
             <span className="text-white font-bold text-sm">Seattle Cannabis Co.</span>
           </div>
-          <button
+          <button type="button"
             onClick={() => setOpen(false)}
             aria-label="Close menu"
             className="p-1.5 text-white/60 hover:text-white hover:bg-white/10 rounded-lg transition-colors"

@@ -767,7 +767,7 @@ export function OrderMenu({
           // outer button supplies the tappable surface; `flex items-center`
           // centers the disc so the X stays optically pinned to the right
           // edge it always lived at.
-          <button
+          <button type="button"
             onClick={() => setSearch("")}
             aria-label="Clear search"
             className="absolute right-1 top-1/2 -translate-y-1/2 min-w-[44px] min-h-[44px] flex items-center justify-end pr-2 text-stone-500 hover:text-stone-700"
@@ -785,7 +785,7 @@ export function OrderMenu({
       <div className="flex gap-6 items-start">
         {/* Sticky category sidebar (desktop) */}
         <aside className="hidden lg:block w-48 shrink-0 sticky top-20 space-y-1">
-          <button
+          <button type="button"
             onClick={() => selectCategory(null)}
             className={`w-full text-left flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-colors ${activeCategory === null && !search ? "bg-indigo-100 text-indigo-800" : "text-stone-500 hover:bg-stone-100"}`}
           >
@@ -795,7 +795,7 @@ export function OrderMenu({
           {categories.map((c) => {
             const count = visibleProducts.reduce((n, p) => n + (p.category === c ? 1 : 0), 0);
             return (
-              <button
+              <button type="button"
                 key={c}
                 onClick={() => selectCategory(c)}
                 className={`w-full text-left flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-colors ${activeCategory === c ? "bg-indigo-100 text-indigo-800" : "text-stone-500 hover:bg-stone-100"}`}
@@ -813,14 +813,14 @@ export function OrderMenu({
           {/* Mobile category pills — sticky just below SiteHeader so the user
               can switch sections without scrolling back up. */}
           <div className="lg:hidden sticky top-16 z-20 -mx-4 sm:-mx-6 px-4 sm:px-6 py-2 mb-4 bg-stone-50/85 backdrop-blur-md border-b border-stone-200/60 flex gap-2 overflow-x-auto">
-            <button
+            <button type="button"
               onClick={() => selectCategory(null)}
               className={`shrink-0 px-3.5 py-2 rounded-full text-xs font-semibold transition-colors ${activeCategory === null ? "bg-indigo-800 text-white" : "bg-stone-100 text-stone-600 hover:bg-stone-200"}`}
             >
               All
             </button>
             {categories.map((c) => (
-              <button
+              <button type="button"
                 key={c}
                 onClick={() => selectCategory(activeCategory === c ? null : c)}
                 className={`shrink-0 flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-semibold transition-colors ${activeCategory === c ? "bg-indigo-800 text-white" : "bg-stone-100 text-stone-600 hover:bg-stone-200"}`}
@@ -846,7 +846,7 @@ export function OrderMenu({
                     const colors = STRAIN_COLORS[s];
                     const active = strainFilter === s;
                     return (
-                      <button
+                      <button type="button"
                         key={s}
                         onClick={() => setStrainFilter(active ? null : s)}
                         // 44px tap target on mobile (Apple HIG) — visual stays
@@ -897,7 +897,7 @@ export function OrderMenu({
                 {PRICE_TIERS.map((t) => {
                   const active = priceTier === t.key;
                   return (
-                    <button
+                    <button type="button"
                       key={t.key}
                       onClick={() => setPriceTier(active ? "all" : t.key)}
                       className={`text-xs font-semibold px-3 py-1.5 min-h-[44px] sm:min-h-0 inline-flex items-center rounded-full border transition-colors ${active ? "bg-indigo-700 text-white border-indigo-700" : "bg-white text-stone-600 border-stone-200 hover:border-stone-300"}`}
@@ -913,7 +913,7 @@ export function OrderMenu({
                 {THC_TIERS.map((t) => {
                   const active = thcTier === t.key;
                   return (
-                    <button
+                    <button type="button"
                       key={t.key}
                       onClick={() => setThcTier(active ? "all" : t.key)}
                       // THC pill active = amber-600 (potency / "heat" semantic).
@@ -928,7 +928,7 @@ export function OrderMenu({
               </div>
 
               {(strainFilter || brandFilter || priceTier !== "all" || thcTier !== "all" || sortBy !== "default") && (
-                <button
+                <button type="button"
                   onClick={() => {
                     setStrainFilter(null);
                     setBrandFilter(null);
@@ -1075,7 +1075,7 @@ export function OrderMenu({
                               </div>
                               {cartItem ? (
                                 <div className="flex items-center gap-2">
-                                  <button
+                                  <button type="button"
                                     onClick={() => updateQty(product.id, -1)}
                                     aria-label={`Decrease quantity of ${parsed.name}`}
                                     // 44×44 (Apple HIG floor) — was w-8 h-8 (32px),
@@ -1088,7 +1088,7 @@ export function OrderMenu({
                                   <span className="w-6 text-center text-sm font-extrabold text-stone-900">
                                     {cartItem.quantity}
                                   </span>
-                                  <button
+                                  <button type="button"
                                     onClick={() => updateQty(product.id, 1)}
                                     aria-label={`Increase quantity of ${parsed.name}`}
                                     className="w-11 h-11 rounded-full bg-indigo-700 flex items-center justify-center text-white hover:bg-indigo-600 text-base font-bold transition-colors shadow-md shadow-indigo-900/20"
@@ -1097,7 +1097,7 @@ export function OrderMenu({
                                   </button>
                                 </div>
                               ) : (
-                                <button
+                                <button type="button"
                                   onClick={() => addToCart(product)}
                                   disabled={product.unitPrice == null}
                                   aria-label={`Add ${parsed.name} to cart`}
@@ -1116,7 +1116,7 @@ export function OrderMenu({
                     })}
                   </div>
                   {hiddenCount > 0 && (
-                    <button
+                    <button type="button"
                       onClick={() => selectCategory(category)}
                       className="mt-5 w-full text-center text-sm font-bold text-indigo-700 hover:text-indigo-600 py-3 rounded-xl border border-stone-100 hover:border-indigo-200 hover:bg-indigo-50/50 transition-colors"
                     >
@@ -1140,7 +1140,7 @@ export function OrderMenu({
               </p>
               <div className="flex flex-wrap justify-center gap-2">
                 {search && (
-                  <button
+                  <button type="button"
                     onClick={() => setSearch("")}
                     className="text-sm text-indigo-700 font-semibold hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 rounded px-1"
                   >
@@ -1148,7 +1148,7 @@ export function OrderMenu({
                   </button>
                 )}
                 {(strainFilter || brandFilter || priceTier !== "all" || thcTier !== "all" || sortBy !== "default") && (
-                  <button
+                  <button type="button"
                     onClick={() => {
                       setStrainFilter(null);
                       setBrandFilter(null);
@@ -1378,7 +1378,7 @@ export function OrderMenu({
                   <span className="font-bold text-base">
                     Your Order · {cartCount} {cartCount === 1 ? "item" : "items"}
                   </span>
-                  <button
+                  <button type="button"
                     onClick={() => {
                       setCartOpen(false);
                       setOrderError(null);
@@ -1406,7 +1406,7 @@ export function OrderMenu({
                         Your cart from {days} days ago is still here — start fresh?
                       </p>
                       <div className="flex items-center gap-2 shrink-0">
-                        <button
+                        <button type="button"
                           onClick={() => {
                             setCart([]);
                             setStaleCartDismissed(true);
@@ -1415,7 +1415,7 @@ export function OrderMenu({
                         >
                           Clear
                         </button>
-                        <button
+                        <button type="button"
                           onClick={() => setStaleCartDismissed(true)}
                           className="text-[11px] font-medium text-amber-800 hover:text-amber-900"
                         >
@@ -1434,7 +1434,7 @@ export function OrderMenu({
                         {item.brand && <div className="text-xs text-stone-400 truncate">{item.brand}</div>}
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
-                        <button
+                        <button type="button"
                           onClick={() => updateQty(item.id, -1)}
                           aria-label={`Decrease quantity of ${item.name}`}
                           // 44×44 (Apple HIG) — was 32px, P0 #2 in
@@ -1448,7 +1448,7 @@ export function OrderMenu({
                         <span className="w-6 text-center font-extrabold text-stone-900 text-sm tabular-nums">
                           {item.quantity}
                         </span>
-                        <button
+                        <button type="button"
                           onClick={() => updateQty(item.id, 1)}
                           aria-label={`Increase quantity of ${item.name}`}
                           className="w-11 h-11 rounded-full bg-indigo-700 flex items-center justify-center text-white hover:bg-indigo-600 active:bg-indigo-800 text-base font-bold transition-colors"
@@ -1585,7 +1585,7 @@ export function OrderMenu({
                         system status). Same handler — placeOrder hits the
                         API, gets 401, and bounces to /sign-in?redirect_url=
                         /order?cart=open which re-opens the drawer on return. */}
-                    <button
+                    <button type="button"
                       onClick={placeOrder}
                       disabled={placing || orderingStatus?.state !== "open" || !pickupTime || closure.isClosed}
                       className="px-6 py-3 min-h-[44px] rounded-2xl bg-indigo-700 hover:bg-indigo-600 active:bg-indigo-800 text-white font-bold text-sm transition-all shadow-lg shadow-indigo-900/30 disabled:opacity-40 disabled:cursor-not-allowed hover:-translate-y-0.5"
@@ -1611,7 +1611,7 @@ export function OrderMenu({
                 </div>
               </div>
             ) : (
-              <button
+              <button type="button"
                 onClick={() => {
                   setCartOpen(true);
                   setOrderError(null);
@@ -1657,7 +1657,7 @@ export function OrderMenu({
           >
             <div className="flex items-center justify-between mb-3">
               <h2 className="font-bold text-stone-900">Keyboard shortcuts</h2>
-              <button
+              <button type="button"
                 onClick={() => setShortcutsOpen(false)}
                 className="w-7 h-7 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-600 text-lg leading-none"
                 aria-label="Close shortcuts"

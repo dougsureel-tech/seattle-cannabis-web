@@ -183,7 +183,7 @@ export function MenuSearch({ categories }: { categories: { slug: string; name: s
             aria-label="Search menu"
           />
           {query && (
-            <button
+            <button type="button"
               onClick={() => {
                 setQuery("");
                 inputRef.current?.focus();
@@ -199,7 +199,7 @@ export function MenuSearch({ categories }: { categories: { slug: string; name: s
         {/* Category chips + filter toggle */}
         <div className="flex items-center gap-2">
           <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1 flex-1">
-            <button
+            <button type="button"
               onClick={() => setActive("all")}
               className={`shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all border ${
                 active === "all"
@@ -213,7 +213,7 @@ export function MenuSearch({ categories }: { categories: { slug: string; name: s
               const isActive = active === c.slug;
               const count = visibleCounts[c.slug] ?? c.count;
               return (
-                <button
+                <button type="button"
                   key={c.slug}
                   onClick={() => setActive(c.slug)}
                   className={`shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all border whitespace-nowrap ${
@@ -260,7 +260,7 @@ export function MenuSearch({ categories }: { categories: { slug: string; name: s
               <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
             </svg>
           </div>
-          <button
+          <button type="button"
             onClick={() => setShowFilters((v) => !v)}
             className={`shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border transition-all ${
               activeFilterCount > 0 || showFilters
@@ -301,7 +301,7 @@ export function MenuSearch({ categories }: { categories: { slug: string; name: s
                 {VIBES.map((v) => {
                   const on = vibe === v.value;
                   return (
-                    <button
+                    <button type="button"
                       key={v.value}
                       onClick={() => setVibe(on ? "" : v.value)}
                       className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
@@ -329,7 +329,7 @@ export function MenuSearch({ categories }: { categories: { slug: string; name: s
                 ].map((s) => {
                   const on = strain === s.value;
                   return (
-                    <button
+                    <button type="button"
                       key={s.value}
                       onClick={() => setStrain(on ? "" : s.value)}
                       className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
@@ -356,7 +356,7 @@ export function MenuSearch({ categories }: { categories: { slug: string; name: s
                 ].map((p) => {
                   const on = price === p.value;
                   return (
-                    <button
+                    <button type="button"
                       key={p.value}
                       onClick={() => setPrice(on ? "" : p.value)}
                       className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
@@ -385,7 +385,7 @@ export function MenuSearch({ categories }: { categories: { slug: string; name: s
                 ].map((t) => {
                   const on = thc === t.value;
                   return (
-                    <button
+                    <button type="button"
                       key={t.value}
                       onClick={() => setThc(on ? "" : t.value)}
                       className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
@@ -413,7 +413,7 @@ export function MenuSearch({ categories }: { categories: { slug: string; name: s
                 <span aria-hidden="true">✨ </span>Just In (last 7 days)
               </label>
               {activeFilterCount > 0 && (
-                <button
+                <button type="button"
                   onClick={clearAll}
                   className="text-xs font-bold text-stone-500 hover:text-rose-600 transition-colors"
                 >
