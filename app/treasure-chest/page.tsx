@@ -8,7 +8,10 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export const metadata: Metadata = {
-  title: "Treasure Chest — clearance & deep-discount deals",
+  // T61: 75c rendered → 56c. Sister glw v17.905. `&amp;` HTML-entity
+  // inflation (+4 chars) pushed body+template suffix over Google's
+  // 60-char SERP cap. title.absolute with brand baked in.
+  title: { absolute: "Treasure Chest — Clearance Deals | Seattle Cannabis Co." },
   // ~150 chars — v11.005 length sweep.
   description: `Hand-picked clearance lane at ${STORE.name} — last-of-batch and end-of-run cannabis at deep discount. Refreshed weekly. Cash only.`,
   alternates: { canonical: "/treasure-chest" },

@@ -5,7 +5,7 @@ import { getPosts } from "@/lib/posts";
 import { safeJsonLd } from "@/lib/json-ld-safe";
 
 export const metadata: Metadata = {
-  title: "Cannabis Guides & Vendor Spotlights",
+  title: "Cannabis Guides + Vendor Spotlights",
   description: `Long-form guides, education, and vendor spotlights from ${STORE.name} — Rainier Valley's cannabis dispensary. Written by people who actually work the counter.`,
   alternates: { canonical: "/blog" },
 };
