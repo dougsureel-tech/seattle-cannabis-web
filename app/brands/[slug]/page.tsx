@@ -156,6 +156,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     // Google: alias URLs are alternates pointing at the canonical.
     alternates: { canonical: `/brands/${slug}` },
     openGraph: {
+      type: "website",
       locale: "en_US",
       title: `${brand.name} | ${STORE.name}`,
       description: `Browse ${brand.name} products available at Seattle Cannabis Co., Rainier Valley WA.`,
