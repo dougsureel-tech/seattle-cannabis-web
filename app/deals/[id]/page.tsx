@@ -49,21 +49,36 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     }
   }
   const rawDesc = deal.description ?? `${deal.short} at ${STORE.name} in ${STORE.address.city}, WA.`;
-  // Auto-truncate description over 160 chars (Google SERP cap). Sister glw
-  // v13.205 same-class — was missing on scc until /loop deep title sweep
-  // 2026-05-10 caught /deals/heroes-20 over cap.
-  const desc = rawDesc.length > 160 ? rawDesc.slice(0, 157).trimEnd() + "…" : rawDesc;
+  // Entity-aware description trim — Google measures HTML-escaped length, not
+  // JS string length. Pre-fix `rawDesc.length > 160` measured JS code units
+  // but `&` → `&amp;` (+4) and `'` → `&#x27;` (+5) inflate rendered HTML.
+  // /deals/heroes-20 came out 162 chars rendered (157 JS + the `&` in
+  // "nurses & healthcare" inflated to `&amp;`). Sister glw v16.105 +
+  // GW v2.94.95. Memory: feedback_html_escape_inflates_meta_description_length.
+  const escLen = (s: string) =>
+    s.replace(/&/g, "&amp;").replace(/'/g, "&#x27;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;").length;
+  let desc = rawDesc;
+  if (escLen(desc) > 160) {
+    let trim = 157;
+    for (let i = 0; i < 5; i++) {
+      const candidate = rawDesc.slice(0, trim).trimEnd() + "…";
+      if (escLen(candidate) <= 160) { desc = candidate; break; }
+      trim -= 5;
+    }
+  }
+  // Title trim — for a few long deal.short strings (e.g. "Birthday Bud —
+  // 20% Off (Birthday Week)" = 38 chars), `${deal.short} | ${STORE.name}`
+  // overshoots the 60-char SERP cap by 1-3 chars (STORE.name "Seattle
+  // Cannabis Co." = 21 chars + " | " = 24 chars suffix). When title would
+  // exceed 60 chars, drop any parenthetical from deal.short to free up
+  // space (the parenthetical is supplementary detail; main name still
+  // carries SEO intent).
+  const fullTitle = `${deal.short} | ${STORE.name}`;
+  const titleStr = fullTitle.length > 60
+    ? `${deal.short.replace(/\s*\([^)]+\)/g, "")} | ${STORE.name}`
+    : fullTitle;
   return {
-    // title.absolute — pre-fix `${deal.short} — ${deal.name}` rendered as
-    // "X — X | Seattle Cannabis Co." because deal.short and deal.name are
-    // typically identical strings in DB. /deals/birthday-20 hit 102 chars
-    // ("Birthday Bud — 20% Off (Birthday Week) — Birthday Bud — 20% Off
-    // (Birthday Week) | Seattle Cannabis Co."). Switched to title.absolute
-    // = `${deal.short} | ${STORE.name}` (matches OG title pattern below).
-    // Sister glw v13.205 — fixed there 2026-05-10 but scc never got the
-    // same-push despite the v13.205 commit message claiming it did.
-    // Caught 2026-05-10 by /loop deep title sweep on random sitemap samples.
-    title: { absolute: `${deal.short} | ${STORE.name}` },
+    title: { absolute: titleStr },
     description: desc,
     alternates: { canonical: `/deals/${deal.id}` },
     openGraph: {
