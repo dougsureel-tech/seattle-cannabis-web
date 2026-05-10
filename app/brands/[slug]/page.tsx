@@ -21,6 +21,7 @@ import GreenRevolutionBrandPage from "./_brands/green-revolution";
 import FiftyFoldBrandPage from "./_brands/fifty-fold";
 import MinglewoodBrandPage from "./_brands/minglewood-brands";
 import AvitasBrandPage from "./_brands/avitas";
+import BotanicaSeattleBrandPage from "./_brands/botanica-seattle";
 import { safeJsonLd } from "@/lib/json-ld-safe";
 
 // ISR: brand detail pages are pre-rendered for known slugs (via
@@ -56,6 +57,7 @@ const BRAND_OVERRIDES: Record<string, React.ComponentType<BrandComponentProps>> 
   "fifty-fold": FiftyFoldBrandPage,
   "minglewood-brands": MinglewoodBrandPage,
   "avitas": AvitasBrandPage,
+  "botanica-seattle": BotanicaSeattleBrandPage,
 };
 
 // Slug aliases — friendly customer-facing URLs that map to the actual
@@ -75,6 +77,14 @@ const SLUG_ALIASES: Record<string, string> = {
   // canonical slug.
   "avitas-cannabis": "avitas",
   "avitas-grown": "avitas",
+  // Botanica Seattle has multiple sub-brands a customer might search for
+  // by name even though all the products live under the parent vendor row.
+  "mr-moxeys": "botanica-seattle",
+  "mr-moxey-s": "botanica-seattle",
+  "moxey": "botanica-seattle",
+  "journeyman": "botanica-seattle",
+  "spot": "botanica-seattle",
+  "botanica": "botanica-seattle",
 };
 
 type Props = { params: Promise<{ slug: string }> };
