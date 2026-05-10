@@ -36,6 +36,11 @@ import type { NextConfig } from "next";
 const PERMISSIONS_POLICY =
   'private-state-token-redemption=(self "https://www.google.com" "https://www.gstatic.com" "https://recaptcha.net" "https://challenges.cloudflare.com" "https://hcaptcha.com"), ' +
   'private-state-token-issuance=(self "https://www.google.com" "https://www.gstatic.com" "https://recaptcha.net" "https://challenges.cloudflare.com" "https://hcaptcha.com"), ' +
+  // Defense-in-depth — lock down browser APIs the marketing site never
+  // uses. Sister glw same-fix. Safe vs iHJ Boost (verified — Boost only
+  // needs private-state-token-* which is already allowlisted above).
+  // Caught by /loop tick 52.
+  'payment=(), usb=(), serial=(), bluetooth=(), midi=(), xr-spatial-tracking=(), magnetometer=(), accelerometer=(), gyroscope=(), ' +
   'camera=(), microphone=(), geolocation=(), interest-cohort=()';
 
 const nextConfig: NextConfig = {
