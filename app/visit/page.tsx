@@ -15,7 +15,7 @@ export const revalidate = 300;
 export const metadata: Metadata = {
   title: "Visit — Hours, Directions, What to Bring",
   // ~150 chars — v11.005 length sweep.
-  description: `Visit ${STORE.name} at ${STORE.address.full}. Hours, parking, ID, directions. 5 min from Othello Light Rail. ATM on-site. Open 8 AM–11 PM.`,
+  description: `Visit ${STORE.name} at ${STORE.address.full}. Hours, parking, ID. 5 min from Othello Light Rail. ATM on-site.`,
   alternates: { canonical: "/visit" },
   keywords: [
     "Rainier Valley dispensary",
