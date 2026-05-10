@@ -42,6 +42,10 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [{ protocol: "https", hostname: "**" }],
   },
+  // Suppress X-Powered-By header. Sister glw — both repos were lone
+  // outliers across 6-site stack still leaking `X-Powered-By: Next.js`.
+  // Caught by /loop tick 46.
+  poweredByHeader: false,
   async headers() {
     return [
       {
