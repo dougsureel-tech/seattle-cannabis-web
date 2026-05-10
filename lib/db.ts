@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 import { cleanBrandName } from "./clean-brand-name";
 
 export type VendorBrand = {
@@ -768,7 +769,10 @@ export async function getActiveBrands(): Promise<VendorBrand[]> {
   }));
 }
 
-export async function getBrandBySlug(slug: string): Promise<VendorBrand | null> {
+// Wrapped with React.cache() so generateMetadata + the page component
+// share the same result within a single request. Sister of glw same-fix
+// — see lib/db.ts there for full context.
+export const getBrandBySlug = cache(async (slug: string): Promise<VendorBrand | null> => {
   const sql = getClient();
   // Bug fix 2026-05-04 (round 2): adds the same `brands_with_recent_sales`
   // gate as getActiveBrands so a direct visit to /brands/abs-buds (or
@@ -832,7 +836,7 @@ export async function getBrandBySlug(slug: string): Promise<VendorBrand | null> 
     socialX: (r.social_x as string | null) ?? null,
     socialFacebook: (r.social_facebook as string | null) ?? null,
   };
-}
+});
 
 export async function getBrandProducts(vendorId: string) {
   const sql = getClient();
