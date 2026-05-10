@@ -95,7 +95,23 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
+  const { slug: rawSlug } = await params;
+  // Alias-resolution sister of the page render (line ~138). Pre-fix,
+  // generateMetadata called getBrandBySlug with the RAW slug while the
+  // page component called it with the alias-RESOLVED slug — so for
+  // every SLUG_ALIAS entry (`/brands/botanica`, `/brands/mr-moxeys`,
+  // `/brands/spot`, `/brands/journeyman`, `/brands/plaid-jacket`,
+  // `/brands/phat-panda`, `/brands/sungrown`, `/brands/leafwerx`,
+  // `/brands/dewey-botanicals`, `/brands/dewey-botanicals-llc`,
+  // `/brands/slab-mechanix`, `/brands/avitas-cannabis`,
+  // `/brands/avitas-grown`, `/brands/rays-lemonade`, etc.) the page
+  // would render correctly but the metadata would be the layout's
+  // default title + noindex hint. That meant Google indexed the alias
+  // URLs as duplicates of the homepage title — exactly the kind of
+  // duplicate-content signal that hurts the canonical brand page's
+  // ranking. Caught 2026-05-10 by /loop tick 4 cross-stack title-
+  // uniqueness audit on scc sitemap (151 URLs).
+  const slug = SLUG_ALIASES[rawSlug] ?? rawSlug;
   const brand = await getBrandBySlug(slug).catch(() => null);
   if (!brand) {
     // Soft-404 mitigation — sister glw fix. ISR + page-level notFound()
@@ -106,6 +122,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: brand.name,
     description: `Shop ${brand.name} cannabis products at ${STORE.name} in Rainier Valley, Seattle WA. ${brand.activeSkus} products in stock.`,
+    // Canonical points at the resolved (canonical) slug, NOT the alias —
+    // so /brands/botanica's `<link rel=canonical>` reads
+    // `/brands/botanica-seattle`. That's the correct dedupe signal for
+    // Google: alias URLs are alternates pointing at the canonical.
     alternates: { canonical: `/brands/${slug}` },
     openGraph: {
       locale: "en_US",
