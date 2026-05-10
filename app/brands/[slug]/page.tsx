@@ -5,12 +5,16 @@ import { VendorAdSlot } from "@/components/VendorAdSlot";
 import { getBrandBySlug, getBrandProducts, getActiveBrands } from "@/lib/db";
 import { STORE } from "@/lib/store";
 import NWCSBrandPage from "./_brands/northwest-cannabis-solutions";
-import GrowOpFarmsBrandPage from "./_brands/grow-op-farms";
+// GrowOpFarmsBrandPage / OoweeBrandPage / FiftyFoldBrandPage imports
+// dropped 2026-05-10 — none of these brands have a vendor row in scc's
+// DB (verified via sitemap audit). Pre-fix BRAND_OVERRIDES referenced
+// them as canonical slugs, but every getBrandBySlug call returned null;
+// pages soft-404'd. Component files kept on disk in case scc starts
+// carrying. Caught by /loop tick 14 dead-config sweep (sister of T13).
 import FairwindsBrandPage from "./_brands/fairwinds-manufacturing";
 import MfusedBrandPage from "./_brands/mfused";
 import SparkIndustriesBrandPage from "./_brands/spark-industries";
 import BondiFarmsBrandPage from "./_brands/bondi-farms";
-import OoweeBrandPage from "./_brands/oowee";
 import Brand2727Page from "./_brands/2727";
 import SungrownBrandPage from "./_brands/sungrown";
 import RedbirdBrandPage from "./_brands/redbird-cannabis";
@@ -18,7 +22,6 @@ import DeweyCannabisCoBrandPage from "./_brands/dewey-cannabis-co";
 import SeattleBubbleWorksBrandPage from "./_brands/seattle-bubble-works";
 import AgroCoutureBrandPage from "./_brands/agro-couture";
 import GreenRevolutionBrandPage from "./_brands/green-revolution";
-import FiftyFoldBrandPage from "./_brands/fifty-fold";
 import MinglewoodBrandPage from "./_brands/minglewood-brands";
 // AvitasBrandPage import dropped 2026-05-10 — scc doesn't actually
 // carry Avitas (no DB row whose name slugifies to any avitas variant).
@@ -47,13 +50,19 @@ type BrandComponentProps = {
 };
 const BRAND_OVERRIDES: Record<string, React.ComponentType<BrandComponentProps>> = {
   "northwest-cannabis-solutions": NWCSBrandPage,
-  "grow-op-farms": GrowOpFarmsBrandPage,
+  // grow-op-farms removed — scc doesn't carry (no DB row). T14 dead-cfg.
   "fairwinds-manufacturing": FairwindsBrandPage,
   "mfused": MfusedBrandPage,
   "spark-industries": SparkIndustriesBrandPage,
   "bondi-farms": BondiFarmsBrandPage,
-  "oowee": OoweeBrandPage,
-  "2727": Brand2727Page,
+  // oowee removed — scc doesn't carry (no DB row). T14 dead-cfg.
+  // scc 2727 vendor row is "Northwest Distributing LLC dba 2727" — DB
+  // slug `northwest-distributing-llc-dba-2727`. BRAND_OVERRIDES key was
+  // bare `2727` (matches glw's vendor name shape, not scc's WSLCB
+  // filing) so the override never ran on scc — `/brands/2727` 404'd
+  // and the URL Google indexed (`/brands/northwest-distributing-llc-dba-2727`)
+  // fell through to the generic template. T14 fix.
+  "northwest-distributing-llc-dba-2727": Brand2727Page,
   "edgemont-group-dba-sungrown": SungrownBrandPage,
   "redbird-cannabis": RedbirdBrandPage,
   // scc Dewey vendor row is "Dewey Botanicals LLC" (DB slug
@@ -68,7 +77,7 @@ const BRAND_OVERRIDES: Record<string, React.ComponentType<BrandComponentProps>> 
   "seattle-bubble-works": SeattleBubbleWorksBrandPage,
   "agro-couture": AgroCoutureBrandPage,
   "green-revolution": GreenRevolutionBrandPage,
-  "fifty-fold": FiftyFoldBrandPage,
+  // fifty-fold removed — scc doesn't carry (no DB row). T14 dead-cfg.
   "minglewood-brands": MinglewoodBrandPage,
   // `avitas` removed 2026-05-10 — scc doesn't carry Avitas (see
   // import-comment above for context).
@@ -81,8 +90,13 @@ const BRAND_OVERRIDES: Record<string, React.ComponentType<BrandComponentProps>> 
 // vendor (e.g. Plaid Jacket is a Spark Industries sub-brand).
 const SLUG_ALIASES: Record<string, string> = {
   "plaid-jacket": "spark-industries",
-  "phat-panda": "grow-op-farms",
+  // phat-panda alias dropped 2026-05-10 (T14) — scc doesn't carry
+  // Grow-Op Farms (Phat Panda's parent) at all, so the alias pointed
+  // at a non-existent canonical and 404'd.
   "sungrown": "edgemont-group-dba-sungrown",
+  // Customer-friendly URL `/brands/2727` aliases to the actual scc
+  // DB slug. T14 fix.
+  "2727": "northwest-distributing-llc-dba-2727",
   "leafwerx": "edgemont-group-dba-sungrown",
   // scc's actual Dewey DB slug is "dewey-botanicals-llc" — map the
   // shorter customer-facing variants to that canonical.
