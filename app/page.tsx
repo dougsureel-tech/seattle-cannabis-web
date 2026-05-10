@@ -11,6 +11,7 @@ import { PrimaryCTA } from "@/components/PrimaryCTA";
 import { SectionHeading } from "@/components/SectionHeading";
 import { ReviewsSection } from "@/components/Reviews";
 import { LoyaltyArc } from "@/components/LoyaltyArc";
+import { AppOnlyDealsFilter } from "@/components/AppOnlyDealsFilter";
 import { RecentlyViewedAutoStrip } from "@/components/RecentlyViewedAutoStrip";
 import { HeroBackground } from "@/components/HeroBackground";
 import { NeighborhoodMap } from "@/components/NeighborhoodMap";
@@ -137,16 +138,18 @@ const STATS = [
 ];
 
 export default async function HomePage() {
-  // PWA-install detection — same cookie that /deals reads. Drives whether
-  // the homepage Today's-deals strip surfaces app_only deals to this
-  // customer. Doug 2026-05-07 — symmetry with the /deals filter.
-  const cookieStore = await import("next/headers").then((m) => m.cookies());
-  const isInstalled = cookieStore.get("scc_pwa_installed")?.value === "1";
+  // CDN-cache fix: previously called `cookies()` to read `scc_pwa_installed`
+  // and pass `includeAppOnly` through. That opted the whole page out of
+  // CDN caching despite `revalidate=60` (TTFB ~456ms vs cannagent's 59ms).
+  // Now we always fetch the full deal set (app-only included) and hide
+  // PWA-gated cards client-side via <AppOnlyDealsFilter />. ~50ms pre-
+  // hydrate flicker is the accepted tradeoff for the cache win. Sister
+  // of glw v20.205 — same fix shape, different cookie name.
   const [brands, featured, justIn, deals, closure, treasureChest] = await Promise.all([
     getActiveBrands().catch(() => []),
     getFeaturedProducts(8).catch(() => []),
     getJustInProducts(12).catch(() => []),
-    getActiveDeals({ includeAppOnly: isInstalled }).catch(() => []),
+    getActiveDeals({ includeAppOnly: true }).catch(() => []),
     fetchClosureStatus(),
     getTreasureChestProducts(60).catch(() => []),
   ]);
@@ -714,6 +717,7 @@ export default async function HomePage() {
             running. Surfaces savings before the category grid so a customer
             sees "20% off Flower today" alongside "what's good?", instead
             of needing to dig into /deals. */}
+      <AppOnlyDealsFilter />
       {deals.length > 0 && (
         <section className="bg-gradient-to-b from-amber-50/70 via-white to-white border-b border-stone-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
@@ -765,6 +769,7 @@ export default async function HomePage() {
                   <Link
                     key={d.id}
                     href="/deals"
+                    data-app-only={d.appOnly ? "1" : "0"}
                     className="group flex flex-col rounded-2xl border border-amber-200 bg-white p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 hover:border-amber-300 transition-all"
                   >
                     <span className="inline-flex items-center self-start gap-1 rounded-full bg-amber-100 text-amber-900 text-xs font-bold uppercase tracking-wide px-2.5 py-1">
