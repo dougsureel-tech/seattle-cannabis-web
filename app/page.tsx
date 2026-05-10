@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   // Homepage-specific title — distinct from /menu so / earns brand-search
   // landing and /menu shows up as a sitelink underneath. Founded year +
   // neighborhood anchor signals "this is the canonical entity page."
-  title: `${STORE.name} | Cannabis Dispensary in ${STORE.neighborhood}, Seattle — Founded 2010`,
+  title: `${STORE.name} — ${STORE.neighborhood} Dispensary Since 2010`,
   // ~150 chars — v11.005 length sweep.
   description: `${STORE.name} at ${STORE.address.full}. 5 min from Othello Light Rail. Founded 2010. Open 8 AM–11 PM. Cash only, 21+.`,
   alternates: { canonical: "/" },
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     type: "website",
     url: STORE.website,
     siteName: STORE.name,
-    title: `${STORE.name} | Cannabis Dispensary in ${STORE.neighborhood}, Seattle — Founded 2010`,
+    title: `${STORE.name} — ${STORE.neighborhood} Dispensary Since 2010`,
     description: `${STORE.neighborhood} cannabis dispensary. Closest shop to ${NEIGHBORHOOD_NAMES}. ${STORE.address.full}.`,
     images: [
       {

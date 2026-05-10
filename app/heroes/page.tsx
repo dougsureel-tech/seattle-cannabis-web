@@ -8,7 +8,7 @@ import { safeJsonLd } from "@/lib/json-ld-safe";
 // "We support local heroes" framing applies cross-store.
 
 export const metadata: Metadata = {
-  title: "Heroes Discount — Service & Industry Recognition",
+  title: "Heroes Discount — Service & Industry",
   // ~155 chars — v11.005 length sweep.
   description: `${STORE.name} Heroes program — military, veterans, first responders, healthcare, K-12 teachers. 30% off every visit with valid ID. Seattle.`,
   alternates: { canonical: "/heroes" },
