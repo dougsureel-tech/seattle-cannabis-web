@@ -3,6 +3,7 @@
 // comes from Vercel automatically on every deploy and is the authoritative
 // "did my push actually land" signal.
 
+// 13.1305 — ♿ Footer column headings h3→h2 (WCAG 2.4.6 hierarchy). Sister glw v13.105 + cannagent v3.301.
 // 13.1105 — 🌐 SEO meta-description trim on 4 /heroes/[cohort] pages — military 173, healthcare 172, first-responders 175, teachers 179 (all over Google ~160-char SERP cap). Reordered subject + dropped redundant brand mention to bring all under cap (152-158). veterans cohort already under cap. Sister glw clean. Caught by /loop heroes desc sweep 2026-05-10.
 // 13.1205 — 🩹 getBrandBySlug retry-once-on-null. Sister glw v13.505 same-push. Root cause: tick 10's React.cache wrap fixed metadata-vs-page desync within a request, but BUILD-TIME generateMetadata still hit transient nulls (Neon cold-start, NOW()-INTERVAL drift) that baked noindex into ISR cache permanently. Tick 11 fix: retry once on null inside the React.cache wrap. Single retry resolves transient nulls; caches result of whichever attempt succeeds. Net: brand pages regenerate cleanly on next deploy.
 // 13.1005 — 🐛 /heroes/[cohort] (×5) + /near/[town] (~20) title.absolute trim. Pre-fix /heroes pages 79-99 chars (\"X Cannabis Discount Seattle — Seattle Cannabis Co. | Seattle Cannabis Co.\"). /near pages 63-73 chars. Sister glw v12.905 same-push.
@@ -267,7 +268,7 @@
 // 9.425 — 🐛 v9.405 fix didn't actually work — `revalidate` export doesn't apply to ImageResponse routes. Verified post-deploy: cache-control still `max-age=0` + `x-vercel-cache: MISS` across 3 sequential hits. The pattern that DOES work (verified live on inv v342.405): set `headers: { "Cache-Control": "..." }` in the ImageResponse options object directly. Re-applied to all 3 dynamic OG files with explicit headers (24h on blog/brands, 1h on deals). Sister fix in glw v8.205 same shape. tsc clean.
 // 10.905 — 🌐 Search Console + Bing Webmaster Tools + Yandex env-driven verification meta tags + GA4 gtag.js loader added to root layout. When Doug pastes `GOOGLE_SITE_VERIFICATION` / `BING_SITE_VERIFICATION` / `YANDEX_VERIFICATION` / `NEXT_PUBLIC_GA_ID` into Vercel env, each renders site-wide; empty env = nothing renders. Sister of GW root layout + glw v10.005 + cannagent. Cross-repo SEO arc 2026-05-09 — env-gating lets verification go live without another deploy once Doug pastes the token. tsc clean.
 // 11.005 — 🌐 Meta-description length sweep — 11 over-limit descriptions trimmed to ≤160 chars (Google SERP cap). Pages: `/` (root layout 296→138, app/page.tsx 201→150), `/learn`, `/menu` 227→155, `/heroes` 189→155, `/faq` 180→155, `/press` 170→150, `/find-your-strain` 292→155, `/deals` 195→150, `/about` 225→155, `/visit` 172→150, `/treasure-chest` 206→150. Pre-fix Google was truncating mid-sentence with "…" in SERPs. Sister of GW v2.92 + glw v10.105 length sweep. Audit recipe: `find app -name page.tsx -exec grep -E "^\\s*description:" {} \\; | awk '{ if (length > 165) print FILENAME }'`. tsc clean.
-export const BUILD_VERSION = "13.1205";
+export const BUILD_VERSION = "13.1305";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ||

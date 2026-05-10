@@ -153,7 +153,7 @@ export function SiteFooter() {
 
         {/* Hours — uniform every day, just say so */}
         <div className="speakable-hours space-y-3">
-          <h3 className="text-white font-semibold text-xs uppercase tracking-widest">Hours</h3>
+          <h2 className="text-white font-semibold text-xs uppercase tracking-widest">Hours</h2>
           <div className="space-y-3">
             <div className="text-xs text-indigo-200/80 space-y-1">
               <div className="font-semibold text-white">Open Every Day</div>
@@ -203,7 +203,7 @@ export function SiteFooter() {
             (alongside Privacy + Terms when those land) so Explore stays a
             scan-able marketing column, not a sitemap dump. */}
         <div className="space-y-3">
-          <h3 className="text-white font-semibold text-xs uppercase tracking-widest">Explore</h3>
+          <h2 className="text-white font-semibold text-xs uppercase tracking-widest">Explore</h2>
           <ul className="space-y-2">
             {[
               { href: "/menu", label: "Shop Menu" },
@@ -230,7 +230,7 @@ export function SiteFooter() {
             "cannabis dispensary in <neighborhood>" queries. Mirror of
             greenlife-web's footer structure. */}
         <div className="space-y-3">
-          <h3 className="text-white font-semibold text-xs uppercase tracking-widest">We serve</h3>
+          <h2 className="text-white font-semibold text-xs uppercase tracking-widest">We serve</h2>
           <ul className="space-y-2">
             {[
               "Rainier Valley",
