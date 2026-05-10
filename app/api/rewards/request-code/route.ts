@@ -152,7 +152,12 @@ export async function POST(req: NextRequest) {
   if (!smsResult.success) {
     // SMS failed — keep the code in the DB so the customer can retry
     // or use a fallback channel; surface a generic error to the client.
-    console.error("[request-code] sendSms failed", smsResult.error);
+    // smsResult.error is e.message from Twilio — Twilio errors echo the
+    // destination phone number ("The 'To' number +1555... is unsubscribed").
+    // Slice to 40 chars to preserve the error class while stripping the
+    // number. Full detail is in the Twilio console.
+    const truncated = smsResult.error ? smsResult.error.slice(0, 40) : "unknown";
+    console.error(`[request-code] sendSms failed: ${truncated}`);
     return NextResponse.json(
       { error: "Could not send code. Please try again or contact us." },
       { status: 500 },
