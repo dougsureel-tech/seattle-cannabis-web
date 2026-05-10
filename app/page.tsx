@@ -1004,14 +1004,16 @@ export default async function HomePage() {
                     position: 1,
                     name: "Browse & Order",
                     text: "Shop the full menu and place a pickup order. 20% off applies automatically — pay nothing until you arrive.",
-                    url: `${STORE.website}/order`,
+                    // /order 307s to /menu via proxy.ts; SoT memory pin
+                    // `feedback_glw_scc_customer_cta_menu_only`.
+                    url: `${STORE.website}/menu`,
                   },
                   {
                     "@type": "HowToStep",
                     position: 2,
                     name: "We Prepare It",
                     text: "Our team gets your order ready. You'll get a status update in your account when it's packed and waiting at the counter.",
-                    url: `${STORE.website}/order`,
+                    url: `${STORE.website}/menu`,
                   },
                   {
                     "@type": "HowToStep",
@@ -1464,7 +1466,7 @@ function FaqSection() {
     },
     {
       q: "Can I order cannabis online for pickup at Seattle Cannabis Co?",
-      a: "Yes. Build your cart on /order, pay in-store when you arrive (cash only). Most orders are ready in 10–20 minutes. You'll get a text when it's packed and waiting at the counter. Online orders save 20% off.",
+      a: "Yes. Build your cart on /menu, pay in-store when you arrive (cash only). Most orders are ready in 10–20 minutes. You'll get a text when it's packed and waiting at the counter. Online orders save 20% off.",
     },
     {
       q: "What's the difference between sativa, indica, and hybrid?",

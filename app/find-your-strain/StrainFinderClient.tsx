@@ -105,7 +105,8 @@ export function StrainFinderClient() {
     if (final.vibe) params.set("vibe", final.vibe);
     if (final.form) params.set("category", final.form);
     if (final.strain) params.set("strain", final.strain);
-    return params.toString() ? `/order?${params}` : "/order";
+    // /order proxies to /menu (proxy.ts 307); skip the hop. Sister glw.
+    return params.toString() ? `/menu?${params}` : "/menu";
   }
 
   function redirectToOrder(final: Record<StepKey, string>) {

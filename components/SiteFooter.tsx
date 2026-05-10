@@ -207,7 +207,9 @@ export function SiteFooter() {
           <ul className="space-y-2">
             {[
               { href: "/menu", label: "Shop Menu" },
-              { href: "/order", label: "Order for Pickup" },
+              // /order proxies to /menu (proxy.ts 307). iHJ Boost cart
+              // is inline at /menu. Sister glw same-fix.
+              { href: "/menu", label: "Order for Pickup" },
               { href: "/deals", label: "Deals & Specials" },
               { href: "/heroes", label: "Heroes Discount" },
               { href: "/rewards", label: "Rewards" },
