@@ -329,11 +329,13 @@ export function SiteFooter() {
             Doug's AI services company — the same hub we point at when
             people ask "who built this?" Subtle, lives next to the
             deploy-identity stamp. Doug 2026-05-02.
-            URL is the in-progress Vercel preview until the real sureel.ai
-            domain flips to the new project (Doug 2026-05-03). */}
+            URL was the in-progress Vercel preview (sureel-ai.vercel.app)
+            until the real sureel.ai domain flipped (Doug 2026-05-03).
+            Now flipped to canonical https://sureelai.com/ — caught
+            2026-05-10 by /loop outbound-link audit. Sister glw same-push. */}
         <p className="max-w-7xl mx-auto mt-2 flex items-center justify-between text-[9px] font-mono tabular-nums text-indigo-500/30">
           <a
-            href="https://sureel-ai.vercel.app/"
+            href="https://sureelai.com/"
             target="_blank"
             rel="noopener noreferrer"
             className="font-sans text-[10px] hover:text-indigo-300/80 transition-colors"
