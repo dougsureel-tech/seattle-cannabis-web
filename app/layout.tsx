@@ -221,18 +221,10 @@ const websiteSchema = {
   description: `${STORE.name} — ${STORE.neighborhood} cannabis dispensary since 2010.`,
   publisher: { "@id": ORG_ID },
   inLanguage: "en-US",
-  // Sitelinks Searchbox endpoint. /order is the real search surface
-  // (OrderMenu.tsx reads `?q=` from URL). Pre-fix template pointed at
-  // /menu which is the iHJ Boost embed — does NOT consume `?q=`. Sister
-  // glw same-fix v15.305. Caught by /loop tick 33.
-  potentialAction: {
-    "@type": "SearchAction",
-    target: {
-      "@type": "EntryPoint",
-      urlTemplate: `${STORE.website}/order?q={search_term_string}`,
-    },
-    "query-input": "required name=search_term_string",
-  },
+  // No SearchAction — T33 → T36 revert. /order 307s to /menu (proxy.ts);
+  // /menu is iHJ Boost embed not query-aware. Drop the action entirely
+  // until /menu wires `?q=` passthrough. Sister glw v15.705 same-revert.
+  // Doug SoT: customer CTAs point to /menu only (never /order direct).
 };
 
 const localBusinessSchema = {
