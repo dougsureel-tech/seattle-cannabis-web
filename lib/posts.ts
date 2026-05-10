@@ -14,9 +14,14 @@ export type Post = {
 export const POSTS: Post[] = [
   {
     slug: "complete-guide-cannabis-rainier-valley",
-    title: "The Complete Guide to Cannabis in Rainier Valley & South Seattle",
+    // Trim 64 → 50 JS / 68 → 54 HTML (the `&` was inflating to `&amp;`).
+    // Drop "The Complete Guide to" prefix + reorder for SERP clarity. Caught
+    // 2026-05-10 by /loop deep title sweep round-3 on random sitemap samples.
+    title: "Cannabis Guide for Rainier Valley & South Seattle",
+    // Trim 170 → 137 chars: drop trailing "what to look for, and how to make
+    // sense of the menu" (covered by the actual blog body).
     description:
-      "Everything you need to know about buying cannabis in Rainier Valley and South Seattle — laws, products, dispensaries, what to look for, and how to make sense of the menu.",
+      "Everything you need to know about buying cannabis in Rainier Valley and South Seattle — laws, products, dispensaries.",
     category: "Guide",
     publishedAt: "2026-04-30",
     readingMinutes: 14,
