@@ -89,6 +89,13 @@ const nextConfig: NextConfig = {
           // drift caught by /loop saturation grind 2026-05-09 security-
           // header audit.
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          // HSTS includeSubDomains + preload directive. Sister glw same-push.
+          // Pre-fix scc served only Vercel's `max-age=63072000` default. The
+          // header in isolation costs nothing if we don't submit to the
+          // preload list. Doug-action: submit seattlecannabis.co (apex +
+          // www) at https://hstspreload.org/ when ready. Hard-to-reverse
+          // (≥6mo delist).
+          { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
         ],
       },
       // Edge-cache pin for crawler-facing files. Sister of glw v11.605 +
