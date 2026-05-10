@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { STORE } from "@/lib/store";
+import { STORE, DEFAULT_OG_IMAGE} from "@/lib/store";
 import { getActiveDeals } from "@/lib/db";
 import { DealArt } from "@/components/DealArt";
 import { matchDealVendor } from "@/lib/deal-vendor-match";
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     // Explicit reference to the root opengraph-image.tsx route — without it,
     // page-level openGraph fully replaces the parent's auto-injected images
     // and Facebook/Slack/Messages share previews come up imageless.
-    images: ["/opengraph-image"],
+    images: [DEFAULT_OG_IMAGE],
   },
 };
 

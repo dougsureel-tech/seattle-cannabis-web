@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { STORE, todayCloseLabel } from "@/lib/store";
+import { STORE, todayCloseLabel, DEFAULT_OG_IMAGE} from "@/lib/store";
 import { getActiveDeals, getTreasureChestProducts } from "@/lib/db";
 import { fetchClosureStatus } from "@/lib/closure-status";
 import { JaneMenu } from "./JaneMenu";
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     // (per-route image) which Next auto-injects despite the override; scc
     // never grew that file, so we reference the root /opengraph-image
     // directly. Sister of v8.745 fix on /order /careers /heroes /blog.
-    images: ["/opengraph-image"],
+    images: [DEFAULT_OG_IMAGE],
   },
   // Partner-presence signal the WP plugin emits. The WP origin (208.109.64.51)
   // shipped <meta name="jane:version" content="1.4.7"/> on every /menu page;

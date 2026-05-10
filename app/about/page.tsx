@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { STORE, STORE_TZ } from "@/lib/store";
+import { STORE, STORE_TZ, DEFAULT_OG_IMAGE} from "@/lib/store";
 import { withAttr } from "@/lib/attribution";
 import { safeJsonLd } from "@/lib/json-ld-safe";
 
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     description: `Locally owned independent dispensary. Founded 2010, in Rainier Valley since 2018.`,
     url: `${STORE.website}/about`,
     type: "website",
-    images: ["/opengraph-image"],
+    images: [DEFAULT_OG_IMAGE],
   },
 };
 

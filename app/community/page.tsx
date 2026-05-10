@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { STORE } from "@/lib/store";
+import { STORE, DEFAULT_OG_IMAGE} from "@/lib/store";
 import { safeJsonLd } from "@/lib/json-ld-safe";
 
 // Mirror of the Wenatchee /community page for Seattle Cannabis Co. SCC
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     title: `Our Community · ${STORE.name}`,
     description: `Past staff, future partners. The community we're building, on purpose.`,
     url: `${STORE.website}/community`,
-    images: ["/opengraph-image"],
+    images: [DEFAULT_OG_IMAGE],
   },
 };
 

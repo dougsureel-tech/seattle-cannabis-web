@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { STORE } from "@/lib/store";
+import { STORE, DEFAULT_OG_IMAGE} from "@/lib/store";
 import { breadcrumbJsonLd } from "@/lib/breadcrumb-jsonld";
 
 // BreadcrumbList JSON-LD — sister of glw v12.605 + cannagent v3.391
@@ -34,13 +34,13 @@ export const metadata: Metadata = {
     description: `Open roles + general intake at ${STORE.name}, ${STORE.neighborhood} Seattle. 21+ required.`,
     url: `${STORE.website}/apply`,
     siteName: STORE.name,
-    images: ["/opengraph-image"],
+    images: [DEFAULT_OG_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
     title: `Apply to work at ${STORE.name}`,
     description: `Open roles + general intake at ${STORE.name}, ${STORE.neighborhood} Seattle.`,
-    images: ["/opengraph-image"],
+    images: [DEFAULT_OG_IMAGE],
   },
 };
 
