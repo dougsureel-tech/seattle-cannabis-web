@@ -43,7 +43,13 @@ export const metadata: Metadata = {
   title: { absolute: `${STORE.name} — ${STORE.neighborhood} Dispensary Since 2010` },
   // ~150 chars — v11.005 length sweep.
   description: `${STORE.name} at ${STORE.address.full}. 5 min from Othello Light Rail. Founded 2010. Open 8 AM–11 PM. Cash only, 21+.`,
-  alternates: { canonical: "/" },
+  alternates: {
+    canonical: "/",
+    // RSS auto-discovery must be repeated at page-level since Next 16
+    // shallow-overwrites layout alternates when page declares its own
+    // alternates.canonical. Sister of glw v18.915 same fix shape.
+    types: { "application/rss+xml": `${STORE.website}/feed.xml` },
+  },
   openGraph: {
     locale: "en_US",
     type: "website",

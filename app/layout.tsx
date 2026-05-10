@@ -44,7 +44,15 @@ export const metadata: Metadata = {
     "cannabis Beacon Hill Seattle",
     "Rainier Valley dispensary since 2018",
   ],
-  alternates: { canonical: "/" },
+  alternates: {
+    canonical: "/",
+    // RSS auto-discovery — Feedly/NewsBlur/Inoreader find the feed when
+    // user pastes the homepage URL. Also signals AI crawlers (GPTBot,
+    // ClaudeBot, PerplexityBot) that there's a structured-content surface.
+    // Sister of glw v18.905 + v18.915 same pattern (page.tsx must repeat
+    // this since Next 16 alternates cascade is shallow-overwrite).
+    types: { "application/rss+xml": `${STORE.website}/feed.xml` },
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
