@@ -68,6 +68,7 @@ export function VendorAccessForm() {
         value={companyName}
         onChange={setCompanyName}
         placeholder="e.g. Mfused"
+        autoComplete="organization"
       />
       <Field
         label="Your name"
@@ -75,6 +76,7 @@ export function VendorAccessForm() {
         value={contactName}
         onChange={setContactName}
         placeholder="First + last"
+        autoComplete="name"
       />
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Field
@@ -142,6 +144,7 @@ function Field({
   value,
   onChange,
   placeholder,
+  autoComplete,
 }: {
   label: string;
   required?: boolean;
@@ -149,7 +152,13 @@ function Field({
   value: string;
   onChange: (v: string) => void;
   placeholder?: string;
+  /** WHATWG autocomplete token (organization/name/etc). Falls back to
+   *  type-based derivation when unset. T58 fix. */
+  autoComplete?: string;
 }) {
+  const resolvedAutoComplete =
+    autoComplete ??
+    (type === "email" ? "email" : type === "tel" ? "tel" : undefined);
   return (
     <label className="block">
       <span className="text-sm font-semibold text-stone-700 mb-1.5 block">
@@ -158,10 +167,7 @@ function Field({
       </span>
       <input
         type={type}
-        // Auto-derive iOS autofill + keyboard hints based on type so all
-        // Field calls inherit the right behavior (and any future Field
-        // gets it for free). Sister of glw v8.065 + inv v319.805 wrapper.
-        autoComplete={type === "email" ? "email" : type === "tel" ? "tel" : undefined}
+        autoComplete={resolvedAutoComplete}
         inputMode={type === "email" ? "email" : type === "tel" ? "tel" : undefined}
         value={value}
         onChange={(e) => onChange(e.target.value)}
