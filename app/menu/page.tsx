@@ -32,12 +32,13 @@ export const metadata: Metadata = {
   description: `Live cannabis menu at ${STORE.name} — flower, pre-rolls, vapes, concentrates, edibles, tinctures, topicals. Order ahead for cash pickup. 21+.`,
   alternates: { canonical: "/menu" },
   openGraph: {
+    siteName: STORE.name,
     locale: "en_US",
     title: `Cannabis Menu | ${STORE.name}`,
     description: `Live cannabis menu — prices, THC/CBD, lab data. ${STORE.address.full}.`,
     url: `${STORE.website}/menu`,
     type: "website",
-    // Next 16 metadata cascade quirk: page-level `openGraph: {...}` fully
+    // Next 16 metadata cascade quirk: page-level `openGraph: { ... }` fully
     // REPLACES parent's auto-injected images. Without this, /menu share
     // previews render imageless. glw has `app/menu/opengraph-image.tsx`
     // (per-route image) which Next auto-injects despite the override; scc

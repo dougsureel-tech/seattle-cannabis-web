@@ -64,6 +64,7 @@ export const metadata: Metadata = {
   description: `Open positions at ${STORE.name} in Rainier Valley, Seattle. Apply online — we review every application.`,
   alternates: { canonical: "/careers" },
   openGraph: {
+    siteName: STORE.name,
     locale: "en_US",
     title: `Careers at ${STORE.name}`,
     description: `Open positions at Seattle Cannabis Co. — Rainier Valley, since 2018; same crew, since 2010.`,

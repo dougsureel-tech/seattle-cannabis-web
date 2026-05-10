@@ -23,6 +23,7 @@ export const metadata: Metadata = {
     "Seattle dispensary since 2010",
   ],
   openGraph: {
+    siteName: STORE.name,
     locale: "en_US",
     title: `About ${STORE.name} — Locally owned Rainier Valley dispensary`,
     description: `Locally owned independent dispensary. Founded 2010, in Rainier Valley since 2018.`,
