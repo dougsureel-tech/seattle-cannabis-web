@@ -324,7 +324,8 @@
 // 13.6705 — 🌐 HowTo + FAQPage entity-graph @id linking on scc homepage — sister of glw v19.005. Pre-fix Organization/WebSite/LocalBusiness/AggregateRating all had stable @id IRIs but HowTo + FAQPage didn't. Added `@id: ${STORE.website}/#howto-pickup` + `@id: ${STORE.website}/#faq`. Now all homepage JSON-LD entities have @id, fully connected entity-graph. tsc clean.
 // 13.6805 — 🌐 BreadcrumbList @id sister-port of glw v19.105. SoT helper `breadcrumbJsonLd()` now emits `@id: ${lastCrumbAbs}#breadcrumb`. /brands/[slug] inline schema gets @id + middle "Brands" nav level (was Home → Brand; now Home › Brands › Brand). Closes BreadcrumbList side of entity-graph @id linking arc. tsc clean.
 // 13.6905 — 🌐 BreadcrumbList @id on /near/[town] inline schema. Sister of glw v19.205 — T85 dead-code-helper class catch (per `feedback_seo_helper_dead_code_curl_recipe.md` memory). tsc clean.
-export const BUILD_VERSION = "13.6905";
+// 13.7005 — 🌐 BreadcrumbList @id swept across 7 more scc inner pages — /about, /faq, /learn, /heroes, /find-your-strain, /press, /deals. Sister of glw v19.305 — same Python sweep. 7 of 9 probed pages had MISSING @id (contact + our-story had no breadcrumb at all). tsc clean.
+export const BUILD_VERSION = "13.7005";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ||
