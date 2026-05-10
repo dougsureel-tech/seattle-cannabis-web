@@ -121,7 +121,7 @@ Manual: open the URL on phone, sign in with phone, verify dashboard renders, tap
 
 ## Cross-references
 
-- OPERATING_PRINCIPLES (`~/Documents/CODE/RANDOM/OPERATING_PRINCIPLES.md`) — the post-deploy verify discipline
+- OPERATING_PRINCIPLES (`~/Documents/CODE/OPERATING_PRINCIPLES.md`) — the post-deploy verify discipline
 - AGENT_BOARD (`~/Documents/CODE/Green Life/AGENT_BOARD.md`) — active in-flight work
 - Cutover plan (`~/Documents/CODE/Green Life/PLAN_SPRINGBIG_CUTOVER_5_25.md`) — Track B execution doc
 - INCIDENTS (`~/Documents/CODE/INCIDENTS.md`) — closed post-mortems (grep first)
