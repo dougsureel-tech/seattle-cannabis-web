@@ -273,7 +273,7 @@ export async function sendQuizMatchEmail(args: SendQuizMatchEmailArgs): Promise<
     unsubscribeToken: args.unsubscribeToken,
   });
 
-  const result = await sendEmail({ to: args.to, subject, html, text });
+  const result = await sendEmail({ to: args.to, subject, html, text, unsubscribeUrl: unsubscribeUrl(args.unsubscribeToken) });
   if (!result.ok && !result.skipped) {
     console.error(`[quiz-nurture-email] D+0 send failed: ${result.error}`);
   }
@@ -353,7 +353,7 @@ export async function sendQuizPickupTipsEmail(args: SendQuizPickupTipsEmailArgs)
     unsubscribeToken: args.unsubscribeToken,
   });
 
-  const result = await sendEmail({ to: args.to, subject, html, text });
+  const result = await sendEmail({ to: args.to, subject, html, text, unsubscribeUrl: unsubscribeUrl(args.unsubscribeToken) });
   if (!result.ok && !result.skipped) {
     console.error(`[quiz-nurture-email] D+5 send failed: ${result.error}`);
   }
@@ -430,7 +430,7 @@ export async function sendQuizFirstVisitDealEmail(
     unsubscribeToken: args.unsubscribeToken,
   });
 
-  const result = await sendEmail({ to: args.to, subject, html, text });
+  const result = await sendEmail({ to: args.to, subject, html, text, unsubscribeUrl: unsubscribeUrl(args.unsubscribeToken) });
   if (!result.ok && !result.skipped) {
     console.error(`[quiz-nurture-email] D+12 send failed: ${result.error}`);
   }
