@@ -769,10 +769,11 @@ export async function getActiveBrands(): Promise<VendorBrand[]> {
   }));
 }
 
-// Wrapped with React.cache() so generateMetadata + the page component
-// share the same result within a single request. Sister of glw same-fix
-// — see lib/db.ts there for full context.
-export const getBrandBySlug = cache(async (slug: string): Promise<VendorBrand | null> => {
+// React.cache + retry-once-on-null. Sister glw fix — see that file's
+// db.ts for full incident context. Tick 11: retry-once handles transient
+// build-time nulls that the bare React.cache wrap couldn't fix (2/20
+// brands stuck after the wrap-only ship).
+async function _getBrandBySlugInner(slug: string): Promise<VendorBrand | null> {
   const sql = getClient();
   // Bug fix 2026-05-04 (round 2): adds the same `brands_with_recent_sales`
   // gate as getActiveBrands so a direct visit to /brands/abs-buds (or
@@ -836,6 +837,14 @@ export const getBrandBySlug = cache(async (slug: string): Promise<VendorBrand | 
     socialX: (r.social_x as string | null) ?? null,
     socialFacebook: (r.social_facebook as string | null) ?? null,
   };
+}
+
+export const getBrandBySlug = cache(async (slug: string): Promise<VendorBrand | null> => {
+  const first = await _getBrandBySlugInner(slug);
+  if (first !== null) return first;
+  // Retry once on null — handles transient build-time nulls. See glw
+  // db.ts for full incident context.
+  return _getBrandBySlugInner(slug);
 });
 
 export async function getBrandProducts(vendorId: string) {
