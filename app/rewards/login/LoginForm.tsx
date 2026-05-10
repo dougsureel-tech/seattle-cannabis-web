@@ -41,8 +41,13 @@ export function LoginForm() {
       }
       // demoCode is only present when SMS is unconfigured (preview/dev).
       // Surface it in dev so the tester can complete the flow without
-      // an external SMS. Production will never see this branch.
-      if (data.demoCode) {
+      // an external SMS. Production should never see this branch (server
+      // only emits demoCode when SMS is unconfigured), but defense-in-depth:
+      // also gate on NODE_ENV so a server-side regression (env-var typo,
+      // Twilio outage, key-rotation race) can't silently leak the OTP into
+      // a customer's browser console where browser extensions / shoulder-
+      // surfers / shared screens could capture it.
+      if (data.demoCode && process.env.NODE_ENV !== "production") {
         console.log(`[rewards-login] demo code: ${data.demoCode}`);
       }
       router.push(`/rewards/verify?phone=${encodeURIComponent(digits)}`);
