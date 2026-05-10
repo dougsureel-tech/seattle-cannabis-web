@@ -996,6 +996,8 @@ export default async function HomePage() {
               __html: JSON.stringify({
                 "@context": "https://schema.org",
                 "@type": "HowTo",
+                // Stable @id — sister of glw v18.915 same fix pattern.
+                "@id": `${STORE.website}/#howto-pickup`,
                 name: `How to order cannabis for pickup at ${STORE.name}`,
                 description:
                   "Three-step pickup flow: build your cart online with 20% off, we prep it, you pay cash and walk out. Most orders ready in 10–20 minutes.",
@@ -1491,6 +1493,8 @@ function FaqSection() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
+    // Stable @id — sister of glw same fix.
+    "@id": `${STORE.website}/#faq`,
     mainEntity: faqs.map((f) => ({
       "@type": "Question",
       name: f.q,
