@@ -144,6 +144,10 @@ export const metadata: Metadata = {
 
 export const viewport = {
   themeColor: "#1e1b4b",
+  // colorScheme: "light" — opt out of browser auto-dark-tinting on
+  // form inputs / scrollbars. Sister glw v16.X + GW same-fix. Caught
+  // by /loop tick 43 cross-stack color-scheme audit.
+  colorScheme: "light",
   width: "device-width",
   initialScale: 1,
 };
