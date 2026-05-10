@@ -330,7 +330,8 @@
 // 13.7205 — 🌐 NEW BreadcrumbList added on /treasure-chest + /vendor-access (sister glw v19.505). tsc clean.
 // 13.7305 — 🌐 BreadcrumbList @id on /contact + NEW BreadcrumbList on /accessibility + FAQPage @id (sister glw v19.605). Closes inner-page BreadcrumbList sweep. tsc clean.
 // 13.7505 — 🎨 Per-cohort OG share-cards on /heroes/[cohort] — sister glw v19.805. Pre-T99 all 5 cohorts fell back to generic homepage OG. NEW `app/heroes/[cohort]/opengraph-image.tsx` (indigo/violet/fuchsia palette mirroring parent /heroes OG) + page-level metadata rewired with explicit per-cohort URL. tsc clean.
-export const BUILD_VERSION = "13.7525";
+// 13.7605 — 🚀 T99 self-regression caught + fixed: per-cohort OG share-cards were serving `cache-control: public, max-age=0` (no CDN cache) — sister glw v19.905. Vercel stripped s-maxage. Adopted proven blog OG pattern (max-age=86400, s-maxage=86400, stale-while-revalidate=604800). tsc clean.
+export const BUILD_VERSION = "13.7605";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ||

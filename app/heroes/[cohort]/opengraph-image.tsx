@@ -128,8 +128,9 @@ export default async function HeroesCohortOG({ params }: { params: Promise<{ coh
     ),
     {
       ...size,
+      // T105 fix sister of glw — proven blog OG pattern.
       headers: {
-        "Cache-Control": "public, max-age=0, s-maxage=86400, stale-while-revalidate=86400",
+        "Cache-Control": "public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800",
       },
     },
   );
