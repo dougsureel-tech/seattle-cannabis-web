@@ -20,7 +20,13 @@ import AgroCoutureBrandPage from "./_brands/agro-couture";
 import GreenRevolutionBrandPage from "./_brands/green-revolution";
 import FiftyFoldBrandPage from "./_brands/fifty-fold";
 import MinglewoodBrandPage from "./_brands/minglewood-brands";
-import AvitasBrandPage from "./_brands/avitas";
+// AvitasBrandPage import dropped 2026-05-10 — scc doesn't actually
+// carry Avitas (no DB row whose name slugifies to any avitas variant).
+// Pre-fix the override + alias map referenced "avitas" as a canonical
+// slug, but every getBrandBySlug call returned null; `/brands/avitas`
+// (and the `-cannabis` / `-grown` aliases) all soft-404'd. Component
+// file `_brands/avitas.tsx` kept on disk in case scc starts carrying.
+// Caught by /loop tick 13 dead-config audit.
 import BotanicaSeattleBrandPage from "./_brands/botanica-seattle";
 import { safeJsonLd } from "@/lib/json-ld-safe";
 
@@ -50,13 +56,22 @@ const BRAND_OVERRIDES: Record<string, React.ComponentType<BrandComponentProps>> 
   "2727": Brand2727Page,
   "edgemont-group-dba-sungrown": SungrownBrandPage,
   "redbird-cannabis": RedbirdBrandPage,
-  "dewey-cannabis-co": DeweyCannabisCoBrandPage,
+  // scc Dewey vendor row is "Dewey Botanicals LLC" (DB slug
+  // "dewey-botanicals-llc"), NOT the same vendor as glw's "Dewey
+  // Cannabis Co." — same brand family, different WSLCB filings per
+  // store. BRAND_OVERRIDES key MUST match the actual scc DB slug;
+  // pre-fix it was "dewey-cannabis-co" (glw's slug) so the override
+  // never ran on scc — `/brands/dewey-botanicals-llc` (the URL Google
+  // indexed from scc's sitemap) fell through to the generic template
+  // instead of the rich boutique component. Fixed 2026-05-10.
+  "dewey-botanicals-llc": DeweyCannabisCoBrandPage,
   "seattle-bubble-works": SeattleBubbleWorksBrandPage,
   "agro-couture": AgroCoutureBrandPage,
   "green-revolution": GreenRevolutionBrandPage,
   "fifty-fold": FiftyFoldBrandPage,
   "minglewood-brands": MinglewoodBrandPage,
-  "avitas": AvitasBrandPage,
+  // `avitas` removed 2026-05-10 — scc doesn't carry Avitas (see
+  // import-comment above for context).
   "botanica-seattle": BotanicaSeattleBrandPage,
 };
 
@@ -69,14 +84,13 @@ const SLUG_ALIASES: Record<string, string> = {
   "phat-panda": "grow-op-farms",
   "sungrown": "edgemont-group-dba-sungrown",
   "leafwerx": "edgemont-group-dba-sungrown",
-  "dewey-botanicals": "dewey-cannabis-co",
-  "dewey-botanicals-llc": "dewey-cannabis-co",
+  // scc's actual Dewey DB slug is "dewey-botanicals-llc" — map the
+  // shorter customer-facing variants to that canonical.
+  "dewey-cannabis-co": "dewey-botanicals-llc",
+  "dewey-botanicals": "dewey-botanicals-llc",
   "slab-mechanix": "agro-couture",
-  // Avitas vendor row may be named "Avitas", "Avitas Cannabis", or "Avitas
-  // Grown" depending on how WSLCB filed it — point all variants at the
-  // canonical slug.
-  "avitas-cannabis": "avitas",
-  "avitas-grown": "avitas",
+  // Avitas SLUG_ALIASES removed 2026-05-10 — scc doesn't carry Avitas
+  // (see BRAND_OVERRIDES + import comments above for context).
   // Botanica Seattle has multiple sub-brands a customer might search for
   // by name even though all the products live under the parent vendor row.
   "mr-moxeys": "botanica-seattle",
