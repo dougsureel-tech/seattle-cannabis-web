@@ -1,6 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { STORE } from "@/lib/store";
+import { breadcrumbJsonLd } from "@/lib/breadcrumb-jsonld";
+
+// BreadcrumbList JSON-LD — sister of cannagent v3.391 100% indexable
+// coverage + glw v12.505. Pre-fix /careers had no BreadcrumbList;
+// Google could not show the breadcrumb chip in SERP results.
+const breadcrumb = breadcrumbJsonLd([
+  { name: "Home", url: STORE.website },
+  { name: "Careers", url: `${STORE.website}/careers` },
+]);
 
 // ISR — open-positions list refreshes every 5 minutes. Inventoryapp side is
 // the source of truth; a stale cache for up to 5 min is fine for a careers page.
@@ -69,6 +78,10 @@ export default async function CareersPage() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
+      />
       {/* Hero — indigo/violet gradient matching the rest of the SCC chrome. */}
       <div className="relative overflow-hidden bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white py-10 sm:py-14">
         <div
