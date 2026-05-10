@@ -57,7 +57,15 @@ function isStandalone(): boolean {
 function initialMode(): "ios" | null {
   if (typeof window === "undefined") return null;
   if (isStandalone()) return null;
-  if (typeof localStorage !== "undefined" && localStorage.getItem(DISMISS_KEY)) return null;
+  // Safari private mode + 3rd-party iframe contexts: localStorage is
+  // defined but every call throws SecurityError. Sister of inv v363.005
+  // (MorningBrief + ThemePicker). Treat read-fail as "not dismissed" so
+  // the banner shows; user can still dismiss but it just won't persist.
+  try {
+    if (typeof localStorage !== "undefined" && localStorage.getItem(DISMISS_KEY)) return null;
+  } catch {
+    /* private mode — proceed as not-dismissed */
+  }
   return isIosSafari() ? "ios" : null;
 }
 
@@ -71,7 +79,11 @@ export function AddToHomeScreen() {
     // chrome-style browsers need the beforeinstallprompt listener.
     if (typeof window === "undefined") return;
     if (isStandalone()) return;
-    if (typeof localStorage !== "undefined" && localStorage.getItem(DISMISS_KEY)) return;
+    try {
+      if (typeof localStorage !== "undefined" && localStorage.getItem(DISMISS_KEY)) return;
+    } catch {
+      /* private mode — proceed as not-dismissed */
+    }
     if (isIosSafari()) return;
 
     function handler(e: Event) {
@@ -87,8 +99,12 @@ export function AddToHomeScreen() {
 
   function dismiss() {
     setShow(false);
-    if (typeof localStorage !== "undefined") {
-      localStorage.setItem(DISMISS_KEY, String(Date.now()));
+    try {
+      if (typeof localStorage !== "undefined") {
+        localStorage.setItem(DISMISS_KEY, String(Date.now()));
+      }
+    } catch {
+      /* private mode — banner re-shows next visit; harmless */
     }
   }
 
