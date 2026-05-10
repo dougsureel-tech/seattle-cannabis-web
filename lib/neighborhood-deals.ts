@@ -39,8 +39,8 @@ export const NEIGHBORHOOD_DEALS: Record<Neighborhood["id"], NeighborhoodDeal | n
     detail: "Off the Link at Othello — our edibles wall is one stop south of yours.",
   },
   "beacon-hill": {
-    short: "Veteran + first-responder 10%",
-    detail: "Beacon Hill VA neighbors — show your ID, save at the counter.",
+    short: "Beacon Hill neighbors — 10%",
+    detail: "Beacon Hill walk-ins — show local ID, save at the counter. (Veterans + first responders: see Heroes program for 30%.)",
   },
   "mount-baker": {
     short: "Lake-day vape special",

@@ -342,7 +342,8 @@
 // 13.8505 — 🌐 PWA manifest `id: "/"` field added — sister glw v20.805. Chrome PWA install detection across www→apex redirects. tsc clean.
 // 13.8605 — 🛡️ 404 page metadata fix — `app/not-found.tsx` now exports `metadata = { title: "Page not found", robots: { index: false, follow: false } }`. Pre-fix the 404 page inherited the layout's default title template (producing homepage SERP titles on 404 URLs) AND was implicitly indexable — soft-404 / thin-content risk. Now: explicit title + robots:noindex closes both gaps. Sister glw v20.905 + GW v2.97.Z0 same-fix triple — board item #21 (cross-stack 404 metadata parity, agent-pickable). tsc clean.
 // 13.8705 — ♿ PWA manifest `lang: "en-US"` + `dir: "ltr"` fields — accessibility signal for screen readers + Lighthouse PWA audit per W3C web-app-manifest spec. Sister glw v21.005 + GW v2.97.AA + sureel same-tick quartet — board item #25. Screenshots field still open pending Doug asset work. tsc clean.
-export const BUILD_VERSION = "13.8705";
+// 13.8805 — 🪞 Heroes vs neighborhood-card disambiguation — `lib/neighborhood-deals.ts` Beacon Hill card was "Veteran + first-responder 10%" but Heroes block elsewhere on /heroes shows 30% for the SAME audience (veterans, military, first responders, healthcare, K-12 teachers). Two numbers under same audience reads like bait-and-switch at the register. Renamed Beacon Hill short to "Beacon Hill neighbors — 10%" + appended Heroes-program pointer in detail ("Veterans + first responders: see Heroes program for 30%."). Strips veteran/first-responder from the geo-card so those words live ONLY in the 30% Heroes block. Caught T176 round-33 /loop via communications-expert cross-site audit. Sister glw v21.105 + cannagent v5.X same-tick under Doug "1-7 yes" greenlight. tsc clean.
+export const BUILD_VERSION = "13.8805";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ||
