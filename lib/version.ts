@@ -3,6 +3,7 @@
 // comes from Vercel automatically on every deploy and is the authoritative
 // "did my push actually land" signal.
 
+// 13.4805 — 🖼️ Per-route OG fix on /deals/[id] + /brands/[slug] (sister glw v17.105 T49). Same dead-code class as T48 (/blog/[slug]) — DEFAULT_OG_IMAGE / brand.logoUrl overrode per-route opengraph-image.tsx file convention. /menu unchanged on scc (no per-route file exists; comment explicitly notes that).
 // 13.4705 — 🖼️ /blog/[slug] per-route OG image fix — explicit `/blog/{slug}/opengraph-image` URL. Sister glw v17.005. Pre-fix DEFAULT_OG_IMAGE override made the per-route opengraph-image.tsx dead-code; share-cards rendered homepage OG instead of post-specific. Audit candidates for follow-up: /menu, /brands/[slug], /deals/[id]. Caught by /loop tick 48.
 // 13.4605 — ⚡ /apple-icon.png cache rule path fix. Sister glw v16.905. Pre-fix cache rule was `source: "/apple-icon"` (no suffix); actual served path is `/apple-icon.png` (file convention name). Every iOS Add-to-Home-Screen fetch was hitting Vercel uncached. Caught by /loop tick 47.
 // 13.4505 — 🛡️ Suppress X-Powered-By header. Sister glw v16.805. Both repos were lone outliers across 6-site stack still leaking `X-Powered-By: Next.js`. Caught by /loop tick 46.
@@ -302,7 +303,7 @@
 // 9.425 — 🐛 v9.405 fix didn't actually work — `revalidate` export doesn't apply to ImageResponse routes. Verified post-deploy: cache-control still `max-age=0` + `x-vercel-cache: MISS` across 3 sequential hits. The pattern that DOES work (verified live on inv v342.405): set `headers: { "Cache-Control": "..." }` in the ImageResponse options object directly. Re-applied to all 3 dynamic OG files with explicit headers (24h on blog/brands, 1h on deals). Sister fix in glw v8.205 same shape. tsc clean.
 // 10.905 — 🌐 Search Console + Bing Webmaster Tools + Yandex env-driven verification meta tags + GA4 gtag.js loader added to root layout. When Doug pastes `GOOGLE_SITE_VERIFICATION` / `BING_SITE_VERIFICATION` / `YANDEX_VERIFICATION` / `NEXT_PUBLIC_GA_ID` into Vercel env, each renders site-wide; empty env = nothing renders. Sister of GW root layout + glw v10.005 + cannagent. Cross-repo SEO arc 2026-05-09 — env-gating lets verification go live without another deploy once Doug pastes the token. tsc clean.
 // 11.005 — 🌐 Meta-description length sweep — 11 over-limit descriptions trimmed to ≤160 chars (Google SERP cap). Pages: `/` (root layout 296→138, app/page.tsx 201→150), `/learn`, `/menu` 227→155, `/heroes` 189→155, `/faq` 180→155, `/press` 170→150, `/find-your-strain` 292→155, `/deals` 195→150, `/about` 225→155, `/visit` 172→150, `/treasure-chest` 206→150. Pre-fix Google was truncating mid-sentence with "…" in SERPs. Sister of GW v2.92 + glw v10.105 length sweep. Audit recipe: `find app -name page.tsx -exec grep -E "^\\s*description:" {} \\; | awk '{ if (length > 165) print FILENAME }'`. tsc clean.
-export const BUILD_VERSION = "13.4705";
+export const BUILD_VERSION = "13.4805";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ||

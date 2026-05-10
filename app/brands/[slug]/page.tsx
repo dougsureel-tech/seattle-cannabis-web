@@ -161,7 +161,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       locale: "en_US",
       title: `${brand.name} | ${STORE.name}`,
       description: `Browse ${brand.name} products available at Seattle Cannabis Co., Rainier Valley WA.`,
-      ...(brand.logoUrl ? { images: [{ url: brand.logoUrl }] } : {}),
+      // Per-route OG at /brands/{slug}/opengraph-image — custom card with
+      // brand name + product count. Sister glw v17.105 T49 same-class fix.
+      images: [
+        {
+          url: `/brands/${slug}/opengraph-image`,
+          width: 1200,
+          height: 630,
+          alt: `${brand.name} — at ${STORE.name}`,
+        },
+      ],
     },
   };
 }
