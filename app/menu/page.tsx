@@ -143,6 +143,12 @@ export default async function MenuPage() {
 
   return (
     <div className="bg-stone-50">
+      {/* Preconnect to iHeartJane Boost origins — primes DNS+TLS+TCP for
+          /menu LCP. Sister glw v16.X same-fix. Pure additive. Caught
+          2026-05-10 by /loop tick 40 cross-stack preconnect audit. */}
+      <link rel="preconnect" href="https://boost-assets.iheartjane.com" crossOrigin="anonymous" />
+      <link rel="preconnect" href="https://api.iheartjane.com" crossOrigin="anonymous" />
+      <link rel="preconnect" href="https://search.iheartjane.com" crossOrigin="anonymous" />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(collectionLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbLd) }} />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-3">
