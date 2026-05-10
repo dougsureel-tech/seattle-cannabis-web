@@ -990,6 +990,72 @@ If you want simple: butane lighter, light from above, corner the bowl. If you wa
   },
 ];
 
+// --- Dynamic content from inv CMS ---
+// Falls back to empty on any error so a momentary API hiccup never
+// breaks the blog index or a /blog/[slug] render.
+
+const INV_CONTENT_BASE = "https://brapp.seattlecannabis.co";
+const INV_CONTENT_STORE = "scc";
+
+const VALID_POST_CATS = new Set<Post["category"]>(["Guide", "Vendor Spotlight", "Education", "Local"]);
+
+type ApiPost = {
+  slug: string;
+  title: string;
+  subtitle?: string | null;
+  category?: string | null;
+  bodyMd?: string | null;
+  publishedAt?: string | null;
+};
+
+function apiPostToPost(p: ApiPost): Post {
+  const words = p.bodyMd?.trim().split(/\s+/).length ?? 0;
+  return {
+    slug: p.slug,
+    title: p.title,
+    description: p.subtitle ?? "",
+    category: VALID_POST_CATS.has(p.category as Post["category"])
+      ? (p.category as Post["category"])
+      : "Education",
+    publishedAt: p.publishedAt ?? new Date().toISOString().slice(0, 10),
+    readingMinutes: words > 0 ? Math.max(1, Math.round(words / 200)) : 5,
+    body: p.bodyMd ?? "",
+  };
+}
+
+export async function fetchDynamicPosts(): Promise<Post[]> {
+  try {
+    const res = await fetch(
+      `${INV_CONTENT_BASE}/api/public/content/list?store=${INV_CONTENT_STORE}`,
+      { next: { revalidate: 300 } },
+    );
+    if (!res.ok) return [];
+    const data: { items?: ApiPost[] } = await res.json().catch(() => ({}));
+    return (data.items ?? [])
+      .filter((p) => p.slug && p.title && p.publishedAt)
+      .map(apiPostToPost)
+      .filter((p) => isPublished(p));
+  } catch {
+    return [];
+  }
+}
+
+export async function fetchDynamicPost(slug: string): Promise<Post | undefined> {
+  try {
+    const res = await fetch(
+      `${INV_CONTENT_BASE}/api/public/content/${encodeURIComponent(slug)}?store=${INV_CONTENT_STORE}`,
+      { next: { revalidate: 300 } },
+    );
+    if (!res.ok) return undefined;
+    const p: ApiPost | null = await res.json().catch(() => null);
+    if (!p?.slug || !p?.title) return undefined;
+    const post = apiPostToPost(p);
+    return isPublished(post) ? post : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 // Stage-by-publishedAt — posts dated in the future are excluded from
 // list + slug-lookup until their publishedAt date arrives. Pre-fix
 // future-dated posts (PLAN_WEEKLY_GUIDES staggered-release pattern)
