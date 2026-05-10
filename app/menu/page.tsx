@@ -4,6 +4,7 @@ import { getActiveDeals, getTreasureChestProducts } from "@/lib/db";
 import { fetchClosureStatus } from "@/lib/closure-status";
 import { JaneMenu } from "./JaneMenu";
 import { MenuFallback } from "./MenuFallback";
+import { AppOnlyDealsFilter } from "@/components/AppOnlyDealsFilter";
 import { MenuLocalStrip } from "@/components/MenuLocalStrip";
 import { MenuActiveDealsStrip } from "@/components/MenuActiveDealsStrip";
 import { ClosureBanner } from "@/components/ClosureBanner";
@@ -84,20 +85,23 @@ async function prewarmDutchieMenu(): Promise<void> {
 }
 
 export default async function MenuPage() {
-  // PWA-install detection — cookie set by /api/track-install on first
-  // standalone-mode launch. Same gate as /deals + homepage strip. Without
-  // this, installed visitors saw the same `app_only=false` deal subset
-  // as browser-only visitors — losing the install incentive on the most-
-  // visited customer page. Sister of glw v4.745.
-  const cookieStore = await import("next/headers").then((m) => m.cookies());
-  const isInstalled = cookieStore.get("scc_pwa_installed")?.value === "1";
+  // CDN-cache fix (sister glw v20.505): previously called `cookies()`
+  // here, opting /menu out of ISR despite `revalidate=60`. Now fetch all
+  // deals server-side (`includeAppOnly: true`); MenuFallback receives the
+  // appOnly flag through `featuredDeal` + MenuActiveDealsStrip cards
+  // carry data-app-only attrs; <AppOnlyDealsFilter /> hides PWA-only
+  // cards client-side post-hydrate via the `scc_pwa_installed` cookie.
+  // Plus pass `revalidate: 60` to fetchClosureStatus so the upstream
+  // fetch participates in ISR (vs default `cache: "no-store"`).
   const [deals, closure, treasureChest] = await Promise.all([
-    getActiveDeals({ includeAppOnly: isInstalled }).catch(() => []),
-    fetchClosureStatus(),
+    getActiveDeals({ includeAppOnly: true }).catch(() => []),
+    fetchClosureStatus({ revalidate: 60 }),
     getTreasureChestProducts(60).catch(() => []),
     prewarmDutchieMenu(),
   ]);
-  const featuredDeal = deals[0] ?? null;
+  const featuredDeal = deals[0]
+    ? { short: deals[0].short, name: deals[0].name, endDate: deals[0].endDate, appOnly: deals[0].appOnly }
+    : null;
   const treasureChestCount = treasureChest.length;
 
   // CollectionPage + ItemList of menu categories. Boost holds the live
@@ -168,6 +172,7 @@ export default async function MenuPage() {
       </div>
       <JaneMenu storeId={IHEARTJANE_STORE_ID} embedConfigId={IHEARTJANE_EMBED_CONFIG_ID} />
       <MenuActiveDealsStrip deals={deals} treasureChestCount={treasureChestCount} />
+      <AppOnlyDealsFilter />
       <MenuFallback featuredDeal={featuredDeal} />
       <MenuLocalStrip />
     </div>

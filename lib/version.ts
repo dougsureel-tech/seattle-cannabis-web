@@ -336,7 +336,8 @@
 // 13.7905 — 🚀 Homepage CDN-cache fix — sister glw v20.205. Removed `cookies()` call that was opting `/` out of CDN caching despite `revalidate=60` (TTFB ~456ms — slowest in 6-site stack). Per Doug-greenlit Option (A): server now fetches all deals (`includeAppOnly: true`); new client-only `<AppOnlyDealsFilter />` reads `scc_pwa_installed` cookie post-hydrate and `display:none`s app-only cards via `data-app-only="1"` attr. ~50ms pre-hydrate flicker accepted. PWA-install carrot preserved. tsc clean.
 // 13.8005 — 🛡️ NEW arc-guard `scripts/check-csp-report-only.mjs` (sister glw v20.305) — pins T108-T109 CSP-RO infrastructure against regression. tsc clean.
 // 13.8105 — 🚀 Homepage CDN-cache fix part 2 (sister glw v20.405) — v13.7905 was incomplete. `fetchClosureStatus()` defaulted to `cache: "no-store"` (per `lib/closure-status.ts:63`), opting the page out of ISR despite removing `cookies()`. Fix: pass `{ revalidate: 60 }` matching page revalidate. Now upstream closure-status fetch participates in ISR cycle. tsc clean.
-export const BUILD_VERSION = "13.8105";
+// 13.8205 — 🚀 /menu CDN-cache fix (sister glw v20.505) — port homepage pattern to scc's most-trafficked customer page. Removed `cookies()` reading `scc_pwa_installed`; fetch all deals server-side; pass `appOnly` flag through MenuFallback's `featuredDeal` + add `data-app-only` to MenuActiveDealsStrip + MenuFallback deal pill; mount `<AppOnlyDealsFilter />` for client-side hide of PWA-only cards. Plus pass `{revalidate:60}` to fetchClosureStatus. ISR now engages on /menu. tsc clean.
+export const BUILD_VERSION = "13.8205";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ||

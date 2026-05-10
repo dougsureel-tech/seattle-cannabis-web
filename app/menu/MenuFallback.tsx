@@ -10,6 +10,11 @@ type FeaturedDeal = {
   short: string;
   name: string;
   endDate: string | null;
+  /** PWA-install gated. Pre-ISR (when this page used cookies()) the
+   *  cookie filter dropped these for non-installed visitors before the
+   *  array reached this component. Now the page is ISR-cached and the
+   *  app-only filter happens client-side via <AppOnlyDealsFilter />. */
+  appOnly?: boolean;
 } | null;
 
 // Renders nothing while the Boost embed is hydrating. If after WAIT_MS the
@@ -95,7 +100,10 @@ export function MenuFallback({ featuredDeal = null }: { featuredDeal?: FeaturedD
       {/* Deal pill — only when there's an active deal AND the embed is
           stuck. Customer who'd otherwise bounce now sees the savings hook. */}
       {featuredDeal && (
-        <div className="rounded-2xl border border-amber-300 bg-gradient-to-r from-amber-100 via-amber-50 to-amber-100 px-4 py-3 sm:px-5 sm:py-3.5 flex items-center gap-3">
+        <div
+          data-app-only={featuredDeal.appOnly ? "1" : "0"}
+          className="rounded-2xl border border-amber-300 bg-gradient-to-r from-amber-100 via-amber-50 to-amber-100 px-4 py-3 sm:px-5 sm:py-3.5 flex items-center gap-3"
+        >
           <span className="text-xl shrink-0" aria-hidden="true">
             🎟️
           </span>
