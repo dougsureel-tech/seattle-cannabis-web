@@ -3,6 +3,7 @@
 // comes from Vercel automatically on every deploy and is the authoritative
 // "did my push actually land" signal.
 
+// 13.6305 — 📧 Email preheader on welcome/order-confirm/quiz-nurture templates. Sister glw v18.605. Inbox-preview snippet (hidden in body but surfaced by Gmail/Apple Mail/Outlook) — pre-fix fell back to brand boilerplate. Caught by /loop tick 74.
 // 13.6205 — ♿ Email a11y — `role="presentation"` on 7 layout `<table>` tags in transactional emails. Sister glw v18.505 + GW v2.97.C0. WCAG 1.3.1 hardening — screen readers no longer announce layout tables as data tables. Caught by /loop tick 73 round-3 dimension shift.
 // 13.6105 — 🛡️ NEW arc-guard `scripts/check-button-type.mjs` — pins T69 against regression. Sister glw v18.405 + GW v2.97.B0. 0/0 across all 3 repos post-T69 sweep. Caught by /loop tick 70.
 // 13.6005 — ♿ `<button type="button">` sweep — 52 buttons / 11 files. Sister glw v18.305 + GW v2.97.A0. Pre-fix onClick buttons defaulted to type=submit per HTML spec; Enter key inside form could trigger unrelated buttons. Python regex inserted type="button" only where onClick= present + type= absent. WCAG 2.1.1 hardening + accidental-submit prevention.
@@ -317,7 +318,7 @@
 // 9.425 — 🐛 v9.405 fix didn't actually work — `revalidate` export doesn't apply to ImageResponse routes. Verified post-deploy: cache-control still `max-age=0` + `x-vercel-cache: MISS` across 3 sequential hits. The pattern that DOES work (verified live on inv v342.405): set `headers: { "Cache-Control": "..." }` in the ImageResponse options object directly. Re-applied to all 3 dynamic OG files with explicit headers (24h on blog/brands, 1h on deals). Sister fix in glw v8.205 same shape. tsc clean.
 // 10.905 — 🌐 Search Console + Bing Webmaster Tools + Yandex env-driven verification meta tags + GA4 gtag.js loader added to root layout. When Doug pastes `GOOGLE_SITE_VERIFICATION` / `BING_SITE_VERIFICATION` / `YANDEX_VERIFICATION` / `NEXT_PUBLIC_GA_ID` into Vercel env, each renders site-wide; empty env = nothing renders. Sister of GW root layout + glw v10.005 + cannagent. Cross-repo SEO arc 2026-05-09 — env-gating lets verification go live without another deploy once Doug pastes the token. tsc clean.
 // 11.005 — 🌐 Meta-description length sweep — 11 over-limit descriptions trimmed to ≤160 chars (Google SERP cap). Pages: `/` (root layout 296→138, app/page.tsx 201→150), `/learn`, `/menu` 227→155, `/heroes` 189→155, `/faq` 180→155, `/press` 170→150, `/find-your-strain` 292→155, `/deals` 195→150, `/about` 225→155, `/visit` 172→150, `/treasure-chest` 206→150. Pre-fix Google was truncating mid-sentence with "…" in SERPs. Sister of GW v2.92 + glw v10.105 length sweep. Audit recipe: `find app -name page.tsx -exec grep -E "^\\s*description:" {} \\; | awk '{ if (length > 165) print FILENAME }'`. tsc clean.
-export const BUILD_VERSION = "13.6205";
+export const BUILD_VERSION = "13.6305";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ||
