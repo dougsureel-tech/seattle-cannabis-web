@@ -1002,7 +1002,7 @@ export default async function HomePage() {
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{
-              __html: JSON.stringify({
+              __html: safeJsonLd({
                 "@context": "https://schema.org",
                 "@type": "HowTo",
                 // Stable @id — sister of glw v18.915 same fix pattern.

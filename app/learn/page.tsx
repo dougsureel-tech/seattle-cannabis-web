@@ -6,6 +6,7 @@ import { STORE, DEFAULT_OG_IMAGE} from "@/lib/store";
 import { LEARN_TOPICS } from "@/lib/learn-topics";
 import { getCompletedSteps } from "@/lib/learn-db";
 import { LearnProgress } from "./LearnProgress";
+import { safeJsonLd } from "@/lib/json-ld-safe";
 
 // Page IS dynamic (auth + DB read for completed steps), but the static
 // shell — hero with h1, topic list, JSON-LD, footer CTAs — has zero
@@ -146,7 +147,7 @@ export default function LearnPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+          __html: safeJsonLd({
             "@context": "https://schema.org",
             "@type": "LearningResource",
             name: "Cannabis 101 — Learn the Basics",
@@ -169,7 +170,7 @@ export default function LearnPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+          __html: safeJsonLd({
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             "@id": `${STORE.website}/learn#breadcrumb`,
