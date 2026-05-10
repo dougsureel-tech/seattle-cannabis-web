@@ -21,7 +21,10 @@ const breadcrumb = breadcrumbJsonLd([
 // /apply match the same canonical posture.
 
 export const metadata: Metadata = {
-  title: `Apply to work at ${STORE.name}`,
+  // Drop ${STORE.name} from body — title.template appends brand suffix
+  // so the body baking it in creates duplicate. Sister glw same-push +
+  // GW v2.94.60. Caught by /loop tick 25 duplicate-brand sweep.
+  title: "Apply for a Job",
   description: `Apply for a position at ${STORE.name} in ${STORE.neighborhood}, Seattle WA. Budtender, lead, inventory and more — open roles + general intake. 21+ required (WAC 314-55-115).`,
   alternates: { canonical: "/apply" },
   openGraph: {
