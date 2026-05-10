@@ -323,7 +323,8 @@
 // 13.6605 — 📰 RSS 2.0 feed at /feed.xml + auto-discovery link rel — cross-stack port of glw v18.905 + v18.915. Pre-fix scc published blog posts with no machine-readable feed (Feedly/NewsBlur/Inoreader 404'd; GPTBot/ClaudeBot/PerplexityBot probe /feed.xml as a structured-content surface and got nothing). NEW `app/feed.xml/route.ts` emits RSS 2.0 with channel meta + per-post items (title/link/guid as permalink/description/pubDate as RFC 822/category). Posts sorted most-recent-first. XML escape via 5-entity replace. 30-min edge cache + 1hr stale-while-revalidate. Layout AND page.tsx both declare `alternates.types: { "application/rss+xml": ... }` — page-level repeats the layout-level since Next 16 alternates cascade is shallow-overwrite (same gotcha glw v18.905 hit + corrected at v18.915). Customer + AI-crawler discoverability win on previously-invisible blog archive. tsc clean.
 // 13.6705 — 🌐 HowTo + FAQPage entity-graph @id linking on scc homepage — sister of glw v19.005. Pre-fix Organization/WebSite/LocalBusiness/AggregateRating all had stable @id IRIs but HowTo + FAQPage didn't. Added `@id: ${STORE.website}/#howto-pickup` + `@id: ${STORE.website}/#faq`. Now all homepage JSON-LD entities have @id, fully connected entity-graph. tsc clean.
 // 13.6805 — 🌐 BreadcrumbList @id sister-port of glw v19.105. SoT helper `breadcrumbJsonLd()` now emits `@id: ${lastCrumbAbs}#breadcrumb`. /brands/[slug] inline schema gets @id + middle "Brands" nav level (was Home → Brand; now Home › Brands › Brand). Closes BreadcrumbList side of entity-graph @id linking arc. tsc clean.
-export const BUILD_VERSION = "13.6805";
+// 13.6905 — 🌐 BreadcrumbList @id on /near/[town] inline schema. Sister of glw v19.205 — T85 dead-code-helper class catch (per `feedback_seo_helper_dead_code_curl_recipe.md` memory). tsc clean.
+export const BUILD_VERSION = "13.6905";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ||
