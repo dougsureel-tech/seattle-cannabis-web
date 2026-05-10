@@ -16,6 +16,12 @@ export default function manifest(): MetadataRoute.Manifest {
     description: `${STORE.tagline}. ${STORE.address.full}.`,
     start_url: "/",
     scope: "/",
+    // `lang` + `dir` per W3C web-app-manifest spec — accessibility signal for
+    // screen readers + Lighthouse PWA audit. Sister glw v20.X same-fix.
+    // Closes board item #25 (lang/dir piece; screenshots still open pending
+    // Doug-captured asset work).
+    lang: "en-US",
+    dir: "ltr",
     display: "standalone",
     orientation: "portrait",
     background_color: "#1e1b4b",

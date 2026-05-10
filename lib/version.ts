@@ -341,7 +341,8 @@
 // 13.8405 — 🛡️ NEW pre-push gates infrastructure on scc — sister glw v20.705. All 9 arc-guards now run on `git push` via `.githooks/pre-push` + `scripts/setup-hooks.sh`. Verified clean 9/9. tsc clean.
 // 13.8505 — 🌐 PWA manifest `id: "/"` field added — sister glw v20.805. Chrome PWA install detection across www→apex redirects. tsc clean.
 // 13.8605 — 🛡️ 404 page metadata fix — `app/not-found.tsx` now exports `metadata = { title: "Page not found", robots: { index: false, follow: false } }`. Pre-fix the 404 page inherited the layout's default title template (producing homepage SERP titles on 404 URLs) AND was implicitly indexable — soft-404 / thin-content risk. Now: explicit title + robots:noindex closes both gaps. Sister glw v20.905 + GW v2.97.Z0 same-fix triple — board item #21 (cross-stack 404 metadata parity, agent-pickable). tsc clean.
-export const BUILD_VERSION = "13.8605";
+// 13.8705 — ♿ PWA manifest `lang: "en-US"` + `dir: "ltr"` fields — accessibility signal for screen readers + Lighthouse PWA audit per W3C web-app-manifest spec. Sister glw v21.005 + GW v2.97.AA + sureel same-tick quartet — board item #25. Screenshots field still open pending Doug asset work. tsc clean.
+export const BUILD_VERSION = "13.8705";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ||
