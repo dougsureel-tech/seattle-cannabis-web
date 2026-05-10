@@ -81,7 +81,18 @@ export const metadata: Metadata = {
     //   by /loop tick 9 cross-stack og:image vs twitter:image comparison.
     //   Sister glw v13.005 same-class.
   },
-  robots: { index: true, follow: true },
+  robots: {
+    index: true,
+    follow: true,
+    // Modern Google SERP-display directives — sister glw + GW.
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-snippet": -1,
+      "max-image-preview": "large",
+      "max-video-preview": -1,
+    },
+  },
   // Search Console + Bing Webmaster Tools + Yandex verification —
   // env-gated. When Doug enables verification in any dashboard, paste
   // the token into the matching env var on Vercel and the meta tag
