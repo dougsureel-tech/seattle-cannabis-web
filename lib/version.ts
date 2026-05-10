@@ -334,7 +334,8 @@
 // 13.7705 — 🛡️ CSP Report-Only header added — sister glw v20.005. Doug-action #2 kickoff. Permissive starting policy; report-only CANNOT block. tsc clean.
 // 13.7805 — 🛡️ NEW /api/csp-report endpoint + report-uri directive — sister glw v20.105. Completes T108 CSP-RO observation infrastructure. tsc clean.
 // 13.7905 — 🚀 Homepage CDN-cache fix — sister glw v20.205. Removed `cookies()` call that was opting `/` out of CDN caching despite `revalidate=60` (TTFB ~456ms — slowest in 6-site stack). Per Doug-greenlit Option (A): server now fetches all deals (`includeAppOnly: true`); new client-only `<AppOnlyDealsFilter />` reads `scc_pwa_installed` cookie post-hydrate and `display:none`s app-only cards via `data-app-only="1"` attr. ~50ms pre-hydrate flicker accepted. PWA-install carrot preserved. tsc clean.
-export const BUILD_VERSION = "13.7905";
+// 13.8005 — 🛡️ NEW arc-guard `scripts/check-csp-report-only.mjs` (sister glw v20.305) — pins T108-T109 CSP-RO infrastructure against regression. tsc clean.
+export const BUILD_VERSION = "13.8005";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ||
