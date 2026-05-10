@@ -29,7 +29,16 @@ export async function generateMetadata({
   if (!area) return { title: "Not found" };
 
   const title = `${area.name} Dispensary — ${STORE.name}`;
-  const desc = `${area.name} to ${STORE.name}: ${area.driveMins} min. ${area.pitch} Open daily 8 AM–11 PM, cash only, 21+.`;
+  // Pre-fix template combined `area.name → STORE: N min. pitch. Open
+  // daily 8 AM–11 PM, cash only, 21+.` which ran 200+ chars on the
+  // longest /near/[town] entries (e.g. /near/west-seattle = 219 chars).
+  // The leading "X to STORE: N min." was redundant with `pitch` (every
+  // pitch already names the route + drive time). Drop it; just use
+  // pitch + a shortened CTA trailer ("Open daily" — 8 AM–11 PM is
+  // visible in 6+ places on the page already, no need to bake into
+  // every meta description). Caught 2026-05-10 by /loop tick 6 cross-
+  // stack description-length re-audit. Sister glw same-push.
+  const desc = `${area.pitch} Open daily, cash only, 21+.`;
 
   return {
     title,
