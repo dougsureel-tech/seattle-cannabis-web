@@ -80,6 +80,57 @@ const nextConfig: NextConfig = {
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
         ],
       },
+      // Edge-cache pin for crawler-facing files. Sister of glw v11.605 +
+      // cannagent v4.685+v4.705+v4.725. Next 16 ignores `export const
+      // revalidate` for MetadataRoute file conventions + static
+      // `public/*.txt` — every Googlebot / Bingbot / GPTBot / ClaudeBot
+      // crawl + every favicon fetch was hitting Vercel function instead of
+      // CDN edge. Pinned at the edge here. None of these paths interact
+      // with /menu or iHeartJane Boost — confirmed safe.
+      {
+        source: "/sitemap.xml",
+        headers: [{ key: "Cache-Control", value: "public, max-age=1800, s-maxage=1800" }],
+      },
+      {
+        source: "/robots.txt",
+        headers: [{ key: "Cache-Control", value: "public, max-age=3600, s-maxage=3600" }],
+      },
+      {
+        source: "/llms.txt",
+        headers: [{ key: "Cache-Control", value: "public, max-age=3600, s-maxage=3600" }],
+      },
+      {
+        source: "/icon",
+        headers: [{ key: "Cache-Control", value: "public, max-age=86400, s-maxage=86400" }],
+      },
+      {
+        source: "/apple-icon",
+        headers: [{ key: "Cache-Control", value: "public, max-age=86400, s-maxage=86400" }],
+      },
+      {
+        source: "/icon-192.png",
+        headers: [{ key: "Cache-Control", value: "public, max-age=86400, s-maxage=86400" }],
+      },
+      {
+        source: "/icon-512.png",
+        headers: [{ key: "Cache-Control", value: "public, max-age=86400, s-maxage=86400" }],
+      },
+      {
+        source: "/favicon.ico",
+        headers: [{ key: "Cache-Control", value: "public, max-age=86400, s-maxage=86400" }],
+      },
+      {
+        source: "/opengraph-image",
+        headers: [{ key: "Cache-Control", value: "public, max-age=3600, s-maxage=3600" }],
+      },
+      {
+        source: "/:path*/opengraph-image",
+        headers: [{ key: "Cache-Control", value: "public, max-age=3600, s-maxage=3600" }],
+      },
+      {
+        source: "/manifest.webmanifest",
+        headers: [{ key: "Cache-Control", value: "public, max-age=3600, s-maxage=3600" }],
+      },
     ];
   },
   // **/menu + /order rule (DO NOT REMOVE):** never add a redirect that
