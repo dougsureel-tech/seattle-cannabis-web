@@ -63,8 +63,17 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${STORE.name} | ${STORE.neighborhood}, Seattle`,
-    description: `${STORE.neighborhood} cannabis dispensary, founded 2010. Cash only, 21+. ${STORE.address.full}.`,
+    // `title` + `description` intentionally NOT set here — when omitted,
+    // Twitter's crawler falls back to og:title + og:description (per
+    // Twitter Cards spec + Next 16 metadata cascade). Pre-fix the layout
+    // hard-coded twitter.title = `${STORE.name} | ${STORE.neighborhood},
+    // Seattle` and child pages overrode openGraph.title but NOT
+    // twitter.title — so EVERY brand / blog / about / near / heroes share
+    // card on Twitter/X showed the layout default ("Seattle Cannabis Co.
+    // | Rainier Valley, Seattle") instead of the page-specific title
+    // (e.g. "MFUSED | Seattle Cannabis Co."). Caught 2026-05-10 by /loop
+    // tick 7 cross-stack og:title vs twitter:title comparison. Sister
+    // glw v12.905 same-push.
     images: ["/opengraph-image"],
   },
   robots: { index: true, follow: true },
