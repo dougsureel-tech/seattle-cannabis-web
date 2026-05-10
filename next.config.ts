@@ -33,6 +33,32 @@ import type { NextConfig } from "next";
 // interest-cohort opts out of FLoC tracking. Sister glw same-push.
 // Caught 2026-05-10 by /loop cross-stack Permissions-Policy presence
 // sweep — glw + scc were the lone outliers.
+// CSP Report-Only — T108 sister of glw v19.X same shape. See glw
+// next.config.ts for full rationale. Permissive starting policy; flip
+// to enforce mode (`Content-Security-Policy` key) after 1-2 week
+// observation window. Cannot break the page in Report-Only mode.
+const CSP_REPORT_ONLY =
+  "default-src 'self'; " +
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' " +
+    "https://*.vercel-scripts.com https://*.iheartjane.com " +
+    "https://www.googletagmanager.com https://www.google-analytics.com " +
+    "https://challenges.cloudflare.com https://www.google.com https://www.gstatic.com https://recaptcha.net https://hcaptcha.com; " +
+  "style-src 'self' 'unsafe-inline' https://*.iheartjane.com; " +
+  "img-src 'self' data: blob: https:; " +
+  "font-src 'self' data: https:; " +
+  "connect-src 'self' https://*.vercel-insights.com https://*.vercel-scripts.com " +
+    "https://*.iheartjane.com https://api.iheartjane.com https://search.iheartjane.com " +
+    "https://www.google-analytics.com https://*.google-analytics.com " +
+    "https://challenges.cloudflare.com https://www.google.com https://www.gstatic.com " +
+    "https://recaptcha.net https://hcaptcha.com; " +
+  "frame-src 'self' https://*.iheartjane.com https://www.google.com https://challenges.cloudflare.com https://hcaptcha.com; " +
+  "media-src 'self' blob:; " +
+  "worker-src 'self' blob:; " +
+  "object-src 'none'; " +
+  "base-uri 'self'; " +
+  "form-action 'self'; " +
+  "frame-ancestors 'self'";
+
 const PERMISSIONS_POLICY =
   'private-state-token-redemption=(self "https://www.google.com" "https://www.gstatic.com" "https://recaptcha.net" "https://challenges.cloudflare.com" "https://hcaptcha.com"), ' +
   'private-state-token-issuance=(self "https://www.google.com" "https://www.gstatic.com" "https://recaptcha.net" "https://challenges.cloudflare.com" "https://hcaptcha.com"), ' +
@@ -109,6 +135,11 @@ const nextConfig: NextConfig = {
           // + vrg already serve this; scc + glw were lone outliers. Safe
           // vs iHJ Boost (iframes, not popups). Caught by /loop tick 44.
           { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+          // T108 — CSP Report-Only kicks off Doug-action #2. See glw
+          // next.config.ts CSP_REPORT_ONLY const for full rationale.
+          // Report-Only CANNOT block requests; browsers log violations
+          // to DevTools Console only. Sister glw same-add.
+          { key: "Content-Security-Policy-Report-Only", value: CSP_REPORT_ONLY },
         ],
       },
       // Edge-cache pin for crawler-facing files. Sister of glw v11.605 +
