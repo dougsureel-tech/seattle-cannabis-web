@@ -130,7 +130,12 @@ const nextConfig: NextConfig = {
         headers: [{ key: "Cache-Control", value: "public, max-age=86400, s-maxage=86400" }],
       },
       {
-        source: "/apple-icon",
+        // `/apple-icon.png` (with .png) — sister glw v16.905. Pre-fix the
+        // cache rule was on `/apple-icon` (no suffix) but the actual
+        // served path is `/apple-icon.png` (file convention name).
+        // Every iOS Add-to-Home-Screen fetch was hitting Vercel
+        // uncached. Caught by /loop tick 47.
+        source: "/apple-icon.png",
         headers: [{ key: "Cache-Control", value: "public, max-age=86400, s-maxage=86400" }],
       },
       {
