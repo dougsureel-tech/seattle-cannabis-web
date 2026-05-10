@@ -98,6 +98,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: `Shop ${brand.name} cannabis products at ${STORE.name} in Rainier Valley, Seattle WA. ${brand.activeSkus} products in stock.`,
     alternates: { canonical: `/brands/${slug}` },
     openGraph: {
+      locale: "en_US",
       title: `${brand.name} | ${STORE.name}`,
       description: `Browse ${brand.name} products available at Seattle Cannabis Co., Rainier Valley WA.`,
       ...(brand.logoUrl ? { images: [{ url: brand.logoUrl }] } : {}),

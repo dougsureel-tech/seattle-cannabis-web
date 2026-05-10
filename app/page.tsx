@@ -41,6 +41,7 @@ export const metadata: Metadata = {
   description: `${STORE.name} at ${STORE.address.full}. 5 min from Othello Light Rail. Founded 2010. Open 8 AM–11 PM. Cash only, 21+.`,
   alternates: { canonical: "/" },
   openGraph: {
+    locale: "en_US",
     type: "website",
     url: STORE.website,
     siteName: STORE.name,

@@ -26,6 +26,7 @@ export const metadata: Metadata = {
     "Rainier Valley cannabis store",
   ],
   openGraph: {
+    locale: "en_US",
     title: `Visit ${STORE.name}`,
     description: `${STORE.address.full} · ${STORE.phone} · Free parking, near Othello Light Rail.`,
     url: `${STORE.website}/visit`,

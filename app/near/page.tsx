@@ -27,6 +27,7 @@ export const metadata: Metadata = {
     "Mt Baker dispensary",
   ],
   openGraph: {
+    locale: "en_US",
     title: `Service Area · ${STORE.name}`,
     description: `${STORE.name} serves ${NEAR_TOWNS.length} Seattle-area neighborhoods + south-of-city catchments.`,
     url: `${STORE.website}/near`,
