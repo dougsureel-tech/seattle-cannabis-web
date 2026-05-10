@@ -36,7 +36,11 @@ export const metadata: Metadata = {
   // Homepage-specific title — distinct from /menu so / earns brand-search
   // landing and /menu shows up as a sitelink underneath. Founded year +
   // neighborhood anchor signals "this is the canonical entity page."
-  title: `${STORE.name} — ${STORE.neighborhood} Dispensary Since 2010`,
+  // title.absolute drops template suffix `| Seattle Cannabis Co.` so brand
+  // appears once. Pre-fix body baked the brand + template appended again
+  // ("Seattle Cannabis Co. — Rainier Valley Dispensary Since 2010 | Seattle
+  // Cannabis Co.", 81 chars, brand x2). T27 duplicate-brand arc-guard catch.
+  title: { absolute: `${STORE.name} — ${STORE.neighborhood} Dispensary Since 2010` },
   // ~150 chars — v11.005 length sweep.
   description: `${STORE.name} at ${STORE.address.full}. 5 min from Othello Light Rail. Founded 2010. Open 8 AM–11 PM. Cash only, 21+.`,
   alternates: { canonical: "/" },

@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { VendorAccessForm } from "./VendorAccessForm";
 
 export const metadata: Metadata = {
-  title: "Vendor portal access — Seattle Cannabis Co.",
+  // Drop brand — template appends. T27 catch.
+  title: "Vendor portal access",
   description:
     "Are you a brand we carry (or want us to carry)? Request access to our vendor portal — upload product photos, brand kits, see what we're displaying.",
   alternates: { canonical: "/vendor-access" },

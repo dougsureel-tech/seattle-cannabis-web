@@ -259,7 +259,8 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { cohort } = await params;
   const c = COHORTS[cohort];
-  if (!c) return { title: `Heroes · ${STORE.name}` };
+  // Drop ${STORE.name} — template appends brand once. T27 catch.
+  if (!c) return { title: "Heroes" };
   return {
     // title.absolute drops template suffix `· Seattle Cannabis Co.` so all
     // 5 cohort pages stay under Google ~60-char SERP cap. metaTitle ends

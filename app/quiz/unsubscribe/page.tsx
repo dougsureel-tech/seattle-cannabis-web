@@ -98,7 +98,8 @@ export default async function QuizUnsubscribePage({
 }
 
 export const metadata = {
-  title: "Unsubscribed — Seattle Cannabis Co.",
+  // Drop brand — template appends. T27 catch.
+  title: "Unsubscribed",
   description: "You've been unsubscribed from strain-finder quiz emails.",
   robots: { index: false, follow: false },
 };
