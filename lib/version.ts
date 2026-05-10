@@ -3,6 +3,7 @@
 // comes from Vercel automatically on every deploy and is the authoritative
 // "did my push actually land" signal.
 
+// 13.7405 — 🚨 Removed AggregateRating + Review JSON-LD schema from `components/Reviews.tsx`. Sister glw v19.705. Hardcoded REVIEWS array (per its own file comment "real review-aggregator integration is a follow-up") was being emitted as schema.org Review/AggregateRating — risked Google structured-data manual action ("self-serving reviews" per Google Search Central policy on review snippets) and FTC scrutiny on attributed quotes (named "customers" with cities + dates not verifiably real). Visual testimonial UI kept; "Leave us a review on Google" CTA still lands at GMB. Schema reinstates once GBP-pull integration ships (`apps/staff/.../pull-gbp-reviews/route.ts` — Google approval pending Case 0-8857000041037). Pre-fix: 6 JSON-LD blocks on homepage; post-fix: 5 (Org + WebSite + LocalBusiness/Store + HowTo + FAQPage retained — factual, not fabricated). Caught 2026-05-10 by /loop SEO/AI relevance pivot.
 // 13.6305 — 📧 Email preheader on welcome/order-confirm/quiz-nurture templates. Sister glw v18.605. Inbox-preview snippet (hidden in body but surfaced by Gmail/Apple Mail/Outlook) — pre-fix fell back to brand boilerplate. Caught by /loop tick 74.
 // 13.6205 — ♿ Email a11y — `role="presentation"` on 7 layout `<table>` tags in transactional emails. Sister glw v18.505 + GW v2.97.C0. WCAG 1.3.1 hardening — screen readers no longer announce layout tables as data tables. Caught by /loop tick 73 round-3 dimension shift.
 // 13.6105 — 🛡️ NEW arc-guard `scripts/check-button-type.mjs` — pins T69 against regression. Sister glw v18.405 + GW v2.97.B0. 0/0 across all 3 repos post-T69 sweep. Caught by /loop tick 70.
@@ -328,7 +329,7 @@
 // 13.7105 — 🌐 BreadcrumbList @id swept across 3 more scc inner pages — /community, /visit, /menu. Sister of glw v19.405 same shape. tsc clean.
 // 13.7205 — 🌐 NEW BreadcrumbList added on /treasure-chest + /vendor-access (sister glw v19.505). tsc clean.
 // 13.7305 — 🌐 BreadcrumbList @id on /contact + NEW BreadcrumbList on /accessibility + FAQPage @id (sister glw v19.605). Closes inner-page BreadcrumbList sweep. tsc clean.
-export const BUILD_VERSION = "13.7305";
+export const BUILD_VERSION = "13.7405";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ||

@@ -1,13 +1,13 @@
 import { STORE } from "@/lib/store";
 
-// Customer review block + aggregate rating + per-review JSON-LD. Reviews
-// hardcoded for now (real review-aggregator integration is a follow-up);
-// admin can swap to a CMS or Google Reviews pull without changing the schema.
-//
-// Why this matters: AggregateRating + Review schemas are what AI engines
-// (ChatGPT / Perplexity / Google AI Overviews) lift to answer trust-related
-// queries — "is Seattle Cannabis Co any good?" — and they're what populates
-// star-rating rich results in classic Google SERPs.
+// Customer review block — visual-only testimonials. AggregateRating + Review
+// JSON-LD schema was removed at v13.7405: the REVIEWS array is curated copy,
+// not verified first-party reviews from a primary review source (Google,
+// Yelp, Leafly), so emitting it as schema.org Review/AggregateRating risked
+// a Google structured-data manual action ("self-serving reviews") and FTC
+// scrutiny on attributed quotes. Reinstate the schema once the GBP-pull
+// integration ships and these get replaced with real Google review data
+// (see `pull-gbp-reviews/route.ts` in the inv app — approval pending).
 
 type Review = {
   author: string;
@@ -92,36 +92,6 @@ function initialsOf(author: string): string {
 }
 
 export function ReviewsSection() {
-  // Per-review + aggregate JSON-LD. Linked to the LocalBusiness @id from
-  // layout.tsx so AI engines + Google connect them to the right entity.
-  const reviewsLd = {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "AggregateRating",
-        "@id": `${STORE.website}/#aggregate-rating`,
-        itemReviewed: { "@id": `${STORE.website}/#dispensary` },
-        ratingValue: avgRating.toFixed(2),
-        reviewCount: totalReviews,
-        bestRating: 5,
-        worstRating: 1,
-      },
-      ...REVIEWS.map((r, i) => ({
-        "@type": "Review",
-        "@id": `${STORE.website}/#review-${i}`,
-        itemReviewed: { "@id": `${STORE.website}/#dispensary` },
-        author: {
-          "@type": "Person",
-          name: r.author,
-          address: { "@type": "PostalAddress", addressLocality: r.city, addressRegion: "WA" },
-        },
-        datePublished: r.date,
-        reviewBody: r.text,
-        reviewRating: { "@type": "Rating", ratingValue: r.rating, bestRating: 5, worstRating: 1 },
-      })),
-    ],
-  };
-
   return (
     <section className="bg-white border-y border-stone-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
@@ -200,8 +170,6 @@ export function ReviewsSection() {
             them — the bad and the great both go up.
           </p>
         </div>
-
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewsLd) }} />
       </div>
     </section>
   );
