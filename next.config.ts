@@ -286,8 +286,13 @@ const nextConfig: NextConfig = {
       { source: "/pickup-order", destination: "/menu", permanent: true },
       { source: "/location-map", destination: "/visit", permanent: true },
       { source: "/education", destination: "/learn", permanent: true },
-      { source: "/cookie-policy", destination: "/privacy", permanent: true },
-      { source: "/privacy-statement", destination: "/privacy", permanent: true },
+      // Both target /health-data-policy — the WA Consumer Health Data Act-
+      // required privacy doc IS the public privacy policy for cannabis retail.
+      // Pre-fix these chained through /privacy → /about which is now wrong
+      // because real legal pages exist at /health-data-policy + /terms-of-use.
+      // Sister glw same-push.
+      { source: "/cookie-policy", destination: "/health-data-policy", permanent: true },
+      { source: "/privacy-statement", destination: "/health-data-policy", permanent: true },
 
       // Round-4 legacy alias sweep. Sister glw v9.805.
       // Generic-cannabis SEO-term aliases:
@@ -331,16 +336,21 @@ const nextConfig: NextConfig = {
       { source: "/team", destination: "/about", permanent: true },
       { source: "/staff", destination: "/about", permanent: true },
 
-      // /privacy + /terms aren't real pages on the new site (operating
-      // disclosures live on /about + the WSLCB-required posters in-store).
-      // Redirect to /about so old-indexed URLs land on something rather
-      // than 404.
-      { source: "/privacy-policy", destination: "/about", permanent: true },
-      { source: "/privacy", destination: "/about", permanent: true },
-      { source: "/terms-of-service", destination: "/about", permanent: true },
-      { source: "/terms-and-conditions", destination: "/about", permanent: true },
-      { source: "/terms", destination: "/about", permanent: true },
-      { source: "/tos", destination: "/about", permanent: true },
+      // /privacy + /terms short-form aliases. Pre-fix all 6 redirected to
+      // /about — that comment was true at the time (no real legal pages
+      // existed) but is now WRONG because real pages live at:
+      //   /health-data-policy  (WA Consumer Health Data Act privacy notice)
+      //   /terms-of-use        (Terms of Use)
+      // A customer searching "Seattle Cannabis Co privacy policy" landing on
+      // /about (which doesn't have privacy info) was a soft-bug. Sister glw
+      // same-push. Caught 2026-05-10 by /loop cross-stack canonical-trailing-
+      // slash sweep when /privacy + /terms titles came back as "About — …".
+      { source: "/privacy-policy", destination: "/health-data-policy", permanent: true },
+      { source: "/privacy", destination: "/health-data-policy", permanent: true },
+      { source: "/terms-of-service", destination: "/terms-of-use", permanent: true },
+      { source: "/terms-and-conditions", destination: "/terms-of-use", permanent: true },
+      { source: "/terms", destination: "/terms-of-use", permanent: true },
+      { source: "/tos", destination: "/terms-of-use", permanent: true },
 
       // WP author/category/tag archives — never had real customer value;
       // collapse to /blog so inbound links don't dead-end.
