@@ -12,6 +12,25 @@ import { NEAR_TOWNS } from "@/lib/near-towns";
 // Sister of inv v342.605 + glw v8.165 cross-repo port.
 export const revalidate = 1800;
 
+// Domains we will NEVER emit as <image:image> in the sitemap, even if
+// the vendors.logoUrl DB field points at one. Per memory
+// `feedback_vendor_logo_sources`: vendor logos must come from the
+// brand's own site/CDN, NOT from third-party aggregators (Weedmaps,
+// Leafly, etc.). Sister of glw v13.905 same fix — glw caught one
+// `1555-industrial-llc` weedmaps logo via /loop tick 15 brand-page
+// health audit; scc has none currently but the defensive filter
+// prevents the policy violation from leaking via DB drift.
+const BANNED_LOGO_DOMAINS = ["weedmaps.com", "leafly.com", "leafly.ca"];
+
+function isBannedLogoUrl(url: string): boolean {
+  try {
+    const host = new URL(url).hostname.toLowerCase();
+    return BANNED_LOGO_DOMAINS.some((banned) => host === banned || host.endsWith(`.${banned}`));
+  } catch {
+    return true;  // malformed → drop
+  }
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [brands, deals] = await Promise.all([
     getActiveBrands().catch(() => []),
@@ -126,7 +145,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
       // Image-extension entry — Google Image search picks the brand
       // logo as the canonical preview. Skips brands without a logo URL.
-      ...(b.logoUrl ? { images: [b.logoUrl] } : {}),
+      ...(b.logoUrl && !isBannedLogoUrl(b.logoUrl) ? { images: [b.logoUrl] } : {}),
     }));
 
   const postPages: MetadataRoute.Sitemap = posts.map((p) => ({
