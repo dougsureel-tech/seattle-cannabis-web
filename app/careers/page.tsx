@@ -48,7 +48,10 @@ async function fetchOpenPositions(): Promise<Position[]> {
 }
 
 export const metadata: Metadata = {
-  title: "Careers — Seattle Cannabis Co.",
+  // Trimmed 2026-05-10 — title-template `· {brand}` suffix was producing
+  // "Careers — Seattle Cannabis Co. | Seattle Cannabis Co." (duplicate
+  // brand). title.absolute bypasses the suffix; brand kept once.
+  title: { absolute: "Careers — Rainier Valley Cannabis | Seattle Cannabis Co." },
   description: `Open positions at ${STORE.name} in Rainier Valley, Seattle. Apply online — we review every application.`,
   alternates: { canonical: "/careers" },
   openGraph: {
