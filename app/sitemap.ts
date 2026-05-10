@@ -31,6 +31,14 @@ function isBannedLogoUrl(url: string): boolean {
   }
 }
 
+// Static-page lastModified — hardcoded date, not `new Date()`. Pre-fix
+// every truly-static page stamped lastmod with the sitemap-build
+// timestamp; Google saw "this page changed today" on every crawl,
+// wasting crawl budget. Bump this constant manually when static
+// content actually changes (FAQ rewrite, hours change, team-roster
+// edit, etc.). Sister glw v17.505 same-fix. Doug-action #3 closure.
+const STATIC_LASTMOD = new Date("2026-05-10");
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [brands, deals] = await Promise.all([
     getActiveBrands().catch(() => []),
@@ -55,10 +63,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // the sitemap → Google never indexed it. Daily changeFrequency since
     // products move in/out as inventory turns. Sister: glw v4.825.
     { url: `${STORE.website}/treasure-chest`, lastModified: new Date(), changeFrequency: "daily", priority: 0.7 },
-    { url: `${STORE.website}/find-your-strain`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
+    { url: `${STORE.website}/find-your-strain`, lastModified: STATIC_LASTMOD, changeFrequency: "weekly", priority: 0.8 },
     {
       url: `${STORE.website}/heroes`,
-      lastModified: new Date(),
+      lastModified: STATIC_LASTMOD,
       changeFrequency: "monthly",
       priority: 0.8,
     },
@@ -67,61 +75,61 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // cannabis discount, SPD weed discount, etc.). Static-rendered.
     ...["veterans", "military", "first-responders", "healthcare", "teachers"].map((slug) => ({
       url: `${STORE.website}/heroes/${slug}`,
-      lastModified: new Date(),
+      lastModified: STATIC_LASTMOD,
       changeFrequency: "monthly" as const,
       priority: 0.75,
     })),
     {
       url: `${STORE.website}/community`,
-      lastModified: new Date(),
+      lastModified: STATIC_LASTMOD,
       changeFrequency: "monthly",
       priority: 0.7,
     },
-    { url: `${STORE.website}/blog`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
-    { url: `${STORE.website}/about`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
-    { url: `${STORE.website}/visit`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.85 },
-    { url: `${STORE.website}/contact`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
+    { url: `${STORE.website}/blog`, lastModified: STATIC_LASTMOD, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${STORE.website}/about`, lastModified: STATIC_LASTMOD, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${STORE.website}/visit`, lastModified: STATIC_LASTMOD, changeFrequency: "weekly", priority: 0.85 },
+    { url: `${STORE.website}/contact`, lastModified: STATIC_LASTMOD, changeFrequency: "monthly", priority: 0.6 },
     {
       url: `${STORE.website}/press`,
-      lastModified: new Date(),
+      lastModified: STATIC_LASTMOD,
       changeFrequency: "monthly",
       priority: 0.5,
     },
-    { url: `${STORE.website}/faq`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
-    { url: `${STORE.website}/learn`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.75 },
+    { url: `${STORE.website}/faq`, lastModified: STATIC_LASTMOD, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${STORE.website}/learn`, lastModified: STATIC_LASTMOD, changeFrequency: "monthly", priority: 0.75 },
     {
       url: `${STORE.website}/accessibility`,
-      lastModified: new Date(),
+      lastModified: STATIC_LASTMOD,
       changeFrequency: "monthly",
       priority: 0.5,
     },
     {
       url: `${STORE.website}/careers`,
-      lastModified: new Date(),
+      lastModified: STATIC_LASTMOD,
       changeFrequency: "weekly",
       priority: 0.6,
     },
     {
       url: `${STORE.website}/terms-of-use`,
-      lastModified: new Date(),
+      lastModified: STATIC_LASTMOD,
       changeFrequency: "yearly",
       priority: 0.3,
     },
     {
       url: `${STORE.website}/health-data-policy`,
-      lastModified: new Date(),
+      lastModified: STATIC_LASTMOD,
       changeFrequency: "yearly",
       priority: 0.3,
     },
     {
       url: `${STORE.website}/vendor-access`,
-      lastModified: new Date(),
+      lastModified: STATIC_LASTMOD,
       changeFrequency: "monthly",
       priority: 0.4,
     },
     {
       url: `${STORE.website}/apply`,
-      lastModified: new Date(),
+      lastModified: STATIC_LASTMOD,
       changeFrequency: "weekly",
       priority: 0.5,
     },
