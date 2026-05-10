@@ -75,9 +75,11 @@ const IHEARTJANE_EMBED_CONFIG_ID = 222;
 // /menu TTFB if Jane/Dutchie is unreachable. Failure silently swallowed.
 async function prewarmDutchieMenu(): Promise<void> {
   try {
+    // CDN-cache fix (sister glw v20.605): was `cache: "no-store"` which
+    // opted /menu out of ISR. Switched to `next: { revalidate: 60 }`.
     await fetch(
       `https://api.iheartjane.com/api/v1/stores/${IHEARTJANE_STORE_ID}/menu_products?per_page=1`,
-      { signal: AbortSignal.timeout(1500), cache: "no-store" },
+      { signal: AbortSignal.timeout(1500), next: { revalidate: 60 } },
     );
   } catch {
     // expected: timeout, Jane down, network blip — page render proceeds
