@@ -35,12 +35,17 @@ export const metadata: Metadata = {
 // AboutPage schema — links back to LocalBusiness @id from layout.tsx so
 // AI engines + Google graph this page as the same store entity. Big GEO
 // add for "who owns Seattle Cannabis Co" / "Seattle Cannabis Co history".
+//
+// `image` points at the OG image so SERP knowledge-panel cards have a
+// thumbnail (Google falls back to a generic icon if no image is provided).
+// Sister of glw v11.705.
 const aboutSchema = {
   "@context": "https://schema.org",
   "@type": "AboutPage",
   name: `About ${STORE.name}`,
   url: `${STORE.website}/about`,
   description: `Rainier Valley locally-owned cannabis dispensary — founded 2010, in Rainier Valley since 2018, neighborhood community-focused.`,
+  image: `${STORE.website}/opengraph-image`,
   mainEntity: { "@id": `${STORE.website}/#dispensary` },
   inLanguage: "en-US",
   isPartOf: { "@id": `${STORE.website}/#website` },
