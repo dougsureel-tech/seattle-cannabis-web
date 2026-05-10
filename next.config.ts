@@ -149,6 +149,15 @@ const nextConfig: NextConfig = {
         source: "/manifest.webmanifest",
         headers: [{ key: "Cache-Control", value: "public, max-age=3600, s-maxage=3600" }],
       },
+      // X-Robots-Tag noindex on /api/* — defense-in-depth on top of
+      // robots.txt. robots.txt blocks crawlers from fetching but doesn't
+      // prevent indexing-without-crawling when API URLs leak via
+      // Slack/Twitter unfurls or email shares. Sister glw v16.105
+      // same-fix. Caught by /loop tick 38 cross-stack header audit.
+      {
+        source: "/api/:path*",
+        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+      },
     ];
   },
   // **/menu + /order rule (DO NOT REMOVE):** never add a redirect that
