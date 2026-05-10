@@ -28,7 +28,9 @@ export async function generateMetadata({
   const area = getTown(slug);
   if (!area) return { title: "Not found" };
 
-  const title = `${area.name} Dispensary — ${STORE.name}`;
+  // title.absolute drops template suffix `· Seattle Cannabis Co.` so
+  // /near/* pages stay under Google ~60-char SERP cap. Sister glw same-push.
+  const title = { absolute: `${area.name} Dispensary — ${STORE.name}` } as const;
   // Pre-fix template combined `area.name → STORE: N min. pitch. Open
   // daily 8 AM–11 PM, cash only, 21+.` which ran 200+ chars on the
   // longest /near/[town] entries (e.g. /near/west-seattle = 219 chars).

@@ -257,7 +257,11 @@ export async function generateMetadata({
   const c = COHORTS[cohort];
   if (!c) return { title: `Heroes · ${STORE.name}` };
   return {
-    title: c.metaTitle,
+    // title.absolute drops template suffix `· Seattle Cannabis Co.` so all
+    // 5 cohort pages stay under Google ~60-char SERP cap. metaTitle ends
+    // with STORE.name then template suffix duplicated it (79-99 chars).
+    // Sister glw + GW + cannagent title.absolute pattern arc.
+    title: { absolute: c.metaTitle },
     description: c.metaDescription,
     keywords: c.searchKeywords,
     alternates: { canonical: `/heroes/${c.slug}` },
