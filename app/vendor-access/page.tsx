@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { VendorAccessForm } from "./VendorAccessForm";
+import { STORE } from "@/lib/store";
+import { safeJsonLd } from "@/lib/json-ld-safe";
 
 export const metadata: Metadata = {
   // Drop brand — template appends. T27 catch.
@@ -10,9 +12,24 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
+// T95 sister of glw v19.505.
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "@id": `${STORE.website}/vendor-access#breadcrumb`,
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: STORE.website },
+    { "@type": "ListItem", position: 2, name: "Vendor Access", item: `${STORE.website}/vendor-access` },
+  ],
+};
+
 export default function VendorAccessPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbSchema) }}
+      />
       <div className="relative overflow-hidden bg-indigo-950 text-white py-10 sm:py-14">
         <div
           className="absolute inset-0 opacity-[0.07]"
