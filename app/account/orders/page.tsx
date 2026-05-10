@@ -91,7 +91,7 @@ export default async function OrderHistoryPage() {
     try {
       await notifyReadyOrders(portalUser.id);
     } catch (e) {
-      console.error("[orders] notifyReadyOrders failed", e);
+      console.error("[orders] notifyReadyOrders failed", e instanceof Error ? e.name : String(e));
     }
   });
 
