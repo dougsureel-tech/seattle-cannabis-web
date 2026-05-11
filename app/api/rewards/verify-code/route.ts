@@ -32,13 +32,18 @@ import { normalizeToE164 } from "@/lib/sms";
 import { createHash, createHmac, timingSafeEqual } from "node:crypto";
 import { DAY_MS, MINUTE_MS } from "@/lib/time-constants";
 import { createRateLimiter } from "@/lib/rate-limit";
+import { REWARDS_COOKIE_NAME } from "@/lib/rewards-session";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 const MAX_ATTEMPTS = 5;
 const SESSION_TTL_DAYS = 30;
-const COOKIE_NAME = "scc_rewards_session";
+// SSoT — imported from lib/rewards-session.ts so issue/read/clear paths
+// can't drift apart (sister of `feedback_cookie_attribute_symmetry_audit`).
+// Pre-fix this was `const COOKIE_NAME = "scc_rewards_session"` inline,
+// duplicating the exported `REWARDS_COOKIE_NAME` value silently.
+const COOKIE_NAME = REWARDS_COOKIE_NAME;
 
 // Per-IP rate limit on verify-code POSTs. Each call runs a DB SELECT on
 // loyalty_otp_codes by phone (composite-indexed but still a DB hop) +
