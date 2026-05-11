@@ -278,6 +278,12 @@ const nextConfig: NextConfig = {
       { source: "/tinctures", destination: "/menu", permanent: true },
       { source: "/accessories", destination: "/menu", permanent: true },
       { source: "/strain/:slug*", destination: "/find-your-strain", permanent: true },
+      // /pricing — dispensaries publish prices ON the menu (per-product live).
+      // No standalone pricing page. Inbound /pricing typists (e.g. competitor
+      // research, agency directories, partner-directory typos) land on /menu
+      // where the actual prices live. Caught by 2026-05-10 cross-stack 404 audit.
+      // Sister of glw v21.x same redirect.
+      { source: "/pricing", destination: "/menu", permanent: true },
 
       // Common e-commerce-platform legacy URL patterns that 404'd pre-fix.
       // /cart + /buy are universal Shopify/WooCommerce legacy aliases;
