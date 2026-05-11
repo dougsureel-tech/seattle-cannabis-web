@@ -99,7 +99,7 @@ export default function CommunityPage() {
             </div>
             <div className="flex-1">
               <p className="text-stone-700 leading-relaxed">
-                Past Seattle Cannabis Co. staff — drop us a line at{" "}
+                Past Seattle Cannabis Co. staff — email us at{" "}
                 <a
                   href={`mailto:${STORE.email}?subject=${encodeURIComponent("Past staff — alumni signup")}`}
                   className="font-semibold text-indigo-700 hover:underline"

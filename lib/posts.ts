@@ -111,7 +111,7 @@ If you're coming from elsewhere in the city: we're 10 minutes south of Beacon Hi
 
 Cannabis affects everyone differently. Don't drive impaired. Don't combine with alcohol if you're new — the interaction surprises people. Lock products away from children and pets — gummies look like candy, and dogs respond very poorly to THC.
 
-If you have questions we didn't cover, [come ask us](/contact) or [give us a call](tel:${STORE.phoneTel}). Our budtenders are happy to talk you through anything.
+If you have questions we didn't cover, [come ask us](/contact) or [call us](tel:${STORE.phoneTel}). Our budtenders are happy to talk you through anything.
 `,
   },
   {
