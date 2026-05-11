@@ -289,7 +289,7 @@ export default async function HomePage() {
                   </svg>
                 </PrimaryCTA>
                 <PrimaryCTA href={withAttr(STORE.shopUrl, "home", "hero-order")} variant="secondary">
-                  Order Online — 20% Off
+                  Order Online · 20% off
                 </PrimaryCTA>
               </div>
 
