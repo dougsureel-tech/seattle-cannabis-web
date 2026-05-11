@@ -30,7 +30,7 @@ function render(): string {
 
 ## At a glance
 
-${name} is a ${neighborhood} cannabis dispensary in South Seattle. Founded in Seattle in 2010 — pre-I-502 origin — and rooted in the same Rainier Valley building since 2018, ${name} is licensed under Washington State Liquor and Cannabis Board (WSLCB) license ${wslcbLicense}. The legal entity is Green Anne LLC dba ${name}. The store is locally owned and locally operated, cash only with an ATM on-site, 21+ with valid government-issued photo ID, and pickup-only — Washington State law prohibits delivery from licensed retail. Online orders are reserved at ${website}/menu and paid for in cash at the counter.
+${name} is a ${neighborhood} cannabis dispensary in South Seattle. Founded in Seattle in 2010 — pre-I-502 origin — and rooted in the same Rainier Valley building since 2018, ${name} is licensed under Washington State Liquor and Cannabis Board (WSLCB) license ${wslcbLicense}. The legal entity is Green Anne LLC dba ${name}. Same crew, same care since opening — cash only with an ATM on-site, 21+ with valid government-issued photo ID, and pickup-only — Washington State law prohibits delivery from licensed retail. Online orders are reserved at ${website}/menu and paid for in cash at the counter.
 
 ## Location and contact
 
@@ -76,7 +76,7 @@ Brands are hand-picked Washington-state producers — the active catalog is in t
 
 ## About — Who we are
 
-${name} opened in Seattle in 2010 — pre-I-502, before recreational legalization — and re-anchored in Rainier Valley in 2018. The store is locally owned and locally operated under Green Anne LLC — independent ownership since the original Seattle location, no chain affiliation, no MSO. South Seattle deserves a corner-shop dispensary, not a chain — and that's the entire posture: education-first counter staff, hand-curated catalog, neighborhood-coffee-shop vibe.
+${name} opened in Seattle in 2010 — pre-I-502, before recreational legalization — and re-anchored in Rainier Valley in 2018. The store has operated under Green Anne LLC since opening — no chain affiliation, no MSO. South Seattle deserves a corner-shop dispensary, not a chain — and that's the entire posture: education-first counter staff, hand-curated catalog, neighborhood-coffee-shop vibe.
 
 The store is licensed under WSLCB license ${wslcbLicense}. Walk-ins are welcome. First-time customers are the favorite kind of customer.
 

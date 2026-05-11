@@ -28,7 +28,7 @@ const FACTS: { label: string; value: string }[] = [
   { label: "Hours", value: "8 AM – 11 PM daily" },
   { label: "WSLCB License", value: STORE.wslcbLicense },
   { label: "Founded", value: FOUNDED_YEAR },
-  { label: "Owner", value: "Green Anne LLC · locally owned, independent" },
+  { label: "Owner", value: "Green Anne LLC · 16+ years in Rainier Valley" },
   {
     label: "Region",
     value: `${STORE.neighborhood}, plus ${STORE.nearbyNeighborhoods.slice(0, 3).join(", ")}`,
@@ -131,10 +131,9 @@ export default function PressPage() {
           <div className="prose prose-stone max-w-none text-stone-700 text-base leading-relaxed">
             <p>
               {STORE.name} sits on Rainier Avenue in the heart of {STORE.neighborhood} — the corridor between
-              Seward Park and Othello Station. Locally owned, neighborhood-staffed, stocked from
-              Washington-state farms with an emphasis on smaller cultivators most chains skip. We stay open
-              until 11 every night because South Seattle deserves more than the same three big-chain shops on
-              MLK.
+              Seward Park and Othello Station. Neighborhood-staffed since 2018, stocked from Washington-state
+              farms with an emphasis on smaller cultivators most chains skip. We stay open until 11 every night
+              because South Seattle deserves more than the same three big-chain shops on MLK.
             </p>
             <p>
               The store has free parking, ADA access, dogs welcome, and an ATM on-site. Cash-only at the

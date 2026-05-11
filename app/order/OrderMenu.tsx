@@ -1314,7 +1314,7 @@ export function OrderMenu({
               Stuck? Walk in.
             </p>
             <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight mb-2">
-              Locally owned since 2010.
+              Same crew, same care since 2010.
             </h2>
             <p className="text-indigo-100/85 text-sm leading-relaxed mb-4 max-w-xl">
               The menu is a starting point. We&apos;ve been here longer than legal weed in Washington —

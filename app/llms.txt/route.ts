@@ -99,10 +99,10 @@ A: ${name} is in ${neighborhood}, closest to ${STORE.nearbyNeighborhoods.slice(0
 A: Browse the menu at ${website}/menu, sign in or create an account, build your cart, choose a 15-minute pickup window, then pay cash at the counter. First online order is 20% off.
 
 **Q: What's the difference between indica, sativa, and hybrid?**
-A: Indica = traditionally relaxing, body-heavy. Sativa = traditionally energizing, uplifting. Hybrid = somewhere in between. Terpene profiles and individual chemistry matter more than these categories — staff can guide.
+A: Indica = traditionally body-heavy. Sativa = traditionally head-forward. Hybrid = somewhere in between. Terpene profiles and individual chemistry shape how a strain lands more than these categories — staff can guide.
 
-**Q: Is ${name} locally owned?**
-A: Yes — ${name} is operated by Green Anne LLC, founded in Seattle in 2010, in Rainier Valley since 2018. Locally owned and locally operated.
+**Q: How long has ${name} been around?**
+A: ${name} is operated by Green Anne LLC, founded in Seattle in 2010, in Rainier Valley since 2018. Same crew, same care since opening.
 
 ## Social
 
