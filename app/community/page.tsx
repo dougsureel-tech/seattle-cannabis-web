@@ -15,7 +15,7 @@ import { safeJsonLd } from "@/lib/json-ld-safe";
 
 export const metadata: Metadata = {
   title: "Our Community — People & Partners",
-  description: `The folks who built and continue to build ${STORE.name}. Past staff, future partners. We're growing the community over time.`,
+  description: `The folks who built and continue to build ${STORE.name} Past staff, future partners. We're growing the community over time.`,
   alternates: { canonical: "/community" },
   openGraph: {
     siteName: STORE.name,

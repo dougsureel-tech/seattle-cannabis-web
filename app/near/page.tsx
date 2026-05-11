@@ -44,7 +44,7 @@ export default function NearIndexPage() {
     "@context": "https://schema.org",
     "@type": "ItemList",
     name: `${STORE.name} service area`,
-    description: `Seattle-area neighborhoods + south-of-city catchments served by ${STORE.name}.`,
+    description: `Seattle-area neighborhoods + south-of-city catchments served by ${STORE.name}`,
     numberOfItems: NEAR_TOWNS.length,
     itemListElement: NEAR_TOWNS.map((t, i) => ({
       "@type": "ListItem",

@@ -85,7 +85,7 @@ const COHORTS: Record<string, Cohort> = {
     label: "Active Military",
     metaTitle: `Active Military Discount Seattle — ${STORE.name}`,
     // Trimmed 173 → 152 chars 2026-05-10 — was over Google ~160 SERP cap.
-    metaDescription: `Active-duty service members get 30% off every visit at ${STORE.name}. CAC, military ID, or current orders accepted. Guard + Reserves welcome.`,
+    metaDescription: `Active-duty service members get 30% off every visit at ${STORE.name} CAC, military ID, or current orders accepted. Guard + Reserves welcome.`,
     heroEyebrow: "For active duty",
     heroH1: "On post or off, we've got you.",
     heroLead:
@@ -120,7 +120,7 @@ const COHORTS: Record<string, Cohort> = {
     label: "First Responders",
     metaTitle: `First Responder Discount Seattle — ${STORE.name}`,
     // Trimmed 175 → 156 chars 2026-05-10.
-    metaDescription: `Seattle-area first responders get 30% off every visit at ${STORE.name}. SPD, KCSO, Seattle Fire, AMR — show your badge or department ID.`,
+    metaDescription: `Seattle-area first responders get 30% off every visit at ${STORE.name} SPD, KCSO, Seattle Fire, AMR — show your badge or department ID.`,
     heroEyebrow: "For first responders",
     heroH1: "The shift is hard. We get it.",
     heroLead:
@@ -160,7 +160,7 @@ const COHORTS: Record<string, Cohort> = {
     label: "Healthcare Workers",
     metaTitle: `Healthcare Worker Discount Seattle — ${STORE.name}`,
     // Trimmed 172 → 158 chars 2026-05-10.
-    metaDescription: `Nurses, doctors, hospital + clinic staff get 30% off at ${STORE.name}. UW Medicine, Swedish, Virginia Mason, Harborview, Kaiser — show your badge.`,
+    metaDescription: `Nurses, doctors, hospital + clinic staff get 30% off at ${STORE.name} UW Medicine, Swedish, Virginia Mason, Harborview, Kaiser — show your badge.`,
     heroEyebrow: "For healthcare",
     heroH1: "We see what you do.",
     heroLead:
@@ -204,7 +204,7 @@ const COHORTS: Record<string, Cohort> = {
     label: "K-12 Teachers",
     metaTitle: `Teacher Discount Seattle — ${STORE.name}`,
     // Trimmed 179 → 156 chars 2026-05-10.
-    metaDescription: `Seattle Public Schools + WA K-12 teachers get 30% off at ${STORE.name}. Show your district ID or pay stub. Public, private, charter — all welcome.`,
+    metaDescription: `Seattle Public Schools + WA K-12 teachers get 30% off at ${STORE.name} Show your district ID or pay stub. Public, private, charter — all welcome.`,
     heroEyebrow: "For teachers",
     heroH1: "Thank you for shaping the next generation.",
     heroLead:

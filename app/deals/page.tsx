@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     siteName: STORE.name,
     locale: "en_US",
     title: `Cannabis Deals | ${STORE.name}`,
-    description: `Live deals at ${STORE.name}. ${STORE.address.full}.`,
+    description: `Live deals at ${STORE.name} ${STORE.address.full}.`,
     url: `${STORE.website}/deals`,
     type: "website",
     // Explicit reference to the root opengraph-image.tsx route — without it,

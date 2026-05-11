@@ -36,7 +36,7 @@ export default async function BlogIndex() {
     "@type": "Blog",
     "@id": `${STORE.website}/blog#blog`,
     name: `${STORE.name} Blog`,
-    description: `Cannabis guides and vendor spotlights from ${STORE.name}.`,
+    description: `Cannabis guides and vendor spotlights from ${STORE.name}`,
     url: `${STORE.website}/blog`,
     publisher: { "@id": `${STORE.website}/#dispensary` },
     blogPost: posts.map((p) => ({

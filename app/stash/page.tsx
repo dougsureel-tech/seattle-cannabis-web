@@ -9,7 +9,7 @@ export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: "Your Stash",
-  description: `Your saved cannabis products at ${STORE.name}. No login required — your favorites live in your browser and follow you back here next visit.`,
+  description: `Your saved cannabis products at ${STORE.name} No login required — your favorites live in your browser and follow you back here next visit.`,
   alternates: { canonical: "/stash" },
   // Stash is a per-visitor view, no public content — keep it out of indexes.
   robots: { index: false, follow: true },

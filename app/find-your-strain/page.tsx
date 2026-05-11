@@ -8,7 +8,10 @@ import { safeJsonLd } from "@/lib/json-ld-safe";
 export const metadata: Metadata = {
   title: "Find Your Strain — 3-Question Quiz",
   // ~155 chars — v11.005 length sweep.
-  description: `Quick 3-question quiz to match you with the right cannabis at ${STORE.name}. Pick a moment, a form, and a strain type — we filter the live menu.`,
+  // ${STORE.name} ends with "Co." — template doesn't add its own "." (that
+  // produced "Co.." in SERP descriptions pre-fix). Cross-stack issue swept
+  // 2026-05-11 across 9 scc surfaces with this STORE.name + "." pattern.
+  description: `Quick 3-question quiz to match you with the right cannabis at ${STORE.name} Pick a moment, a form, and a strain type — we filter the live menu.`,
   alternates: { canonical: "/find-your-strain" },
   openGraph: {
     siteName: STORE.name,

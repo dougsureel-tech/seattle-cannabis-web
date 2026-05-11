@@ -52,7 +52,7 @@ export async function GET(): Promise<Response> {
     <title>${escapeXml(`${STORE.name} — Blog`)}</title>
     <link>${STORE.website}/blog</link>
     <atom:link href="${STORE.website}/feed.xml" rel="self" type="application/rss+xml" />
-    <description>${escapeXml(`Cannabis education, vendor spotlights, and dispatches from ${STORE.address.city}, WA — written by the counter team at ${STORE.name}. 21+.`)}</description>
+    <description>${escapeXml(`Cannabis education, vendor spotlights, and dispatches from ${STORE.address.city}, WA — written by the counter team at ${STORE.name} 21+.`)}</description>
     <language>en-US</language>
     <lastBuildDate>${lastBuildDate}</lastBuildDate>
 ${items}

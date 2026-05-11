@@ -5,7 +5,7 @@ import { STORE, DEFAULT_OG_IMAGE} from "@/lib/store";
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Order for Pickup",
-  description: `Order cannabis online for pickup at ${STORE.name}. Browse flower, edibles, vapes, concentrates and more. Pay cash in store.`,
+  description: `Order cannabis online for pickup at ${STORE.name} Browse flower, edibles, vapes, concentrates and more. Pay cash in store.`,
   alternates: { canonical: "/order" },
   openGraph: {
     siteName: STORE.name,
