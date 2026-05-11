@@ -15,7 +15,10 @@ import { useEffect, useState } from "react";
 // /order itself (where the cart drawer lives) don't need to be reflected
 // here because /order is in HIDE_ON.
 
-const HIDE_ON = ["/order", "/sign-in", "/sign-up"];
+// /menu included because /order 307-redirects to /menu (proxy.ts) — the
+// banner would otherwise render on /menu and link back to /order which
+// just bounces the customer.
+const HIDE_ON = ["/menu", "/order", "/sign-in", "/sign-up"];
 const CART_KEY = "sc_cart";
 
 type CartItem = { quantity: number; unitPrice: number | null };
@@ -86,7 +89,7 @@ export function CartResumeBanner() {
 
   return (
     <Link
-      href="/order"
+      href="/menu"
       className="block bg-gradient-to-r from-indigo-800 via-violet-700 to-indigo-800 hover:from-indigo-700 hover:via-violet-600 hover:to-indigo-700 text-white text-sm font-semibold transition-colors animate-gradient bg-[length:200%_auto]"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex items-center justify-between gap-3">
