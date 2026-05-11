@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { STORE, STORE_TZ, isOpenNow, nextOpenLabel } from "@/lib/store";
+import { DAY_MS } from "@/lib/time-constants";
 import { withAttr } from "@/lib/attribution";
 import { getActiveBrands, getActiveDeals, getFeaturedProducts, getJustInProducts, getTreasureChestProducts } from "@/lib/db";
 import { fetchClosureStatus } from "@/lib/closure-status";
@@ -758,7 +759,7 @@ export default async function HomePage() {
                 const ends = d.endDate
                   ? (() => {
                       const date = new Date(`${d.endDate}T12:00:00`);
-                      const days = Math.ceil((date.getTime() - Date.now()) / 86400000);
+                      const days = Math.ceil((date.getTime() - Date.now()) / DAY_MS);
                       if (days <= 0) return { label: "Ends today", urgent: true };
                       if (days === 1) return { label: "Ends tomorrow", urgent: true };
                       if (days <= 7)

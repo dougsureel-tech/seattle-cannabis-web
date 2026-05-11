@@ -11,7 +11,7 @@
 // (v345.805 + v346.205) and `greenlife-web/lib/rate-limit.ts` (this wave).
 // Three repos, identical helper, all prune opportunistically.
 
-const MINUTE_MS = 60_000;
+import { MINUTE_MS } from "./time-constants";
 
 type Entry = { count: number; resetAt: number };
 
