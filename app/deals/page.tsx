@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   // include the brand here — was rendering "... | Seattle Cannabis Co. | Seattle Cannabis Co.".
   title: "Cannabis Deals & Specials",
   // ~150 chars — v11.005 length sweep.
-  description: `Live cannabis deals at ${STORE.name} in ${STORE.address.city}, WA. Daily specials on flower, edibles, vapes, concentrates. WSLCB-compliant.`,
+  description: `Today's cannabis deals at ${STORE.name} in ${STORE.address.city}, WA. Daily specials on flower, edibles, vapes, concentrates. Within WAC 314-55-155 — percent-off / dollar-off only.`,
   alternates: { canonical: "/deals" },
   openGraph: {
     siteName: STORE.name,
@@ -133,12 +133,12 @@ export default async function DealsPage({ searchParams }: Props) {
           }}
         />
         <div className="relative max-w-3xl mx-auto px-4 sm:px-6 py-16 sm:py-20 text-center">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-indigo-200">🔥 Live Deals</p>
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-indigo-200">Today&apos;s deals</p>
           <h1 className="mt-3 text-4xl sm:text-5xl font-extrabold tracking-tight">
             What&apos;s on sale right now.
           </h1>
           <p className="mt-3 text-indigo-100/80 max-w-md mx-auto">
-            Updated continuously from our live menu. WSLCB-compliant — percent-off and dollar-off only, never
+            Pulled from our live menu. Within WAC 314-55-155 — percent-off and dollar-off only, never
             below cost.
           </p>
         </div>
@@ -219,8 +219,8 @@ export default async function DealsPage({ searchParams }: Props) {
                   No deals today — but you still earn points.
                 </h2>
                 <p className="text-stone-600 mt-3 max-w-md mx-auto leading-relaxed">
-                  100 points = $1 off at the counter on a regular-price visit. Browse
-                  the live menu — we&apos;ll have what you&apos;re after.
+                  Points stack up every visit and redeem on a sliding ladder — 50pt for 5% off, 100pt for 10%,
+                  on up to 30% off at 300-400pt. Browse the live menu — we&apos;ll have what you&apos;re after.
                 </p>
                 <Link
                   href="/menu"
