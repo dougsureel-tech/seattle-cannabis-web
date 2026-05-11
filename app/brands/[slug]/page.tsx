@@ -332,7 +332,7 @@ export default async function BrandPage({ params }: Props) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center gap-4 sm:gap-6">
           {brand.logoUrl ? (
             <div className="shrink-0 w-20 h-20 rounded-2xl bg-white p-2.5 flex items-center justify-center shadow-lg relative overflow-hidden">
-              <Image src={brand.logoUrl} alt={brand.name} fill className="object-contain p-2" unoptimized />
+              <Image src={brand.logoUrl} alt={brand.name} fill sizes="80px" className="object-contain p-2" />
             </div>
           ) : (
             <div className="shrink-0 w-20 h-20 rounded-2xl bg-indigo-800 border border-indigo-700 flex items-center justify-center text-2xl">
