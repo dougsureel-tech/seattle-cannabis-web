@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { STORE, todayCloseLabel, DEFAULT_OG_IMAGE} from "@/lib/store";
+import { STORE, todayCloseLabel } from "@/lib/store";
 import { getActiveDeals, getTreasureChestProducts } from "@/lib/db";
 import { fetchClosureStatus } from "@/lib/closure-status";
 import { JaneMenu } from "./JaneMenu";
@@ -39,13 +39,18 @@ export const metadata: Metadata = {
     description: `Live cannabis menu — prices, THC/CBD, lab data. ${STORE.address.full}.`,
     url: `${STORE.website}/menu`,
     type: "website",
-    // Next 16 metadata cascade quirk: page-level `openGraph: { ... }` fully
-    // REPLACES parent's auto-injected images. Without this, /menu share
-    // previews render imageless. glw has `app/menu/opengraph-image.tsx`
-    // (per-route image) which Next auto-injects despite the override; scc
-    // never grew that file, so we reference the root /opengraph-image
-    // directly. Sister of v8.745 fix on /order /careers /heroes /blog.
-    images: [DEFAULT_OG_IMAGE],
+    // Per-route OG at /menu/opengraph-image (file convention). Pre-fix
+    // SCC referenced root DEFAULT_OG_IMAGE which made share-cards render
+    // the homepage card on /menu shares instead of a menu-specific card.
+    // Sister of glw v10.105 + v16.905 same-shape fix.
+    images: [
+      {
+        url: "/menu/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: `Cannabis Menu — ${STORE.name}`,
+      },
+    ],
   },
   // Partner-presence signal the WP plugin emits. The WP origin (208.109.64.51)
   // shipped <meta name="jane:version" content="1.4.7"/> on every /menu page;
