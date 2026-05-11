@@ -32,8 +32,22 @@ const isProtectedRoute = createRouteMatcher(["/account(.*)"]);
 //      resolve to a working page.
 //
 // Override at deploy time with NEXT_PUBLIC_CANONICAL_HOST if a brand-new
-// custom domain ever lands (e.g. moving to .com in the future).
-const CANONICAL_HOST = process.env.NEXT_PUBLIC_CANONICAL_HOST || "www.seattlecannabis.co";
+// custom domain ever lands (e.g. moving to .com in the future). The env
+// is validated against an allow-list (sister of inv v337.005 + v21.605
+// email-defense sweep) — if env drifts to a typo'd value, EVERY non-
+// canonical request would 308-redirect to that broken host = site-wide
+// outage. Allow-list rejects any value not in the known-good Set. To add
+// a new canonical (e.g. .com flip), add it to ALLOWED_CANONICAL_HOSTS in
+// code FIRST, then flip the env. 2-step is a feature, not a bug.
+const ALLOWED_CANONICAL_HOSTS = new Set([
+  "www.seattlecannabis.co",
+]);
+
+const CANONICAL_HOST = (() => {
+  const env = process.env.NEXT_PUBLIC_CANONICAL_HOST;
+  if (env && ALLOWED_CANONICAL_HOSTS.has(env)) return env;
+  return "www.seattlecannabis.co";
+})();
 
 // Belt-and-suspenders: even if NEXT_PUBLIC_CANONICAL_HOST is ever
 // misconfigured at deploy time (e.g. a stale value from when the deployment
