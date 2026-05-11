@@ -137,14 +137,20 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.redirect(target.toString(), 307);
   }
 
-  // TEMPORARY 2026-05-04 per Doug — Seattle inventoryapp DB has Wenatchee-
-  // seeded prices on shared-ID products (OUTSTANDING_WORK 3.9 + INCIDENTS),
-  // so the in-tree /order menu shows wrong prices. /menu (iHeartJane Boost
-  // embed at storeId 5295) shows the real Dutchie Seattle prices. Page-level
-  // `redirect()` from next/navigation in app/order/page.tsx didn't fire
-  // (rendered the layout shell + loading state with HTTP 200 instead) — this
-  // middleware-level NextResponse.redirect always returns 307 cleanly.
-  // Restore: delete this 6-line block when /order tree prices are reconciled.
+  // /order → /menu canonical-surface redirect.
+  //
+  // Originally added 2026-05-04 as a temporary fix while the Seattle
+  // inventoryapp DB had Wenatchee-seeded prices on shared-ID products
+  // (OUTSTANDING_WORK 3.9 + INCIDENTS). Became the PERMANENT pattern per
+  // `feedback_customer_ctas_point_to_menu_only.md` memory pin + the
+  // `scripts/check-customer-cta-order-href.mjs` arc-guard (baseline 0):
+  // all customer CTAs point at /menu, and /order is preserved as a
+  // redirect so stale share-links + bookmarks land on the canonical
+  // surface.
+  //
+  // Middleware-level redirect (vs `redirect()` in app/order/page.tsx)
+  // because page-level redirect renders the layout shell + loading state
+  // with HTTP 200 first, while NextResponse.redirect emits a clean 307.
   if (url.pathname === "/order" || url.pathname.startsWith("/order/")) {
     return NextResponse.redirect(new URL("/menu", req.url), 307);
   }

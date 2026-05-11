@@ -20,14 +20,25 @@ export const metadata: Metadata = {
   },
 };
 
-// TEMPORARILY REDIRECTED 2026-05-04 per Doug — Seattle inventoryapp DB has
-// Wenatchee-seeded prices on shared-ID products (per OUTSTANDING_WORK 3.9
-// + INCIDENTS.md), so the in-tree menu shows wrong prices for Seattle until
-// a Dutchie sync reconciles them. /menu (iHeartJane Boost embed at storeId
-// 5295) shows the real Dutchie Seattle prices, so push customers there.
+// CANONICAL ORDER SURFACE IS /menu — /order redirects here.
 //
-// Restore: replace this stub with the original implementation (preserved in
-// git at SHA 4cbe36a / v3.50: app/order/page.tsx) when the price sync ships.
+// HISTORICAL CONTEXT:
+// 2026-05-04 — initially redirected as a temporary fix while the Seattle
+// inventoryapp DB had Wenatchee-seeded prices on shared-ID products
+// (OUTSTANDING_WORK 3.9 + INCIDENTS.md). /menu (iHeartJane Boost embed,
+// storeId 5295) shows the real Dutchie Seattle prices.
+//
+// 2026-05-XX onward — the redirect became the PERMANENT pattern per
+// `feedback_customer_ctas_point_to_menu_only.md` memory pin + the
+// `scripts/check-customer-cta-order-href.mjs` arc-guard (baseline 0).
+// All customer CTAs point at /menu; /order is preserved as a redirect
+// so stale share-links + bookmarks land on the canonical surface.
+//
+// Original /order implementation (in-tree menu) is preserved in git at
+// SHA 4cbe36a / v3.50: app/order/page.tsx if a future product decision
+// reverses the canonical-surface pin. The /menu surface itself is still
+// blocked on iHeartJane CORS re-authorization (see MENU_LOG.md), which
+// is partner-action not code.
 export default async function OrderPage() {
   redirect("/menu");
 }
