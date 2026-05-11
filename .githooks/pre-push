@@ -88,7 +88,8 @@ for gate in \
   scripts/check-please-hedge.mjs \
   scripts/check-template-warmth.mjs \
   scripts/check-apologize-pattern.mjs \
-  scripts/check-store-name-double-period.mjs; do
+  scripts/check-store-name-double-period.mjs \
+  scripts/check-no-unsafe-redirect.mjs; do
   if ! node "$gate" 2>&1; then
     echo ""
     echo "  ✗ Push blocked: $gate failed above. Fix before pushing."
@@ -97,7 +98,7 @@ for gate in \
     exit 1
   fi
 done
-echo "  ✓ Build-gates OK (30/30)"
+echo "  ✓ Build-gates OK (31/31)"
 
 # ── 3. Lib unit tests (node:test pin tests on lib/__tests__/*.ts) ─────────
 echo "  Running lib tests..."
