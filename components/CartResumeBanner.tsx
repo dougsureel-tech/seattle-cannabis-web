@@ -38,33 +38,30 @@ function readCart(): CartItem[] {
 // Disabled until /order ships publicly. The banner links to /order, but
 // /order is a dev-only surface for now — public CTAs all route to /menu.
 // See feedback memory `feedback_customer_ctas_point_to_menu_only.md`. When
-// /order goes live, drop this short-circuit. Constant is checked BEFORE any
-// hooks so React sees a stable "no hooks" render path while it's false.
+// /order goes live, drop this short-circuit (PUBLIC_ORDER_ROUTE_LIVE = true)
+// — no other changes needed since hooks are now top-level.
 const PUBLIC_ORDER_ROUTE_LIVE = false;
 
 export function CartResumeBanner() {
-  if (!PUBLIC_ORDER_ROUTE_LIVE) return null;
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+  // All hooks called unconditionally at the top so they remain stable
+  // regardless of the PUBLIC_ORDER_ROUTE_LIVE flag (Rules of Hooks). Pre-
+  // fix had hooks AFTER an early return gated on the flag — worked while
+  // the flag was a compile-time constant (zero hooks called) but would
+  // silently break the moment the flag became dynamic state/prop. Cost
+  // of always-call: 2 useState + 3 useEffect per render = negligible.
   const pathname = usePathname();
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [cart, setCart] = useState<CartItem[]>([]);
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [mounted, setMounted] = useState(false);
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     setCart(readCart());
   }, []);
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCart(readCart());
   }, [pathname]);
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     const onVis = () => {
       if (document.visibilityState === "visible") setCart(readCart());
@@ -80,6 +77,7 @@ export function CartResumeBanner() {
     };
   }, []);
 
+  if (!PUBLIC_ORDER_ROUTE_LIVE) return null;
   if (!mounted) return null;
   if (HIDE_ON.some((p) => pathname.startsWith(p))) return null;
 
