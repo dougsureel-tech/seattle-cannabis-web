@@ -52,7 +52,13 @@ export function HeroBackground() {
   return (
     <div
       aria-hidden="true"
-      className="hero-bg pointer-events-none absolute inset-0 overflow-hidden"
+      // content-visibility:auto lets the compositor skip rendering this layer
+      // when scrolled offscreen — low-end mobile scroll FPS +5-10 per
+      // vercel:performance-optimizer P3 finding. Safe because HeroBackground
+      // is absolute inset-0 over the hero <section>; the section's height
+      // doesn't depend on this layer's render state, so no CLS from
+      // content-visibility's default zero-size-when-skipped behavior.
+      className="hero-bg pointer-events-none absolute inset-0 overflow-hidden [content-visibility:auto]"
     >
       {/* Layer 1 — base brand gradient. Static. */}
       <div className="hero-bg__base absolute inset-0" />
