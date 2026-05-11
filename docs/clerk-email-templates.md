@@ -69,7 +69,7 @@ Six branded HTML templates for the Clerk dashboard. Each is a complete copy-past
               <td style="padding:18px 28px 22px;border-top:1px solid #e7e5e4;background:#f5f5f4;">
                 <p style="margin:0;font-size:11px;color:#78716c;line-height:1.6;">
                   Seattle Cannabis Co. · 7266 Rainier Ave S, Seattle, WA 98118<br />
-                  Founded 2010 · Locally owned in Rainier Valley since 2018 · WSLCB License 426199 · 21+ with valid ID
+                  Founded 2010 · Rainier Valley since 2018 · WSLCB License 426199 · 21+ with valid ID
                 </p>
               </td>
             </tr>
@@ -135,7 +135,7 @@ Six branded HTML templates for the Clerk dashboard. Each is a complete copy-past
               <td style="padding:18px 28px 22px;border-top:1px solid #e7e5e4;background:#f5f5f4;">
                 <p style="margin:0;font-size:11px;color:#78716c;line-height:1.6;">
                   Seattle Cannabis Co. · 7266 Rainier Ave S, Seattle, WA 98118<br />
-                  Founded 2010 · Locally owned in Rainier Valley since 2018 · WSLCB License 426199 · 21+ with valid ID
+                  Founded 2010 · Rainier Valley since 2018 · WSLCB License 426199 · 21+ with valid ID
                 </p>
               </td>
             </tr>
@@ -202,7 +202,7 @@ Six branded HTML templates for the Clerk dashboard. Each is a complete copy-past
               <td style="padding:18px 28px 22px;border-top:1px solid #e7e5e4;background:#f5f5f4;">
                 <p style="margin:0;font-size:11px;color:#78716c;line-height:1.6;">
                   Seattle Cannabis Co. · 7266 Rainier Ave S, Seattle, WA 98118<br />
-                  Founded 2010 · Locally owned in Rainier Valley since 2018 · WSLCB License 426199 · 21+ with valid ID
+                  Founded 2010 · Rainier Valley since 2018 · WSLCB License 426199 · 21+ with valid ID
                 </p>
               </td>
             </tr>
@@ -268,7 +268,7 @@ Six branded HTML templates for the Clerk dashboard. Each is a complete copy-past
               <td style="padding:18px 28px 22px;border-top:1px solid #e7e5e4;background:#f5f5f4;">
                 <p style="margin:0;font-size:11px;color:#78716c;line-height:1.6;">
                   Seattle Cannabis Co. · 7266 Rainier Ave S, Seattle, WA 98118<br />
-                  Founded 2010 · Locally owned in Rainier Valley since 2018 · WSLCB License 426199 · 21+ with valid ID
+                  Founded 2010 · Rainier Valley since 2018 · WSLCB License 426199 · 21+ with valid ID
                 </p>
               </td>
             </tr>
@@ -341,7 +341,7 @@ Six branded HTML templates for the Clerk dashboard. Each is a complete copy-past
               <td style="padding:18px 28px 22px;border-top:1px solid #e7e5e4;background:#f5f5f4;">
                 <p style="margin:0;font-size:11px;color:#78716c;line-height:1.6;">
                   Seattle Cannabis Co. · 7266 Rainier Ave S, Seattle, WA 98118<br />
-                  Founded 2010 · Locally owned in Rainier Valley since 2018 · WSLCB License 426199 · 21+ with valid ID
+                  Founded 2010 · Rainier Valley since 2018 · WSLCB License 426199 · 21+ with valid ID
                 </p>
               </td>
             </tr>
@@ -410,7 +410,7 @@ Six branded HTML templates for the Clerk dashboard. Each is a complete copy-past
               <td style="padding:18px 28px 22px;border-top:1px solid #e7e5e4;background:#f5f5f4;">
                 <p style="margin:0;font-size:11px;color:#78716c;line-height:1.6;">
                   Seattle Cannabis Co. · 7266 Rainier Ave S, Seattle, WA 98118<br />
-                  Founded 2010 · Locally owned in Rainier Valley since 2018 · WSLCB License 426199 · 21+ with valid ID
+                  Founded 2010 · Rainier Valley since 2018 · WSLCB License 426199 · 21+ with valid ID
                 </p>
               </td>
             </tr>

@@ -66,13 +66,13 @@ Pages below are ordered by where in the funnel they live, not alphabetically.
 
 ### `/about`, `/visit`
 
-**Purpose.** Tell the customer *why* before *what*. Locally-owned, Rainier Valley since 2018, founded 2010, the people behind the counter.
+**Purpose.** Tell the customer *why* before *what*. Rainier Valley since 2018, founded 2010, the people behind the counter, longest-running shop in the Valley. **Note:** "locally-owned" framing forbidden per Doug 2026-05-02 directive — `check-brand-voice-locally-owned.mjs` arc-guard.
 
 **Funnel role.** Conviction. Visited mostly by first-time customers and Google when ranking us.
 
 **What we want them to do.** Trust → click "Order for Pickup" / "Browse the menu" (always to /menu — `/order` is dev-only).
 
-**Big-picture tie-in.** Locally-owned positioning is a margin moat — chains like Have a Heart and Uncle Ike's can't claim Rainier-Valley-rooted in the same way. Every page that reinforces "founded 2010, Rainier Valley since 2018, 7266 Rainier Ave S, the 7-bus stops at the door, Mt Baker + Columbia City Link a short walk" compounds the brand premium and lets us hold prices vs. higher-volume rivals on Aurora and downtown. WSLCB license **426199**.
+**Big-picture tie-in.** Rainier-Valley-rooted positioning is a margin moat — chains like Have a Heart and Uncle Ike's can't claim being-of-this-neighborhood in the same way. Every page that reinforces "founded 2010, Rainier Valley since 2018, 7266 Rainier Ave S, the 7-bus stops at the door, Mt Baker + Columbia City Link a short walk" compounds the brand premium and lets us hold prices vs. higher-volume rivals on Aurora and downtown. WSLCB license **426199**. **Note:** "locally-owned" framing is forbidden per Doug 2026-05-02 directive (ownership change coming) — `check-brand-voice-locally-owned.mjs` arc-guard enforces. Lead with neighborhood-rootedness instead.
 
 **Small-adjustments-compound watch list.**
 - Founder bio + photo → first-time visitors who see a face convert better than visitors who see only a logo
