@@ -141,10 +141,10 @@ ${summary}. Pacific Time. Hours subject to change on holidays.
 ${address.full}. Free parking in the lot.
 
 **I've never bought cannabis before — is that okay?**
-Absolutely. Budtenders love helping first-time customers. Staff will walk through product types, dosing, how to consume safely, and what to expect.
+Yes — first-time customers are the favorite kind. Staff will walk through product types, dosing, start-low guidance, and what to expect.
 
 **What's the difference between indica, sativa, and hybrid?**
-Indica strains are traditionally associated with relaxing, body-heavy effects. Sativas tend toward more energizing, uplifting effects. Hybrids fall in between. Terpene profiles and individual chemistry matter more than these three labels.
+Quick rule of thumb: indica leans body-heavy, sativa leans head-forward, hybrid is a blend of both. It's a simplification — terpene profile shapes how a strain lands more than the indica/sativa label.
 
 **How much cannabis can I purchase at one time?**
 Washington State law caps a recreational transaction at 1 ounce of usable cannabis, 7 grams of concentrates, and 16 ounces of cannabis-infused products in solid form (or 72 ounces in liquid form).
