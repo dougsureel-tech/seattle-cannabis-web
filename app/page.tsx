@@ -538,8 +538,9 @@ export default async function HomePage() {
             after the neighborhood map (geo) and before the first-time flow
             (operational) so the rhythm is: where → why → how → what's on
             today. Indigo/violet palette matches the rest of the Seattle
-            site. Locally owned framing stays here per the SCC positioning
-            (Wenatchee uses best-staff framing instead, separate decision). */}
+            site. Tenure-as-credential framing per Doug 2026-05-02 directive
+            (ownership change coming — "locally owned" stripped cross-store
+            in favor of "Same crew · 16+ Years"). */}
       <section className="bg-stone-50 border-b border-stone-100" aria-labelledby="why-heading">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
           <div className="text-center mb-10 sm:mb-12">
@@ -553,15 +554,15 @@ export default async function HomePage() {
               Rainier Valley&apos;s neighborhood shop.
             </h2>
             <p className="text-stone-600 mt-3 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
-              Sixteen years in cannabis. Eight in Rainier Valley. Same locally owned, independent
-              operation that opened in 2010 — now five minutes from Othello Light Rail.
+              Sixteen years in cannabis. Eight in Rainier Valley. Same crew, same care since 2010 —
+              now five minutes from Othello Light Rail.
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
             {[
               {
-                title: "Locally Owned · 16+ Years",
+                title: "Same Crew · 16+ Years",
                 body: "Founded 2010. In Rainier Valley since 2018. Independent — not a chain, not corporate.",
                 iconPath: "M3 21V10l9-7 9 7v11h-6v-7H9v7H3z",
               },
