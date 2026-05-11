@@ -30,6 +30,7 @@ import "server-only";
 
 import { sendEmail, isEmailConfigured } from "./email";
 import { STORE } from "./store";
+import { round2 } from "./money-math.ts";
 
 export type OrderConfirmationItem = {
   productName: string;
@@ -63,8 +64,7 @@ const safe = (s: string): string =>
     "'": "&#39;",
   }[c]!));
 
-const fmtUsd = (n: number): string =>
-  `$${(Math.round(n * 100) / 100).toFixed(2)}`;
+const fmtUsd = (n: number): string => `$${round2(n).toFixed(2)}`;
 
 // Seattle palette — matches SiteFooter.tsx (indigo-950 → violet-950) +
 // the indigo-700/violet-700 accents used across CartResumeBanner, LoyaltyArc.
