@@ -28,7 +28,7 @@ Pages below are ordered by where in the funnel they live, not alphabetically.
 - Homepage hero info card live status → "open now" pill drives walk-in conversions all day, especially the post-work commuter cohort getting off the 7 or the Link
 - Featured products row → rotates daily; sub it for sell-through targets when cases are full
 - Brand strip ordering → top brands earn placement; rotate in the brand we want to push
-- Trust block ("budtenders / locally owned / Rainier Valley since 2018 / founded 2010") → conversion lift on first-time visitors who aren't sure about cannabis retail. **Note:** "Locally Owned" replaces the prior "Veteran-Owned" framing (swept 2026-05-02). And the founding line is **2010** with **Rainier Valley since 2018** — never "since 2014" (see project_seattle_founding memory).
+- Trust block ("budtenders / Rainier Valley since 2018 / founded 2010 / WSLCB-licensed") → conversion lift on first-time visitors who aren't sure about cannabis retail. **Note:** "locally owned" and "veteran-owned" framings are BOTH forbidden per Doug 2026-05-02 directive (ownership change coming) + WSLCB best practices — `scripts/check-brand-voice-locally-owned.mjs` arc-guard enforces. The founding line is **2010** with **Rainier Valley since 2018** — never "since 2014" (see project_seattle_founding memory).
 
 ### `/blog`, `/learn`, `/find-your-strain`
 
