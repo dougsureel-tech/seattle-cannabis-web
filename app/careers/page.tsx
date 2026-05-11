@@ -105,11 +105,10 @@ export default async function CareersPage() {
             Careers
           </p>
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
-            Work with us at Seattle Cannabis Co.
+            Same crew. Same care. Since 2010.
           </h1>
           <p className="text-indigo-200/80 mt-3 text-sm sm:text-base leading-relaxed max-w-2xl">
-            We&apos;ve been part of Seattle&apos;s cannabis story since 2010 — same crew,
-            same care, on Rainier since 2018. We&apos;re looking for people who take the
+            On Rainier Ave since 2018. We&apos;re looking for people who take the
             work seriously, treat customers like neighbors, and want a shop that&apos;s
             still here in another fifteen years. If that sounds like you, we&apos;d love
             to hear from you.
@@ -139,13 +138,13 @@ export default async function CareersPage() {
             {/* General apply nudge below the list. */}
             <div className="mt-10 rounded-2xl border border-stone-200 bg-stone-50 p-6 text-center">
               <p className="text-sm text-stone-700">
-                Don&apos;t see a perfect fit? We keep good resumes on file.
+                Don&apos;t see a perfect fit? We still want to hear from you.
               </p>
               <Link
                 href="/apply"
                 className="inline-flex items-center justify-center mt-3 px-5 py-2.5 rounded-xl bg-white border border-stone-300 text-stone-800 text-sm font-bold hover:border-indigo-400 hover:text-indigo-800 transition-colors"
               >
-                Apply anyway →
+                Send us your resume →
               </Link>
             </div>
           </div>
@@ -240,11 +239,10 @@ function EmptyState() {
         </svg>
       </div>
       <h2 className="text-xl sm:text-2xl font-extrabold text-stone-900 tracking-tight">
-        We&apos;re not actively hiring right now
+        No open roles today.
       </h2>
       <p className="text-stone-600 text-sm sm:text-base leading-relaxed mt-3 max-w-md mx-auto">
-        But we keep good resumes on file. If you&apos;d be a great fit when something opens
-        up, we&apos;d love to meet you — apply anytime.
+        We keep good resumes on hand for when something opens up. Drop yours in — we read every one.
       </p>
       <Link
         href="/apply"
