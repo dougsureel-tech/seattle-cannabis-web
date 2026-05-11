@@ -150,7 +150,7 @@ export default function FindYourStrainPage() {
           </div>
           <div className="rounded-2xl border border-stone-200 bg-white p-4">
             <div className="text-2xl mb-2" aria-hidden>🏠</div>
-            <div className="text-sm font-bold text-stone-900 mb-1">Locally-owned since 2010</div>
+            <div className="text-sm font-bold text-stone-900 mb-1">Same crew since 2010</div>
             <p className="text-xs text-stone-600 leading-relaxed">
               Pre-I-502 origin, Rainier Valley since 2018. Same crew, same instinct — tell us what worked
               and what didn&apos;t and we&apos;ll dial it.

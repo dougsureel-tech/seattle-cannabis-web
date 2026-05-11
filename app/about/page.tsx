@@ -11,13 +11,12 @@ export const revalidate = 300;
 export const metadata: Metadata = {
   title: "About — Rainier Valley Since 2010",
   // ~155 chars — v11.005 length sweep.
-  description: `Learn about ${STORE.name} — Rainier Valley's locally-owned cannabis dispensary. Founded 2010 (pre-I-502), in Rainier Valley since 2018.`,
+  description: `Learn about ${STORE.name} — Rainier Valley cannabis dispensary. Founded 2010 (pre-I-502), in Rainier Valley since 2018.`,
   alternates: { canonical: "/about" },
   keywords: [
     "Rainier Valley dispensary",
     "Seattle Cannabis Co history",
     "South Seattle cannabis",
-    "locally owned dispensary Seattle",
     "independent dispensary Seattle",
     "Othello cannabis",
     "Seattle dispensary since 2010",
@@ -25,8 +24,8 @@ export const metadata: Metadata = {
   openGraph: {
     siteName: STORE.name,
     locale: "en_US",
-    title: `About ${STORE.name} — Locally owned Rainier Valley dispensary`,
-    description: `Locally owned independent dispensary. Founded 2010, in Rainier Valley since 2018.`,
+    title: `About ${STORE.name} — Rainier Valley dispensary since 2010`,
+    description: `Independent dispensary, founded 2010 in Seattle, in Rainier Valley since 2018.`,
     url: `${STORE.website}/about`,
     type: "website",
     images: [{ url: "/about/opengraph-image", width: 1200, height: 630, alt: `${STORE.name}` }],
@@ -45,7 +44,7 @@ const aboutSchema = {
   "@type": "AboutPage",
   name: `About ${STORE.name}`,
   url: `${STORE.website}/about`,
-  description: `Rainier Valley locally-owned cannabis dispensary — founded 2010, in Rainier Valley since 2018, neighborhood community-focused.`,
+  description: `Rainier Valley cannabis dispensary — founded 2010, in Rainier Valley since 2018, neighborhood community-focused.`,
   image: `${STORE.website}/opengraph-image`,
   mainEntity: { "@id": `${STORE.website}/#dispensary` },
   inLanguage: "en-US",
@@ -99,14 +98,14 @@ export default function AboutPage() {
           <div className="space-y-5">
             <h2 className="text-3xl font-extrabold text-stone-900 tracking-tight">Who We Are</h2>
             <p className="text-stone-600 leading-relaxed">
-              Seattle Cannabis Co. is a locally owned, independent cannabis dispensary — founded in 2010
-              and rooted in Rainier Valley since 2018. We&apos;re proud to serve South Seattle&apos;s
-              diverse community — from first-time visitors to longtime enthusiasts.
+              Seattle Cannabis Co. is an independent cannabis dispensary — founded in 2010
+              and rooted in Rainier Valley since 2018. Same crew, same care. We&apos;re proud to serve
+              South Seattle&apos;s diverse community — from first-time visitors to longtime enthusiasts.
             </p>
             <p className="text-stone-600 leading-relaxed">
               Our team of knowledgeable budtenders takes time to understand what you&apos;re looking for and
-              guide you toward the right product. Whether you&apos;re seeking relief, relaxation, creativity,
-              or just exploring — we&apos;re here to help with no judgment.
+              guide you toward the right product. Whether it&apos;s a body-heavy evening, a daytime session,
+              a creative moment, or just exploring — we&apos;re here to help with no judgment.
             </p>
             <p className="text-stone-600 leading-relaxed">
               We handpick every product on our shelves, prioritizing quality, value, and Washington-grown
@@ -142,7 +141,7 @@ export default function AboutPage() {
             {[
               {
                 icon: "🏡",
-                title: "Locally Owned",
+                title: "Same Crew Since 2010",
                 body: "An independent, neighborhood small business — not a chain. Founded 2010, in Rainier Valley since 2018. We offer service discounts to active military, veterans, first responders, healthcare workers, and teachers — just show your ID.",
                 color: "bg-indigo-50 border-indigo-200",
               },

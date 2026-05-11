@@ -189,14 +189,17 @@ export default async function VisitPage() {
 
       {/* Trust strip — reinforces Seattle positioning between hero + hours.
           Per memory `project_seattle_founding` — founded 2010 (pre-I-502),
-          Rainier Valley since 2018. Locally-owned IS the framing here. */}
+          Rainier Valley since 2018. Tenure-as-credential framing per Doug
+          2026-05-02 directive (was "Locally-owned IS the framing here" before
+          the ownership-change-coming sweep landed; arc-guard
+          check-brand-voice-locally-owned.mjs enforces). */}
       <section className="bg-white border-b border-stone-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-7 sm:py-8">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-8 text-center sm:text-left">
             <div className="flex sm:items-center sm:gap-3 flex-col sm:flex-row gap-1.5">
               <span className="text-2xl shrink-0" aria-hidden="true">🏡</span>
               <div>
-                <div className="font-bold text-stone-900 text-sm">Locally owned since 2010</div>
+                <div className="font-bold text-stone-900 text-sm">Same crew since 2010</div>
                 <div className="text-stone-500 text-xs leading-snug">
                   Independent neighborhood dispensary — not a chain. Pre-I-502 origin.
                 </div>

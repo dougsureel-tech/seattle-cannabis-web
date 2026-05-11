@@ -102,7 +102,7 @@ export default function AboutOG() {
               color: "white",
             }}
           >
-            Locally owned.
+            Same crew since 2010.
           </span>
           <span
             style={{
