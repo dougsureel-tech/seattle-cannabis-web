@@ -4,8 +4,8 @@
 // directive into its module graph (Next 16 / React 19 throws if a server
 // component imports a value from a "use client" file).
 
-import { STORE_TZ } from "./store";
-import { HOUR_MS, DAY_MS } from "./time-constants";
+import { STORE_TZ } from "./store.ts";
+import { HOUR_MS, DAY_MS } from "./time-constants.ts";
 
 export type DealCountdownState = {
   label: string;
