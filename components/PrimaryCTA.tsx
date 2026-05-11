@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-// Single source of truth for the "Order Online — 20% Off" gradient button
+// Single source of truth for the "Order Online · 20% off" gradient button
 // pattern that previously lived inline on the homepage hero, How-Pickup,
 // Today's Picks, and footer. Same visual treatment in five different code
 // paths is the kind of duplication that ages badly — bumping the gradient,

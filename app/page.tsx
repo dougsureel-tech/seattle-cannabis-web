@@ -991,7 +991,7 @@ export default async function HomePage() {
             ))}
           </div>
           <div className="text-center mt-10">
-            <PrimaryCTA href={STORE.shopUrl}>Order Online — 20% Off →</PrimaryCTA>
+            <PrimaryCTA href={STORE.shopUrl}>Order Online · 20% off →</PrimaryCTA>
           </div>
           {/* HowTo JSON-LD — AI engines + Google rich-result fuel for "how
               do I order from Seattle Cannabis Co" type queries. Mirrors the
@@ -1240,7 +1240,7 @@ export default async function HomePage() {
               ))}
             </div>
             <div className="text-center mt-10">
-              <PrimaryCTA href={STORE.shopUrl}>Order Online — 20% Off →</PrimaryCTA>
+              <PrimaryCTA href={STORE.shopUrl}>Order Online · 20% off →</PrimaryCTA>
             </div>
           </div>
         </section>
@@ -1447,7 +1447,7 @@ export default async function HomePage() {
               Browse Menu
             </PrimaryCTA>
             <PrimaryCTA href={withAttr(STORE.shopUrl, "home", "bottom-order")} variant="secondary">
-              Order Online — 20% Off
+              Order Online · 20% off
             </PrimaryCTA>
           </div>
         </div>

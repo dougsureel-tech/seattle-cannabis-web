@@ -45,7 +45,7 @@ export function SiteFooter() {
           </div>
           <div className="flex gap-3 shrink-0">
             <PrimaryCTA href={withAttr(STORE.shopUrl, "footer", "order")} variant="light" size="sm">
-              Order Online — 20% Off
+              Order Online · 20% off
             </PrimaryCTA>
             <PrimaryCTA href={withAttr("/menu", "footer", "browse")} variant="secondary" size="sm">
               Browse Menu

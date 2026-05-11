@@ -277,7 +277,7 @@ export default async function BlogPost({ params }: Props) {
               href={STORE.shopUrl}
               className="px-4 py-2 rounded-xl border border-white/20 hover:border-white/40 hover:bg-white/10 text-white text-sm font-semibold transition-colors"
             >
-              Order Online — 20% Off
+              Order Online · 20% off
             </a>
           </div>
         </div>

@@ -441,7 +441,7 @@ export default async function BrandPage({ params }: Props) {
             href={STORE.shopUrl}
             className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-500 hover:bg-indigo-400 text-white text-sm font-bold transition-all shadow-md hover:-translate-y-0.5"
           >
-            Order Online — 20% Off →
+            Order Online · 20% off →
           </a>
         </div>
 
