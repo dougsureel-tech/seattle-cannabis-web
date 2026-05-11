@@ -22,7 +22,7 @@ export function LoginForm() {
     setErr(null);
     const digits = phone.replace(/\D/g, "");
     if (digits.length < 10) {
-      setErr("Please enter at least a 10-digit phone number.");
+      setErr("Enter a 10-digit phone number.");
       return;
     }
 
