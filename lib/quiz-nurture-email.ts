@@ -74,9 +74,17 @@ const COLORS = {
 // GW v2.78.90 canonicalBase pattern).
 const PUBLIC_ORIGIN = ((): string => {
   const env = process.env.NEXT_PUBLIC_SITE_ORIGIN;
-  // Canonical-host fallback: www, not apex (sister of v8.665).
-  const base = env && !env.includes(".vercel.app") ? env : "https://www.seattlecannabis.co";
-  return base.replace(/\/+$/, "");
+  const FALLBACK = "https://www.seattlecannabis.co";
+  // Allow-list defense (sister of inv v337.005 + welcome-email v21.605
+  // sweep). Hostname must MATCH canonical OR fall back. Deny-list-only
+  // lets typo'd subdomains on the right TLD through.
+  if (!env || env.includes(".vercel.app")) return FALLBACK;
+  try {
+    if (new URL(env).hostname !== "www.seattlecannabis.co") return FALLBACK;
+  } catch {
+    return FALLBACK;
+  }
+  return env.replace(/\/+$/, "");
 })();
 
 function unsubscribeUrl(token: string): string {
