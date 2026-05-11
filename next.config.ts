@@ -519,6 +519,14 @@ const nextConfig: NextConfig = {
       { source: "/hello-world", destination: "/blog", permanent: true },
       { source: "/my-account/:path*", destination: "/account", permanent: true },
       { source: "/sitemap", destination: "/sitemap.xml", permanent: true },
+
+      // iOS Safari probes /apple-touch-icon.png + /apple-touch-icon-precomposed.png
+      // at the root BEFORE reading the HTML <link rel="apple-touch-icon">. Without
+      // these redirects every "Add to Home Screen" attempt eats 2 wasted 404
+      // requests. The actual icon route is /apple-icon.png (Next 16 file
+      // convention `app/apple-icon.png/route.tsx`). Sister glw same-fix.
+      { source: "/apple-touch-icon.png", destination: "/apple-icon.png", permanent: true },
+      { source: "/apple-touch-icon-precomposed.png", destination: "/apple-icon.png", permanent: true },
     ];
   },
 };
