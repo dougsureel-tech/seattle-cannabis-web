@@ -85,6 +85,11 @@ export default function OG() {
         <div style={{ fontSize: 20, color: "#c7d2fe", fontWeight: 500 }}>seattlecannabis.co</div>
       </div>
     </div>,
-    { ...size },
+    {
+      ...size,
+      headers: {
+        "Cache-Control": "public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800",
+      },
+    },
   );
 }
