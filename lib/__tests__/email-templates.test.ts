@@ -206,6 +206,46 @@ describe("email templates — loyalty math drift defense", () => {
   });
 });
 
+describe("lib/email.ts — Resend silent-failure defense (sister of inv v305.205)", () => {
+  const EMAIL_HELPER = readFileSync(join(LIB, "email.ts"), "utf-8");
+
+  test("checks r.error before returning success (no silent failure)", () => {
+    // Resend v4 returns { data, error: null } | { data: null, error: ErrorResponse }
+    // — does NOT throw. Pre-fix lib/email.ts read r.data?.id without checking
+    // r.error first → every Resend rejection (unverified domain, rate-limit,
+    // invalid recipient) silently surfaced as "Resend returned no message
+    // id" losing diagnostic info. The fix: branch on r.error BEFORE checking
+    // for id. Same incident class as inv 2026-05-08/09 fixed in v305.205.
+    assert.match(
+      EMAIL_HELPER,
+      /\.error[\s\S]{0,200}(return\s*\{[\s\S]{0,80}ok\s*:\s*false|errName|errResp)/,
+      "lib/email.ts must check r.error before returning success — sister of inv v305.205 silent-failure defense",
+    );
+  });
+
+  test("error logging uses .name (typed code) not .message (PII risk)", () => {
+    // ErrorResponse.message may echo recipient address; ErrorResponse.name
+    // is a typed code key (e.g. "validation_error"). PII discipline: log
+    // name only. Sister of glw same-file fix.
+    assert.ok(
+      !/console\.error[^}]*r\.error\.message/.test(EMAIL_HELPER) &&
+        !/console\.error[^}]*errResp\.message/.test(EMAIL_HELPER),
+      "lib/email.ts must NOT log error.message (may contain recipient PII) — use error.name",
+    );
+  });
+
+  test("catch block also strips PII (errName not e.message)", () => {
+    // Existing catch block uses `errName = e instanceof Error ? e.name : "Error"`.
+    // Pin so a future "let's make this more helpful" refactor doesn't reintroduce
+    // PII into Vercel logs.
+    assert.match(
+      EMAIL_HELPER,
+      /const\s+errName\s*=\s*e\s+instanceof\s+Error\s*\?\s*e\.name/,
+      "lib/email.ts catch block must strip PII (use e.name, not e.message)",
+    );
+  });
+});
+
 describe("email templates — server-only hygiene", () => {
   test("every template imports 'server-only' (Next.js bundle-side guard)", () => {
     for (const name of TEMPLATE_NAMES) {
