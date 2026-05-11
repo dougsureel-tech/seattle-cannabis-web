@@ -175,10 +175,11 @@ function buildHtml(args: WelcomeEmailArgs): string {
             Loyalty — every visit counts
           </p>
           <p style="margin:0 0 6px;font-size:14px;color:${COLORS.textBody};line-height:1.6;">
-            Earn <strong>1 point per $1</strong> spent in store. Redeem
-            <strong>100 points = $1 off</strong> your next visit. Tier progress
-            runs <strong>Visitor → Regular → Local → Family</strong>, with
-            perks at each step. Ask a budtender to start your card on your
+            Every visit earns points (more if you're opted in to SMS or email).
+            Points redeem on a sliding ladder — <strong>50pt for 5% off</strong>,
+            <strong>100pt for 10%</strong>, on up to <strong>30% off at 300-400pt</strong>.
+            Tier progress runs <strong>Visitor → Regular → Local → Family</strong>,
+            with perks at each step. Ask a budtender to start your card on your
             first visit — it takes about thirty seconds.
           </p>
         </div>
@@ -260,8 +261,9 @@ function buildText(args: WelcomeEmailArgs): string {
     `  - Hours: ${hoursText}`,
     "",
     "Loyalty — every visit counts:",
-    "  - Earn 1 point per $1 spent in store.",
-    "  - Redeem 100 points = $1 off your next visit.",
+    "  - Every visit earns points (more if you're opted in to SMS or email).",
+    "  - Points redeem on a sliding ladder — 50pt for 5% off, 100pt for 10%,",
+    "    on up to 30% off at 300-400pt.",
     "  - Tiers: Visitor → Regular → Local → Family, with perks at each step.",
     "  - Ask a budtender to start your card on your first visit — about 30 seconds.",
     "",
