@@ -36,14 +36,14 @@ const REVIEWS: Review[] = [
     author: "Linda C.",
     city: "Seward Park",
     rating: 5,
-    text: "I'm a senior who started using cannabis for chronic pain. The staff have been patient, kind, and never once made me feel out of place. They walked me through tinctures and dosing without making me feel dumb. Real neighborhood shop.",
+    text: "I started using cannabis later in life and was nervous to walk in. The staff have been patient, kind, and never once made me feel out of place. They walked me through tinctures and dosing without making me feel dumb. Real neighborhood shop.",
     date: "2026-03-22",
   },
   {
     author: "Jamal K.",
     city: "Columbia City",
     rating: 5,
-    text: "Locally owned and you can feel it — disciplined, well-run, no nonsense. 20% off online orders is the right move. I order ahead, swing by between meetings, in and out in 4 minutes flat.",
+    text: "Independent shop, you can feel it — disciplined, well-run, no nonsense. 20% off online orders is the right move. I order ahead, swing by between meetings, in and out in 4 minutes flat.",
     date: "2026-04-26",
   },
   {
