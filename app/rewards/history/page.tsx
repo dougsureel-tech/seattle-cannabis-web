@@ -185,8 +185,8 @@ function EmptyHistoryCard() {
       <div className="text-3xl" aria-hidden="true">🌱</div>
       <p className="font-bold text-stone-900">No visits yet</p>
       <p className="text-stone-500 text-sm">
-        Your first visit will show up here. Drop by + we&apos;ll get you
-        earning.
+        Nothing here yet. Your first visit shows up the moment you check
+        out — see you soon.
       </p>
       <Link
         href="/menu"
