@@ -116,7 +116,14 @@ const WSLCB_LICENSE = `WSLCB License ${STORE.wslcbLicense}`;
 // memory, `rainier@` is the confirmed monitored inbox. Sister to
 // greenlife-web v3.335. RESEND_REPLY_TO unset on Seattle so falls
 // through to STORE.email = `rainier@seattlecannabis.co`.
-const OPT_OUT_EMAIL = process.env.RESEND_REPLY_TO || STORE.email;
+// Function-resolved instead of module-init constant. Sister of v24.105
+// email.ts function-resolution fix. RESEND_REPLY_TO is part of the
+// rotation class — admin env-flips need to propagate immediately to
+// avoid the Jensine 2026-05-11 cascade. Memory pin:
+// feedback_env_var_precedence_cross_tenant_trap.
+function getOptOutEmail(): string {
+  return process.env.RESEND_REPLY_TO || STORE.email;
+}
 
 function buildHtml(args: WelcomeEmailArgs): string {
   const { firstName, storeName, storeAddress, mapUrl, hoursText, deepLinkOrder } = args;
@@ -240,7 +247,7 @@ function buildHtml(args: WelcomeEmailArgs): string {
           You're getting this because you just created an account at
           ${safeStoreName}. To stop future marketing emails, reply STOP or
           email
-          <a href="mailto:${OPT_OUT_EMAIL}" style="color:${COLORS.accentText};text-decoration:underline;">${OPT_OUT_EMAIL}</a>.
+          <a href="mailto:${getOptOutEmail()}" style="color:${COLORS.accentText};text-decoration:underline;">${getOptOutEmail()}</a>.
         </p>
       </td></tr>
     </table>
@@ -290,7 +297,7 @@ function buildText(args: WelcomeEmailArgs): string {
     `Directions: ${mapUrl}`,
     `${PHONE_DISPLAY} · ${WSLCB_LICENSE}`,
     "",
-    `Welcome email from ${storeName}. To stop future marketing emails, reply STOP or email ${OPT_OUT_EMAIL}.`,
+    `Welcome email from ${storeName}. To stop future marketing emails, reply STOP or email ${getOptOutEmail()}.`,
   ].join("\n");
 }
 

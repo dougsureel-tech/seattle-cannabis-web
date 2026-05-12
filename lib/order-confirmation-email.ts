@@ -97,7 +97,14 @@ const WSLCB_LICENSE = `WSLCB License ${STORE.wslcbLicense}`;
 // `RESEND_REPLY_TO` env unset on Seattle (per inventoryapp v3.325
 // notes) so falls through to STORE.email = `rainier@seattlecannabis.co`
 // — the monitored inbox.
-const OPT_OUT_EMAIL = process.env.RESEND_REPLY_TO || STORE.email;
+// Function-resolved instead of module-init constant. Sister of v24.105
+// email.ts function-resolution fix. RESEND_REPLY_TO is part of the
+// rotation class — admin env-flips need to propagate immediately to
+// avoid the Jensine 2026-05-11 cascade. Memory pin:
+// feedback_env_var_precedence_cross_tenant_trap.
+function getOptOutEmail(): string {
+  return process.env.RESEND_REPLY_TO || STORE.email;
+}
 
 function buildHtml(args: OrderConfirmationArgs): string {
   const {
@@ -282,7 +289,7 @@ function buildHtml(args: OrderConfirmationArgs): string {
           You're getting this because you placed an order at ${safeStoreName}.
           This is a transactional confirmation — to stop future marketing
           emails, email
-          <a href="mailto:${OPT_OUT_EMAIL}?subject=Unsubscribe" style="color:${COLORS.accentText};text-decoration:underline;">${OPT_OUT_EMAIL}</a>.
+          <a href="mailto:${getOptOutEmail()}?subject=Unsubscribe" style="color:${COLORS.accentText};text-decoration:underline;">${getOptOutEmail()}</a>.
         </p>
       </td></tr>
     </table>
@@ -344,7 +351,7 @@ function buildText(args: OrderConfirmationArgs): string {
     `${storeAddress}`,
     `${PHONE_DISPLAY} · ${WSLCB_LICENSE}`,
     "",
-    `Transactional confirmation from ${storeName}. To stop future marketing emails, email ${OPT_OUT_EMAIL}.`,
+    `Transactional confirmation from ${storeName}. To stop future marketing emails, email ${getOptOutEmail()}.`,
   ].join("\n");
 }
 
