@@ -31,16 +31,29 @@ import "server-only";
 // single info line WITHOUT the recipient address. The error string is
 // safe to include in logs.
 
-const API_KEY = process.env.RESEND_API_KEY;
-const DEFAULT_FROM =
-  process.env.RESEND_FROM || "Seattle Cannabis Co. <hi@seattlecannabis.co>";
+// Function-resolved env reads instead of module-init constants.
+// Sister of inv v401.505 + cannagent v6.4565 (stale-Fluid-Compute-instance
+// env-var trap): Vercel Fluid Compute keeps warm serverless instances
+// ~15min, but `const X = process.env.Y` at module load captures the value
+// ONCE per instance — admin env rotations don't reach instances loaded
+// with the previous value until they cycle. Function-resolution reads
+// `process.env` on every call (zero perf cost — process.env is a Proxy
+// getter). Memory pin: `feedback_env_var_precedence_cross_tenant_trap`.
+// Caused the inv 2026-05-11 Jensine welcome-email failure cascade —
+// staff-bulk-reissue sent from stale send.subdomain (unverified at Resend)
+// for ~30min after env-flip until instances cycled. Probe-side reports
+// emailFromAtRisk based on these getters so they agree with send code.
+function getApiKey(): string | undefined { return process.env.RESEND_API_KEY; }
+function getDefaultFrom(): string {
+  return process.env.RESEND_FROM || "Seattle Cannabis Co. <hi@seattlecannabis.co>";
+}
 // Reply-To override. When set, customer replies to outbound mail land
 // here instead of the From address. Mirror of greenlife-web — kept
 // symmetric so both repos behave identically. Seattle's From
 // (rainier@seattlecannabis.co) is actively monitored as of 2026-05-04
 // so this env var is currently unset on the SCC project, but the
 // support is wired so future routing changes don't need code edits.
-const DEFAULT_REPLY_TO = process.env.RESEND_REPLY_TO ?? null;
+function getDefaultReplyTo(): string | null { return process.env.RESEND_REPLY_TO ?? null; }
 
 export type SendEmailArgs = {
   to: string;
@@ -67,7 +80,7 @@ export type SendEmailResult =
  *  email ("we'll email you a copy") so we don't lie to customers when
  *  the env var is absent in a given environment. */
 export function isEmailConfigured(): boolean {
-  return !!API_KEY;
+  return !!getApiKey();
 }
 
 /**
@@ -100,7 +113,7 @@ export function isEmailConfigured(): boolean {
  *  at the Resend dashboard first (DNS-side TXT + DKIM records).
  */
 export function isEmailFromAtRisk(): boolean | null {
-  if (!API_KEY) return null;
+  if (!getApiKey()) return null;
   const configured = process.env.RESEND_FROM?.trim();
   if (!configured) {
     // Code default is `hi@seattlecannabis.co` (apex) — AT-RISK by default
@@ -121,7 +134,7 @@ export function isEmailFromAtRisk(): boolean | null {
  * local-part). Paired with `isEmailFromAtRisk()` on `/api/health`.
  */
 export function getEmailFromHost(): string | null {
-  if (!API_KEY) return null;
+  if (!getApiKey()) return null;
   const configured = process.env.RESEND_FROM?.trim();
   if (!configured) return "seattlecannabis.co"; // code-default apex
   const angleMatch = configured.match(/<([^>]+@([^>]+))>/);
@@ -134,7 +147,8 @@ export function getEmailFromHost(): string | null {
  *  (graceful no-op for local dev / preview envs without the key), and
  *  `{ ok: false, error }` on a real send failure. Never throws. */
 export async function sendEmail(args: SendEmailArgs): Promise<SendEmailResult> {
-  if (!API_KEY) {
+  const apiKey = getApiKey();
+  if (!apiKey) {
     // Single info line, NO recipient address — keeps PII out of logs in
     // the no-op path which is the most common path in dev / preview.
     console.info("[email] RESEND_API_KEY not configured — skipping send");
@@ -147,11 +161,11 @@ export async function sendEmail(args: SendEmailArgs): Promise<SendEmailResult> {
 
   try {
     const { Resend } = await import("resend");
-    const client = new Resend(API_KEY);
-    const replyTo = args.replyTo ?? DEFAULT_REPLY_TO ?? undefined;
+    const client = new Resend(apiKey);
+    const replyTo = args.replyTo ?? getDefaultReplyTo() ?? undefined;
     const headers: Record<string, string> | undefined = args.unsubscribeUrl
       ? (() => {
-          const mailtoSource = replyTo || args.from || DEFAULT_FROM;
+          const mailtoSource = replyTo || args.from || getDefaultFrom();
           const angleMatch = mailtoSource.match(/<([^>]+)>/);
           const bareEmail = angleMatch ? angleMatch[1] : mailtoSource;
           return {
@@ -161,7 +175,7 @@ export async function sendEmail(args: SendEmailArgs): Promise<SendEmailResult> {
         })()
       : undefined;
     const r = await client.emails.send({
-      from: args.from ?? DEFAULT_FROM,
+      from: args.from ?? getDefaultFrom(),
       to: args.to,
       subject: args.subject,
       html: args.html,
