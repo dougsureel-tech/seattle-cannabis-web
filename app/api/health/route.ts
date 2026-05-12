@@ -104,6 +104,13 @@ export async function GET() {
     // is set on this deployment; `false` means email helper falls back to
     // the no-op skip path.
     emailConfigured: isEmailConfigured(),
+    // Cross-stack alias of `emailConfigured` — sister stacks (cannagent + GW +
+    // sureel + VRG) use the name `emailReady` for this same concept. Doug
+    // post-deploy curl pattern is one mental model across all 6 sites; keeping
+    // both names lets him reuse a single grep without context-switching.
+    // Additive — `emailConfigured` retained for backwards compat with any
+    // existing consumer (Vercel monitors, external probes).
+    emailReady: isEmailConfigured(),
     // Cross-stack readiness probe (sister of cannagent v6.4585 + inv v401.305).
     // `true` when RESEND_FROM is set to bare apex `seattlecannabis.co` — at-risk
     // because `dig MX seattlecannabis.co` returns `seattlecannabis-co.mail.protection.outlook.com`
@@ -125,6 +132,8 @@ export async function GET() {
     // 2026-05-03 21:25 PT (Twilio gap) directly on the public-site
     // health endpoint.
     smsConfigured: isSmsConfigured(),
+    // Cross-stack alias — sister of `emailReady` above. GW uses `smsReady`.
+    smsReady: isSmsConfigured(),
   };
 
   return NextResponse.json(body, {
