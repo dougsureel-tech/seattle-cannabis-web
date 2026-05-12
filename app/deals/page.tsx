@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { STORE, DEFAULT_OG_IMAGE} from "@/lib/store";
+import { STORE } from "@/lib/store";
 import { getActiveDeals } from "@/lib/db";
 import { DealArt } from "@/components/DealArt";
 import { matchDealVendor } from "@/lib/deal-vendor-match";
@@ -25,10 +25,16 @@ export const metadata: Metadata = {
     description: `Live deals at ${STORE.name} ${STORE.address.full}.`,
     url: `${STORE.website}/deals`,
     type: "website",
-    // Explicit reference to the root opengraph-image.tsx route — without it,
-    // page-level openGraph fully replaces the parent's auto-injected images
-    // and Facebook/Slack/Messages share previews come up imageless.
-    images: [DEFAULT_OG_IMAGE],
+    // Per-route OG at /deals/opengraph-image — Seattle indigo deals card.
+    // Sister of glw deals OG + scc menu OG v23.805 (same fix shape).
+    images: [
+      {
+        url: "/deals/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: `Cannabis Deals — ${STORE.name}`,
+      },
+    ],
   },
 };
 
