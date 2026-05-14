@@ -100,6 +100,24 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.redirect(target.toString(), 308);
   }
 
+  // Typed-URL 308s for paths customers + referrers guess. Pre-fix
+  // `/online` + `/store` 404'd. Inbound links from marketing email
+  // typos, social-share path mangling, and misremembered search
+  // results land on a real page now. Sister of /brands redirect
+  // above + sister-ship to GW v2.97.M7 + greenlife-web sister. Per
+  // the standing customer-CTAs-point-to-menu rule (memory pin
+  // `feedback_customer_ctas_point_to_menu_only`), "shop"/"buy"
+  // intent ALL routes to /menu — only `/store` ambiguates to
+  // /visit (physical-store intent, not online-order intent).
+  // 308 because these paths are gone for good (no native /store or
+  // /online surface is planned).
+  if (url.pathname === "/online") {
+    return NextResponse.redirect(new URL("/menu", req.url), 308);
+  }
+  if (url.pathname === "/store") {
+    return NextResponse.redirect(new URL("/visit", req.url), 308);
+  }
+
   // Site-wide canonical-host redirect. Was previously scoped to `/menu*`
   // only (because that path was the original CORS-driven case — see
   // CANONICAL_HOST comment above), but every other route benefits too:
