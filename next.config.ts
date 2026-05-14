@@ -275,9 +275,13 @@ const nextConfig: NextConfig = {
       { source: "/pre-rolls", destination: "/menu", permanent: true },
       { source: "/vapes", destination: "/menu", permanent: true },
 
-      // Strain-finder has its own SEO-aware page on the new site — better fit
-      // than /menu for the "/strains" inbound (search-intent matches).
-      { source: "/strains", destination: "/find-your-strain", permanent: true },
+      // /strains REDIRECT REMOVED v26.505 — it now owns its own page
+      // (NEW `app/strains/page.tsx` directory hub + 4 per-type landing
+      // pages at /strains/[type]). The strain-finder quiz still lives
+      // at /find-your-strain as its own canonical URL and is linked
+      // from the new /strains hero. Legacy /strains inbounds now land
+      // on the SEO-targeted directory instead of the quiz — better
+      // match for "/strains" search intent.
 
       // Booking-style legacy URLs. Destination flattened from `/order` →
       // `/menu` direct (v9.225): /order itself 307s → /menu via proxy.ts
