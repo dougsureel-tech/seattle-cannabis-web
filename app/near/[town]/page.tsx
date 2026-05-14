@@ -210,6 +210,25 @@ export default async function NearTownPage({
 
   const otherAreas = NEAR_TOWNS.filter((t) => t.slug !== area.slug);
 
+  // "Also nearby" mini-cluster — resolves the area's hand-picked
+  // `notableNeighbors` names against NEAR_TOWNS to produce a 2-3-card
+  // related cluster that renders ABOVE the full area grid. Anchors
+  // PageRank between geo-neighbors (the most-likely next-page for a
+  // visitor who arrived via an area-search) without disturbing the
+  // full crawl-discovery grid below. Notable-neighbor names use display
+  // case ("Mt Baker"); slug match is loose (lowercase + hyphen-for-
+  // space) so the SSoT doesn't need a second name→slug map. Sister
+  // glw v35.905.
+  const slugify = (s: string): string =>
+    s.toLowerCase().replace(/\s+/g, "-");
+  const notableNearby = area.notableNeighbors
+    .map((name) => {
+      const target = slugify(name);
+      return NEAR_TOWNS.find((t) => t.slug === target);
+    })
+    .filter((t): t is NonNullable<typeof t> => t !== undefined)
+    .slice(0, 3);
+
   // Static hours summary — uniform 8 AM–11 PM seven days a week on scc.
   // Page is force-static + revalidate=false; baking a "today's hours"
   // string at build time would drift by day-of-week on every
@@ -456,42 +475,77 @@ export default async function NearTownPage({
         </div>
       </section>
 
-      {/* ── OTHER AREAS ─────────────────────────────────────────────────
-          Compact card grid (2-col mobile, 3-col tablet+) replacing the
-          plain 2-column bullet list. Each card has the area + drive
-          time + a subtle hover state. This is the internal-link
-          cluster Google uses to crawl the rest of the /near network.
-          Sister glw v33.805 other-towns card grid.
+      {/* ── ALSO NEARBY + OTHER AREAS ───────────────────────────────────
+          Two sister clusters sharing one section wrapper so the spacing
+          stays coherent. Top cluster: hand-picked 2-3 neighbor areas
+          from `area.notableNeighbors` (SSoT in lib/near-towns.ts)
+          rendered with chevron + driveTime chip — anchors PageRank
+          between geo-neighbors (the most-likely next-page for a visitor
+          who arrived via an area-specific search). Bottom grid: full
+          crawl-discovery surface for the rest of the NEAR_TOWNS network.
+          Operator-direct headers, no marketing-speak. Sister glw v35.905.
       */}
-      {otherAreas.length > 0 && (
+      {(notableNearby.length > 0 || otherAreas.length > 0) && (
         <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
-          <div className="mb-6 sm:mb-8">
-            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-indigo-700 mb-2">
-              Other neighborhoods we serve
-            </p>
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-stone-900">
-              From everywhere in the south end
-            </h2>
-          </div>
-          <ul className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
-            {otherAreas.map((t) => (
-              <li key={t.slug}>
-                <Link
-                  href={`/near/${t.slug}`}
-                  className="group block rounded-xl bg-white border border-stone-200 hover:border-indigo-400 hover:shadow-sm transition-all px-3 sm:px-4 py-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
-                >
-                  <div className="flex items-baseline justify-between gap-2">
-                    <span className="text-sm sm:text-base font-semibold text-stone-900 group-hover:text-indigo-800 transition-colors truncate">
-                      {t.name}
-                    </span>
-                    <span className="text-xs font-semibold text-indigo-700 tabular-nums shrink-0">
-                      {t.driveMins} min
-                    </span>
-                  </div>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          {notableNearby.length > 0 && (
+            <div className="mb-8 sm:mb-10">
+              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-indigo-700 mb-3">
+                Also nearby
+              </p>
+              <ul className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
+                {notableNearby.map((t) => (
+                  <li key={t.slug}>
+                    <Link
+                      href={`/near/${t.slug}`}
+                      className="group flex items-center justify-between gap-3 rounded-xl bg-white border border-indigo-200 hover:border-indigo-500 hover:shadow-sm transition-all px-3 sm:px-4 py-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+                    >
+                      <span className="flex items-center gap-2 min-w-0">
+                        <span aria-hidden="true" className="text-indigo-700 shrink-0">›</span>
+                        <span className="text-sm sm:text-base font-semibold text-stone-900 group-hover:text-indigo-800 transition-colors truncate">
+                          {t.name}
+                        </span>
+                      </span>
+                      <span className="inline-flex items-center gap-1 rounded-full bg-indigo-50 group-hover:bg-indigo-100 px-2 py-0.5 text-[11px] font-semibold text-indigo-800 tabular-nums shrink-0 transition-colors">
+                        {t.driveMins} min
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {otherAreas.length > 0 && (
+            <div>
+              <div className="mb-6 sm:mb-8">
+                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-indigo-700 mb-2">
+                  Other neighborhoods we serve
+                </p>
+                <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-stone-900">
+                  From everywhere in the south end
+                </h2>
+              </div>
+              <ul className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
+                {otherAreas.map((t) => (
+                  <li key={t.slug}>
+                    <Link
+                      href={`/near/${t.slug}`}
+                      className="group block rounded-xl bg-white border border-stone-200 hover:border-indigo-400 hover:shadow-sm transition-all px-3 sm:px-4 py-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+                    >
+                      <div className="flex items-baseline justify-between gap-2">
+                        <span className="text-sm sm:text-base font-semibold text-stone-900 group-hover:text-indigo-800 transition-colors truncate">
+                          {t.name}
+                        </span>
+                        <span className="text-xs font-semibold text-indigo-700 tabular-nums shrink-0">
+                          {t.driveMins} min
+                        </span>
+                      </div>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </section>
       )}
     </main>
