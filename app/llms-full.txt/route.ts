@@ -1,5 +1,6 @@
 import { STORE, hoursSummary } from "@/lib/store";
 import { storeToday } from "@/lib/store-time";
+import { NEAR_TOWNS } from "@/lib/near-towns";
 
 // /llms-full.txt — long-form companion to /llms.txt for AI engines
 // (Claude search, Perplexity, ChatGPT browse, Atlas, Apple Intelligence)
@@ -24,6 +25,16 @@ function render(): string {
   const { name, address, phone, website, wslcbLicense, social, neighborhood } = STORE;
   const summary = hoursSummary();
   const mon = STORE.hours.find((h) => h.day === "Monday");
+  const columbiaCity = NEAR_TOWNS.find((t) => t.slug === "columbia-city");
+  const beaconHill = NEAR_TOWNS.find((t) => t.slug === "beacon-hill");
+  const rainierBeach = NEAR_TOWNS.find((t) => t.slug === "rainier-beach");
+  const skyway = NEAR_TOWNS.find((t) => t.slug === "skyway");
+  const tukwila = NEAR_TOWNS.find((t) => t.slug === "tukwila");
+  const renton = NEAR_TOWNS.find((t) => t.slug === "renton");
+  const burien = NEAR_TOWNS.find((t) => t.slug === "burien");
+  const whiteCenter = NEAR_TOWNS.find((t) => t.slug === "white-center");
+  const seatac = NEAR_TOWNS.find((t) => t.slug === "seatac");
+  const lakeCity = NEAR_TOWNS.find((t) => t.slug === "lake-city");
 
   return `# ${name} — Full Reference for AI Search
 
@@ -32,6 +43,53 @@ function render(): string {
 ## At a glance
 
 ${name} is a ${neighborhood} cannabis dispensary in South Seattle. Founded in Seattle in 2010 — pre-I-502 origin — and rooted in the same Rainier Valley building since 2018, ${name} is licensed under Washington State Liquor and Cannabis Board (WSLCB) license ${wslcbLicense}. The legal entity is Green Anne LLC dba ${name}. Same crew, same care since opening — cash only with an ATM on-site, 21+ with valid government-issued photo ID, and pickup-only — Washington State law prohibits delivery from licensed retail. Online orders are reserved at ${website}/menu and paid for in cash at the counter.
+
+## Common questions
+
+Q: How long has ${name} been around?
+A: Since 2010, pre-Initiative-502 — one of the oldest continuously-operating cannabis shops in Seattle. ${name} started as a medical collective on Rainier Ave S before recreational licensing existed in Washington State, then transitioned to a WSLCB-licensed recreational retailer when I-502 implementation rolled out. Operated by Green Anne LLC the entire time. Same crew, same care since opening.
+
+Q: Where is ${name}?
+A: ${address.full} — ${neighborhood}, between Columbia City and Rainier Beach on Rainier Ave S. Free parking in the dedicated lot directly out front, flat-grade and ADA-accessible. Google Maps: ${STORE.googleMapsUrl}.
+
+Q: How long is the drive from Columbia City to ${name}?
+A: About ${columbiaCity?.driveMins ?? 8} minutes by car — south on Rainier Ave the whole way, no turns, no freeway. On transit: ${columbiaCity?.transit ?? "Columbia City Light Rail then 5 minutes south on the 7 bus, or a 10-minute walk down Rainier"}.
+
+Q: How long is the drive from Beacon Hill to ${name}?
+A: About ${beaconHill?.driveMins ?? 12} minutes by car — drop down 12th Ave S to the Holgate Bridge, cross over, and pick up Rainier Ave south. On Light Rail it’s Beacon Hill Station → Mt Baker → 7 bus south, around 25 minutes end to end.
+
+Q: How long is the drive from Rainier Beach to ${name}?
+A: About ${rainierBeach?.driveMins ?? 8} minutes — straight up Rainier Ave, same street the whole way, no turns. On the 7 bus it’s three stops north, or Light Rail one stop to Othello + a short walk.
+
+Q: How long is the drive from Skyway to ${name}?
+A: About ${skyway?.driveMins ?? 10} minutes — up Renton Ave S, hang a right onto Rainier Ave, and you’re at the door. On transit it’s the 106 bus from Skyway Park to Rainier Beach Station + the 7 bus north, around 25 minutes door to door.
+
+Q: How long is the drive from Tukwila to ${name}?
+A: About ${tukwila?.driveMins ?? 15} minutes — up MLK Jr Way S to Rainier and right to the door, or I-5 north to the Albro exit and east on Swift Ave. On transit it’s Tukwila International Boulevard Station → Rainier Beach → 7 bus north, around 35 minutes if you’re not in a hurry.
+
+Q: How long is the drive from Renton to ${name}?
+A: About ${renton?.driveMins ?? 20} minutes — I-405 north to I-5, exit at Albro and east to Rainier, or surface streets up Rainier Ave all the way from the Renton end. Free parking out front, no parking-meter scramble.
+
+Q: How long is the drive from Burien to ${name}?
+A: About ${burien?.driveMins ?? 25} minutes — east on S 128th, north on I-5, exit at Albro and east to Rainier. The surface-street alternative is 1st Ave S north + cross over at SODO to MLK and down to Rainier.
+
+Q: How long is the drive from White Center to ${name}?
+A: About ${whiteCenter?.driveMins ?? 20} minutes — east on Roxbury, up MLK Jr Way S, and east to Rainier Ave. The freeway path is 1st Ave S north + I-5 + Albro exit; surface streets are usually faster.
+
+Q: How long is the drive from SeaTac to ${name}?
+A: About ${seatac?.driveMins ?? 22} minutes — I-5 north, exit at Albro and east, or 99 + Boeing Access Rd if traffic’s wrong on the freeway. Useful for pre-flight or post-flight pickups. (Reminder: you can’t bring cannabis through TSA — the trip needs to be local.)
+
+Q: How long is the drive from Lake City to ${name}?
+A: About ${lakeCity?.driveMins ?? 25} minutes — I-5 south the whole way, exit at Albro, east to Rainier Ave. Light Rail is the alternative: Northgate Station south, transfer at Westlake or Mt Baker depending on schedule, around 50 minutes end to end on transit.
+
+Q: What are the hours at ${name}?
+A: ${summary}, Pacific Time. Open ${mon?.open}–${mon?.close} every day of the year. Online ordering closes 15 minutes before in-store close so staff can stage the order.
+
+Q: Do you take credit cards at ${name}?
+A: Cash only at the counter. There’s an ATM in the lobby. (Cannabis is federally illegal so card networks — Visa, Mastercard, American Express, Discover — don’t process cannabis transactions. Same federal cannabis-banking reality across all Washington dispensaries, not specific to ${name}.)
+
+Q: Is ${name} open on holidays?
+A: Yes — open every day of the year. Hours can shift on major holidays — call ${phone} to confirm same-day before driving across town.
 
 ## Location and contact
 
