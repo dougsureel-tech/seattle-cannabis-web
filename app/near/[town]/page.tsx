@@ -133,6 +133,63 @@ export default async function NearTownPage({
     ],
   };
 
+  // FAQPage — per-neighborhood Q&A block so Google + LLMs (ChatGPT,
+  // Perplexity, Claude.ai, Gemini) have explicit structured Q&A to
+  // cite. Five questions per page; 2 are area-specific (drive-time +
+  // transit) and pull from `area.driveMins` + `area.transit`; the
+  // other 3 are structural facts (address / cash-only / hours / 21+)
+  // and pull from STORE constants. Hardcoded answers but routed
+  // through safeJsonLd() per existing convention. Voice: operator-grit,
+  // no exclamation marks, U+2019 apostrophes, WAC 314-55-155 lane
+  // (no effect/medical/promo claims).
+  const faqLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "@id": `${STORE.website}/near/${area.slug}#faq`,
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: `How long is the drive from ${area.name} to ${STORE.name}?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: `About ${area.driveMins} minutes by car. On transit: ${area.transit}.`,
+        },
+      },
+      {
+        "@type": "Question",
+        name: `What${"’"}s the address?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: `${STORE.address.full}. Free parking out front.`,
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Do you take cards?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: `Cash only at the counter. There${"’"}s an ATM in the lobby.`,
+        },
+      },
+      {
+        "@type": "Question",
+        name: "What are your hours?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "8 AM to 11 PM daily. Open every day of the year.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Do I need to be 21?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Yes. ID checked at the door per WAC. 21 and up only.",
+        },
+      },
+    ],
+  };
+
   const otherAreas = NEAR_TOWNS.filter((t) => t.slug !== area.slug);
 
   return (
@@ -144,6 +201,10 @@ export default async function NearTownPage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(faqLd) }}
       />
 
       <nav className="text-sm text-zinc-500 mb-4">
