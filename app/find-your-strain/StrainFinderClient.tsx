@@ -153,7 +153,7 @@ export function StrainFinderClient() {
       }
     } catch {
       setCaptureState("error");
-      setCaptureError("Network hiccup — try again or skip below.");
+      setCaptureError("Couldn't reach us — try again or skip below.");
     }
   }
 
@@ -348,7 +348,7 @@ export function StrainFinderClient() {
               {captureState === "submitting"
                 ? "Sending…"
                 : captureState === "success"
-                  ? "Sent! Loading your matches…"
+                  ? "Sent — loading your matches…"
                   : "Send it"}
             </button>
 

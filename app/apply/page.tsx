@@ -344,7 +344,7 @@ function ApplyForm() {
           window.location.href = "/apply/thanks";
           return;
         }
-        setSubmitError("Application's in, but our system sent back a weird response. If you don't hear back in 1–2 weeks, email us and we'll dig in.");
+        setSubmitError("Application's in, but we didn't get a clean confirmation. If you don't hear back in 1–2 weeks, email us and we'll dig in.");
         return;
       }
 
@@ -356,14 +356,10 @@ function ApplyForm() {
       } else if (errorJson?.error && typeof errorJson.error === "string") {
         setSubmitError(errorJson.error);
       } else {
-        setSubmitError(`Couldn't submit your application (server returned ${res.status}). Try again or email us directly.`);
+        setSubmitError("Couldn't submit your application. Try again, or email us directly and we'll grab it that way.");
       }
-    } catch (err) {
-      setSubmitError(
-        err instanceof Error && err.message
-          ? `Network issue: ${err.message}. Try again.`
-          : "Network issue — check your connection and try again."
-      );
+    } catch {
+      setSubmitError("Couldn't reach us — check your connection and try again.");
     } finally {
       setSubmitting(false);
     }
