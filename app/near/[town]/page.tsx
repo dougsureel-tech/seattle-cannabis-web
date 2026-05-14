@@ -115,6 +115,16 @@ export default async function NearTownPage({
         addressCountry: "US",
       },
     },
+    // SpeakableSpecification — explicit anchor for voice assistants
+    // (Google Assistant / Siri / Alexa) so a "near me" voice query
+    // surfaces a compact readback of the load-bearing facts (H1 +
+    // anything tagged `data-speakable`: cityCopy lede + address line).
+    // Generic CSS selectors so future copy doesn't need to know about
+    // this contract. Sister glw v34.405 + GW v2.97.M1 SpeakableSpecification port.
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: ["h1", "[data-speakable]"],
+    },
   };
 
   // BreadcrumbList — Google renders the path under the SERP result
@@ -242,14 +252,14 @@ export default async function NearTownPage({
             Cannabis dispensary near {area.name}, Seattle
           </h2>
           {area.cityCopy.split("\n\n").map((para, i) => (
-            <p key={i}>{para}</p>
+            <p key={i} {...(i === 0 ? { "data-speakable": "" } : {})}>{para}</p>
           ))}
         </section>
       )}
 
       <section className="prose prose-zinc max-w-none mb-10">
         <p>{area.whyStop}</p>
-        <p>
+        <p data-speakable>
           We&apos;re at <strong>{STORE.address.full}</strong>. ATM in-store, free parking out front, ADA accessible.
           Cash only at the counter — browse the live menu and place a pickup order before you head over.
         </p>
