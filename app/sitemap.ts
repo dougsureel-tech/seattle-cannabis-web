@@ -3,6 +3,7 @@ import { getActiveBrands, getActiveDeals } from "@/lib/db";
 import { STORE } from "@/lib/store";
 import { getPosts, fetchDynamicPosts } from "@/lib/posts";
 import { NEAR_TOWNS } from "@/lib/near-towns";
+import { STRAIN_TYPES } from "@/lib/strain-types";
 
 // Revalidate every 30 minutes at CDN edge — sitemap pulls from DB
 // (brands, deals, posts) but those change rarely (deals daily at most;
@@ -67,6 +68,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // products move in/out as inventory turns. Sister: glw v4.825.
     { url: `${STORE.website}/treasure-chest`, lastModified: new Date(), changeFrequency: "daily", priority: 0.7 },
     { url: `${STORE.website}/find-your-strain`, lastModified: STATIC_LASTMOD, changeFrequency: "weekly", priority: 0.8 },
+    // /strains directory + 4 per-type landing pages — SEO audit Tier-1
+    // long-tail intent capture ("indica strains Seattle", "sativa
+    // Rainier Valley", etc.). priority 0.8 — peer with /find-your-strain.
+    // changeFrequency "monthly" because the descriptive copy doesn't
+    // turn over (live inventory lives at /menu).
+    { url: `${STORE.website}/strains`, lastModified: STATIC_LASTMOD, changeFrequency: "monthly", priority: 0.8 },
+    ...STRAIN_TYPES.map((t) => ({
+      url: `${STORE.website}/strains/${t.slug}`,
+      lastModified: STATIC_LASTMOD,
+      changeFrequency: "monthly" as const,
+      priority: 0.75,
+    })),
     {
       url: `${STORE.website}/heroes`,
       lastModified: STATIC_LASTMOD,
