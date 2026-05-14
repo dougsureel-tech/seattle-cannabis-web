@@ -62,13 +62,18 @@ export async function generateMetadata({
       description: desc,
       url: `${STORE.website}/near/${area.slug}`,
       siteName: STORE.name,
-      // `images` intentionally omitted — co-located `opengraph-image.tsx`
-      // is the per-route card (scc v26.805) and Next 16's convention
-      // auto-injects it into og:image + twitter:image at build time.
-      // Setting `images: [DEFAULT_OG_IMAGE]` here would override the
-      // convention and make the per-route file dead code — that's the
-      // exact bug `scripts/check-per-route-og-image.mjs` was built to
-      // prevent (T48-T50 history).
+      // Explicit per-route OG URL (scc v26.805). Co-located
+      // `opengraph-image.tsx` is the per-area card; this entry points
+      // at the per-route file. See `check-per-route-og-image.mjs` fix
+      // shape B + `check-og-completeness.mjs` images-required rule.
+      images: [
+        {
+          url: `/near/${area.slug}/opengraph-image`,
+          width: 1200,
+          height: 630,
+          alt: `${area.name} → ${STORE.name} · ${area.driveMins} min`,
+        },
+      ],
     },
   };
 }

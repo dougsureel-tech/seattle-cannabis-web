@@ -20,17 +20,9 @@ import { NEAR_TOWNS, getTown } from "@/lib/near-towns";
 // WAC 314-55-155: card text is descriptive only — drive-time + transit
 // + neighborhood name. No effect/medical/promotional claims.
 
+export const alt = `${STORE.name} — Dispensary near you`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-
-export function generateImageMetadata() {
-  return NEAR_TOWNS.map((t) => ({
-    id: t.slug,
-    alt: `${t.name} → ${STORE.name} · ${t.driveMins} min`,
-    size,
-    contentType,
-  }));
-}
 
 export default async function OG({ params }: { params: Promise<{ town: string }> }) {
   const { town: slug } = await params;
