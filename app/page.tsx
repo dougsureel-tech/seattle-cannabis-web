@@ -18,6 +18,25 @@ import { HeroBackground } from "@/components/HeroBackground";
 import { NeighborhoodMap } from "@/components/NeighborhoodMap";
 import { NEIGHBORHOODS } from "@/lib/neighborhoods";
 import { safeJsonLd } from "@/lib/json-ld-safe";
+import { NEAR_TOWNS } from "@/lib/near-towns";
+
+// Slug-by-name map for /near pages — lets the homepage's
+// STORE.nearbyNeighborhoods pill cluster wrap matching neighborhood
+// names in /near/<slug> internal links without forcing the SSoT
+// (strings list) to carry slugs. Names that don't map (e.g. "Mount
+// Baker" → "mt-baker" via the variant table below) fall back to non-
+// linked spans. Resolves SEO-audit Fix 1 — 0 inbound /near links on the
+// homepage pre-v25.805. Sister glw v34.805 same pattern.
+const NEAR_SLUG_BY_NAME: Record<string, string> = Object.fromEntries(
+  NEAR_TOWNS.flatMap((t) => {
+    const variants = [t.name, t.name.toLowerCase()];
+    // Hand-fix the doc-name drifts between STORE.nearbyNeighborhoods
+    // ("Mount Baker") and NEAR_TOWNS.name ("Mt Baker"). Both spellings
+    // resolve to the same /near/mt-baker landing page.
+    if (t.slug === "mt-baker") variants.push("Mount Baker", "mount baker");
+    return variants.map((v) => [v, t.slug] as const);
+  }),
+);
 
 // ISR: home page hits Neon 3x per request (getActiveBrands, getFeaturedProducts,
 // getActiveDeals). Was force-dynamic so every visit ran all three. 60s
@@ -482,19 +501,26 @@ export default async function HomePage() {
               </h2>
             </div>
             <div className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-10 gap-3">
-              {featuredBrands.map((brand) => (
+              {featuredBrands.map((brand, i) => (
                 <Link
                   key={brand.id}
                   href={`/brands/${brand.slug}`}
                   className="group flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border border-stone-100 bg-stone-50 hover:border-violet-300 hover:bg-white hover:shadow-md hover:shadow-violet-500/10 hover:-translate-y-0.5 transition-all duration-200 aspect-square"
                 >
                   {brand.logoUrl ? (
+                    // First brand logo is the first above-the-fold raster
+                    // image on the homepage (hero is text + CSS — no
+                    // <Image>). Marking the first card `priority` so
+                    // Next/Image emits `fetchpriority="high"` + `loading="eager"`
+                    // shaves LCP off the critical path on mobile per the
+                    // 2026-05-14 SEO audit. Sister glw v34.805.
                     <Image
                       src={brand.logoUrl}
                       alt={brand.name}
                       width={80}
                       height={40}
                       sizes="(max-width: 640px) 80px, 160px"
+                      priority={i === 0}
                       className="max-h-10 max-w-full object-contain group-hover:scale-105 transition-transform duration-200"
                     />
                   ) : (
@@ -1337,14 +1363,29 @@ export default async function HomePage() {
                 Nearby Neighborhoods
               </h3>
               <div className="flex flex-wrap gap-2">
-                {STORE.nearbyNeighborhoods.map((n) => (
-                  <span
-                    key={n}
-                    className="text-xs px-3 py-1.5 rounded-full bg-stone-100 text-stone-600 font-medium"
-                  >
-                    {n}
-                  </span>
-                ))}
+                {STORE.nearbyNeighborhoods.map((n) => {
+                  const slug = NEAR_SLUG_BY_NAME[n];
+                  // Wrap pills whose neighborhood has a /near landing
+                  // page in a <Link> — internal-link equity transfer
+                  // per the 2026-05-14 SEO audit Fix 1. Pills with no
+                  // match stay non-linked spans.
+                  return slug ? (
+                    <Link
+                      key={n}
+                      href={`/near/${slug}`}
+                      className="text-xs px-3 py-1.5 rounded-full bg-stone-100 hover:bg-indigo-50 text-stone-600 hover:text-indigo-700 font-medium transition-colors"
+                    >
+                      {n}
+                    </Link>
+                  ) : (
+                    <span
+                      key={n}
+                      className="text-xs px-3 py-1.5 rounded-full bg-stone-100 text-stone-600 font-medium"
+                    >
+                      {n}
+                    </span>
+                  );
+                })}
               </div>
             </div>
             <div className="flex flex-wrap gap-3">
