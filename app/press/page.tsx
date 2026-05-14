@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { STORE } from "@/lib/store";
 import { safeJsonLd } from "@/lib/json-ld-safe";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 // Press kit page — exists so journalists, podcasters, local bloggers, and
 // micro-influencers (Rainier Valley + South Seattle creators especially)
@@ -59,6 +60,8 @@ export default function PressPage() {
     <div className="bg-stone-50 min-h-screen">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(orgSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbLd) }} />
+
+      <Breadcrumb items={[{ label: "Press" }]} />
 
       <section className="bg-indigo-950 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-16 sm:py-24">

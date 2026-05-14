@@ -5,6 +5,7 @@ import { NEAR_TOWNS } from "@/lib/near-towns";
 import { withAttr } from "@/lib/attribution";
 import { fetchClosureStatus } from "@/lib/closure-status";
 import { ClosureBanner } from "@/components/ClosureBanner";
+import { Breadcrumb } from "@/components/Breadcrumb";
 import { safeJsonLd } from "@/lib/json-ld-safe";
 
 // "Driving over from another neighborhood?" card grid below the
@@ -122,6 +123,8 @@ export default async function VisitPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbSchema) }}
       />
+
+      <Breadcrumb items={[{ label: "Visit" }]} />
 
       {closure.isClosed && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-4">

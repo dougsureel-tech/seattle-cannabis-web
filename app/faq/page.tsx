@@ -3,6 +3,7 @@ import Link from "next/link";
 import { STORE, DEFAULT_OG_IMAGE} from "@/lib/store";
 import { withAttr } from "@/lib/attribution";
 import { safeJsonLd } from "@/lib/json-ld-safe";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 // ISR — FAQs change occasionally; 24h is fine.
 export const revalidate = 86400;
@@ -162,6 +163,8 @@ export default function FaqPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbSchema) }}
       />
+
+      <Breadcrumb items={[{ label: "FAQ" }]} />
 
       {/* Hero — gradient bookend matching the rest of the site. */}
       <div className="relative overflow-hidden bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white py-10 sm:py-14">

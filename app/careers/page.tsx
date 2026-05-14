@@ -3,6 +3,7 @@ import Link from "next/link";
 import { STORE, DEFAULT_OG_IMAGE} from "@/lib/store";
 import { breadcrumbJsonLd } from "@/lib/breadcrumb-jsonld";
 import { safeJsonLd } from "@/lib/json-ld-safe";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 // BreadcrumbList JSON-LD — sister of cannagent v3.391 100% indexable
 // coverage + glw v12.505. Pre-fix /careers had no BreadcrumbList;
@@ -84,6 +85,7 @@ export default async function CareersPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumb) }}
       />
+      <Breadcrumb items={[{ label: "Careers" }]} />
       {/* Hero — indigo/violet gradient matching the rest of the SCC chrome. */}
       <div className="relative overflow-hidden bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white py-10 sm:py-14">
         <div

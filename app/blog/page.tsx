@@ -3,6 +3,7 @@ import Link from "next/link";
 import { STORE, STORE_TZ } from "@/lib/store";
 import { getPosts, fetchDynamicPosts } from "@/lib/posts";
 import { safeJsonLd } from "@/lib/json-ld-safe";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export const metadata: Metadata = {
   title: "Cannabis Guides + Vendor Spotlights",
@@ -63,6 +64,8 @@ export default async function BlogIndex() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(blogSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbLd) }} />
+
+      <Breadcrumb items={[{ label: "Blog" }]} />
 
       {/* Hero — gradient bookend matching the rest of the site. */}
       <div className="relative overflow-hidden bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white py-10 sm:py-14">

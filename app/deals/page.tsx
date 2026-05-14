@@ -7,6 +7,7 @@ import { matchDealVendor } from "@/lib/deal-vendor-match";
 import { withAttr } from "@/lib/attribution";
 import { VendorAdSlot } from "@/components/VendorAdSlot";
 import { safeJsonLd } from "@/lib/json-ld-safe";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -125,6 +126,8 @@ export default async function DealsPage({ searchParams }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbLd) }}
       />
+
+      <Breadcrumb items={[{ label: "Deals" }]} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-3">
         <VendorAdSlot slot="deals_page_top" />

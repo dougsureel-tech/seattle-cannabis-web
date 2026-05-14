@@ -3,6 +3,7 @@ import Link from "next/link";
 import { STORE, STORE_TZ} from "@/lib/store";
 import { withAttr } from "@/lib/attribution";
 import { safeJsonLd } from "@/lib/json-ld-safe";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 // ISR — content rarely changes; today-row highlight is the only dynamic
 // bit and a 5-minute cache window is plenty.
@@ -69,6 +70,8 @@ export default function AboutPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbSchema) }}
       />
+
+      <Breadcrumb items={[{ label: "About" }]} />
 
       {/* Hero — gradient bookend matching homepage / visit / footer. */}
       <div className="relative overflow-hidden bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white py-10 sm:py-14">

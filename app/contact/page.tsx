@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { STORE } from "@/lib/store";
 import { safeJsonLd } from "@/lib/json-ld-safe";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -32,6 +33,7 @@ export default function ContactPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd(contactSchema) }}
       />
+      <Breadcrumb items={[{ label: "Contact" }]} />
       {/* Hero — gradient bookend matching homepage / visit / about / footer. */}
       <div className="relative overflow-hidden bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white py-10 sm:py-14">
         <div

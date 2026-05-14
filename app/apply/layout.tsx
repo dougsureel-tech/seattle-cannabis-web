@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { STORE, DEFAULT_OG_IMAGE} from "@/lib/store";
 import { breadcrumbJsonLd } from "@/lib/breadcrumb-jsonld";
 import { safeJsonLd } from "@/lib/json-ld-safe";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 // BreadcrumbList JSON-LD — sister of glw v12.605 + cannagent v3.391
 // 100% indexable coverage. Pre-fix /apply had no BreadcrumbList;
@@ -54,6 +55,7 @@ export default function ApplyLayout({ children }: { children: React.ReactNode })
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumb) }}
       />
+      <Breadcrumb items={[{ label: "Apply" }]} />
       {children}
     </>
   );

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { STORE} from "@/lib/store";
 import { safeJsonLd } from "@/lib/json-ld-safe";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 // Mirror of the Wenatchee /community page for Seattle Cannabis Co. SCC
 // doesn't yet have a `lib/team.ts` analog with named alumni, so the
@@ -45,6 +46,7 @@ export default function CommunityPage() {
   return (
     <main className="min-h-[80vh] bg-stone-50">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbLd) }} />
+      <Breadcrumb items={[{ label: "Community" }]} />
       {/* Hero — indigo/violet gradient mirroring the homepage hero. */}
       <section className="relative overflow-hidden bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white">
         <div
