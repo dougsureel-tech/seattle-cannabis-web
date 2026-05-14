@@ -170,6 +170,22 @@ export default async function NearTownPage({
         </div>
       </section>
 
+      {/* Long-form local context — renders when an area row carries
+          cityCopy. Above the standard whyStop so Google sees the heavier
+          body copy first. Sister of glw NearTown.cityCopy rendering;
+          4-paragraph shape (drive/parking → who shows up → cross-traffic
+          + compliance → tenure + CTA). */}
+      {area.cityCopy && (
+        <section className="prose prose-zinc max-w-none mb-10">
+          <h2 className="text-2xl font-semibold tracking-tight mb-4 text-zinc-900">
+            Cannabis dispensary near {area.name}, Seattle
+          </h2>
+          {area.cityCopy.split("\n\n").map((para, i) => (
+            <p key={i}>{para}</p>
+          ))}
+        </section>
+      )}
+
       <section className="prose prose-zinc max-w-none mb-10">
         <p>{area.whyStop}</p>
         <p>
