@@ -38,6 +38,13 @@ type Cohort = {
   recognitionLine: string;
   idRequired: string;
   idExamples: string[];
+  // Long-form descriptive body (4 paragraphs, ~350-500 words total).
+  // (1) who qualifies + ID, (2) how the discount works, (3) Rainier
+  // Rainier Valley / South Seattle / pre-I-502 tenure context (tenure-
+  // as-credential per check-brand-voice-locally-owned arc-guard —
+  // ownership change pending so "locally owned" is OFF cross-store),
+  // (4) how to use at the counter. WAC 314-55-155 STRICT.
+  longForm: string[];
   faqs: { q: string; a: string }[];
   searchKeywords: string[];
 };
@@ -55,7 +62,17 @@ const COHORTS: Record<string, Cohort> = {
     recognitionLine: "We see you, and we appreciate what you carried so the rest of us didn't have to.",
     idRequired: "Bring your 21+ ID plus one of:",
     idExamples: ["DD-214 (any era — original or copy)", "VA Health ID Card (VHIC)", "Veterans ID Card", "Honorable-discharge documentation"],
+    longForm: [
+      "Veterans of any branch and any era qualify for the Heroes discount at Seattle Cannabis Co. That covers Army, Navy, Air Force, Marines, Coast Guard, Space Force, and the merchant marine — Vietnam, the Gulf, post-9/11, peacetime, whichever piece of the timeline you served in. The credential we accept is a DD-214 (original or a clear photocopy), a VA Health ID Card (VHIC), a Veterans ID Card, or honorable-discharge paperwork. Bring it with your government-issued 21+ ID — Washington law requires the 21+ ID for every cannabis purchase, every visit, regardless of any other credential.",
+      "The discount is thirty percent off the in-store subtotal. It doesn’t stack with daily deals or other promotions — the register applies whichever discount is larger automatically, so you always land on the better number. It works on every product on the shelf: flower, pre-rolls, vapes, edibles, concentrates, tinctures, topicals. Online orders already carry a standing 20% online discount, so Heroes is in-person only — the higher discount lives at the counter where we verify the credential. Loyalty points still accrue at the standard rate on every visit.",
+      "VA Puget Sound is a fifteen-minute drive from the shop, and we see veterans from across the whole South Seattle and Eastside footprint — Rainier Valley folks who served and came home, JBLM retirees who settled north, Vietnam-era vets who’ve been in Beacon Hill or Columbia City for forty years, post-9/11 vets working tech and trades. Seattle Cannabis Co. opened in 2010 as a medical collective on Rainier Avenue South, pre-I-502 — same neighborhood, same street, since long before recreational was legal. We built the Heroes program because veterans showed up on day one of the medical lane and they still show up, and they deserve to be recognized at the counter without having to ask.",
+      "First visit, walk up to the register, tell the budtender you’re here under the Heroes Veterans program, and hand over both IDs. Verification takes about thirty seconds — we look at the credential, note your account, and that’s it. Every visit after that, the discount is automatic on the receipt. No re-verify, no card to carry, no expiration. If your name changes or you switch phone numbers, let us know so we can keep the record current. Browse the live menu before you stop in if you want to plan ahead — what’s in stock today is on the page.",
+    ],
     faqs: [
+      {
+        q: "What ID do I need?",
+        a: "Two things: your 21+ government photo ID (required for every cannabis purchase in Washington — no exceptions, no vertical IDs) plus one veteran credential. Any of these work: DD-214 (original or photocopy), VA Health ID Card (VHIC), Veterans ID Card, or honorable-discharge documentation.",
+      },
       {
         q: "Does my era matter?",
         a: "No. Whether you served in Vietnam, the Gulf, post-9/11, or peacetime — if you served honorably, you qualify.",
@@ -65,12 +82,28 @@ const COHORTS: Record<string, Cohort> = {
         a: "Request a replacement at vets.gov or via SF-180. Your VA card or VHIC also works in the meantime — both are tied to your veteran status and we accept either.",
       },
       {
-        q: "Does my spouse get the discount?",
-        a: "The Veterans discount is for the veteran themselves. Surviving spouses with a VA-issued ID also qualify. Family members visiting with you are welcome but pay the standard price.",
+        q: "I’m at the VA Puget Sound. Can I bring my appointment paperwork?",
+        a: "Yes — VA Puget Sound paperwork tied to your name and service number works alongside your VA Health ID Card. We’re a fifteen-minute drive from the VA medical center.",
       },
       {
-        q: "I'm at the VA Puget Sound. Can I bring my appointment paperwork?",
-        a: "Yes — VA Puget Sound paperwork tied to your name + service number works alongside your VA Health ID Card. We're a 15-minute drive from the VA medical center.",
+        q: "Is the discount stackable with daily deals or other promos?",
+        a: "No — discounts don’t combine. Heroes 30% applies in place of any daily deal, and the register picks whichever discount is larger. You still earn loyalty points every visit.",
+      },
+      {
+        q: "Does the discount apply online and in-store?",
+        a: "Heroes is in-person only. Online orders already carry a standing 20% discount; the bigger 30% Heroes benefit lives at the counter where we verify your credential.",
+      },
+      {
+        q: "Can I use it on edibles and flower, or just specific categories?",
+        a: "Every category on the shelf — flower, pre-rolls, vapes, edibles, concentrates, tinctures, topicals. No carve-out by product type.",
+      },
+      {
+        q: "Is the discount limited to first-time customers?",
+        a: "The opposite. The credential check happens once, on your first visit; after that the discount is automatic every visit going forward. No expiration, no re-verify.",
+      },
+      {
+        q: "Does my spouse get the discount?",
+        a: "The Veterans discount is for the veteran themselves. Surviving spouses with a VA-issued ID also qualify. Family members visiting with you are welcome but pay the standard price.",
       },
     ],
     searchKeywords: [
@@ -94,18 +127,40 @@ const COHORTS: Record<string, Cohort> = {
     recognitionLine: "Service is service. We're glad you stopped in.",
     idRequired: "Bring your 21+ ID plus one of:",
     idExamples: ["Common Access Card (CAC)", "Active military ID", "Current orders / TDY paperwork", "National Guard or Reserve ID"],
+    longForm: [
+      "Active-duty service members qualify under the Heroes program — Army, Navy, Air Force, Marines, Coast Guard, Space Force, including National Guard and Reserve members in current drill status. The credential we accept is the Common Access Card (CAC), a standard military ID, current PCS or TDY orders, or a Guard or Reserve unit ID showing active membership. Bring it with your 21+ government photo ID. Washington law treats the 21+ ID as a separate, required document for every cannabis purchase — it’s not interchangeable with the CAC, even though both are government-issued.",
+      "Thirty percent off the in-store subtotal, every visit, on every product on the shelf. Heroes doesn’t stack with daily deals or other promotions — the register applies whichever discount is larger, so the customer always lands on the better number. Online orders carry their own standing 20% discount, and Heroes is in-person only because the credential check needs to happen where we can look at the card. Loyalty points still accrue at the standard rate, so the discount and the points work together.",
+      "Seattle is a real service town — JBLM south on I-5, Naval Station Everett to the north, USCG Sector Puget Sound on the waterfront, recruiters and reservists drilling across the region, plus families and singles stationed here or stationed elsewhere and just home for the weekend. Seattle Cannabis Co. opened in 2010 as a medical collective on Rainier Avenue South, pre-I-502, and we’ve been the closest licensed dispensary to a lot of the South Seattle and Eastside service population since recreational launched. The Rainier Valley shop is fifteen minutes from downtown, twenty-five from Bellevue, an hour from JBLM in light traffic — and we built the Heroes program so the counter conversation is short and respectful.",
+      "On your first visit, walk up to the register and tell the budtender you’re here under the Heroes Active Military program. Hand over your 21+ ID and your service credential — verification takes about thirty seconds. We note your account, and the discount applies automatically on every visit after that. No re-credentialing, no expiration, no card to carry. If you PCS out of the region and back, just check in with us when you return — we’ll find your record. Browse the live menu before you stop in if you want to know what’s on the shelf.",
+    ],
     faqs: [
       {
-        q: "I'm stationed at JBLM. Does my CAC work?",
-        a: "Yes — JBLM CAC, Naval Station Everett ID, USCG Sector Puget Sound — all current military credentials work. We're a quick I-5 drive from JBLM.",
+        q: "What ID do I need?",
+        a: "Two things: your 21+ government photo ID (required for every cannabis purchase in Washington — no exceptions) plus one military credential. CAC, active military ID, current orders / TDY paperwork, or a National Guard or Reserve unit ID all work.",
       },
       {
-        q: "I'm a Reservist or National Guard. Do I qualify?",
-        a: "Absolutely. National Guard and Reserves both qualify under the active-military category. Your unit ID or current drill paperwork works.",
+        q: "I’m stationed at JBLM. Does my CAC work?",
+        a: "Yes — JBLM CAC, Naval Station Everett ID, USCG Sector Puget Sound — all current military credentials work. We’re a quick I-5 drive from JBLM.",
       },
       {
-        q: "Does the discount combine with daily deals?",
-        a: "No — discounts don't combine. Heroes 30% applies in place of any daily deal. You'll still earn loyalty points on the visit either way.",
+        q: "I’m a Reservist or National Guard. Do I qualify?",
+        a: "Yes. National Guard and Reserves both qualify under the active-military category. Your unit ID or current drill paperwork works.",
+      },
+      {
+        q: "Is the discount stackable with daily deals or other promos?",
+        a: "No — discounts don’t combine. Heroes 30% applies in place of any daily deal, and the register picks the better discount automatically. You still earn loyalty points on every visit.",
+      },
+      {
+        q: "Does the discount apply online and in-store?",
+        a: "In-store only. Online orders already carry a standing 20% discount; the 30% Heroes benefit lives at the counter where we can verify your credential.",
+      },
+      {
+        q: "Can I use it on edibles and flower, or just specific categories?",
+        a: "Every category — flower, pre-rolls, vapes, edibles, concentrates, tinctures, topicals. No product-type carve-outs.",
+      },
+      {
+        q: "Is the discount limited to first-time customers?",
+        a: "No. The credential check happens once, on your first visit; after that the discount is automatic every visit. No expiration, no re-verify.",
       },
     ],
     searchKeywords: [
@@ -134,9 +189,19 @@ const COHORTS: Record<string, Cohort> = {
       "Current EMT / paramedic certification (AMR, Tri-Med, etc.)",
       "Seattle Fire or King County Fire ID",
     ],
+    longForm: [
+      "First responders qualify under the Heroes program — that covers police, sheriff, corrections, probation, parole, federal law enforcement, sworn dispatchers, firefighters (career or volunteer with active department membership), EMTs, paramedics, and search-and-rescue with department credentials. The document we accept at the counter is your department ID badge (SPD, KCSO, Bellevue PD, Tukwila PD, etc.), your federal LE credentials, your current EMT or paramedic certification (AMR, Tri-Med, Falck), or your Seattle Fire or King County Fire ID. Bring it with your 21+ government photo ID — that’s still required for every cannabis purchase in Washington, regardless of any other credential you carry.",
+      "The discount is thirty percent off the in-store subtotal, on every category on the shelf — flower, pre-rolls, vapes, edibles, concentrates, tinctures, topicals. Heroes doesn’t stack with daily deals: the register picks whichever discount is larger, so you always get the better number. Online orders carry a standing 20% discount, and Heroes is in-person only because we want to verify the credential at the counter. Loyalty points accrue at the standard rate on every visit.",
+      "Seattle PD South Precinct sits a few minutes north of the shop. King County Sheriff units run through the Valley every shift, Seattle Fire engines from Station 33 on Rainier respond up and down the corridor, AMR rigs roll out of the South King base, and the King County Jail downtown is a short bus ride away. We see badges every day — South Precinct patrol coming off graveyard, Harborview ED paramedics decompressing after a hard call, federal LE from the courthouse. Seattle Cannabis Co. opened in 2010 as a medical collective on Rainier Avenue South, pre-I-502 — fifteen-plus years on the same street, same neighborhood, same intake desk — and the crew knows how to read a credential without slowing down the line, and we don’t make small talk about the call you just came off of.",
+      "On the first visit, walk up to the register, tell the budtender you’re here under the Heroes First Responders program, and hand over both IDs. Verification is quick — we look at the credential, note your account, you’re done. Every visit after that, the discount applies automatically; nothing to remember, nothing to re-verify. Retired LE qualifies too with a retirement ID or HR-218 credential. If your department issues a new badge or you switch agencies, mention it next time so we can keep the record current. The live menu is on the page if you want to plan before you stop in.",
+    ],
     faqs: [
       {
-        q: "I'm a corrections officer at King County Jail. Do I qualify?",
+        q: "What ID do I need?",
+        a: "Two things: your 21+ government photo ID (required for every cannabis purchase in Washington) plus one department credential. SPD / KCSO / Bellevue PD / Tukwila PD badge, federal LE credentials, current EMT or paramedic cert (AMR, Tri-Med, Falck), or Seattle Fire / King County Fire ID — any of those work.",
+      },
+      {
+        q: "I’m a corrections officer at King County Jail. Do I qualify?",
         a: "Yes. Sworn corrections, probation, parole — all qualify under the first-responder category. Your department ID is the credential.",
       },
       {
@@ -144,8 +209,24 @@ const COHORTS: Record<string, Cohort> = {
         a: "Yes, with your department ID showing active membership. Volunteer fire is fire.",
       },
       {
-        q: "I'm retired LE. Does retiree status work?",
+        q: "I’m retired LE. Does retiree status work?",
         a: "Retired LE qualifies. Your retirement ID or HR-218 credential works.",
+      },
+      {
+        q: "Is the discount stackable with daily deals or other promos?",
+        a: "No — discounts don’t combine. Heroes 30% applies in place of any daily deal, and the register picks the better one. You still earn loyalty points every visit.",
+      },
+      {
+        q: "Does the discount apply online and in-store?",
+        a: "In-store only. Online orders already carry a 20% standing discount; the 30% Heroes benefit lives at the counter where we can verify the credential.",
+      },
+      {
+        q: "Can I use it on edibles and flower, or just specific categories?",
+        a: "Every category — flower, pre-rolls, vapes, edibles, concentrates, tinctures, topicals. No carve-outs by product type.",
+      },
+      {
+        q: "Is the discount limited to first-time customers?",
+        a: "No. The credential check happens once, on your first visit. After that the discount is automatic every visit, no expiration, no re-verify.",
       },
     ],
     searchKeywords: [
@@ -174,22 +255,48 @@ const COHORTS: Record<string, Cohort> = {
       "Department ID",
       "Healthcare-system payroll badge",
     ],
+    longForm: [
+      "Healthcare workers qualify under the Heroes program, and we keep the cohort broad on purpose — if you work in a clinical care environment with a badge, you’re in. That covers nurses (RN, LPN, ARNP, CRNA), doctors (MD, DO, ND), PAs, surgical techs, medical assistants, CNAs, lab techs, pharmacy techs, radiology, respiratory therapists, paramedics on the clinical side, EMTs, mental-health and behavioral-health clinicians, social workers, and hospital admin staff who work inside clinical buildings. The credential we accept is your hospital or clinic badge (UW, Swedish, Virginia Mason, Kaiser, Harborview, Pacific Medical, Polyclinic), a current professional license (RN, MD, etc.), a department ID, or a healthcare-system payroll badge. Bring it with your 21+ government photo ID — that’s still required for every cannabis purchase in Washington.",
+      "Thirty percent off the in-store subtotal, every visit, on every product on the shelf. Heroes doesn’t stack with daily deals — the register applies whichever discount is larger automatically, so the better number always wins. Online orders carry a standing 20% discount; Heroes is in-person only because the credential check needs to happen at the counter. Loyalty points still accrue at the standard rate, so the Heroes discount and the points program run side by side.",
+      "Harborview ED is fifteen minutes north on Rainier. UW Medicine and the Polyclinic across the lake, Swedish on First Hill, Virginia Mason downtown, Kaiser Capitol Hill, Pacific Medical Center, plus the smaller behavioral-health offices and clinics scattered through Rainier Valley, Beacon Hill, and Columbia City — we see badges from across the whole Puget Sound care system. After-shift looks different for everyone, and we want what we sell to be one of the easier parts of the day. Seattle Cannabis Co. opened in 2010 as a medical collective on Rainier Avenue South, pre-I-502 — fifteen-plus years on the same street, and we’re open seven days a week from 8 AM, so the post-graveyard crew can stop in on the way home.",
+      "First visit: walk up to the register, tell the budtender you’re here under the Heroes Healthcare program, and show your 21+ ID plus your healthcare credential. Verification takes about thirty seconds — we look at the badge, note your account, you’re done. Every visit after that, the discount applies automatically. No re-credentialing, no expiration. Travel nurses, bring your active nursing license plus current assignment paperwork — we can verify both at the counter. Retired healthcare workers qualify too with a retired license or last department badge. The live menu is on the page if you want to know what’s in stock before you stop in.",
+    ],
     faqs: [
       {
-        q: "I'm a CNA / MA / tech. Do I qualify?",
+        q: "What ID do I need?",
+        a: "Two things: your 21+ government photo ID (required for every cannabis purchase in Washington) plus one healthcare credential. Hospital or clinic badge (UW, Swedish, Virginia Mason, Kaiser, Harborview), current professional license (RN, MD, etc.), department ID, or a healthcare-system payroll badge — any of those work.",
+      },
+      {
+        q: "I’m a CNA / MA / tech. Do I qualify?",
         a: "Yes. The healthcare cohort is broad — if you work in a clinical care environment with a badge, you qualify. CNAs, medical assistants, surgical techs, lab techs, pharmacy techs, hospital admin in clinical buildings — all in.",
       },
       {
-        q: "I'm a Harborview ED nurse coming off an overnight. Y'all open early?",
-        a: "We open at 8 AM. We've had folks roll up in scrubs straight off shift more than once and we love it. Stop in.",
+        q: "I’m a Harborview ED nurse coming off an overnight. Y’all open early?",
+        a: "We open at 8 AM. We’ve had folks roll up in scrubs straight off shift more than once. Stop in.",
       },
       {
         q: "Travel nurses without a permanent ID?",
-        a: "Bring your active nursing license + current assignment paperwork. We can verify both at the counter.",
+        a: "Bring your active nursing license plus current assignment paperwork. We can verify both at the counter.",
       },
       {
         q: "Mental-health and behavioral-health workers?",
-        a: "Absolutely. Counselors, therapists, social workers, peer-support specialists — credential at the counter and you're in.",
+        a: "Yes. Counselors, therapists, social workers, peer-support specialists — credential at the counter and you’re in.",
+      },
+      {
+        q: "Is the discount stackable with daily deals or other promos?",
+        a: "No — discounts don’t combine. Heroes 30% applies in place of any daily deal, and the register picks whichever discount is larger. Loyalty points still accrue on every visit.",
+      },
+      {
+        q: "Does the discount apply online and in-store?",
+        a: "In-store only. Online orders already carry a 20% standing discount; the 30% Heroes benefit lives at the counter where we verify your credential.",
+      },
+      {
+        q: "Can I use it on edibles and flower, or just specific categories?",
+        a: "Every category — flower, pre-rolls, vapes, edibles, concentrates, tinctures, topicals. No product-type carve-outs.",
+      },
+      {
+        q: "Is the discount limited to first-time customers?",
+        a: "No. The credential check happens once, on your first visit. After that the discount is automatic every visit, no re-verify, no expiration.",
       },
     ],
     searchKeywords: [
@@ -218,22 +325,48 @@ const COHORTS: Record<string, Cohort> = {
       "OSPI certificate of teaching",
       "School-issued employment letter",
     ],
+    longForm: [
+      "K-12 teachers and school staff qualify under the Heroes program. That covers classroom teachers, paraeducators, instructional aides, school counselors, librarians, special-ed staff, substitute teachers with active sub-list status, and other school-employed staff working in classroom-adjacent roles. Public, private, charter, alternative — if it’s a Washington-state K-12 school, you’re in. The credential we accept is your district ID badge (Seattle Public Schools, Highline, Renton, Bellevue, Tukwila, Kent, Federal Way, etc.), a current pay stub showing the school district, an OSPI certificate of teaching, or a school-issued employment letter. Bring it with your 21+ government photo ID; the 21+ ID is required for every cannabis purchase in Washington, regardless of any other credential.",
+      "Thirty percent off the in-store subtotal, every visit, on every category — flower, pre-rolls, vapes, edibles, concentrates, tinctures, topicals. Heroes doesn’t stack with daily deals: the register applies whichever discount is larger, so the better number always wins. Online orders carry a standing 20% discount; the Heroes 30% lives at the counter where we verify the credential. Summer doesn’t pause the benefit — once we’ve credentialed you for the school year, you’re in through summer break too. Re-credentialing happens annually if your status changes (district transfer, role change, retirement).",
+      "Seattle Public Schools — Franklin, Cleveland, Rainier Beach, Mercer Middle, Aki Kurose, all the Rainier Valley elementaries — Highline up north, Renton and Kent and Tukwila and Federal Way to the south, the smaller private and charter campuses scattered through the city, plus the alternative and reentry programs that don’t always show up in directories. We see badges from across South Seattle and South King County, and we built the program so teachers don’t have to spend their downtime translating eligibility rules at the register. Seattle Cannabis Co. opened in 2010 as a medical collective on Rainier Avenue South, pre-I-502 — same street, same neighborhood, fifteen-plus years on — and the crew knows that a teacher walking in on a Friday afternoon has been on her feet since 7 AM.",
+      "First visit: walk up to the register, tell the budtender you’re here under the Heroes Teachers program, hand over both IDs. Verification is quick — we look at the credential, note your account, and that’s it. Every visit after that, the discount is automatic on the receipt. Substitute teachers with active on-call status qualify; bring your sub-list paperwork or district ID. If you switch districts mid-year, just check in next time so we can update the record. The live menu is on the page if you want to scan what’s in stock before you stop in.",
+    ],
     faqs: [
       {
-        q: "I'm a paraeducator / aide / counselor. Do I qualify?",
-        a: "If you're employed by a K-12 school in any classroom-adjacent role — yes. Paraeducators, instructional aides, school counselors, librarians, special-ed staff. The badge is the credential.",
+        q: "What ID do I need?",
+        a: "Two things: your 21+ government photo ID (required for every cannabis purchase in Washington) plus one teaching credential. District ID badge (Seattle Public Schools, Highline, Renton, Kent, Federal Way, etc.), current pay stub showing the district, OSPI certificate of teaching, or a school-issued employment letter — any of those work.",
+      },
+      {
+        q: "I’m a paraeducator / aide / counselor. Do I qualify?",
+        a: "If you’re employed by a K-12 school in any classroom-adjacent role — yes. Paraeducators, instructional aides, school counselors, librarians, special-ed staff. The badge is the credential.",
       },
       {
         q: "I teach at UW or Seattle U. Does that count?",
-        a: "The Heroes Teachers cohort is K-12 specifically. Higher-ed isn't currently in scope.",
+        a: "The Heroes Teachers cohort is K-12 specifically. Higher-ed isn’t currently in scope.",
       },
       {
         q: "Substitute teachers?",
-        a: "Yes — current substitute-teaching credentials with active-on-call status qualify. Bring your sub-list paperwork or district ID.",
+        a: "Yes — current substitute-teaching credentials with active on-call status qualify. Bring your sub-list paperwork or district ID.",
       },
       {
         q: "Summer break — does the discount pause?",
-        a: "No. Once we've credentialed you for the school year, you're in for summer. Re-credential happens annually if your status changes.",
+        a: "No. Once we’ve credentialed you for the school year, you’re in for summer. Re-credential happens annually if your status changes.",
+      },
+      {
+        q: "Is the discount stackable with daily deals or other promos?",
+        a: "No — discounts don’t combine. Heroes 30% applies in place of any daily deal, and the register picks whichever discount is larger. Loyalty points still accrue every visit.",
+      },
+      {
+        q: "Does the discount apply online and in-store?",
+        a: "In-store only. Online orders already carry a 20% standing discount; the 30% Heroes benefit lives at the counter.",
+      },
+      {
+        q: "Can I use it on edibles and flower, or just specific categories?",
+        a: "Every category — flower, pre-rolls, vapes, edibles, concentrates, tinctures, topicals. No product-type carve-outs.",
+      },
+      {
+        q: "Is the discount limited to first-time customers?",
+        a: "No. The credential check happens once on your first visit; after that the discount is automatic every visit, no re-verify.",
       },
     ],
     searchKeywords: [
@@ -386,6 +519,31 @@ export default async function HeroesCohortPage({
       </section>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16 space-y-12 sm:space-y-14">
+        {/* Long-form descriptive body — 4 paragraphs, ~350-500 words.
+            Drives long-tail SEO ("veteran discount cannabis Seattle",
+            "healthcare worker dispensary Rainier Valley", etc.) and
+            answers questions customers ask BEFORE driving over.
+            WAC 314-55-155 STRICT. SCC positioning: Since 2010 / pre-
+            I-502 medical-collective heritage on Rainier Avenue South.
+            Tenure-as-credential per check-brand-voice-locally-owned
+            arc-guard — "locally owned" framing OFF cross-store. Sits
+            between hero and "What to bring" block. */}
+        <section className="space-y-5">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-green-700">
+              The {c.label} program
+            </p>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight mt-1.5">
+              Who qualifies, how it works, how to use it.
+            </h2>
+          </div>
+          <div className="space-y-4 text-stone-700 text-base leading-relaxed">
+            {c.longForm.map((para, i) => (
+              <p key={i}>{para}</p>
+            ))}
+          </div>
+        </section>
+
         <section className="space-y-5">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-green-700">
