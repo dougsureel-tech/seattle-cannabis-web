@@ -88,7 +88,15 @@ export default function OG() {
     {
       ...size,
       headers: {
-        "Cache-Control": "public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800",
+        // Next 16 silently strips `s-maxage` from custom `Cache-Control` on
+        // metadata-image routes (`app/opengraph-image.tsx` file convention).
+        // Result: live response served `public, max-age=3600` (1hr) instead
+        // of 24hr. Vendor-prefixed `Vercel-CDN-Cache-Control` is NOT touched
+        // by Next's metadata-image pipeline and reads with highest priority
+        // on Vercel's CDN. Pair them: browser respects Cache-Control, Vercel
+        // edge respects the CDN-prefixed one. Sister glw same-fix.
+        "Cache-Control": "public, max-age=86400",
+        "Vercel-CDN-Cache-Control": "public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800",
       },
     },
   );
