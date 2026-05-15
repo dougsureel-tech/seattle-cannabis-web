@@ -1079,10 +1079,12 @@ export async function fetchDynamicPost(slug: string): Promise<Post | undefined> 
 // becomes-visible on its publish day without redeploy (the consuming
 // pages set revalidate so the filter re-evaluates).
 function isPublished(p: Post, asOf: Date = new Date()): boolean {
-  // Date-only compare (YYYY-MM-DD lexicographic). Asia-Pacific time
-  // zones could see a post 1 day "late" — accept that vs the
-  // alternative of timezone-shifting per-reader.
-  const today = asOf.toISOString().slice(0, 10);
+  // Date-only compare (YYYY-MM-DD lexicographic) in Pacific time so a
+  // `publishedAt: "2026-05-15"` post becomes visible at midnight PT on
+  // 2026-05-15 (not at 5pm PT on 2026-05-14 = midnight UTC). Asia-Pacific
+  // readers see posts ~16h late vs their local date — accept that vs
+  // shipping early to all Americas readers.
+  const today = storeToday(asOf);
   return p.publishedAt <= today;
 }
 
