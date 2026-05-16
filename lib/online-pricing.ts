@@ -14,6 +14,22 @@ import type { ActiveDeal, MenuProduct } from "@/lib/db";
 
 export const ONLINE_DISCOUNT_PCT = 20;
 
+// Find the active deal that applies to a given product. Storewide deals
+// match every product; category-scoped deals match by stem.
+export function findDealForProduct(
+  p: Pick<MenuProduct, "category">,
+  deals: ActiveDeal[],
+): ActiveDeal | null {
+  if (!deals || deals.length === 0) return null;
+  const cat = (p.category ?? "").toLowerCase();
+  for (const d of deals) {
+    if (!d.appliesTo || d.appliesTo === "all") return d;
+    const stem = d.appliesTo.toLowerCase().replace(/s$/, "");
+    if (cat.includes(stem)) return d;
+  }
+  return null;
+}
+
 export type EffectivePrice = {
   displayPrice: number | null;
   originalPrice: number | null;
