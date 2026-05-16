@@ -16,6 +16,28 @@ import { safeJsonLd } from "@/lib/json-ld-safe";
 // seattlecannabis.co — the Boost JS module hydrates the menu inline.
 // Naive iframe is blocked (iHeartJane sets X-Frame-Options: SAMEORIGIN).
 //
+// ═══════════════════════════════════════════════════════════════════════
+// 🚨 LOAD-BEARING DOUG-DIRECTIVE 2026-05-16 ~02:50 PT
+//
+// "we need to keep that [iHJ /menu] live until our devmenu is 100 ·
+//  we would like to get it switched over asap"
+//
+// /menu MUST continue rendering <JaneMenu> (iHJ Boost) as the default
+// surface until Doug greenlights the single-flip cutover to the dev tree
+// menu (OrderMenu.tsx visual register × MenuSearch.tsx polish, per Phase 1
+// of MENU_MODEL_A_ARCHITECTURE_2026_05_16.md).
+//
+// Future agents: do NOT remove JaneMenu rendering or flip the default to
+// MenuFallback / a revived MenuSearch without explicit Doug-greenlight.
+// The Phase 1 build is allowed to: polish OrderMenu / MenuSearch on the
+// /order or /menu-preview route; wire URL-param contracts; delete unused
+// JaneMenu code ONLY AFTER cutover greenlight. It is NOT allowed to:
+// change the /menu default render, 308-redirect /menu, hide JaneMenu
+// behind a default-off feature flag.
+//
+// The cutover flip is intentionally a SINGLE atomic Doug-greenlit edit.
+// ═══════════════════════════════════════════════════════════════════════
+//
 // Config + script tags live in JaneMenu.tsx. Seattle's embedConfigId 222
 // was recovered from a 2023-09-21 web.archive.org snapshot of
 // www.seattlecannabis.co/menu (back when the site ran on the older
