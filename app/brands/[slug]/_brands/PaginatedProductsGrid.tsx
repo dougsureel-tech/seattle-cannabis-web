@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { getProductPlaceholderGradient, getProductPlaceholderIcon } from "@/lib/product-placeholder";
 
 type Product = {
   id: string;
