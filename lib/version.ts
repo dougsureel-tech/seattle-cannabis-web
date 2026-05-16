@@ -514,7 +514,8 @@
 // 27.805 — 💰 Homepage product cards now show strikethrough + discounted price (sister glw v36.505). Extends v27.765 pricing engine from /menu to /. lib/online-pricing.ts now exports findDealForProduct. Both card sections (New + Featured) render strikethrough red + bold indigo discounted + "20% off online" chip. typecheck CLEAN.
 // 27.825 — 💰 Pricing engine: full site coverage (sister glw v36.525). Final 4 product-card surfaces — RecentlyViewed{,Auto}Strip + Stash + deals/[id] — all now render strikethrough + discounted price. Every product-price surface on the site uses the same pattern. typecheck CLEAN.
 // 27.845 — 💰 Surface "save 20% online" hook on strain decision moments (sister glw v36.545). Strain page CTA subtitle now reads "Live inventory at {STORE.name} — save 20% on every online order." Single copy edit (brand page already got the same copy from parallel session). typecheck CLEAN.
-export const BUILD_VERSION = "27.845";
+// 27.865 — 🛡️ WAC vibe-token rename in MenuSearch.tsx (sister glw v36.565). "Sleep" → "Wind down", "Energize" → "Active", medical match-tokens swept for sensory language. Per Ticket N12. typecheck CLEAN.
+export const BUILD_VERSION = "27.865";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ||
