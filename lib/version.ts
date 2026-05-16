@@ -513,7 +513,8 @@
 // 27.625 — 🚨 Menu Model A cutover guardrail + WAC tokens on dead MenuSearch (sister glw v36.325 same-push). Doug 2026-05-16 ~02:50 PT directives: "keep iHJ /menu live until devmenu is 100 · switch over asap · pictures from approved source like the vendors." **(1) Cutover guardrail comment** at top of `app/menu/page.tsx`: `<JaneMenu>` (iHJ Boost) MUST stay as the default until Doug greenlights the single-flip cutover. Future agents may polish but MUST NOT change `/menu/page.tsx` default render. **(2) MenuSearch.tsx WAC token fix** — line 17 swapped from `relief` + match `["pain","relief","anti","anxiety"]` (highest-risk WAC trap in candidate code per visual-design agent) to `calm` + match `["relax","mellow","calm","ease"]`. File dead today but becomes live the moment Menu Model A Phase 1 ships. typecheck CLEAN.
 // 27.805 — 💰 Homepage product cards now show strikethrough + discounted price (sister glw v36.505). Extends v27.765 pricing engine from /menu to /. lib/online-pricing.ts now exports findDealForProduct. Both card sections (New + Featured) render strikethrough red + bold indigo discounted + "20% off online" chip. typecheck CLEAN.
 // 27.825 — 💰 Pricing engine: full site coverage (sister glw v36.525). Final 4 product-card surfaces — RecentlyViewed{,Auto}Strip + Stash + deals/[id] — all now render strikethrough + discounted price. Every product-price surface on the site uses the same pattern. typecheck CLEAN.
-export const BUILD_VERSION = "27.825";
+// 27.845 — 💰 Surface "save 20% online" hook on strain decision moments (sister glw v36.545). Strain page CTA subtitle now reads "Live inventory at {STORE.name} — save 20% on every online order." Single copy edit (brand page already got the same copy from parallel session). typecheck CLEAN.
+export const BUILD_VERSION = "27.845";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ||
