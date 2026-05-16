@@ -15,6 +15,23 @@ import { LEARN_HUB_TOPICS } from "@/lib/learn-hub";
 // Sister of inv v342.605 + glw v8.165 cross-repo port.
 export const revalidate = 1800;
 
+// Specific URLs that DO 404 or block bots — sister-port of glw's
+// BROKEN_LOGO_URLS set (audited cross-stack 2026-05-16 by the brand-
+// pages-completion audit at BRANDS_PAGES_COMPLETION_AUDIT_2026_05_15.md;
+// scc was emitting `the420bar.com` 404 URL in <image:image> for
+// evergreen-herbal — an active SEO ding identified in live sitemap
+// inspection). Doug-action: update vendors.logoUrl in scc Postgres to a
+// working source (self-hosted under /public/images/brands/ or verified
+// vendor CDN) — then remove the URL from this set.
+const BROKEN_LOGO_URLS = new Set<string>([
+  // Evergreen Herbal — 404 on the420bar.com WP upload (cross-stack
+  // discovery: glw caught it 2026-05-09; scc has been silently emitting
+  // the same URL until this port).
+  "https://the420bar.com/wp-content/uploads/2022/04/420-logo-alpha.png",
+  // Agro Couture — 202 captcha challenge on agrocouture.com (SiteGround)
+  "https://agrocouture.com/wp-content/uploads/2024/01/Agro-Couture_Logo-gold.png",
+]);
+
 // Domains we will NEVER emit as <image:image> in the sitemap, even if
 // the vendors.logoUrl DB field points at one. Per memory
 // `feedback_vendor_logo_sources`: vendor logos must come from the
@@ -26,6 +43,7 @@ export const revalidate = 1800;
 const BANNED_LOGO_DOMAINS = ["weedmaps.com", "leafly.com", "leafly.ca"];
 
 function isBannedLogoUrl(url: string): boolean {
+  if (BROKEN_LOGO_URLS.has(url)) return true;
   try {
     const host = new URL(url).hostname.toLowerCase();
     return BANNED_LOGO_DOMAINS.some((banned) => host === banned || host.endsWith(`.${banned}`));
