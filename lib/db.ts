@@ -42,6 +42,11 @@ export type MenuProduct = {
   terpenes: string | null;
   /** True when this SKU first appeared in stock within the last 7 days. */
   isNew: boolean;
+  /** Producer/COA-confirmed WA DOH-compliant SKU — passed the extra-testing
+   *  tier beyond the WSLCB safety panel. DOH-verified medical patients
+   *  see tax-exempt pricing on these; everyone else sees rec pricing.
+   *  Backed by `products.is_doh_compliant` (inv-app migration 0262). */
+  isDohCompliant: boolean;
 };
 
 export async function getMenuProducts(): Promise<MenuProduct[]> {
@@ -69,7 +74,8 @@ export async function getMenuProducts(): Promise<MenuProduct[]> {
       p.id, p.name, p.brand, p.category, p.strain_type,
       p.thc_pct::float AS thc_pct, p.cbd_pct::float AS cbd_pct,
       p.unit_price::float AS unit_price, p.image_url, p.effects, p.terpenes,
-      COALESCE(fs.first_seen >= NOW() - INTERVAL '7 days', FALSE) AS is_new
+      COALESCE(fs.first_seen >= NOW() - INTERVAL '7 days', FALSE) AS is_new,
+      COALESCE(p.is_doh_compliant, FALSE) AS is_doh_compliant
     FROM products p
     INNER JOIN latest_inv li ON li.product_id = p.id
     INNER JOIN brands_with_recent_sales bws ON bws.vendor_id = p.vendor_id
@@ -97,6 +103,7 @@ export async function getMenuProducts(): Promise<MenuProduct[]> {
     effects: (r.effects ?? null) as string | null,
     terpenes: (r.terpenes ?? null) as string | null,
     isNew: Boolean(r.is_new),
+    isDohCompliant: Boolean(r.is_doh_compliant),
   }));
 }
 
@@ -127,7 +134,8 @@ export async function getProductsByIds(ids: string[]): Promise<MenuProduct[]> {
       p.id, p.name, p.brand, p.category, p.strain_type,
       p.thc_pct::float AS thc_pct, p.cbd_pct::float AS cbd_pct,
       p.unit_price::float AS unit_price, p.image_url, p.effects, p.terpenes,
-      COALESCE(fs.first_seen >= NOW() - INTERVAL '7 days', FALSE) AS is_new
+      COALESCE(fs.first_seen >= NOW() - INTERVAL '7 days', FALSE) AS is_new,
+      COALESCE(p.is_doh_compliant, FALSE) AS is_doh_compliant
     FROM products p
     INNER JOIN latest_inv li ON li.product_id = p.id
     INNER JOIN brands_with_recent_sales bws ON bws.vendor_id = p.vendor_id
@@ -154,6 +162,7 @@ export async function getProductsByIds(ids: string[]): Promise<MenuProduct[]> {
     effects: (r.effects ?? null) as string | null,
     terpenes: (r.terpenes ?? null) as string | null,
     isNew: Boolean(r.is_new),
+    isDohCompliant: Boolean(r.is_doh_compliant),
   }));
 }
 
@@ -167,7 +176,8 @@ export async function getFeaturedProducts(limit = 8): Promise<MenuProduct[]> {
     SELECT p.id, p.name, p.brand, p.category, p.strain_type,
       p.thc_pct::float AS thc_pct, p.cbd_pct::float AS cbd_pct,
       p.unit_price::float AS unit_price, p.image_url, p.effects, p.terpenes,
-      FALSE AS is_new
+      FALSE AS is_new,
+      COALESCE(p.is_doh_compliant, FALSE) AS is_doh_compliant
     FROM products p
     WHERE p.is_featured = TRUE
       AND p.carry_status = 'active'
@@ -189,6 +199,7 @@ export async function getFeaturedProducts(limit = 8): Promise<MenuProduct[]> {
       effects: (r.effects ?? null) as string | null,
       terpenes: (r.terpenes ?? null) as string | null,
       isNew: false,
+      isDohCompliant: Boolean(r.is_doh_compliant),
     }));
   }
   // Bug fix 2026-05-04: pre-fix featured-products carousel could surface
@@ -210,7 +221,8 @@ export async function getFeaturedProducts(limit = 8): Promise<MenuProduct[]> {
     SELECT p.id, p.name, p.brand, p.category, p.strain_type,
       p.thc_pct::float AS thc_pct, p.cbd_pct::float AS cbd_pct,
       p.unit_price::float AS unit_price, p.image_url, p.effects, p.terpenes,
-      FALSE AS is_new
+      FALSE AS is_new,
+      COALESCE(p.is_doh_compliant, FALSE) AS is_doh_compliant
     FROM products p
     INNER JOIN latest_inv li ON li.product_id = p.id
     INNER JOIN brands_with_recent_sales bws ON bws.vendor_id = p.vendor_id
@@ -234,6 +246,7 @@ export async function getFeaturedProducts(limit = 8): Promise<MenuProduct[]> {
     effects: (r.effects ?? null) as string | null,
     terpenes: (r.terpenes ?? null) as string | null,
     isNew: false,
+    isDohCompliant: Boolean(r.is_doh_compliant),
   }));
   if (mapped.length < 4) {
     const fallback = await sql`
@@ -252,7 +265,8 @@ export async function getFeaturedProducts(limit = 8): Promise<MenuProduct[]> {
       SELECT p.id, p.name, p.brand, p.category, p.strain_type,
         p.thc_pct::float AS thc_pct, p.cbd_pct::float AS cbd_pct,
         p.unit_price::float AS unit_price, p.image_url, p.effects, p.terpenes,
-        FALSE AS is_new
+        FALSE AS is_new,
+        COALESCE(p.is_doh_compliant, FALSE) AS is_doh_compliant
       FROM products p
       INNER JOIN latest_inv li ON li.product_id = p.id
       INNER JOIN brands_with_recent_sales bws ON bws.vendor_id = p.vendor_id
@@ -275,6 +289,7 @@ export async function getFeaturedProducts(limit = 8): Promise<MenuProduct[]> {
       effects: (r.effects ?? null) as string | null,
       terpenes: (r.terpenes ?? null) as string | null,
       isNew: false,
+      isDohCompliant: Boolean(r.is_doh_compliant),
     }));
   }
   return mapped;
@@ -435,7 +450,8 @@ export async function getJustInProducts(limit = 12): Promise<MenuProduct[]> {
     SELECT p.id, p.name, p.brand, p.category, p.strain_type,
       p.thc_pct::float AS thc_pct, p.cbd_pct::float AS cbd_pct,
       p.unit_price::float AS unit_price, p.image_url, p.effects, p.terpenes,
-      TRUE AS is_new
+      TRUE AS is_new,
+      COALESCE(p.is_doh_compliant, FALSE) AS is_doh_compliant
     FROM products p
     INNER JOIN first_seen fs ON fs.product_id = p.id
     INNER JOIN latest_inv li ON li.product_id = p.id
@@ -462,6 +478,7 @@ export async function getJustInProducts(limit = 12): Promise<MenuProduct[]> {
     effects: (r.effects ?? null) as string | null,
     terpenes: (r.terpenes ?? null) as string | null,
     isNew: true,
+    isDohCompliant: Boolean(r.is_doh_compliant),
   }));
 }
 
@@ -488,7 +505,8 @@ export async function getTreasureChestProducts(limit = 60): Promise<MenuProduct[
     SELECT
       p.id, p.name, p.brand, p.category, p.strain_type,
       p.thc_pct::float AS thc_pct, p.cbd_pct::float AS cbd_pct,
-      p.unit_price::float AS unit_price, p.image_url, p.effects, p.terpenes
+      p.unit_price::float AS unit_price, p.image_url, p.effects, p.terpenes,
+      COALESCE(p.is_doh_compliant, FALSE) AS is_doh_compliant
     FROM products p
     INNER JOIN latest_inv li ON li.product_id = p.id
     INNER JOIN brands_with_recent_sales bws ON bws.vendor_id = p.vendor_id
@@ -513,6 +531,7 @@ export async function getTreasureChestProducts(limit = 60): Promise<MenuProduct[
     effects: (r.effects ?? null) as string | null,
     terpenes: (r.terpenes ?? null) as string | null,
     isNew: false,
+    isDohCompliant: Boolean(r.is_doh_compliant),
   }));
 }
 
@@ -618,7 +637,8 @@ export async function getCategoryPreviewProducts(
     )
     SELECT p.id, p.name, p.brand, p.category, p.strain_type,
       p.thc_pct::float AS thc_pct, p.cbd_pct::float AS cbd_pct,
-      p.unit_price::float AS unit_price, p.image_url, p.effects, p.terpenes
+      p.unit_price::float AS unit_price, p.image_url, p.effects, p.terpenes,
+      COALESCE(p.is_doh_compliant, FALSE) AS is_doh_compliant
     FROM products p
     INNER JOIN latest_inv li ON li.product_id = p.id
     INNER JOIN brands_with_recent_sales bws ON bws.vendor_id = p.vendor_id
@@ -643,6 +663,7 @@ export async function getCategoryPreviewProducts(
     effects: (r.effects ?? null) as string | null,
     terpenes: (r.terpenes ?? null) as string | null,
     isNew: false,
+    isDohCompliant: Boolean(r.is_doh_compliant),
   }));
 }
 
