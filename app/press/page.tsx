@@ -37,12 +37,22 @@ const FACTS: { label: string; value: string }[] = [
 ];
 
 export default function PressPage() {
+  // WebPage — was previously typed NewsArticle, which Google's rich-results
+  // validator flagged with "Missing field 'image' / headline / datePublished"
+  // (NewsArticle required fields). This is a static media-kit page, not
+  // a date-stamped news item. Sister glw v36.105 same-port.
   const orgSchema = {
     "@context": "https://schema.org",
-    "@type": "NewsArticle",
+    "@type": "WebPage",
+    "@id": `${STORE.website}/press#page`,
     name: `${STORE.name} press kit`,
+    url: `${STORE.website}/press`,
+    description: `Press kit for ${STORE.name} in ${STORE.address.city}, WA — logo, fact sheet, story, and press contact.`,
+    inLanguage: "en-US",
+    isPartOf: { "@id": `${STORE.website}/#website` },
     publisher: { "@type": "Organization", name: STORE.name, url: STORE.website },
     about: { "@id": `${STORE.website}/#dispensary` },
+    primaryImageOfPage: { "@type": "ImageObject", url: `${STORE.website}/opengraph-image` },
   };
 
   // BreadcrumbList — earns SERP path rendering (Home › Press).

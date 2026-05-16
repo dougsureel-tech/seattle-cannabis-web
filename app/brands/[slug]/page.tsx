@@ -235,7 +235,7 @@ export default async function BrandPage({ params }: Props) {
       name: p.name,
       brand: { "@type": "Brand", name: brand.name },
       ...(p.category ? { category: p.category } : {}),
-      ...(p.image_url ? { image: p.image_url } : {}),
+      image: p.image_url || brand.logoUrl || `${STORE.website}/brands/${slug}/opengraph-image`,
       ...(p.effects ? { description: p.effects } : {}),
       ...(p.thc_pct != null
         ? {

@@ -214,8 +214,9 @@ export default async function BlogPost({ params }: Props) {
     author,
     articleSection: post.category,
     wordCount: post.body.split(/\s+/).length,
-    // Article rich-result eligibility requires `image`. Sister glw v7.625.
-    image: [`${STORE.website}/opengraph-image`],
+    // Article rich-result eligibility requires `image`. Sister glw v36.105
+    // (per-route OG so each post gets unique SERP card art).
+    image: [`${STORE.website}/blog/${slug}/opengraph-image`],
   };
 
   const breadcrumbSchema = {
