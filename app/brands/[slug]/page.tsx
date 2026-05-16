@@ -5,6 +5,7 @@ import { VendorAdSlot } from "@/components/VendorAdSlot";
 import { getBrandBySlug, getBrandProducts, getActiveBrands } from "@/lib/db";
 import { getBrandCopy } from "@/lib/brand-copy";
 import { withAttr } from "@/lib/attribution";
+import { isBannedLogoUrl } from "@/lib/banned-logo-url";
 import { getProductPlaceholderGradient, getProductPlaceholderIcon } from "@/lib/product-placeholder";
 import { STORE } from "@/lib/store";
 import NWCSBrandPage from "./_brands/northwest-cannabis-solutions";
@@ -210,6 +211,11 @@ export default async function BrandPage({ params }: Props) {
   const brand = await getBrandBySlug(slug).catch(() => null);
   if (!brand) notFound();
 
+  // Defense-in-depth: drop aggregator/broken logoUrls before they hit
+  // render, JSON-LD, or product-image fallback. Sitemap already filters
+  // via the same module (v27.505). Sister glw same fix.
+  const logoUrl = brand.logoUrl && !isBannedLogoUrl(brand.logoUrl) ? brand.logoUrl : null;
+
   const products = await getBrandProducts(brand.id).catch(() => []);
   const categories = [...new Set(products.map((p) => p.category ?? "Other"))].sort((a, b) => {
     const order = [
@@ -233,7 +239,7 @@ export default async function BrandPage({ params }: Props) {
     "@id": `${brandUrl}#brand`,
     name: brand.name,
     ...(brand.website ? { url: brand.website } : {}),
-    ...(brand.logoUrl ? { logo: brand.logoUrl } : {}),
+    ...(logoUrl ? { logo: logoUrl } : {}),
   };
 
   // Product schemas — gives AI engines structured, citable answers for
@@ -247,7 +253,7 @@ export default async function BrandPage({ params }: Props) {
       name: p.name,
       brand: { "@type": "Brand", name: brand.name },
       ...(p.category ? { category: p.category } : {}),
-      image: p.image_url || brand.logoUrl || `${STORE.website}/brands/${slug}/opengraph-image`,
+      image: p.image_url || logoUrl || `${STORE.website}/brands/${slug}/opengraph-image`,
       ...(p.effects ? { description: p.effects } : {}),
       ...(p.thc_pct != null
         ? {
@@ -342,9 +348,9 @@ export default async function BrandPage({ params }: Props) {
       {/* Hero — gradient bookend matching the rest of the site. */}
       <div className="bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white py-10 sm:py-14">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center gap-4 sm:gap-6">
-          {brand.logoUrl ? (
+          {logoUrl ? (
             <div className="shrink-0 w-20 h-20 rounded-2xl bg-white p-2.5 flex items-center justify-center shadow-lg relative overflow-hidden">
-              <Image src={brand.logoUrl} alt={brand.name} fill sizes="80px" className="object-contain p-2" />
+              <Image src={logoUrl} alt={brand.name} fill sizes="80px" className="object-contain p-2" />
             </div>
           ) : (
             <div className="shrink-0 w-20 h-20 rounded-2xl bg-indigo-800 border border-indigo-700 flex items-center justify-center text-2xl">
