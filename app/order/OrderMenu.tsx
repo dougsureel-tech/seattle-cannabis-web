@@ -144,6 +144,17 @@ const STRAIN_COLORS: Record<string, { badge: string; dot: string }> = {
   CBD: { badge: "bg-sky-100 text-sky-700 border-sky-200", dot: "bg-sky-400" },
 };
 
+// Emoji shorthand for strain types — mirrors `MenuSearch.tsx` VIBES visual
+// register where Sativa = ⚡ Energize / Indica = 💤 Sleep / Hybrid = 🌿
+// Balanced. Replaces the color-dot prefix in the filter pill row so the
+// pill reads as "⚡ Sativa" not "● Sativa". Sister glw v36.445.
+const STRAIN_EMOJI: Record<string, string> = {
+  Sativa: "⚡",
+  Indica: "💤",
+  Hybrid: "🌿",
+  CBD: "🧘",
+};
+
 const CAT_ICONS: Record<string, string> = {
   Flower: "🌿",
   "Pre-Rolls": "🫙",
@@ -896,11 +907,13 @@ export function OrderMenu({
                         // py-1.5 on sm+ where pointer precision is fine. Mobile
                         // floor uses min-h-[44px] to clear the Fitts violation
                         // flagged in UX_AUDIT_2026_05_03 P0 #2.
-                        className={`text-xs font-semibold px-3 py-1.5 min-h-[44px] sm:min-h-0 inline-flex items-center rounded-full border transition-colors ${active ? `${colors?.badge ?? "bg-indigo-100 text-indigo-800 border-indigo-200"} ring-2 ring-offset-1 ring-stone-300` : "bg-white text-stone-600 border-stone-200 hover:border-stone-300"}`}
+                        className={`text-xs font-semibold px-3 py-1.5 min-h-[44px] sm:min-h-0 inline-flex items-center gap-1 rounded-full border transition-colors ${active ? `${colors?.badge ?? "bg-indigo-100 text-indigo-800 border-indigo-200"} ring-2 ring-offset-1 ring-stone-300` : "bg-white text-stone-600 border-stone-200 hover:border-stone-300"}`}
                       >
-                        {colors && (
-                          <span className={`inline-block w-1.5 h-1.5 rounded-full mr-1 ${colors.dot}`} />
-                        )}
+                        {STRAIN_EMOJI[s] ? (
+                          <span aria-hidden="true">{STRAIN_EMOJI[s]}</span>
+                        ) : colors ? (
+                          <span className={`inline-block w-1.5 h-1.5 rounded-full ${colors.dot}`} />
+                        ) : null}
                         {s}
                       </button>
                     );
