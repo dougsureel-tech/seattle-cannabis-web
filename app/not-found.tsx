@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { STORE, isOpenNow } from "@/lib/store";
 import { fetchClosureStatus } from "@/lib/closure-status";
+import { NotFoundSuggestions } from "./NotFoundSuggestions";
 
 // 404s should never be indexed — soft-404 / thin-content signal to Google.
 // Without explicit metadata.title here, Next inherits the layout's default
@@ -67,6 +68,10 @@ export default async function NotFound() {
             open-now status to plan a visit.
           </p>
         </div>
+
+        {/* Doug 2026-05-16: smart-suggestion when URL is an obvious paste-
+            error. Renders nothing for legit 404s. Cross-stack port. */}
+        <NotFoundSuggestions />
 
         {/* Mood shortcut row */}
         <div>
