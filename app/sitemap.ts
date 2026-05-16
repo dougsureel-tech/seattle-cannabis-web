@@ -4,6 +4,7 @@ import { STORE } from "@/lib/store";
 import { getPosts, fetchDynamicPosts } from "@/lib/posts";
 import { NEAR_TOWNS } from "@/lib/near-towns";
 import { STRAIN_TYPES } from "@/lib/strain-types";
+import { getStrainsInCurrentWave } from "@/lib/strains";
 import { LEARN_HUB_TOPICS } from "@/lib/learn-hub";
 
 // Revalidate every 30 minutes at CDN edge — sitemap pulls from DB
@@ -80,6 +81,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: STATIC_LASTMOD,
       changeFrequency: "monthly" as const,
       priority: 0.7,
+    })),
+    // Per-strain pages — gated by SEO_STRAIN_WAVE env (Doug 2026-05-15 cadence).
+    ...getStrainsInCurrentWave().map((slug) => ({
+      url: `${STORE.website}/strains/${slug}`,
+      lastModified: STATIC_LASTMOD,
+      changeFrequency: "monthly" as const,
+      priority: 0.65,
     })),
     {
       url: `${STORE.website}/heroes`,

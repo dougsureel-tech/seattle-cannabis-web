@@ -170,20 +170,45 @@ const nextConfig: NextConfig = {
       // CDN edge. Pinned at the edge here. None of these paths interact
       // with /menu or iHeartJane Boost — confirmed safe.
       {
+        // Vercel-CDN-Cache-Control belt-and-suspenders: Next 16 strips
+        // `s-maxage` on metadata routes (verified on /opengraph-image; same
+        // class). Layered header bypasses the strip. Sister glw + GW Z48.
         source: "/sitemap.xml",
-        headers: [{ key: "Cache-Control", value: "public, max-age=1800, s-maxage=1800" }],
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=1800, s-maxage=1800" },
+          { key: "Vercel-CDN-Cache-Control", value: "public, max-age=1800, s-maxage=1800, stale-while-revalidate=3600" },
+        ],
       },
       {
         // Bumped 1hr → 24hr (2026-05-14) — content rebuilds on deploy
         // anyway, so cache flushes naturally on every push. No staleness
         // risk; 24× fewer crawler-driven cold edge rebuilds. Sister glw.
+        // Vercel-CDN-Cache-Control layered 2026-05-15 (GW Z48 port).
         source: "/robots.txt",
-        headers: [{ key: "Cache-Control", value: "public, max-age=86400, s-maxage=86400" }],
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=86400, s-maxage=86400" },
+          { key: "Vercel-CDN-Cache-Control", value: "public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800" },
+        ],
       },
       {
         // Same rationale as /robots.txt — rebuilds on deploy. Sister glw.
+        // Vercel-CDN-Cache-Control layered 2026-05-15 (GW Z48 port).
         source: "/llms.txt",
-        headers: [{ key: "Cache-Control", value: "public, max-age=86400, s-maxage=86400" }],
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=86400, s-maxage=86400" },
+          { key: "Vercel-CDN-Cache-Control", value: "public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800" },
+        ],
+      },
+      {
+        // /llms-full.txt was previously uncovered — Vercel default served
+        // `cache-control: max-age=0, must-revalidate` so every ClaudeBot /
+        // GPTBot / PerplexityBot fetch hit origin. Content rebuilds on
+        // deploy, so 24hr edge cache is safe. Sister glw + GW Z48 port.
+        source: "/llms-full.txt",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=86400, s-maxage=86400" },
+          { key: "Vercel-CDN-Cache-Control", value: "public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800" },
+        ],
       },
       {
         source: "/icon",
