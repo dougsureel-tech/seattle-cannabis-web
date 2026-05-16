@@ -1,4 +1,9 @@
 "use client";
+// aria-current:ignore-file
+//   usePathname is read for SUGGESTION generation (alternative to the 404'd
+//   path), not active-state styling. The Link's href is by definition not
+//   the current pathname. aria-current="page" would be wrong here. Sister
+//   glw same marker. See glw commit 4d3d58a.
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
