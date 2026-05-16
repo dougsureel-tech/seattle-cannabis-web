@@ -4,6 +4,7 @@ import Image from "next/image";
 import { VendorAdSlot } from "@/components/VendorAdSlot";
 import { getBrandBySlug, getBrandProducts, getActiveBrands } from "@/lib/db";
 import { getBrandCopy } from "@/lib/brand-copy";
+import { withAttr } from "@/lib/attribution";
 import { STORE } from "@/lib/store";
 import NWCSBrandPage from "./_brands/northwest-cannabis-solutions";
 // GrowOpFarmsBrandPage / OoweeBrandPage / FiftyFoldBrandPage imports
@@ -469,7 +470,10 @@ export default async function BrandPage({ params }: Props) {
           <div className="text-center py-16 space-y-3">
             <div className="text-4xl" aria-hidden="true">🌿</div>
             <p className="text-stone-500 font-medium">No products currently in stock</p>
-            <a href={STORE.shopUrl} className="text-sm text-indigo-700 font-semibold hover:underline">
+            <a
+              href={withAttr(`${STORE.shopUrl}?brand=${slug}`, "brand", slug)}
+              className="text-sm text-indigo-700 font-semibold hover:underline"
+            >
               Browse full menu →
             </a>
           </div>
