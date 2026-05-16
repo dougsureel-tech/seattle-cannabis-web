@@ -1,6 +1,16 @@
+// Helper module for /strains/[slug]/page.tsx — renders the per-category
+// landing pages (indica/sativa/hybrid/cbd) when slug matches a strain type.
+//
+// Why a helper not a sibling route: Next.js 16 doesn't allow two sibling
+// dynamic routes at the same level (`[type]` + `[slug]` collide).
+// The [slug] route now dispatches: type slugs render via this module,
+// strain slugs render the strain detail JSX in page.tsx.
+//
+// Underscore-prefix filename keeps this OUT of the routing tree —
+// importable as a module but not addressable as `/strains/_type-handler`.
+
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import { STORE } from "@/lib/store";
 import { STRAIN_TYPES, getStrainType } from "@/lib/strain-types";
 import { STRAINS, getStrainsInCurrentWave } from "@/lib/strains";
@@ -8,33 +18,14 @@ import { safeJsonLd } from "@/lib/json-ld-safe";
 import { withAttr } from "@/lib/attribution";
 import { Breadcrumb } from "@/components/Breadcrumb";
 
-// /strains/[type] — per-category long-form landing pages. Sister
-// surface to /near/[town]: same JSON-LD pattern (LocalBusiness +
-// BreadcrumbList), same hero shape, same CTA band. Captures long-tail
-// shelf-category queries with descriptive copy that stays inside
-// WAC 314-55-155 (no effect/medical claims).
-
-export const dynamic = "force-static";
-export const revalidate = false;
-export const dynamicParams = false;
-
-export function generateStaticParams() {
-  return STRAIN_TYPES.map((t) => ({ type: t.slug }));
+export function isStrainTypeSlug(slug: string): boolean {
+  return STRAIN_TYPES.some((t) => t.slug === slug);
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ type: string }>;
-}): Promise<Metadata> {
-  const { type: slug } = await params;
+export function strainTypeMetadata(slug: string): Metadata | null {
   const t = getStrainType(slug);
-  if (!t) return { title: "Not found" };
-
-  // absolute drops the template suffix so the SERP title stays under
-  // Google's ~60-char cap.
+  if (!t) return null;
   const title = { absolute: `${t.name} strains — ${STORE.name}` } as const;
-
   return {
     title,
     description: t.metaDescription,
@@ -47,13 +38,12 @@ export async function generateMetadata({
       description: t.metaDescription,
       url: `${STORE.website}/strains/${t.slug}`,
       siteName: STORE.name,
-      // Explicit per-route OG URL (scc v26.805). Co-located
-      // `opengraph-image.tsx` is the per-type card; this entry points
-      // at the per-route file. See `check-per-route-og-image.mjs` fix
-      // shape B + `check-og-completeness.mjs` images-required rule.
+      // Per-route OG was killed by the [type] + [slug] route-merge fix
+      // (Next.js 16 can't disambiguate sibling dynamic routes). Falling
+      // back to root site OG explicitly satisfies `check-og-completeness`.
       images: [
         {
-          url: `/strains/${t.slug}/opengraph-image`,
+          url: `${STORE.website}/opengraph-image`,
           width: 1200,
           height: 630,
           alt: `${t.name} strains at ${STORE.name} · ${t.subhead}`,
@@ -63,25 +53,17 @@ export async function generateMetadata({
   };
 }
 
-export default async function StrainTypePage({
-  params,
-}: {
-  params: Promise<{ type: string }>;
-}) {
-  const { type: slug } = await params;
+export function StrainTypePage({ slug }: { slug: string }) {
   const t = getStrainType(slug);
-  if (!t) notFound();
+  if (!t) return null;
 
-  // LocalBusiness anchor — references the canonical `#dispensary`
-  // entity from app/layout.tsx so Google merges this page's
-  // signals with the main store. Sister-shape with /near/[town].
   const localBusinessLd = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "@id": `${STORE.website}/#dispensary`,
     mainEntityOfPage: { "@id": `${STORE.website}/strains/${t.slug}` },
     name: STORE.name,
-    description: `${t.name} cannabis strains at ${STORE.name} in ${STORE.neighborhood}, Seattle.`,
+    description: `${t.name} cannabis strains at ${STORE.name} in the Rainier Valley.`,
     address: {
       "@type": "PostalAddress",
       streetAddress: STORE.address.street,
@@ -116,46 +98,20 @@ export default async function StrainTypePage({
 
   const otherTypes = STRAIN_TYPES.filter((x) => x.slug !== t.slug);
 
-  // Wave-gated per-strain cluster — only strains currently in the
-  // SEO_STRAIN_WAVE window appear here. Filters by matching `s.type`
-  // against the route's category slug. cbd type renders zero cards
-  // until CBD-dominant strains land in a future wave. Empty state simply
-  // renders nothing — section hides itself. Cadence-gate compliant
-  // (no new URLs, just internal links into per-strain pages that
-  // already exist + are wave-gated independently). Sister glw v36.165.
   const inWaveSlugs = new Set(getStrainsInCurrentWave());
   const strainsForType = Object.values(STRAINS)
     .filter((s) => s.type === t.slug && inWaveSlugs.has(s.slug))
     .sort((a, b) => a.name.localeCompare(b.name));
 
-  // /menu?strain=<type> — same query-param contract the strain-finder
-  // quiz emits at find-your-strain/StrainFinderClient.tsx. Boost embed
-  // ignores params today but the contract is preserved for the day
-  // Boost adds passthrough.
-  const menuHref = withAttr(`/menu?strain=${t.slug}`, "quiz", `strains-${t.slug}`);
+  const menuHref = withAttr(`/menu?strain=${t.slug}`, "strains", t.slug);
 
   return (
     <main className="bg-stone-50 text-stone-900">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: safeJsonLd(localBusinessLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbLd) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(localBusinessLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbLd) }} />
 
-      <Breadcrumb
-        items={[
-          { label: "Strains", href: "/strains" },
-          { label: t.name },
-        ]}
-      />
+      <Breadcrumb items={[{ label: "Strains", href: "/strains" }, { label: t.name }]} />
 
-      {/* ── HERO ───────────────────────────────────────────────────────
-          Indigo→violet gradient matching /near + /visit identity.
-          Eyebrow + H1 + subhead carries the SEO phrase.
-      */}
       <section className="relative bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white overflow-hidden">
         <div
           aria-hidden="true"
@@ -170,7 +126,7 @@ export default async function StrainTypePage({
           className="absolute inset-0"
           style={{
             backgroundImage:
-              "radial-gradient(ellipse 60% 50% at 80% 50%, #818cf833, transparent), radial-gradient(ellipse 50% 60% at 20% 100%, #c026d322, transparent)",
+              "radial-gradient(ellipse 60% 50% at 80% 50%, #a5b4fc33, transparent), radial-gradient(ellipse 50% 60% at 20% 100%, #8b5cf622, transparent)",
           }}
         />
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 pt-8 sm:pt-12 pb-10 sm:pb-14">
@@ -186,7 +142,6 @@ export default async function StrainTypePage({
           <p className="text-base sm:text-lg text-indigo-100/90 leading-relaxed max-w-2xl mb-7">
             On Rainier Ave S since 2010 — pre-I-502, originally a medical collective. {t.name}-leaning genetics across flower, pre-rolls, vapes, and edibles, rotated weekly as Washington growers harvest.
           </p>
-
           <div className="flex flex-wrap gap-3">
             <Link
               href={menuHref}
@@ -212,10 +167,6 @@ export default async function StrainTypePage({
         </div>
       </section>
 
-      {/* ── FACT TILES ────────────────────────────────────────────────
-          4 quick-scan tiles describing the category. Pulled from
-          strain-types.ts SSoT.
-      */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 -mt-6 sm:-mt-8 mb-10 sm:mb-14 relative z-10">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
           {t.factTiles.map((tile) => (
@@ -223,30 +174,19 @@ export default async function StrainTypePage({
               key={tile.label}
               className="rounded-2xl bg-white border border-stone-200 shadow-sm px-4 sm:px-5 py-4"
             >
-              <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.14em] text-indigo-700 mb-1.5">
+              <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.14em] text-indigo-800 mb-1.5">
                 {tile.label}
               </div>
-              <div className="text-xs sm:text-sm font-semibold text-stone-900 leading-snug">
-                {tile.value}
-              </div>
+              <div className="text-xs sm:text-sm font-semibold text-stone-900 leading-snug">{tile.value}</div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ── LONG-FORM BODY ─────────────────────────────────────────────
-          Heavier body copy gets the prose treatment for crawlability +
-          scan-readability. Strictly descriptive — no effect or
-          outcome claims per WAC 314-55-155.
-      */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-12 sm:mb-16">
         <div className="max-w-2xl">
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-indigo-700 mb-2">
-            About the category
-          </p>
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-stone-900 mb-6 leading-tight">
-            {t.h2}
-          </h2>
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-indigo-800 mb-2">About the category</p>
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-stone-900 mb-6 leading-tight">{t.h2}</h2>
           <div className="prose prose-stone prose-base sm:prose-lg max-w-none prose-p:text-stone-700 prose-p:leading-relaxed prose-p:mb-5 prose-strong:text-stone-900">
             {t.bodyCopy.split("\n\n").map((para, i) => (
               <p key={i} {...(i === 0 ? { "data-speakable": "" } : {})}>
@@ -257,16 +197,9 @@ export default async function StrainTypePage({
         </div>
       </section>
 
-      {/* ── WHAT TO LOOK FOR ──────────────────────────────────────────
-          Practical shelf-reading guidance — lineage, packaging, lab
-          panel signals. Still no effect claims, but adds product-
-          discovery utility that the body copy alone doesn't carry.
-      */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-12 sm:mb-16">
         <div className="max-w-2xl">
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-indigo-700 mb-2">
-            On the shelf
-          </p>
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-indigo-800 mb-2">On the shelf</p>
           <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-stone-900 mb-4 leading-tight">
             What to look for in the {t.name.toLowerCase()} section
           </h2>
@@ -278,21 +211,10 @@ export default async function StrainTypePage({
         </div>
       </section>
 
-      {/* ── STRAINS IN THIS FAMILY ────────────────────────────────────
-          Wave-gated per-strain card grid. Only strains in the current
-          SEO_STRAIN_WAVE window appear here. Each card links to the
-          per-strain page (`/strains/<slug>`) which carries the lineage
-          family-tree SVG + FAQs. Internal cross-link (no new URL),
-          cadence-gate compliant. Empty when wave=0 or no matching
-          strains shipped — section hides itself entirely. Sister glw
-          v36.165 (indigo here vs glw green-800 to match scc identity).
-      */}
       {strainsForType.length > 0 && (
         <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-12 sm:mb-16">
           <div className="mb-6 sm:mb-8">
-            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-indigo-800 mb-2">
-              Strains we carry
-            </p>
+            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-indigo-800 mb-2">Strains we carry</p>
             <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-stone-900">
               {t.name} strains in the library
             </h2>
@@ -312,7 +234,7 @@ export default async function StrainTypePage({
                   className="group block h-full rounded-xl bg-white border border-stone-200 hover:border-indigo-500 hover:shadow-sm transition-all px-4 py-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
                 >
                   <div className="flex items-baseline justify-between gap-2 mb-1">
-                    <span className="text-sm sm:text-base font-semibold text-stone-900 group-hover:text-indigo-800 transition-colors truncate">
+                    <span className="text-sm sm:text-base font-semibold text-stone-900 group-hover:text-indigo-900 transition-colors truncate">
                       {s.name}
                     </span>
                     <span aria-hidden="true" className="text-xs font-semibold text-indigo-800 shrink-0">
@@ -320,9 +242,7 @@ export default async function StrainTypePage({
                     </span>
                   </div>
                   {s.lineage && (
-                    <div className="text-[11px] sm:text-xs text-stone-500 leading-snug truncate">
-                      {s.lineage}
-                    </div>
+                    <div className="text-[11px] sm:text-xs text-stone-500 leading-snug truncate">{s.lineage}</div>
                   )}
                 </Link>
               </li>
@@ -331,70 +251,43 @@ export default async function StrainTypePage({
         </section>
       )}
 
-      {/* ── STORE FACTS CHIPS ─────────────────────────────────────────
-          Mirrors /near "Why stop in" fact strip — address, payment,
-          ID, parking. Re-asserts the LocalBusiness signals on every
-          /strains/[type] page so each is independently load-bearing.
-      */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-12 sm:mb-16">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 max-w-3xl">
           <div className="rounded-xl bg-white border border-stone-200 px-3 sm:px-4 py-3">
-            <div className="text-[10px] font-bold uppercase tracking-wider text-stone-500 mb-1">
-              Address
-            </div>
-            <div
-              className="text-xs sm:text-sm font-semibold text-stone-900 leading-snug"
-              data-speakable
-            >
+            <div className="text-[10px] font-bold uppercase tracking-wider text-stone-500 mb-1">Address</div>
+            <div className="text-xs sm:text-sm font-semibold text-stone-900 leading-snug" data-speakable>
               {STORE.address.street}
             </div>
-            <div className="text-xs text-stone-500 mt-0.5">
-              {STORE.neighborhood}, Seattle
-            </div>
+            <div className="text-xs text-stone-500 mt-0.5">{STORE.address.city}, WA</div>
           </div>
           <div className="rounded-xl bg-white border border-stone-200 px-3 sm:px-4 py-3">
-            <div className="text-[10px] font-bold uppercase tracking-wider text-stone-500 mb-1">
-              Payment
-            </div>
-            <div className="text-xs sm:text-sm font-semibold text-stone-900">
-              Cash only
-            </div>
-            <div className="text-xs text-stone-500 mt-0.5">ATM in lobby</div>
+            <div className="text-[10px] font-bold uppercase tracking-wider text-stone-500 mb-1">Parking</div>
+            <div className="text-xs sm:text-sm font-semibold text-stone-900">Free, on-site</div>
+            <div className="text-xs text-stone-500 mt-0.5">ATM on-site</div>
           </div>
           <div className="rounded-xl bg-white border border-stone-200 px-3 sm:px-4 py-3">
-            <div className="text-[10px] font-bold uppercase tracking-wider text-stone-500 mb-1">
-              ID
-            </div>
-            <div className="text-xs sm:text-sm font-semibold text-stone-900">
-              21+, gov ID
-            </div>
+            <div className="text-[10px] font-bold uppercase tracking-wider text-stone-500 mb-1">ID</div>
+            <div className="text-xs sm:text-sm font-semibold text-stone-900">21+, gov ID</div>
             <div className="text-xs text-stone-500 mt-0.5">Out-of-state OK</div>
           </div>
           <div className="rounded-xl bg-white border border-stone-200 px-3 sm:px-4 py-3">
-            <div className="text-[10px] font-bold uppercase tracking-wider text-stone-500 mb-1">
-              Open
-            </div>
-            <div className="text-xs sm:text-sm font-semibold text-stone-900">
-              8 AM – 11 PM
-            </div>
-            <div className="text-xs text-stone-500 mt-0.5">Daily</div>
+            <div className="text-[10px] font-bold uppercase tracking-wider text-stone-500 mb-1">Open</div>
+            <div className="text-xs sm:text-sm font-semibold text-stone-900">8 AM – 9 PM</div>
+            <div className="text-xs text-stone-500 mt-0.5">Later Fri & Sat</div>
           </div>
         </div>
       </section>
 
-      {/* ── CTA BAND ────────────────────────────────────────────────── */}
       <section className="bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6">
             <div className="max-w-md">
-              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-indigo-300 mb-2">
-                Live menu
-              </p>
+              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-indigo-300 mb-2">Live menu</p>
               <h2 className="text-2xl sm:text-3xl font-bold tracking-tight mb-3 leading-tight">
                 See what {t.name.toLowerCase()} is on the shelf right now.
               </h2>
               <p className="text-indigo-200/80 text-sm sm:text-base leading-relaxed">
-                Browse the live menu — place a pickup order and we’ll have it pulled and bagged when you arrive. Cash only at the counter, 21+.
+                Browse the live menu — place a pickup order and we’ll have it pulled and bagged when you arrive. 21+, gov ID at the door.
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-3 shrink-0">
@@ -416,44 +309,28 @@ export default async function StrainTypePage({
         </div>
       </section>
 
-      {/* ── OTHER STRAIN TYPES ──────────────────────────────────────────
-          Sister-type cross-link cluster. Pre-v27.305 this rendered as
-          a thin 2/3-col grid with name + arrow only. Now: 2-col mobile
-          / 3-col tablet+ card grid where each card pulls the per-type
-          `eyebrow` one-liner from `lib/strain-types.ts` SSoT — gives
-          the related-cluster real scan-readable content rather than a
-          bare list, anchoring dwell-time when a reader is comparing
-          shelves. Voice: operator-direct, no marketing-speak. Sister
-          glw v35.905.
-      */}
       {otherTypes.length > 0 && (
         <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
           <div className="mb-6 sm:mb-8">
-            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-indigo-700 mb-2">
-              Other strain types
-            </p>
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-stone-900">
-              All four shelves
-            </h2>
+            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-indigo-800 mb-2">Other strain types</p>
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-stone-900">All four shelves</h2>
           </div>
           <ul className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
             {otherTypes.map((x) => (
               <li key={x.slug}>
                 <Link
                   href={`/strains/${x.slug}`}
-                  className="group block h-full rounded-xl bg-white border border-stone-200 hover:border-indigo-400 hover:shadow-sm transition-all px-3 sm:px-4 py-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+                  className="group block h-full rounded-xl bg-white border border-stone-200 hover:border-indigo-500 hover:shadow-sm transition-all px-3 sm:px-4 py-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
                 >
                   <div className="flex items-baseline justify-between gap-2">
-                    <span className="text-sm sm:text-base font-semibold text-stone-900 group-hover:text-indigo-800 transition-colors truncate">
+                    <span className="text-sm sm:text-base font-semibold text-stone-900 group-hover:text-indigo-900 transition-colors truncate">
                       {x.name}
                     </span>
-                    <span aria-hidden="true" className="text-xs font-semibold text-indigo-700 shrink-0">
+                    <span aria-hidden="true" className="text-xs font-semibold text-indigo-800 shrink-0">
                       →
                     </span>
                   </div>
-                  <div className="text-[11px] sm:text-xs text-stone-500 mt-1 leading-snug">
-                    {x.eyebrow}
-                  </div>
+                  <div className="text-[11px] sm:text-xs text-stone-500 mt-1 leading-snug">{x.eyebrow}</div>
                 </Link>
               </li>
             ))}
