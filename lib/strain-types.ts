@@ -67,7 +67,7 @@ export const STRAIN_TYPES: StrainType[] = [
     ],
     bodyCopy: `Cannabis indica is one of the two long-recognized botanical lines of the cannabis genus, characterized by shorter plant stature, broader leaflets, and a denser, faster-finishing bud structure compared to cannabis sativa. In modern Washington retail the term is used as a shelf category that signals lineage and grow form rather than a strict botanical certification — most commercial strains are hybridized to some degree, and the indica label on a jar indicates that the strain leans toward indica-dominant heritage in its breeding tree.
 
-We’ve been on Rainier Ave S since 2010, originally as a medical collective before I-502 went into effect in 2012. That tenure shapes how we stock the indica section: we carry both Washington-grown legacy genetics that customers have asked for by name for years (Northern Lights and Bubba Kush lineages, for instance) and newer crosses from regional growers working with terpene-forward parents. The shelf isn’t static — indica-leaning hybrids cycle in and out as growers harvest, so the live menu is the source of truth.
+We’ve been in cannabis since 2010 — pre-I-502 medical-collective days in lower Queen Anne — and on Rainier Ave S since 2018. That tenure shapes how we stock the indica section: we carry both Washington-grown legacy genetics that customers have asked for by name for years (Northern Lights and Bubba Kush lineages, for instance) and newer crosses from regional growers working with terpene-forward parents. The shelf isn’t static — indica-leaning hybrids cycle in and out as growers harvest, so the live menu is the source of truth.
 
 Indica is offered across every product format we carry: cured flower in 1g, 3.5g, 7g, and 14g portions; pre-rolls singles and packs; live-resin and distillate vapes; edibles including gummies, chocolates, and beverages where the producer specifies a lineage on the label; and concentrates where extract artists choose indica-dominant input material. Pricing follows the producer + format — craft small-batch flower runs higher than larger commercial harvests, and that ladder is consistent across categories.
 
@@ -100,7 +100,7 @@ Format matters too: indica-leaning flower from a craft grower will be denser and
     ],
     bodyCopy: `Cannabis sativa is the second long-recognized botanical line of the cannabis genus, characterized by taller plant stature, narrower leaflets, and a longer flowering window than cannabis indica. In Washington retail the sativa label functions as a shelf category that signals lineage rather than a strict botanical certification — nearly every commercial strain on the market today is a hybrid to some degree, and the sativa label on a jar means the strain leans toward sativa-dominant heritage in its breeding tree.
 
-Our buying team has been on Rainier Ave S since 2010 — we opened as a medical collective two years before I-502 made adult-use retail legal in Washington. That history shapes how we stock the sativa section: we carry classic Washington-grown sativa lineages that long-time customers ask for by name (Durban Poison, Jack Herer, Sour Diesel families) alongside newer crosses from regional growers experimenting with terpene-forward parents. The shelf rotates as harvests come in and go out.
+Our buying team has been in cannabis since 2010 — opened as a medical collective in lower Queen Anne two years before I-502 made adult-use retail legal in Washington, then moved to Rainier Ave S in 2018. That history shapes how we stock the sativa section: we carry classic Washington-grown sativa lineages that long-time customers ask for by name (Durban Poison, Jack Herer, Sour Diesel families) alongside newer crosses from regional growers experimenting with terpene-forward parents. The shelf rotates as harvests come in and go out.
 
 Sativa is offered across every product format we carry: cured flower in 1g, 3.5g, 7g, and 14g portions; pre-roll singles and packs; live-resin and distillate vape cartridges; edibles where the producer specifies a sativa-leaning input on the label; and concentrates from extract artists who select sativa-dominant flower or trim. Pricing follows the producer and format ladder — craft small-batch sativa runs higher than larger-volume commercial harvests, consistent across the rest of the store.
 
@@ -133,7 +133,7 @@ For sativa-dominant vapes and edibles, the producer labels the input material wi
     ],
     bodyCopy: `Hybrid strains are crosses of cannabis indica and cannabis sativa lineages, and they make up the majority of the modern cannabis market — most strains you’ll see on a Washington dispensary shelf today are hybrids in some sense, since breeders have been crossing indica and sativa parents for fifty-plus years. The hybrid label on a jar means the strain is intentionally bred from mixed lineage, often with a stated lean (“indica-dominant hybrid”, “sativa-dominant hybrid”, or “balanced hybrid”) reflecting the breeder’s phenotype selection.
 
-We’ve been on Rainier Ave S since 2010 — pre-I-502, originally as a medical collective — and the hybrid section has grown the most over those years as Washington growers leaned into hybrid breeding programs. The shelf carries legacy hybrid genetics like Blue Dream, Girl Scout Cookies, OG Kush, and Wedding Cake families alongside newer phenotype hunts and limited-run releases from regional craft growers.
+We’ve been in cannabis since 2010 — pre-I-502 medical-collective days in lower Queen Anne, on Rainier Ave S since 2018 — and the hybrid section has grown the most over those years as Washington growers leaned into hybrid breeding programs. The shelf carries legacy hybrid genetics like Blue Dream, Girl Scout Cookies, OG Kush, and Wedding Cake families alongside newer phenotype hunts and limited-run releases from regional craft growers.
 
 Hybrid is offered across every format we carry: flower in 1g through 14g portions; pre-roll singles and packs; live-resin and distillate vape carts; edibles where the producer specifies a hybrid input on the label; and concentrates from extract artists who select balanced flower or trim. Pricing tracks the producer + format ladder consistent with the rest of the menu.
 
@@ -153,7 +153,7 @@ Hybrids are where Washington’s craft growers do most of their phenotype huntin
     name: "CBD",
     eyebrow: "Strain category · CBD-dominant",
     metaDescription:
-      "CBD-dominant strains at Seattle Cannabis Co. in Rainier Valley. High-CBD flower, tinctures, and edibles on the live menu — Rainier Ave S since 2010.",
+      "CBD-dominant strains at Seattle Cannabis Co. in Rainier Valley. High-CBD flower, tinctures, and edibles on the live menu — in cannabis since 2010, on Rainier Ave S since 2018.",
     subhead: "CBD-dominant cultivars · cannabinoid ratio category",
     h2: "CBD-dominant strains in Seattle’s Rainier Valley",
     keywords: [

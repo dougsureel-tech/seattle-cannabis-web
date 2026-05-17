@@ -30,7 +30,7 @@ export const dynamic = "force-static";
 export const revalidate = false;
 
 const TITLE = `Strains — ${STORE.name}`;
-const DESCRIPTION = `Indica, sativa, hybrid, and CBD-dominant strain categories at ${STORE.name} in Rainier Valley, Seattle. Live menu, Rainier Ave S since 2010.`;
+const DESCRIPTION = `Indica, sativa, hybrid, and CBD-dominant strain categories at ${STORE.name} in Rainier Valley, Seattle. Live menu — in cannabis since 2010, on Rainier Ave S since 2018.`;
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
@@ -141,11 +141,11 @@ export default function StrainsIndexPage() {
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-[1.05] mb-4 max-w-3xl">
             Strains at {STORE.name}
             <span className="block text-indigo-300/90 font-semibold text-xl sm:text-2xl md:text-3xl mt-2">
-              Indica, sativa, hybrid, CBD-dominant — on Rainier Ave S since 2010
+              Indica, sativa, hybrid, CBD-dominant — Rainier Ave S since 2018, in cannabis since 2010
             </span>
           </h1>
           <p className="text-base sm:text-lg text-indigo-100/90 leading-relaxed max-w-2xl mb-7">
-            We carry the four shelf categories you’d expect from a Washington dispensary, stocked from regional craft growers and rotated as harvests come in. Pre-I-502 origin as a Rainier Valley medical collective; same Rainier Ave S address.
+            We carry the four shelf categories you’d expect from a Washington dispensary, stocked from regional craft growers and rotated as harvests come in. Pre-I-502 origin as a lower-Queen-Anne medical collective; moved to Rainier Ave S in 2018, same address ever since.
           </p>
 
           <div className="flex flex-wrap gap-3">

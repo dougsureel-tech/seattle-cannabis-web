@@ -149,7 +149,7 @@ export function StrainTypePage({ slug }: { slug: string }) {
             </span>
           </h1>
           <p className="text-base sm:text-lg text-indigo-100/90 leading-relaxed max-w-2xl mb-7">
-            On Rainier Ave S since 2010 — pre-I-502, originally a medical collective. {t.name}-leaning genetics across flower, pre-rolls, vapes, and edibles, rotated weekly as Washington growers harvest.
+            In cannabis since 2010 — pre-I-502 medical collective in lower Queen Anne — and on Rainier Ave S since 2018. {t.name}-leaning genetics across flower, pre-rolls, vapes, and edibles, rotated weekly as Washington growers harvest.
           </p>
           <div className="flex flex-wrap gap-3">
             <Link
