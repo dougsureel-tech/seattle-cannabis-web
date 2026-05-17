@@ -1134,7 +1134,7 @@ export default async function HomePage() {
           surface — that's "hot picks", this is "what's new". CTA links to /menu
           (the iHeartJane Boost embed in prod), safe distinct from /order tree dev. */}
       {justIn.length > 0 && (
-        <section className="py-12 sm:py-10">
+        <section className="py-10 sm:py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <div className="flex items-end justify-between mb-8 gap-4">
               <SectionHeading align="left" kicker="🆕 New this week">
@@ -1242,7 +1242,7 @@ export default async function HomePage() {
           a preview of the in-dev /order tree menu. Restore (drop the `false &&`)
           when /order ships to prod. */}
       {false && featured.length > 0 && (
-        <section className="py-12 sm:py-10">
+        <section className="py-10 sm:py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <div className="flex items-end justify-between mb-8 gap-4">
               <SectionHeading align="left" kicker="Fresh arrivals & staff favorites">
