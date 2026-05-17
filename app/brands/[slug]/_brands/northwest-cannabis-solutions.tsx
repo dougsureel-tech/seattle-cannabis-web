@@ -55,7 +55,7 @@ const NWCS_CALLOUT_CONCENTRATES =
   "https://www.nwcs425.com/files/image/5cb6060dc6221/callout/AdobeStock_145830355.jpeg";
 const NWCS_CALLOUT_FLOWER =
   "https://www.nwcs425.com/files/image/5c5b998280245/callout/pot_leaf.png";
-const NWCS_CALLOUT_WELLNESS =
+const NWCS_CALLOUT_TOPICALS =
   "https://www.nwcs425.com/files/image/5e852c4a693c9/callout/WA_Salve_50ml_18to1.jpg";
 
 const SUB_BRANDS: Array<{ name: string; tag: string; line: string }> = [
@@ -114,9 +114,9 @@ const APPROACH_CARDS = [
     body: "Magic Kitchen is one of WA's longest-running edible lines — Marmas, Pebbles, Cookies, Koko Gemz. Lab-tested doses.",
   },
   {
-    img: NWCS_CALLOUT_WELLNESS,
-    title: "Wellness",
-    body: "Topicals, tinctures, and capsules formulated for predictable, smoke-free use. THCaps and salves at varied ratios.",
+    img: NWCS_CALLOUT_TOPICALS,
+    title: "Topicals & Tinctures",
+    body: "Topicals, tinctures, and capsules in the smoke-free formats. THCaps and salves at varied ratios.",
   },
 ];
 
@@ -237,7 +237,7 @@ export default function NWCSBrandPage({
               </h2>
             </div>
             <p className="text-sm text-stone-500 max-w-md">
-              NWCS runs sixteen total — these are the ones that move in our case. Ask a budtender
+              NWCS runs sixteen total — these are the ones that move at Green Life. Ask a budtender
               if you want a sample of what each one does.
             </p>
           </div>
