@@ -873,6 +873,44 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* ─── Strain library callout ───────────────────────────────────────────
+          Surfaces the 250-strain library (lib/strains.ts) that was previously
+          invisible from the homepage. /strains page itself stays robots:noindex
+          outside the SEO_STRAIN_WAVE-current set; this homepage link drives
+          customer-side discoverability + builds internal-link signal Google
+          activates when the wave bumps. Two CTAs: primary library browse,
+          secondary 3-question quiz. WAC 314-55-155 STRICT — no effect claims. */}
+      <section className="bg-stone-50 border-b border-stone-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-6 items-center">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-indigo-700">Get to know the strains</p>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight mt-1.5">
+                250 strains, family trees, and what to look for on the shelf
+              </h2>
+              <p className="text-stone-600 mt-2 text-sm sm:text-base leading-relaxed max-w-2xl">
+                Our library covers the strains rotating through the menu — Blue Dream, OG Kush, Wedding Cake, Gelato, the ones our regulars ask for and the heritage cuts behind them — with descriptive notes on lineage, terpenes, aroma, and how customers commonly reach for each one. Pre-I-502 medical-collective tenure on Rainier Ave South translates into working knowledge of the genetics, written down.
+              </p>
+            </div>
+            <div className="flex flex-col gap-2 sm:gap-3 md:items-end">
+              <Link
+                href="/strains"
+                className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 rounded-2xl bg-indigo-700 hover:bg-indigo-800 text-white font-bold text-sm transition-all shadow-sm whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+              >
+                Browse the strain library
+                <span aria-hidden="true">→</span>
+              </Link>
+              <Link
+                href="/find-your-strain"
+                className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 rounded-2xl border border-indigo-700 text-indigo-800 hover:bg-indigo-50 font-semibold text-sm transition-all whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+              >
+                Take the 3-question quiz
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ─── Where you headed? — pick-the-trip vibe section. Seward Park is
               literally next door (Lake Washington swim spot, ~5 min walk).
               Alki is the westside sunset cruise. Discovery / Hurricane / Tiger
