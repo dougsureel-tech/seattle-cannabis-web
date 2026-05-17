@@ -63,9 +63,13 @@ export const metadata: Metadata = {
   // appears once. Pre-fix body baked the brand + template appended again
   // ("Seattle Cannabis Co. — Rainier Valley Dispensary Since 2010 | Seattle
   // Cannabis Co.", 81 chars, brand x2). T27 duplicate-brand arc-guard catch.
-  title: { absolute: `${STORE.name} — ${STORE.neighborhood} Dispensary Since 2010` },
+  // Doug 2026-05-17 correction: dropped "Since 2010" suffix from the title
+  // because it conflated the business's 2010 founding (lower Queen Anne
+  // medical-cannabis) with the Rainier Valley location (since 2018). Body
+  // describes the timeline accurately.
+  title: { absolute: `${STORE.name} — ${STORE.neighborhood} Dispensary` },
   // ~150 chars — v11.005 length sweep.
-  description: `${STORE.name} at ${STORE.address.full}. 5 min from Othello Light Rail. Founded 2010. Open 8 AM–11 PM. Cash only, 21+.`,
+  description: `${STORE.name} at ${STORE.address.full}. 5 min from Othello Light Rail. In cannabis since 2010, on Rainier since 2018. Open 8 AM–11 PM. Cash only, 21+.`,
   alternates: {
     canonical: "/",
     // RSS auto-discovery must be repeated at page-level since Next 16
