@@ -59,7 +59,7 @@ const PALETTE: BrandPalette = {
 // (200) and on the brand's current Squarespace CDN per
 // `feedback_vendor_logo_sources`. Hero swapped from Super Fog product
 // glamour shot (no longer hosted) to the brand's current website hero
-// background — same brand-mood signal.
+// background — same brand-mood signal. Sister of scc same-push.
 const MFUSED_LOGO =
   "https://images.squarespace-cdn.com/content/v1/65982e5124b1b60fe9b2d332/024d7af8-d7c9-4063-9864-b4466977e9ee/mfused-web-logo.png";
 const MFUSED_HERO =
@@ -104,7 +104,7 @@ const SUB_BRANDS: Array<{ name: string; tag: string; line: string }> = [
   {
     name: "Vibes",
     tag: "Approachable",
-    line: "The lower-strength tier — easier on the lungs, milder onset. Good entry point if you're new to high-THC vapes.",
+    line: "The lower-strength tier — gentler draw, milder onset. Good entry point if you're new to high-THC vapes.",
   },
 ];
 
