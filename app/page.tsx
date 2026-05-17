@@ -581,7 +581,7 @@ export default async function HomePage() {
             </p>
             <h2
               id="why-heading"
-              className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-stone-900 tracking-tight mt-2"
+              className="text-3xl sm:text-4xl font-extrabold text-stone-900 tracking-tight mt-2"
             >
               Rainier Valley&apos;s neighborhood shop.
             </h2>
