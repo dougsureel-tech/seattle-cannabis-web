@@ -73,7 +73,7 @@ export async function generateMetadata({
   const count = getStrainsInFamily(family).length;
   const title = { absolute: `${fam.name} — ${count} strains at ${STORE.name}` } as const;
   const desc =
-    `${fam.tagline} ${count} strains from this genetic line on the shelf at ${STORE.name}.`;
+    `${fam.tagline} ${count} strains from this genetic line on the shelf at ${STORE.name}`;
   const inWave = isFamilyInWave();
   return {
     title,
