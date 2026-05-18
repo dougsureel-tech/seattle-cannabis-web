@@ -134,6 +134,19 @@ export async function GET() {
     smsConfigured: isSmsConfigured(),
     // Cross-stack alias — sister of `emailReady` above. GW uses `smsReady`.
     smsReady: isSmsConfigured(),
+    // 2026-05-18 grind-find: DASHBOARD_SESSION_SECRET was missing from the
+    // scc Vercel project entirely → /api/rewards/verify-code returned 500
+    // ({"error":"Server misconfigured"}) on every customer OTP submit. The
+    // existing health endpoint exposed emailReady + smsReady but NOT this
+    // env, so live probes against /api/health looked clean while the
+    // customer-facing rewards flow was silently broken. `rewardsReady`
+    // exposes the env state without revealing the value — false = the
+    // rewards OTP verify path will 500 + customer can't claim rewards.
+    // Fix when false: Vercel dashboard → seattle-cannabis-web Settings →
+    // Environment Variables → add DASHBOARD_SESSION_SECRET (≥32-char
+    // random string from `openssl rand -base64 48`, Sensitive flag,
+    // production target) → redeploy.
+    rewardsReady: Boolean(process.env.DASHBOARD_SESSION_SECRET),
   };
 
   return NextResponse.json(body, {
