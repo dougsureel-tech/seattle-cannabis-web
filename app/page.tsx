@@ -6,7 +6,7 @@ import { DAY_MS } from "@/lib/time-constants";
 import { getProductPlaceholderGradient, getProductPlaceholderIcon } from "@/lib/product-placeholder";
 import { effectivePriceFor, findDealForProduct, ONLINE_DISCOUNT_PCT } from "@/lib/online-pricing";
 import { withAttr } from "@/lib/attribution";
-import { getActiveBrands, getActiveDeals, getFeaturedProducts, getJustInProducts, getTreasureChestProducts } from "@/lib/db";
+import { getTopBrandsBySales, getActiveDeals, getFeaturedProducts, getJustInProducts, getTreasureChestProducts } from "@/lib/db";
 import { fetchClosureStatus } from "@/lib/closure-status";
 import { getBrandCopy } from "@/lib/brand-copy";
 import { isBannedLogoUrl } from "@/lib/banned-logo-url";
@@ -174,7 +174,11 @@ export default async function HomePage() {
   // hydrate flicker is the accepted tradeoff for the cache win. Sister
   // of glw v20.205 — same fix shape, different cookie name.
   const [brands, featured, justIn, deals, closure, treasureChest] = await Promise.all([
-    getActiveBrands().catch(() => []),
+    // Top Brands carousel ordered by 90d sales-line-item count (Doug
+    // 2026-05-17 "top brands should be based on sales"). Limit 30 gives
+    // headroom for the .filter(logoUrl) downstream so we still land 10
+    // logo'd tiles even when some top sellers don't have a curated logo.
+    getTopBrandsBySales(30, 90).catch(() => []),
     getFeaturedProducts(8).catch(() => []),
     getJustInProducts(12).catch(() => []),
     getActiveDeals({ includeAppOnly: true }).catch(() => []),
