@@ -1110,7 +1110,7 @@ export function OrderMenu({
                                 WSLCB GS1 mirror, the category-prefix check
                                 renders the badge from authoritative data
                                 already in the products table. */}
-                            {(product.isDohCompliant || /^DOH\s+/i.test(product.category ?? "")) && (
+                            {(product.isDohCompliant || /^DOH\s+/i.test(product.category ?? "") || /\bDOH\b/i.test(product.name ?? "")) && (
                               <span
                                 className="absolute top-2.5 left-2.5 text-[10px] px-2 py-0.5 rounded-full font-bold bg-purple-700 text-white shadow-md uppercase tracking-wide"
                                 title="DOH-compliant — extra-tested SKU. Medical patients pay no tax."

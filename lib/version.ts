@@ -560,7 +560,7 @@
 // 28.045 — 🛡️ WAC sweep: Botanica + NWCS + Green Revolution batch (sister glw v36.745). Per BRAND_OVERRIDE_WAC_AUDIT_2026_05_16.md. typecheck CLEAN.
 // 28.065 — 🛡️ WAC sweep: VOICE-class fixes on fifty-fold + 2727 brand pages (sister glw v36.765). Per BRAND_OVERRIDE_WAC_AUDIT_2026_05_16.md rows #23 + #26. Fifty Fold: "the highest QA bar on the rec shelf" × 2 → "one of the strictest QA bars on the rec shelf" (Q&A line 34 + sub-brand line 83) — drops the absolute-superlative that Doug can't defend against a 500+ WA producer/processor universe; "one of the strictest" preserves the DOH-compliance signal. 2727: tagline quote-style swap `'Made to Burn with Perfection'` → `"Made to Burn with Perfection"` (curly U+201C/U+201D double quotes per voice convention; ASCII straight quotes were the only inconsistency in the file). 3 line edits per stack, sister-identical via file-copy. Avoided collision with parallel-session BORDERLINE batch (mfused/avitas/agro-couture/oowee) — those 4 files left untouched. typecheck CLEAN.
 // 28.085 — 🛡️ WAC sweep: 5 singleton brand fixes (sister glw v36.785). mfused/avitas/agro-couture/oowee per BRAND_OVERRIDE_WAC_AUDIT 18-21, 24. Audit fully shipped end-to-end.
-export const BUILD_VERSION = "28.745";
+export const BUILD_VERSION = "28.765";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ||
