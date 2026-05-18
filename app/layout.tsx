@@ -182,6 +182,14 @@ export const viewport = {
   colorScheme: "light",
   width: "device-width",
   initialScale: 1,
+  // viewportFit: "cover" — extends the rendered surface UNDER the iPhone
+  // Dynamic Island / notch / home-indicator areas, then individual surfaces
+  // restore safe-area padding via env(safe-area-inset-*) where it matters
+  // (sticky headers, bottom CTAs). Without this, mobile Safari pads the
+  // whole document by the device's safe-area amounts, leaving a visible
+  // letterbox bar around the page in PWA / Add-to-Home-Screen mode. Sister
+  // glw + GW same-fix. Surfaced 2026-05-18 by mobile-PWA expert audit.
+  viewportFit: "cover" as const,
 };
 
 // Convert STORE.hours format ("8:00 AM" / "11:00 PM") → schema.org ISO 24h

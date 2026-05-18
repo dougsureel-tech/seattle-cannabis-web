@@ -87,7 +87,7 @@ export async function AnnouncementBar() {
 
   return (
     <div
-      className={`text-xs font-medium py-1 px-4 text-center flex items-center justify-center gap-3 flex-wrap ${bg} ${textColor}`}
+      className={`text-xs font-medium py-1 pt-[max(0.25rem,env(safe-area-inset-top))] px-4 text-center flex items-center justify-center gap-3 flex-wrap ${bg} ${textColor}`}
     >
       <span className="flex items-center gap-1.5">
         <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${dot}`} />
