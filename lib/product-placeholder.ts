@@ -38,10 +38,11 @@ const CATEGORY_GRADIENTS: Record<string, string> = {
   Tincture: "bg-gradient-to-br from-teal-100 via-cyan-50 to-sky-100",
   Topicals: "bg-gradient-to-br from-rose-100 via-pink-50 to-fuchsia-100",
   Topical: "bg-gradient-to-br from-rose-100 via-pink-50 to-fuchsia-100",
-  // Capsules + Accessories were stone/slate (dead-neutral). Stack-tint to
-  // indigo so they read as part of the SCC surface, not as missing-art.
-  Capsules: "bg-gradient-to-br from-indigo-50 via-slate-50 to-blue-50",
-  Capsule: "bg-gradient-to-br from-indigo-50 via-slate-50 to-blue-50",
+  // Capsules + Accessories — stack-tinted indigo. v28.845 cycle-3 polish:
+  // dropped the `via-slate-50` middle stop in Capsule (had killed the
+  // saturation cycle-2 was trying to deliver) so the tint actually shows.
+  Capsules: "bg-gradient-to-br from-indigo-50 via-violet-50 to-blue-50",
+  Capsule: "bg-gradient-to-br from-indigo-50 via-violet-50 to-blue-50",
   Accessories: "bg-gradient-to-br from-indigo-50 via-violet-50 to-blue-50",
   Accessory: "bg-gradient-to-br from-indigo-50 via-violet-50 to-blue-50",
 };
