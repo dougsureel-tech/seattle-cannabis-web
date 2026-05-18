@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import { VendorAdSlot } from "@/components/VendorAdSlot";
-import { getBrandBySlug, getBrandProducts, getActiveBrands } from "@/lib/db";
+import { getBrandBySlug, getBrandProducts, getActiveBrands, getActiveDeals } from "@/lib/db";
+import { effectivePriceFor, findDealForProduct, ONLINE_DISCOUNT_PCT } from "@/lib/online-pricing";
 import { getBrandCopy } from "@/lib/brand-copy";
 import { withAttr } from "@/lib/attribution";
 import { isBannedLogoUrl } from "@/lib/banned-logo-url";
@@ -52,6 +53,12 @@ export const revalidate = 300;
 type BrandComponentProps = {
   brand: NonNullable<Awaited<ReturnType<typeof getBrandBySlug>>>;
   products: Awaited<ReturnType<typeof getBrandProducts>>;
+  /** Active deals so brand-override components can pass to
+   *  PaginatedProductsGrid → pricing engine. Optional for backward
+   *  compat with override components that haven't been refactored
+   *  yet (they'll fall back to 20% online floor only, no daily-deal
+   *  surfacing). */
+  deals?: Awaited<ReturnType<typeof getActiveDeals>>;
 };
 const BRAND_OVERRIDES: Record<string, React.ComponentType<BrandComponentProps>> = {
   "northwest-cannabis-solutions": NWCSBrandPage,
@@ -228,7 +235,15 @@ export default async function BrandPage({ params }: Props) {
   const dbLogoUrl = brand.logoUrl && !isBannedLogoUrl(brand.logoUrl) ? brand.logoUrl : null;
   const logoUrl = dbLogoUrl ?? getBrandCopy(slug)?.logoUrl ?? null;
 
-  const products = await getBrandProducts(brand.id).catch(() => []);
+  const [products, deals] = await Promise.all([
+    getBrandProducts(brand.id).catch(() => []),
+    // Brand pages were rendering raw p.unit_price.toFixed(2) — bypassed the
+    // online-pricing engine (Doug 2026-05-17 screenshot caught BALLIN at
+    // $18.00 instead of post-discount). Fetch active deals so the price
+    // render below applies the BIGGER of (20% online floor, current daily
+    // deal %) per `lib/online-pricing.ts` semantics.
+    getActiveDeals({ includeAppOnly: true }).catch(() => []),
+  ]);
   const categories = [...new Set(products.map((p) => p.category ?? "Other"))].sort((a, b) => {
     const order = [
       "Flower",
@@ -338,7 +353,7 @@ export default async function BrandPage({ params }: Props) {
             dangerouslySetInnerHTML={{ __html: safeJsonLd(productSchemas) }}
           />
         )}
-        <Override brand={brand} products={products} />
+        <Override brand={brand} products={products} deals={deals} />
       </>
     );
   }
@@ -569,13 +584,33 @@ export default async function BrandPage({ params }: Props) {
                           </div>
                           {p.effects && <p className="text-xs text-stone-400 line-clamp-1">✨ {p.effects}</p>}
                           <div className="flex items-center justify-between pt-1 border-t border-stone-50">
-                            {p.unit_price != null ? (
-                              <span className="font-extrabold text-stone-900">
-                                ${p.unit_price.toFixed(2)}
-                              </span>
-                            ) : (
-                              <span className="text-stone-300">—</span>
-                            )}
+                            {(() => {
+                              if (p.unit_price == null) {
+                                return <span className="text-stone-300">—</span>;
+                              }
+                              const pricing = effectivePriceFor(
+                                { unitPrice: p.unit_price, category: p.category },
+                                findDealForProduct({ category: p.category }, deals),
+                              );
+                              if (pricing.displayPrice == null) {
+                                return <span className="text-stone-300">—</span>;
+                              }
+                              return (
+                                <div className="flex flex-col leading-tight">
+                                  <span className="text-stone-400 line-through text-[10px] decoration-red-500 decoration-2">
+                                    ${pricing.originalPrice?.toFixed(2)}
+                                  </span>
+                                  <span className="font-extrabold text-stone-900 text-base">
+                                    ${pricing.displayPrice.toFixed(2)}
+                                  </span>
+                                  <span className="text-[9px] font-bold uppercase tracking-wider text-indigo-700 leading-none">
+                                    {pricing.dealName
+                                      ? `${Math.round(pricing.discountPct)}% off · ${pricing.dealName}`
+                                      : `${ONLINE_DISCOUNT_PCT}% off online`}
+                                  </span>
+                                </div>
+                              );
+                            })()}
                             <a
                               href={STORE.shopUrl}
                               className="text-xs font-bold text-indigo-700 hover:text-indigo-600 transition-colors"
