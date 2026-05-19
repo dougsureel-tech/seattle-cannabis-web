@@ -164,7 +164,6 @@ function ApplyForm() {
   const [resumeError, setResumeError] = useState<string | null>(null);
   const [refs, setRefs] = useState<Reference[]>([{ ...EMPTY_REF }]);
   const [age21Confirmed, setAge21Confirmed] = useState(false);
-  const [hasWaWorkerPermit, setHasWaWorkerPermit] = useState<boolean | null>(null);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
 
   // Submission state
@@ -313,9 +312,6 @@ function ApplyForm() {
     fd.append("customerRecoveryStory", recoveryStory.trim());
     fd.append("availability", availability.trim());
     fd.append("age21Confirmed", String(age21Confirmed));
-    if (hasWaWorkerPermit !== null) {
-      fd.append("hasWaWorkerPermit", String(hasWaWorkerPermit));
-    }
     const cleanedRefs = refs
       .map((r) => ({
         name: r.name.trim(),
@@ -695,40 +691,12 @@ function ApplyForm() {
               )}
             </div>
 
-            {/* ── WA worker permit (optional) ── */}
-            <Field
-              label="WA cannabis worker permit"
-              hint="Optional — let us know if you already have one. We can help you get one if you don't."
-            >
-              <div className="flex gap-2">
-                {(
-                  [
-                    { v: true, l: "Yes, I have one" },
-                    { v: false, l: "Not yet" },
-                  ] as const
-                ).map((opt) => (
-                  <label
-                    key={String(opt.v)}
-                    className={`flex-1 flex items-center justify-center px-3 py-2.5 rounded-xl border text-sm font-medium cursor-pointer transition-colors ${
-                      hasWaWorkerPermit === opt.v
-                        ? "border-indigo-700 bg-indigo-50 text-indigo-800"
-                        : "border-stone-300 bg-white text-stone-600 hover:border-indigo-400"
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      name="hasWaWorkerPermit"
-                      checked={hasWaWorkerPermit === opt.v}
-                      onChange={() => setHasWaWorkerPermit(opt.v)}
-                      className="sr-only"
-                    />
-                    {opt.l}
-                  </label>
-                ))}
-              </div>
-            </Field>
-
             {/* ── 21+ confirmation (REQUIRED, big + prominent) ── */}
+            {/* WA does NOT issue a state-level cannabis worker permit. Sister
+                glw 2026-05-19 removal — Doug: "No cannabis license needed in
+                washington." Employees must be 21+ per WAC 314-55-115 +
+                complete employer training, but no state-issued worker
+                license exists; asking applicants confused them. */}
             <div
               className={`rounded-2xl border-2 p-5 transition-colors ${
                 age21Confirmed
