@@ -98,27 +98,38 @@ export function isEmailConfigured(): boolean {
  * email incident 2026-05-11 — burned 3hr on inv before diag endpoint
  * surfaced root cause).
  *
+ * **UPDATED 2026-05-19 evening:** apex `seattlecannabis.co` is no longer
+ * at-risk. The apex SPF now includes `_spf.resend.com` (verified via
+ * `dig TXT seattlecannabis.co` — returns `v=spf1 include:_spf.resend.com
+ * include:spf.protection.outlook.com -all`). Apex DKIM verified in Resend
+ * dashboard 15 days ago. DMARC is `aspf=r adkim=r` (relaxed alignment) so
+ * apex-direct sending passes SPF + DMARC at receiving clients.
+ *
+ * The send.<apex> trampoline is no longer needed. Both apex AND send.subdomain
+ * are safe; Jensine-class silent-spam-fold risk is closed by SPF + DKIM
+ * verification at the apex.
+ *
  * Returns:
  *   - `null` when RESEND_API_KEY isn't set (nothing to validate)
- *   - `false` when from-host is `send.seattlecannabis.co` or another
- *     verified subdomain (correct shape)
- *   - `true` when from-host equals bare apex `seattlecannabis.co`
- *     (at-risk — flip env to send.subdomain)
+ *   - `true` when RESEND_FROM is unset (default code-fallback) OR uses an
+ *     UNVERIFIED domain (could be misconfigured / typo)
+ *   - `false` when from-host is the verified apex `seattlecannabis.co` OR
+ *     verified subdomain `send.seattlecannabis.co`
  *
- * **Doug-action follow-up if at-risk:**
- *   `vercel env rm RESEND_FROM production --yes && \
- *    echo "Seattle Cannabis Co. <hi@send.seattlecannabis.co>" | \
- *    vercel env add RESEND_FROM production`
- *  Then redeploy. Note: requires verifying `send.seattlecannabis.co`
- *  at the Resend dashboard first (DNS-side TXT + DKIM records).
+ * If SPF / Resend-domain-verification state ever changes, update VERIFIED_HOSTS
+ * below + this doc block.
  */
+const VERIFIED_HOSTS = new Set<string>([
+  "seattlecannabis.co",
+  "send.seattlecannabis.co",
+]);
+
 export function isEmailFromAtRisk(): boolean | null {
   if (!getApiKey()) return null;
   const configured = process.env.RESEND_FROM?.trim();
   if (!configured) {
-    // Code default is `hi@seattlecannabis.co` (apex) — AT-RISK by default
-    // until env var is set OR code-default flipped (see cannagent v6.4565
-    // for the code-default-flip pattern). Surface this honestly.
+    // RESEND_FROM unset → code-default fallback. Honest "we don't know
+    // for sure" signal until env is explicitly set.
     return true;
   }
   // Parse host from either `Name <addr@host>` or `addr@host`.
@@ -126,7 +137,9 @@ export function isEmailFromAtRisk(): boolean | null {
   const bareMatch = configured.match(/([^\s]+@([^\s]+))/);
   const host = (angleMatch?.[2] || bareMatch?.[2] || "").trim().toLowerCase();
   if (!host) return null;
-  return host === "seattlecannabis.co";
+  // Unverified host (typo / wrong domain) → at-risk. Both apex + send.apex
+  // are verified in Resend dashboard with SPF + DKIM.
+  return !VERIFIED_HOSTS.has(host);
 }
 
 /**
