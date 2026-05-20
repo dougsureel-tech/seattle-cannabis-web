@@ -652,6 +652,15 @@ export default async function BrandPage({ params }: Props) {
 // (sold through, vendor name changed, never set up). Render a friendly
 // "not on the shelf right now — here's similar" page with noindex.
 // Set dynamicParams=true (top of file) for the catch-all to reach this.
+//
+// 2026-05-20: when `MENU_PRE_ONBOARD_BRANDS_ENABLED=true` AND BRAND_COPY
+// has a curated entry for this slug, the fallback rendering is enhanced
+// to surface the curated bio + tagline + (optional) logo so customers
+// who hit a brand we're talking about pre-onboarding get a real
+// informational page instead of just "isn't on our shelf right now."
+// Default OFF preserves the existing honest-disclaimer-first behavior;
+// flag-ON adds context below the disclaimer (the disclaimer itself stays
+// as the headline so we don't mislead). Sister-port from glw.
 async function BrandNotCarriedFallback({ rawSlug }: { rawSlug: string }) {
   // Pretty the slug back into a brand-name-ish display ("ballin" → "Ballin",
   // "ag-grow-412557" → "Ag Grow 412557"). Never trust the slug for HTML
@@ -664,6 +673,14 @@ async function BrandNotCarriedFallback({ rawSlug }: { rawSlug: string }) {
   // for now; could swap to recent-sales when traffic warrants).
   const allBrands = await getActiveBrands().catch(() => []);
   const featured = allBrands.slice(0, 8);
+
+  // Pre-onboarding curated content surface — only fires when env-flag is
+  // ON AND BRAND_COPY has a curated entry for this slug. Logo path falls
+  // back to the file convention `/brand-logos/<slug>.png` when BRAND_COPY
+  // doesn't specify an explicit logoUrl.
+  const preOnboardingEnabled = process.env.MENU_PRE_ONBOARD_BRANDS_ENABLED === "true";
+  const curated = preOnboardingEnabled ? getBrandCopy(rawSlug) : null;
+  const curatedLogoUrl = curated?.logoUrl ?? (curated ? `/brand-logos/${rawSlug}.png` : null);
 
   return (
     <div className="min-h-screen bg-white">
@@ -695,6 +712,42 @@ async function BrandNotCarriedFallback({ rawSlug }: { rawSlug: string }) {
             </a>
           </div>
         </div>
+
+        {curated && (
+          <section className="mt-10 rounded-2xl border border-stone-200 bg-white p-6 sm:p-8">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-indigo-700 mb-3">
+              About {prettyName}
+            </p>
+            <div className="flex flex-col sm:flex-row gap-5 items-start">
+              {curatedLogoUrl && (
+                <div className="shrink-0 w-20 h-20 rounded-xl bg-stone-50 border border-stone-200 flex items-center justify-center overflow-hidden relative">
+                  <Image
+                    src={curatedLogoUrl}
+                    alt={`${prettyName} logo`}
+                    fill
+                    sizes="80px"
+                    className="object-contain p-2"
+                  />
+                </div>
+              )}
+              <div className="space-y-3 min-w-0 flex-1">
+                {curated.tagline && (
+                  <p className="text-stone-900 font-semibold leading-snug">{curated.tagline}</p>
+                )}
+                {curated.bio &&
+                  curated.bio.split(/\n{2,}/).map((para, i) => (
+                    <p key={i} className="text-stone-700 text-sm leading-relaxed">
+                      {para}
+                    </p>
+                  ))}
+              </div>
+            </div>
+            <p className="text-[11px] text-stone-400 mt-4 leading-relaxed">
+              We don&apos;t currently carry {prettyName} on our shelf — this is background
+              on the brand. Check the live menu for what we&apos;re stocking today.
+            </p>
+          </section>
+        )}
 
         {featured.length > 0 && (
           <section className="mt-10">
