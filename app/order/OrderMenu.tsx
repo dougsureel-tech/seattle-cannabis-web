@@ -244,6 +244,21 @@ function parseProductName(p: MenuProduct): { name: string; weight: string | null
   return { name: kept.join(" — ") || p.name, weight };
 }
 
+// Brand-logo fallback: when a product has no real photo, try to render the
+// vendor's brand logo (~60 logos shipped in /public/brand-logos/) before
+// falling through to the strain-tinted gradient. Slug the brand name to
+// match the file convention (`buddy-boy-farm.png`, `the-goodship.png`).
+// We can't probe file existence from a client component, so the <Image>
+// onError flips state to drop back to CategoryIcon — gives the same
+// "deliberate surface" feel for brands we don't have a logo for yet.
+function slugifyBrandForLogo(brand: string): string {
+  return brand
+    .toLowerCase()
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
 function ProductImage({
   src,
   alt,
@@ -263,7 +278,10 @@ function ProductImage({
 }) {
   const [loaded, setLoaded] = useState(false);
   const [errored, setErrored] = useState(false);
+  const [brandLogoErrored, setBrandLogoErrored] = useState(false);
   const CategoryIcon = getCategoryIcon(category);
+  const brandLogoSlug = brand ? slugifyBrandForLogo(brand) : null;
+  const tryBrandLogo = !!brandLogoSlug && !brandLogoErrored;
 
   if (!src || errored) {
     // Strain-tinted (Flower/Pre-Roll) or category-tinted gradient via the
@@ -310,21 +328,35 @@ function ProductImage({
           </span>
         ) : null}
         <div className="relative w-full h-full flex flex-col items-center justify-center gap-2 px-3">
-          {/* Line-art SVG category icon (cycle 3 v28.845) — replaces the
-              prior emoji glyph. currentColor inherits stone-700/70 so the
-              icon sits UNDER the brand pill in the visual hierarchy
-              instead of competing. Sized 56px (w-14 h-14) — close to the
-              cycle-2 6xl emoji visual weight but with consistent stroke
-              quality across OS/browser combinations. */}
-          <CategoryIcon
-            className="w-14 h-14 text-stone-700/70 drop-shadow-sm"
-            aria-hidden="true"
-          />
-          {brand ? (
-            <span className="text-[11px] font-bold uppercase tracking-wider text-stone-700 px-3 py-1 bg-white/80 backdrop-blur-sm rounded-full line-clamp-1 max-w-[85%] shadow-sm border border-white/50">
-              {brand}
-            </span>
-          ) : null}
+          {tryBrandLogo ? (
+            // Brand-logo fallback (`/public/brand-logos/<slug>.png`). When the
+            // file is missing for this brand the onError handler flips
+            // brandLogoErrored=true and the next render falls through to
+            // the CategoryIcon branch. The brand pill is suppressed when
+            // the logo renders successfully — the logo carries the
+            // wordmark, so the pill would just repeat the brand name.
+            <Image
+              src={`/brand-logos/${brandLogoSlug}.png`}
+              alt={`${brand} brand logo`}
+              width={160}
+              height={160}
+              className="w-24 h-24 object-contain drop-shadow-sm"
+              onError={() => setBrandLogoErrored(true)}
+              unoptimized
+            />
+          ) : (
+            <>
+              <CategoryIcon
+                className="w-14 h-14 text-stone-700/70 drop-shadow-sm"
+                aria-hidden="true"
+              />
+              {brand ? (
+                <span className="text-[11px] font-bold uppercase tracking-wider text-stone-700 px-3 py-1 bg-white/80 backdrop-blur-sm rounded-full line-clamp-1 max-w-[85%] shadow-sm border border-white/50">
+                  {brand}
+                </span>
+              ) : null}
+            </>
+          )}
           {/* THC% on placeholder cards only — wrapped in a smaller
               outlined pill so brand-pill + THC-pill read as a deliberate
               two-pill group rather than chip + free-floating caption
@@ -1089,12 +1121,13 @@ export function OrderMenu({
                       {items.length}
                     </span>
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4">
                     {visibleItems.map((product) => {
                       const cartItem = cart.find((i) => i.id === product.id);
                       const strain = product.strainType ? STRAIN_COLORS[product.strainType] : null;
                       const parsed = parseProductName(product);
                       const deal = findDealForProduct(product, activeDeals);
+                      const isDoh = product.isDohCompliant || /^DOH\s+/i.test(product.category ?? "") || /\bDOH\b/i.test(product.name ?? "");
                       return (
                         <div
                           key={product.id}
@@ -1156,24 +1189,31 @@ export function OrderMenu({
                                 {cartItem.quantity}
                               </span>
                             )}
-                            {/* DOH-compliant badge — left side so it doesn't
-                                clash with NEW/cartItem on the right. Always
-                                shown on DOH SKUs (informational); the
-                                medical-no-tax price below appears only when
-                                the signed-in customer is DOH-verified.
-                                Fallback gate: WSLCB attaches "DOH " as a
-                                category prefix on medical-endorsed SKUs (see
-                                normalizer above). Until the `is_doh_compliant`
-                                boolean is backfilled on every DOH SKU from the
-                                WSLCB GS1 mirror, the category-prefix check
-                                renders the badge from authoritative data
-                                already in the products table. */}
-                            {(product.isDohCompliant || /^DOH\s+/i.test(product.category ?? "") || /\bDOH\b/i.test(product.name ?? "")) && (
+                            {/* DOH-compliant badge — stacks UNDER the deal chip
+                                when a sale is running (top-12 ≈ 48px down) so
+                                top-left never piles two chips side-by-side.
+                                Alone in top-left when no deal. Medical-grade
+                                cross + caps "DOH" reads as clinical, not
+                                consumer-marketing — matches the regulatory
+                                weight (WSLCB-endorsed extra-tested SKU, no
+                                excise tax for verified patients).
+                                TODO swap inline SVG for the official WA-DOH
+                                logo Doug attached — needs Doug to re-drop
+                                into chat; file not in /public yet. */}
+                            {isDoh && (
                               <span
-                                className="absolute top-2.5 left-2.5 text-[10px] px-2 py-0.5 rounded-full font-bold bg-purple-700 text-white shadow-md uppercase tracking-wide"
-                                title="DOH-compliant — extra-tested SKU. Medical patients pay no tax."
+                                className={`absolute ${deal ? "top-12" : "top-2.5"} left-2.5 inline-flex items-center gap-1 text-[10px] px-2 py-1 rounded-md font-extrabold bg-purple-700 text-white shadow-md uppercase tracking-wider pointer-events-none`}
+                                title="DOH-compliant — extra-tested medical SKU. No tax for verified patients."
                               >
-                                <span aria-hidden="true">🟣 </span>DOH
+                                <svg
+                                  className="w-2.5 h-2.5"
+                                  viewBox="0 0 24 24"
+                                  fill="currentColor"
+                                  aria-hidden="true"
+                                >
+                                  <path d="M10 3h4v7h7v4h-7v7h-4v-7H3v-4h7z" />
+                                </svg>
+                                DOH
                               </span>
                             )}
                           </div>
