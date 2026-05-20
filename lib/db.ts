@@ -78,7 +78,8 @@ export async function getMenuProducts(): Promise<MenuProduct[]> {
       p.thc_pct::float AS thc_pct, p.cbd_pct::float AS cbd_pct,
       p.unit_price::float AS unit_price, p.image_url, p.effects, p.terpenes,
       COALESCE(fs.first_seen >= NOW() - INTERVAL '7 days', FALSE) AS is_new,
-      COALESCE(p.is_doh_compliant, FALSE) AS is_doh_compliant
+      COALESCE(p.is_doh_compliant, FALSE) AS is_doh_compliant,
+      p.menu_ready_at
     FROM products p
     INNER JOIN latest_inv li ON li.product_id = p.id
     INNER JOIN brands_with_recent_sales bws ON bws.vendor_id = p.vendor_id
@@ -93,7 +94,19 @@ export async function getMenuProducts(): Promise<MenuProduct[]> {
       AND p.unit_price IS NOT NULL
     ORDER BY p.category NULLS LAST, p.brand NULLS LAST, p.name
   `;
-  return rows.map((r) => ({
+  // Phase 3b receive-automation menu-readiness gate (sister-port from glw —
+  // see greenlife-web/lib/db.ts:getMenuProducts for the full rationale).
+  // inv-App migration 0281 backfilled every currently-active product to
+  // menu_ready_at = NOW(), so flipping MENU_READY_FILTER_ENABLED=true in
+  // Vercel env today removes ZERO products from the SCC customer menu —
+  // the gap only manifests when future receives fail the readiness check.
+  // Doug-gated flip per the mid-day product-disappearance risk he flagged
+  // on the board. Default OFF preserves current customer-facing behavior.
+  const filterMenuReady = process.env.MENU_READY_FILTER_ENABLED === "true";
+  const filtered = filterMenuReady
+    ? rows.filter((r) => r.menu_ready_at !== null)
+    : rows;
+  return filtered.map((r) => ({
     id: r.id as string,
     name: r.name as string,
     brand: (r.brand ?? null) as string | null,
