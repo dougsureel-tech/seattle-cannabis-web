@@ -1165,8 +1165,16 @@ export function OrderMenu({
                               </span>
                             )}
                             {strain && (
+                              // v29.025: strain chip moved to bottom-right
+                              // always (was conditionally top-left when no
+                              // deal — would collide with the DOH chip when
+                              // a DOH+strain card had no deal running). Top
+                              // corners are reserved for higher-priority
+                              // chips (deal + DOH on left, NEW/cart on
+                              // right); strain is informational, fine on the
+                              // bottom edge opposite the weight chip.
                               <span
-                                className={`absolute ${deal ? "bottom-2.5 right-2.5" : "top-2.5 left-2.5"} text-xs px-2.5 py-1 rounded-full font-semibold border ${strain.badge}`}
+                                className={`absolute bottom-2.5 right-2.5 text-xs px-2.5 py-1 rounded-full font-semibold border ${strain.badge}`}
                               >
                                 <span
                                   className={`inline-block w-1.5 h-1.5 rounded-full mr-1 ${strain.dot}`}
@@ -1350,20 +1358,31 @@ export function OrderMenu({
           </div>
 
           {filtered.length === 0 && (
-            <div className="py-20 text-center space-y-3">
+            // v29.025: empty state now offers concrete next steps instead
+                  // of just "clear filters." When the filters were the cause,
+                  // surface the top-4 categories as one-tap recovery buttons
+                  // so the user can pivot rather than feeling stuck. Search
+                  // misses get a different recovery path (clear search +
+                  // suggestion to phone the store).
+            <div className="py-16 text-center space-y-4">
               <div className="text-4xl" aria-hidden>🔍</div>
-              <p className="text-stone-500 font-medium">
+              <p className="text-stone-600 font-semibold text-base">
                 {search ? (
                   <>No products match &ldquo;{search}&rdquo;</>
                 ) : (
-                  <>No products match those filters.</>
+                  <>No products match those filters</>
                 )}
               </p>
-              <div className="flex flex-wrap justify-center gap-2">
+              <p className="text-stone-500 text-sm max-w-md mx-auto">
+                {search
+                  ? "Try a shorter search or one of the popular categories below. Still stuck? Call the store and a budtender can check the back."
+                  : "Some combinations are stricter than what's on the shelf today. Reset or pivot to a category below."}
+              </p>
+              <div className="flex flex-wrap justify-center gap-2 pt-1">
                 {search && (
                   <button type="button"
                     onClick={() => setSearch("")}
-                    className="text-sm text-indigo-700 font-semibold hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 rounded px-1"
+                    className="text-sm text-white bg-indigo-700 hover:bg-indigo-600 font-semibold py-2 px-4 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 transition-colors"
                   >
                     Clear search
                   </button>
@@ -1377,12 +1396,43 @@ export function OrderMenu({
                       setThcTier("all");
                       setSortBy("default");
                     }}
-                    className="text-sm text-indigo-700 font-semibold hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 rounded px-1"
+                    className="text-sm text-white bg-indigo-700 hover:bg-indigo-600 font-semibold py-2 px-4 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 transition-colors"
                   >
                     Reset filters
                   </button>
                 )}
               </div>
+              {/* Category pivot — only render top-4 categories with stock so
+                  the user can fall sideways into something that exists on
+                  the shelf today instead of just reset-and-retry. */}
+              {categories.length > 0 && (
+                <div className="pt-3">
+                  <p className="text-xs uppercase tracking-widest text-stone-400 font-semibold mb-2">
+                    Or browse a category
+                  </p>
+                  <div className="flex flex-wrap justify-center gap-2">
+                    {categories.slice(0, 4).map((c) => (
+                      <button
+                        type="button"
+                        key={c}
+                        onClick={() => {
+                          setStrainFilter(null);
+                          setBrandFilter(null);
+                          setPriceTier("all");
+                          setThcTier("all");
+                          setSortBy("default");
+                          setSearch("");
+                          selectCategory(c);
+                        }}
+                        className="inline-flex items-center gap-1.5 text-sm text-stone-700 bg-white hover:bg-stone-50 border border-stone-200 hover:border-indigo-300 font-semibold py-2 px-4 rounded-full transition-colors"
+                      >
+                        <span aria-hidden="true">{CAT_ICONS[c] ?? "🌱"}</span>
+                        {displayCategory(c)}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>
