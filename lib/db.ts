@@ -3,6 +3,7 @@ import { cache } from "react";
 import { cleanBrandName } from "./clean-brand-name";
 import { scoreProduct, rankStrainMatches, type ScoredProduct } from "./strain-match";
 import type { Strain, LineageGraph } from "./strains";
+import { safeProductImageUrl } from "./banned-logo-url";
 
 export type VendorBrand = {
   id: string;
@@ -101,7 +102,7 @@ export async function getMenuProducts(): Promise<MenuProduct[]> {
     thcPct: (r.thc_pct ?? null) as number | null,
     cbdPct: (r.cbd_pct ?? null) as number | null,
     unitPrice: (r.unit_price ?? null) as number | null,
-    imageUrl: (r.image_url ?? null) as string | null,
+    imageUrl: safeProductImageUrl(r.image_url as string | null | undefined),
     effects: (r.effects ?? null) as string | null,
     terpenes: (r.terpenes ?? null) as string | null,
     isNew: Boolean(r.is_new),
@@ -160,7 +161,7 @@ export async function getProductsByIds(ids: string[]): Promise<MenuProduct[]> {
     thcPct: (r.thc_pct ?? null) as number | null,
     cbdPct: (r.cbd_pct ?? null) as number | null,
     unitPrice: (r.unit_price ?? null) as number | null,
-    imageUrl: (r.image_url ?? null) as string | null,
+    imageUrl: safeProductImageUrl(r.image_url as string | null | undefined),
     effects: (r.effects ?? null) as string | null,
     terpenes: (r.terpenes ?? null) as string | null,
     isNew: Boolean(r.is_new),
@@ -197,7 +198,7 @@ export async function getFeaturedProducts(limit = 8): Promise<MenuProduct[]> {
       thcPct: (r.thc_pct ?? null) as number | null,
       cbdPct: (r.cbd_pct ?? null) as number | null,
       unitPrice: (r.unit_price ?? null) as number | null,
-      imageUrl: (r.image_url ?? null) as string | null,
+      imageUrl: safeProductImageUrl(r.image_url as string | null | undefined),
       effects: (r.effects ?? null) as string | null,
       terpenes: (r.terpenes ?? null) as string | null,
       isNew: false,
@@ -244,7 +245,7 @@ export async function getFeaturedProducts(limit = 8): Promise<MenuProduct[]> {
     thcPct: (r.thc_pct ?? null) as number | null,
     cbdPct: (r.cbd_pct ?? null) as number | null,
     unitPrice: (r.unit_price ?? null) as number | null,
-    imageUrl: (r.image_url ?? null) as string | null,
+    imageUrl: safeProductImageUrl(r.image_url as string | null | undefined),
     effects: (r.effects ?? null) as string | null,
     terpenes: (r.terpenes ?? null) as string | null,
     isNew: false,
@@ -287,7 +288,7 @@ export async function getFeaturedProducts(limit = 8): Promise<MenuProduct[]> {
       thcPct: (r.thc_pct ?? null) as number | null,
       cbdPct: (r.cbd_pct ?? null) as number | null,
       unitPrice: (r.unit_price ?? null) as number | null,
-      imageUrl: (r.image_url ?? null) as string | null,
+      imageUrl: safeProductImageUrl(r.image_url as string | null | undefined),
       effects: (r.effects ?? null) as string | null,
       terpenes: (r.terpenes ?? null) as string | null,
       isNew: false,
@@ -392,7 +393,7 @@ export async function getActiveVendorAds(slot: string, limit = 3): Promise<Vendo
     vendorName: r.vendor_name
       ? (cleanBrandName(r.vendor_name as string) || (r.vendor_name as string))
       : null,
-    imageUrl: (r.image_url ?? null) as string | null,
+    imageUrl: safeProductImageUrl(r.image_url as string | null | undefined),
     headline: (r.headline ?? null) as string | null,
     body: (r.body ?? null) as string | null,
     ctaLabel: (r.cta_label ?? null) as string | null,
@@ -476,7 +477,7 @@ export async function getJustInProducts(limit = 12): Promise<MenuProduct[]> {
     thcPct: (r.thc_pct ?? null) as number | null,
     cbdPct: (r.cbd_pct ?? null) as number | null,
     unitPrice: (r.unit_price ?? null) as number | null,
-    imageUrl: (r.image_url ?? null) as string | null,
+    imageUrl: safeProductImageUrl(r.image_url as string | null | undefined),
     effects: (r.effects ?? null) as string | null,
     terpenes: (r.terpenes ?? null) as string | null,
     isNew: true,
@@ -529,7 +530,7 @@ export async function getTreasureChestProducts(limit = 60): Promise<MenuProduct[
     thcPct: (r.thc_pct ?? null) as number | null,
     cbdPct: (r.cbd_pct ?? null) as number | null,
     unitPrice: (r.unit_price ?? null) as number | null,
-    imageUrl: (r.image_url ?? null) as string | null,
+    imageUrl: safeProductImageUrl(r.image_url as string | null | undefined),
     effects: (r.effects ?? null) as string | null,
     terpenes: (r.terpenes ?? null) as string | null,
     isNew: false,
@@ -661,7 +662,7 @@ export async function getCategoryPreviewProducts(
     thcPct: (r.thc_pct ?? null) as number | null,
     cbdPct: (r.cbd_pct ?? null) as number | null,
     unitPrice: (r.unit_price ?? null) as number | null,
-    imageUrl: (r.image_url ?? null) as string | null,
+    imageUrl: safeProductImageUrl(r.image_url as string | null | undefined),
     effects: (r.effects ?? null) as string | null,
     terpenes: (r.terpenes ?? null) as string | null,
     isNew: false,
