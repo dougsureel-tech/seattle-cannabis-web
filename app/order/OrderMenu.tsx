@@ -244,6 +244,57 @@ function parseProductName(p: MenuProduct): { name: string; weight: string | null
   return { name: kept.join(" — ") || p.name, weight };
 }
 
+// WA DOH product-compliance logo per WAC 246-70-040. Three official categories:
+//   - High THC: specific product types only (capsules / tablets / tinctures /
+//     transdermal patches / suppositories) with 10-50mg active THC per
+//     serving, DOH-flagged
+//   - High CBD: CBD-dominant + non-smokeable (no flower, no pre-rolls), DOH-flagged
+//   - General Use: everything else (DOH's actual catch-all per the framework —
+//     applies to DOH-flagged products that don't meet High THC/High CBD criteria
+//     AND to non-DOH/recreational products alike)
+// Files at /public/doh-logos/{high-thc,high-cbd,general-use}.jpg — fetched
+// from the official DOH page 2026-05-20.
+function pickDohLogo({
+  isDohCompliant,
+  thcPct,
+  cbdPct,
+  category,
+}: {
+  isDohCompliant?: boolean | null;
+  thcPct?: number | null;
+  cbdPct?: number | null;
+  category?: string | null;
+}): { src: string; label: string; description: string } {
+  const cat = (category ?? "").toLowerCase();
+  const thc = thcPct ?? 0;
+  const cbd = cbdPct ?? 0;
+  const isDoh = isDohCompliant === true || /^DOH\s+/i.test(category ?? "");
+  // High THC: 5 specific product types only per WAC 246-70-040
+  const isHighThcEligibleCategory = /capsule|tablet|tincture|patch|suppositor/.test(cat);
+  if (isDoh && isHighThcEligibleCategory) {
+    return {
+      src: "/doh-logos/high-thc.jpg",
+      label: "WA DOH High THC compliant",
+      description: "Medical product with 10-50mg active THC per serving (WAC 246-70).",
+    };
+  }
+  // High CBD: CBD-dominant + non-smokeable
+  const isSmokeable = /flower|pre[-_\s]?roll/.test(cat);
+  if (isDoh && cbd > thc && !isSmokeable) {
+    return {
+      src: "/doh-logos/high-cbd.jpg",
+      label: "WA DOH High CBD compliant",
+      description: "Medical CBD-dominant product (WAC 246-70).",
+    };
+  }
+  // General Use: DOH framework's catch-all
+  return {
+    src: "/doh-logos/general-use.jpg",
+    label: "WA DOH General Use",
+    description: "Any cannabis product allowed by the WSLCB (WAC 246-70).",
+  };
+}
+
 // Brand-logo fallback: when a product has no real photo, try to render the
 // vendor's brand logo (~60 logos shipped in /public/brand-logos/) before
 // falling through to the strain-tinted gradient. Slug the brand name to
@@ -1268,6 +1319,7 @@ export function OrderMenu({
                             <div className="flex items-center justify-between pt-1 border-t border-stone-50">
                               <div className="flex flex-col">
                                 {(() => {
+                                  const dohLogo = pickDohLogo(product);
                                   const pricing = effectivePriceFor(product, deal);
                                   if (pricing.displayPrice == null) return <span className="font-extrabold text-stone-900 text-base">—</span>;
                                   // DOH-verified medical patient on a DOH-compliant
@@ -1284,7 +1336,18 @@ export function OrderMenu({
                                     return (
                                       <>
                                         <span className="text-stone-400 line-through text-xs decoration-red-500 decoration-2">${pricing.originalPrice?.toFixed(2)}</span>
-                                        <span className="font-extrabold text-purple-900 text-base leading-tight">${medicalPrice.toFixed(2)}</span>
+                                        <div className="flex items-center gap-1.5">
+                                          <span className="font-extrabold text-purple-900 text-base leading-tight">${medicalPrice.toFixed(2)}</span>
+                                          <Image
+                                            src={dohLogo.src}
+                                            alt={dohLogo.label}
+                                            title={`${dohLogo.label} — ${dohLogo.description}`}
+                                            width={32}
+                                            height={32}
+                                            className="h-5 w-5 object-contain opacity-80"
+                                            unoptimized
+                                          />
+                                        </div>
                                         <span className="text-[10px] font-bold uppercase tracking-wider text-purple-700 leading-none">
                                           <span aria-hidden="true">🟣 </span>Medical · no tax
                                         </span>
@@ -1294,7 +1357,18 @@ export function OrderMenu({
                                   return (
                                     <>
                                       <span className="text-stone-400 line-through text-xs decoration-red-500 decoration-2">${pricing.originalPrice?.toFixed(2)}</span>
-                                      <span className="font-extrabold text-stone-900 text-base leading-tight">${pricing.displayPrice.toFixed(2)}</span>
+                                      <div className="flex items-center gap-1.5">
+                                        <span className="font-extrabold text-stone-900 text-base leading-tight">${pricing.displayPrice.toFixed(2)}</span>
+                                        <Image
+                                          src={dohLogo.src}
+                                          alt={dohLogo.label}
+                                          title={`${dohLogo.label} — ${dohLogo.description}`}
+                                          width={32}
+                                          height={32}
+                                          className="h-5 w-5 object-contain opacity-80"
+                                          unoptimized
+                                        />
+                                      </div>
                                       <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-700 leading-none">
                                         {pricing.dealName ? `${Math.round(pricing.discountPct)}% off · ${pricing.dealName}` : `${ONLINE_DISCOUNT_PCT}% off online`}
                                       </span>
