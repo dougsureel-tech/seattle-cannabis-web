@@ -127,6 +127,25 @@ const SLUG_ALIASES: Record<string, string> = {
   "botanica": "botanica-seattle",
 };
 
+// Display-name override for aliased slugs — when a customer lands on
+// /brands/plaid-jacket we want the page-title + meta + OG-card to say
+// "Plaid Jacket" not "Spark Industries" (the DB vendor row's name).
+// Polish-audit 2026-05-20 caught this defeating the brand-first SEO
+// pivot. Sister glw v37.945.
+const SLUG_DISPLAY_NAMES: Record<string, string> = {
+  "plaid-jacket": "Plaid Jacket",
+  "sungrown": "Leafwerx · Cookies WA · Solr Bear",
+  "leafwerx": "Leafwerx",
+  "2727": "2727",
+  "slab-mechanix": "Slab Mechanix",
+  "mr-moxeys": "Mr. Moxey's",
+  "mr-moxey-s": "Mr. Moxey's",
+  "moxey": "Mr. Moxey's",
+  "journeyman": "Journeyman",
+  "spot": "Spot",
+  "botanica": "Botanica Seattle",
+};
+
 type Props = { params: Promise<{ slug: string }> };
 
 // dynamicParams=true (Doug 2026-05-17 — /brands/ballin screenshot 404).
@@ -178,9 +197,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     // `robots: noindex` hint prevents Google from indexing the soft-404.
     return { robots: { index: false, follow: false } };
   }
+  // Brand-first display name — when rawSlug is a known alias
+  // (e.g. /brands/plaid-jacket), use the customer-facing display name
+  // ("Plaid Jacket") rather than the DB vendor row's parent-distributor
+  // name ("Spark Industries"). Polish-audit 2026-05-20 sister glw v37.945.
+  const displayName = SLUG_DISPLAY_NAMES[rawSlug.toLowerCase()] ?? brand.name;
   return {
-    title: brand.name,
-    description: `Shop ${brand.name} cannabis products at ${STORE.name} in Rainier Valley, Seattle WA. ${brand.activeSkus} products in stock.`,
+    title: displayName,
+    description: `Shop ${displayName} cannabis products at ${STORE.name} in Rainier Valley, Seattle WA. ${brand.activeSkus} products in stock.`,
     // Canonical points at the resolved (canonical) slug, NOT the alias —
     // so /brands/botanica's `<link rel=canonical>` reads
     // `/brands/botanica-seattle`. That's the correct dedupe signal for
@@ -190,8 +214,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       siteName: STORE.name,
       type: "website",
       locale: "en_US",
-      title: `${brand.name} | ${STORE.name}`,
-      description: `Browse ${brand.name} products available at Seattle Cannabis Co., Rainier Valley WA.`,
+      title: `${displayName} | ${STORE.name}`,
+      description: `Browse ${displayName} products available at Seattle Cannabis Co., Rainier Valley WA.`,
       // Per-route OG at /brands/{slug}/opengraph-image — custom card with
       // brand name + product count. Sister glw v17.105 T49 same-class fix.
       images: [
@@ -199,7 +223,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           url: `/brands/${slug}/opengraph-image`,
           width: 1200,
           height: 630,
-          alt: `${brand.name} — at ${STORE.name}`,
+          alt: `${displayName} — at ${STORE.name}`,
         },
       ],
     },
