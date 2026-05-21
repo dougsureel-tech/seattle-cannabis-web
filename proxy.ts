@@ -79,6 +79,14 @@ function isCanonicalOrLocal(host: string): boolean {
 // flows) and removes the cookie/header noise from every other route.
 const clerk = clerkMiddleware(async (auth, req) => {
   if (!isProtectedRoute(req)) return;
+  // Preview-mode escape hatch — sister glw fix. C1 Wrapped page (and
+  // future feature-flagged /account/* surfaces) sets its own no-auth
+  // fallback when ?preview=1 is present so Doug can eye mock fixtures
+  // before the customer-facing flag flip. Without this exemption Clerk
+  // intercepts at middleware before the page's preview logic runs.
+  const url = new URL(req.url);
+  const preview = url.searchParams.get("preview");
+  if (preview === "1" || preview === "true") return;
   const signInUrl = new URL("/sign-in", req.url);
   signInUrl.searchParams.set("redirect_url", req.url);
   await auth.protect({ unauthenticatedUrl: signInUrl.toString() });
