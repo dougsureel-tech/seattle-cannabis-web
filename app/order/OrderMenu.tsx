@@ -15,6 +15,7 @@ import { CURRENT_TEAM, initialOf } from "@/lib/team";
 import { MINUTE_MS, DAY_MS } from "@/lib/time-constants";
 import { fetchClosureStatus, type ClosureStatus } from "@/lib/closure-status";
 import { eligibleRedemptionTiers, applyRedemptionTier, type RedemptionTier } from "@/lib/loyalty-redemption";
+import { BRAND_LOGOS_AVAILABLE } from "@/lib/brand-logos-available";
 
 // Map a product to a running deal it qualifies for. Mirror of the
 // helper in greenlife-web — keep in sync. Stem-match against the
@@ -332,7 +333,17 @@ function ProductImage({
   const [brandLogoErrored, setBrandLogoErrored] = useState(false);
   const CategoryIcon = getCategoryIcon(category);
   const brandLogoSlug = brand ? slugifyBrandForLogo(brand) : null;
-  const tryBrandLogo = !!brandLogoSlug && !brandLogoErrored;
+  // Build-time manifest gate — only attempt the brand-logo render when
+  // the PNG actually exists on disk. Pre-manifest, products whose slug
+  // didn't match an existing file would fetch a 404 + briefly show the
+  // browser's broken-image icon before React's onError re-rendered to
+  // the CategoryIcon branch. Verified live 2026-05-21: 11 of 14 brand-
+  // logo refs on SCC menu-preview hit 404 (1988 / 2727 / 4-20-bar / airo
+  // / ballin / bic / cartello-cannabis / double-delicious / endo /
+  // hemparillo / rochester-farms — none of which have a PNG on disk).
+  // See lib/brand-logos-available.ts doctrine.
+  const hasLogo = !!brandLogoSlug && BRAND_LOGOS_AVAILABLE.has(brandLogoSlug);
+  const tryBrandLogo = hasLogo && !brandLogoErrored;
 
   if (!src || errored) {
     // Strain-tinted (Flower/Pre-Roll) or category-tinted gradient via the
