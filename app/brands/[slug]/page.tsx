@@ -495,7 +495,7 @@ export default async function BrandPage({ params }: Props) {
               {displayBio && (
                 <div className="space-y-3">
                   <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-indigo-700">
-                    About {brand.name}
+                    About {displayName}
                   </p>
                   {fileCopy?.tagline && !brand.brandBio && (
                     <p className="text-stone-900 font-semibold leading-snug text-base">
@@ -552,7 +552,7 @@ export default async function BrandPage({ params }: Props) {
 
         <div className="rounded-2xl bg-gradient-to-r from-indigo-800 to-indigo-700 text-white px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
-            <p className="font-bold text-base">Want to order {brand.name}?</p>
+            <p className="font-bold text-base">Want to order {displayName}?</p>
             <p className="text-indigo-200/80 text-sm">Place a pickup order — save 20% online.</p>
           </div>
           <a
