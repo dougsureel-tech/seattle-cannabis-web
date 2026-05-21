@@ -129,6 +129,7 @@ export const BRAND_COPY: Record<string, BrandCopy> = {
 
   "kiva-confections": {
     slug: "kiva-confections",
+    displayName: "Kiva",
     logoUrl: "/brand-logos/kiva-confections.png",
     tagline: "Edibles built like chocolate since 2010, not like cannabis novelty.",
     bio: "Kiva Confections was founded in 2010 by Scott and Kristi Palmer, who started making the first Kiva chocolate bars in their home kitchen in California. The company now operates out of a 13,000-square-foot production facility in Oakland and licenses its lines into legal markets across the country, Washington included.\n\nKiva’s catalog runs deeper than most edible brands. Their flagship is the Kiva chocolate bar in single-origin and dessert profiles. Around it sit Terra (chocolate-covered nuts and espresso beans), Petra (sugar-free breath mints with low-dose THC), Camino (fruit gummies built around terpene blends — the most-stocked of the lineup in many WA shops), and Lost Farm (a single-strain live-resin fruit chew). Doses are precise, and the formats are designed around how people actually eat candy — a square at a time, not a whole bar.\n\nThe Washington production is licensed through a local manufacturing partner so the products meet WSLCB sourcing rules, but the recipes and brand standards are the same as California. Customers reach for Kiva when they want a name they recognize and dose-by-dose consistency across formats.",
