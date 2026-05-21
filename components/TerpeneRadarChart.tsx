@@ -27,7 +27,11 @@
 
 "use client";
 
-import { TERPENE_AXES, type TerpeneVector } from "@/lib/terpene-fingerprint";
+// Import from terpene-types (no "server-only" directive) — sister glw
+// v38.425 fix. lib/terpene-fingerprint is server-only because it owns
+// the scoring algorithm; this Client Component only needs the axis
+// labels + vector type. Build fails otherwise.
+import { TERPENE_AXES, type TerpeneVector } from "@/lib/terpene-types";
 
 type Props = {
   /** The customer's personal terpene preference vector. */

@@ -32,35 +32,15 @@
 
 import "server-only";
 import type { Strain } from "./strains";
-
-/**
- * Canonical terpene axes for the customer fingerprint. Order matters —
- * downstream code (lib/cousin-finder.ts, components/TerpeneRadarChart.tsx)
- * relies on these indices when iterating the 7-element vector. Adding a
- * new axis is a BREAKING change for cached vectors; bump VECTOR_VERSION.
- *
- * Why these 7? They cover ~95% of dispensary-shelf terpene mass per
- * Confident Cannabis aggregate panel data. Ocimene is intentionally
- * omitted from the customer-visible axes (low shelf presence, would
- * register as ~0 for nearly every customer) — keeps the radar legible.
- */
-export const TERPENE_AXES = [
-  "Myrcene",
-  "Limonene",
-  "Caryophyllene",
-  "Pinene",
-  "Linalool",
-  "Humulene",
-  "Terpinolene",
-] as const;
-
-export type TerpeneAxis = (typeof TERPENE_AXES)[number];
-
-/** Vector schema version. Bump if TERPENE_AXES changes shape/order. */
-export const VECTOR_VERSION = 1;
-
-/** Normalized 7-element vector, components sum to 1.0 (or vector is all-zero). */
-export type TerpeneVector = readonly [number, number, number, number, number, number, number];
+// Pure type + const re-export from lib/terpene-types.ts so the Client
+// Component TerpeneRadarChart.tsx can import the same shapes without
+// pulling "server-only" into the client bundle. Lived 2026-05-21 GLW
+// build failure (sister glw v38.425). Sister fix applied here defensively
+// before SCC tries to build the same import.
+import { TERPENE_AXES, VECTOR_VERSION } from "./terpene-types";
+import type { TerpeneAxis, TerpeneVector } from "./terpene-types";
+export { TERPENE_AXES, VECTOR_VERSION };
+export type { TerpeneAxis, TerpeneVector };
 
 /** A strain in the customer's tasted history, with their rating (1-5) and a purchase weight. */
 export type RatedStrain = {
