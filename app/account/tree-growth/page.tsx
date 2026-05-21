@@ -35,25 +35,40 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default async function TreeGrowthPage() {
+export default async function TreeGrowthPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ preview?: string }>;
+}) {
+  // ?preview=1 escape — sister glw v38.365. Doug eyes mock fixture without
+  // login before flipping TREE_TIMELAPSE_ENABLED.
+  const { preview } = await searchParams;
+  const previewMode = preview === "1" || preview === "true";
+
   // Feature-flag gate FIRST — Doug-flipped per Vercel env, default OFF.
-  if (process.env.TREE_TIMELAPSE_ENABLED !== "true") {
+  // Preview-mode escape lets Doug see the page even when the flag is OFF.
+  if (process.env.TREE_TIMELAPSE_ENABLED !== "true" && !previewMode) {
     notFound();
   }
 
-  // Customer-only surface. Pass current path as ?redirect_url so
-  // post-sign-in lands them back here — matches the /account guard
-  // shape in /app/account/page.tsx + /app/account/orders/page.tsx
-  // (sister of the safe-redirect pattern from v29.065).
-  const { userId } = await auth();
-  if (!userId) redirect("/sign-in?redirect_url=/account/tree-growth");
+  // Customer-only surface — preview mode skips Clerk + portalUser lookup
+  // and renders with a neutral display name.
+  let portalDisplayName = "friend";
+  if (!previewMode) {
+    const { userId } = await auth();
+    if (!userId) redirect("/sign-in?redirect_url=/account/tree-growth");
 
-  const user = await currentUser();
-  const portalUser = await getOrCreatePortalUser(
-    userId,
-    user?.emailAddresses[0]?.emailAddress,
-    user?.fullName,
-  );
+    const user = await currentUser();
+    const portalUser = await getOrCreatePortalUser(
+      userId,
+      user?.emailAddresses[0]?.emailAddress,
+      user?.fullName,
+    );
+    portalDisplayName =
+      user?.firstName?.trim() ||
+      portalUser?.name?.trim().split(/\s+/)[0] ||
+      "friend";
+  }
 
   // Mock-data mode — see lib/tree-timelapse-mock for the swap recipe.
   // When verified-purchase ships, this line becomes:
@@ -61,13 +76,7 @@ export default async function TreeGrowthPage() {
   const timeline: readonly PurchaseTimelineEntry[] = mockPurchaseTimeline();
   const sequence = buildTimelapseFrames(timeline, { durationSec: 15 });
 
-  // Display-name resolution mirrors the welcome-email + LoyaltyCard
-  // pattern — Clerk first, then portal_users.name, then a neutral
-  // fallback. Never PII-leak the email address.
-  const displayName =
-    user?.firstName?.trim() ||
-    portalUser?.name?.trim().split(/\s+/)[0] ||
-    "friend";
+  const displayName = portalDisplayName;
 
   const visitCount = timeline.length;
   const distinctStrainCount = sequence.nodes.length;

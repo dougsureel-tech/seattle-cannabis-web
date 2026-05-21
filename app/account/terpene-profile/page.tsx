@@ -49,15 +49,29 @@ export const metadata: Metadata = {
   robots: { index: false },
 };
 
-export default async function TerpeneProfilePage() {
+export default async function TerpeneProfilePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ preview?: string }>;
+}) {
+  // ?preview=1 escape — sister glw v38.365. Doug eyes mock fixture without
+  // login before flipping TERPENE_FINGERPRINT_ENABLED. Middleware exempts
+  // ?preview=1 from Clerk auth.protect(); page-level Clerk check skipped
+  // too. Real-data render still requires flag ON + Clerk login.
+  const { preview } = await searchParams;
+  const previewMode = preview === "1" || preview === "true";
+
   // Hard env-flag gate — return 404 when disabled so the route is
   // invisible to crawlers + curious customers during soft-launch.
-  if (process.env.TERPENE_FINGERPRINT_ENABLED !== "true") {
+  // Preview-mode escape lets Doug see the page even when the flag is OFF.
+  if (process.env.TERPENE_FINGERPRINT_ENABLED !== "true" && !previewMode) {
     notFound();
   }
 
-  const { userId } = await auth();
-  if (!userId) redirect("/sign-in?redirect_url=/account/terpene-profile");
+  if (!previewMode) {
+    const { userId } = await auth();
+    if (!userId) redirect("/sign-in?redirect_url=/account/terpene-profile");
+  }
 
   // Phase 0 — mock-data mode. When the nightly recompute cron lands,
   // swap this for a server-side fetch of the customer_terpene_profiles row.
