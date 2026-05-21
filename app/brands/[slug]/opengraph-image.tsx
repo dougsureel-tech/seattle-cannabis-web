@@ -1,6 +1,24 @@
 import { ImageResponse } from "next/og";
 import { getBrandBySlug } from "@/lib/db";
+import { getBrandCopy } from "@/lib/brand-copy";
 import { STORE } from "@/lib/store";
+
+// Display-name override map for aliased slugs — mirrors SLUG_DISPLAY_NAMES
+// in app/brands/[slug]/page.tsx so the OG card matches the visible brand
+// page when shared on social. Sister glw v38.405.
+const SLUG_DISPLAY_NAMES: Record<string, string> = {
+  "plaid-jacket": "Plaid Jacket",
+  "sungrown": "Leafwerx · Cookies WA · Solr Bear",
+  "leafwerx": "Leafwerx",
+  "2727": "2727",
+  "slab-mechanix": "Slab Mechanix",
+  "mr-moxeys": "Mr. Moxey's",
+  "mr-moxey-s": "Mr. Moxey's",
+  "moxey": "Mr. Moxey's",
+  "journeyman": "Journeyman",
+  "spot": "Spot",
+  "botanica": "Botanica Seattle",
+};
 
 // Cache OG image at CDN edge for 24h, stale 7d. Pattern matches
 // inv v342.405 /api/og — `revalidate` export alone doesn't apply to
@@ -24,7 +42,12 @@ export default async function BrandOG({ params }: { params: Promise<{ slug: stri
   const { slug } = await params;
   const brand = await getBrandBySlug(slug).catch(() => null);
 
-  const brandName = brand?.name ?? "Brands";
+  // 3-layer display-name fallback chain so OG card matches brand-page h1.
+  const brandName =
+    SLUG_DISPLAY_NAMES[slug.toLowerCase()] ??
+    getBrandCopy(slug)?.displayName ??
+    brand?.name ??
+    "Brands";
   const skuCount = brand?.activeSkus ?? 0;
   const skuLine = brand
     ? `${skuCount} product${skuCount !== 1 ? "s" : ""} in stock`
