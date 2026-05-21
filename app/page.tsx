@@ -539,7 +539,7 @@ export default async function HomePage() {
                     // 2026-05-14 SEO audit. Sister glw v34.805.
                     <Image
                       src={brand.logoUrl}
-                      alt={brand.name}
+                      alt={getBrandCopy(brand.slug)?.displayName ?? brand.name}
                       width={80}
                       height={40}
                       sizes="(max-width: 640px) 80px, 160px"

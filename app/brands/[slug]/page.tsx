@@ -302,11 +302,15 @@ export default async function BrandPage({ params }: Props) {
   });
 
   const brandUrl = `${STORE.website}/brands/${slug}`;
+  // 3-layer display-name fallback chain for all customer-facing surfaces.
+  // Sister glw v38.125 pattern. Pulled into a const so JSON-LD + h1 +
+  // breadcrumb + alt all reference the consistent customer-facing form.
+  const displayName = SLUG_DISPLAY_NAMES[rawSlug.toLowerCase()] ?? getBrandCopy(slug)?.displayName ?? brand.name;
   const brandSchema = {
     "@context": "https://schema.org",
     "@type": "Brand",
     "@id": `${brandUrl}#brand`,
-    name: brand.name,
+    name: displayName,
     ...(brand.website ? { url: brand.website } : {}),
     ...(logoUrl ? { logo: logoUrl } : {}),
   };
@@ -320,7 +324,7 @@ export default async function BrandPage({ params }: Props) {
       "@type": "Product",
       "@id": `${brandUrl}#product-${p.id}`,
       name: p.name,
-      brand: { "@type": "Brand", name: brand.name },
+      brand: { "@type": "Brand", name: displayName },
       ...(p.category ? { category: p.category } : {}),
       image: p.image_url || logoUrl || `${STORE.website}/brands/${slug}/opengraph-image`,
       ...(p.effects ? { description: p.effects } : {}),
@@ -372,7 +376,7 @@ export default async function BrandPage({ params }: Props) {
       itemListElement: [
         { "@type": "ListItem", position: 1, name: "Home", item: STORE.website },
         { "@type": "ListItem", position: 2, name: "Brands", item: `${STORE.website}/brands` },
-        { "@type": "ListItem", position: 3, name: brand.name, item: brandUrl },
+        { "@type": "ListItem", position: 3, name: displayName, item: brandUrl },
       ],
     },
   };
@@ -417,14 +421,14 @@ export default async function BrandPage({ params }: Props) {
       {/* Display name — alias-specific override wins first, then per-brand
           displayName from BRAND_COPY (fixes shouty all-caps DB names),
           then fall back to raw DB vendor name. Sister glw v37.985+. */}
-      <Breadcrumb items={[{ label: "Brands", href: "/brands" }, { label: SLUG_DISPLAY_NAMES[rawSlug.toLowerCase()] ?? getBrandCopy(slug)?.displayName ?? brand.name }]} />
+      <Breadcrumb items={[{ label: "Brands", href: "/brands" }, { label: displayName }]} />
 
       {/* Hero — gradient bookend matching the rest of the site. */}
       <div className="bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white py-10 sm:py-14">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center gap-4 sm:gap-6">
           {logoUrl ? (
             <div className="shrink-0 w-20 h-20 rounded-2xl bg-white p-2.5 flex items-center justify-center shadow-lg relative overflow-hidden">
-              <Image src={logoUrl} alt={SLUG_DISPLAY_NAMES[rawSlug.toLowerCase()] ?? getBrandCopy(slug)?.displayName ?? brand.name} fill sizes="80px" className="object-contain p-2" />
+              <Image src={logoUrl} alt={displayName} fill sizes="80px" className="object-contain p-2" />
             </div>
           ) : (
             <div className="shrink-0 w-20 h-20 rounded-2xl bg-indigo-800 border border-indigo-700 flex items-center justify-center text-2xl">
@@ -432,7 +436,7 @@ export default async function BrandPage({ params }: Props) {
             </div>
           )}
           <div>
-            <h1 className="text-3xl font-extrabold tracking-tight">{SLUG_DISPLAY_NAMES[rawSlug.toLowerCase()] ?? getBrandCopy(slug)?.displayName ?? brand.name}</h1>
+            <h1 className="text-3xl font-extrabold tracking-tight">{displayName}</h1>
             {/* Heritage tagline — sister of glw v37.905 (Doug 2026-05-20:
                 "people want to know how long the product has been getting
                 people high for, not who is behind it"). Hero surfaces the
