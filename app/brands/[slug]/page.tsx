@@ -201,7 +201,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // (e.g. /brands/plaid-jacket), use the customer-facing display name
   // ("Plaid Jacket") rather than the DB vendor row's parent-distributor
   // name ("Spark Industries"). Polish-audit 2026-05-20 sister glw v37.945.
-  const displayName = SLUG_DISPLAY_NAMES[rawSlug.toLowerCase()] ?? brand.name;
+  const displayName = SLUG_DISPLAY_NAMES[rawSlug.toLowerCase()] ?? getBrandCopy(slug)?.displayName ?? brand.name;
   return {
     title: displayName,
     description: `Shop ${displayName} cannabis products at ${STORE.name} in Rainier Valley, Seattle WA. ${brand.activeSkus} products in stock.`,
@@ -414,14 +414,17 @@ export default async function BrandPage({ params }: Props) {
         />
       )}
 
-      <Breadcrumb items={[{ label: "Brands", href: "/brands" }, { label: brand.name }]} />
+      {/* Display name — alias-specific override wins first, then per-brand
+          displayName from BRAND_COPY (fixes shouty all-caps DB names),
+          then fall back to raw DB vendor name. Sister glw v37.985+. */}
+      <Breadcrumb items={[{ label: "Brands", href: "/brands" }, { label: SLUG_DISPLAY_NAMES[rawSlug.toLowerCase()] ?? getBrandCopy(slug)?.displayName ?? brand.name }]} />
 
       {/* Hero — gradient bookend matching the rest of the site. */}
       <div className="bg-gradient-to-br from-indigo-950 via-violet-950 to-indigo-950 text-white py-10 sm:py-14">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center gap-4 sm:gap-6">
           {logoUrl ? (
             <div className="shrink-0 w-20 h-20 rounded-2xl bg-white p-2.5 flex items-center justify-center shadow-lg relative overflow-hidden">
-              <Image src={logoUrl} alt={brand.name} fill sizes="80px" className="object-contain p-2" />
+              <Image src={logoUrl} alt={SLUG_DISPLAY_NAMES[rawSlug.toLowerCase()] ?? getBrandCopy(slug)?.displayName ?? brand.name} fill sizes="80px" className="object-contain p-2" />
             </div>
           ) : (
             <div className="shrink-0 w-20 h-20 rounded-2xl bg-indigo-800 border border-indigo-700 flex items-center justify-center text-2xl">
@@ -429,7 +432,7 @@ export default async function BrandPage({ params }: Props) {
             </div>
           )}
           <div>
-            <h1 className="text-3xl font-extrabold tracking-tight">{brand.name}</h1>
+            <h1 className="text-3xl font-extrabold tracking-tight">{SLUG_DISPLAY_NAMES[rawSlug.toLowerCase()] ?? getBrandCopy(slug)?.displayName ?? brand.name}</h1>
             {/* Heritage tagline — sister of glw v37.905 (Doug 2026-05-20:
                 "people want to know how long the product has been getting
                 people high for, not who is behind it"). Hero surfaces the
