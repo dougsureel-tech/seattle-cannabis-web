@@ -167,7 +167,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // duplicate-content signal that hurts the canonical brand page's
   // ranking. Caught 2026-05-10 by /loop tick 4 cross-stack title-
   // uniqueness audit on scc sitemap (151 URLs).
-  const slug = SLUG_ALIASES[rawSlug] ?? rawSlug;
+  // Case-normalize the rawSlug — externally-linked URLs with mixed case
+  // ("/brands/ARTIZEN") would otherwise miss SLUG_ALIASES + DB lookups
+  // and soft-404 a valid brand. Smoke-test audit 2026-05-20.
+  const slug = SLUG_ALIASES[rawSlug.toLowerCase()] ?? rawSlug.toLowerCase();
   const brand = await getBrandBySlug(slug).catch(() => null);
   if (!brand) {
     // Soft-404 mitigation — sister glw fix. ISR + page-level notFound()
@@ -222,7 +225,8 @@ const CAT_ICONS: Record<string, string> = {
 
 export default async function BrandPage({ params }: Props) {
   const { slug: rawSlug } = await params;
-  const slug = SLUG_ALIASES[rawSlug] ?? rawSlug;
+  // Lowercase the rawSlug — see generateMetadata above for full context.
+  const slug = SLUG_ALIASES[rawSlug.toLowerCase()] ?? rawSlug.toLowerCase();
   const brand = await getBrandBySlug(slug).catch(() => null);
   if (!brand) {
     // Soft-fallback render — brand isn't in our active vendor list right
@@ -402,7 +406,19 @@ export default async function BrandPage({ params }: Props) {
           )}
           <div>
             <h1 className="text-3xl font-extrabold tracking-tight">{brand.name}</h1>
-            <p className="text-indigo-300/70 text-sm mt-1 flex flex-wrap items-center gap-3">
+            {/* Heritage tagline — sister of glw v37.905 (Doug 2026-05-20:
+                "people want to know how long the product has been getting
+                people high for, not who is behind it"). Hero surfaces the
+                brand-first tagline; distributor + SKU count secondary. */}
+            {(() => {
+              const fileCopy = getBrandCopy(slug);
+              return fileCopy?.tagline ? (
+                <p className="text-indigo-100 text-base font-semibold mt-1.5 max-w-2xl">
+                  {fileCopy.tagline}
+                </p>
+              ) : null;
+            })()}
+            <p className="text-indigo-300/70 text-sm mt-2 flex flex-wrap items-center gap-3">
               <span>
                 {brand.activeSkus} product{brand.activeSkus !== 1 ? "s" : ""} in Seattle, WA
               </span>
