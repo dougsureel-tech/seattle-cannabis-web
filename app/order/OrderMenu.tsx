@@ -1016,7 +1016,7 @@ export function OrderMenu({
         <div className="flex-1 min-w-0">
           {/* Mobile category pills — sticky just below SiteHeader so the user
               can switch sections without scrolling back up. */}
-          <div className="lg:hidden sticky top-16 z-20 -mx-4 sm:-mx-6 px-4 sm:px-6 py-2 mb-4 bg-stone-50/85 backdrop-blur-md border-b border-stone-200/60 flex gap-2 overflow-x-auto">
+          <div className="lg:hidden sticky top-16 z-20 -mx-4 sm:-mx-6 px-4 sm:px-6 py-2 mb-4 bg-stone-50/85 backdrop-blur-md border-b border-stone-200/60 flex gap-2 overflow-x-auto sm:flex-wrap sm:overflow-x-visible">
             <button type="button"
               onClick={() => selectCategory(null)}
               className={`shrink-0 px-3.5 py-2 rounded-full text-xs font-semibold transition-colors ${activeCategory === null ? "bg-indigo-800 text-white" : "bg-stone-100 text-stone-600 hover:bg-stone-200"}`}
