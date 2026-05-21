@@ -708,10 +708,17 @@ async function BrandNotCarriedFallback({ rawSlug }: { rawSlug: string }) {
   // Pretty the slug back into a brand-name-ish display ("ballin" → "Ballin",
   // "ag-grow-412557" → "Ag Grow 412557"). Never trust the slug for HTML
   // attributes — only display text inside text children (no innerHTML).
-  const prettyName = rawSlug
+  const slugPretty = rawSlug
     .split("-")
     .map((p) => (p.length === 0 ? p : p[0].toUpperCase() + p.slice(1)))
     .join(" ");
+  // ALWAYS check BRAND_COPY for displayName regardless of the pre-onboarding
+  // flag — even when we're not surfacing the curated bio/logo yet, the
+  // displayName gives customers the brand-facing form on the "not on shelf"
+  // page (e.g. /brands/heylo-cannabis → "Heylo" not "Heylo Cannabis";
+  // /brands/honu-inc → "Honu" not "Honu Inc"). Sister glw v38.125.
+  const brandCopyForFallback = getBrandCopy(rawSlug);
+  const prettyName = brandCopyForFallback?.displayName ?? slugPretty;
   // Top 8 brands to suggest — same source the homepage uses (alphabetical
   // for now; could swap to recent-sales when traffic warrants).
   const allBrands = await getActiveBrands().catch(() => []);
@@ -722,7 +729,7 @@ async function BrandNotCarriedFallback({ rawSlug }: { rawSlug: string }) {
   // back to the file convention `/brand-logos/<slug>.png` when BRAND_COPY
   // doesn't specify an explicit logoUrl.
   const preOnboardingEnabled = process.env.MENU_PRE_ONBOARD_BRANDS_ENABLED === "true";
-  const curated = preOnboardingEnabled ? getBrandCopy(rawSlug) : null;
+  const curated = preOnboardingEnabled ? brandCopyForFallback : null;
   const curatedLogoUrl = curated?.logoUrl ?? (curated ? `/brand-logos/${rawSlug}.png` : null);
 
   return (
