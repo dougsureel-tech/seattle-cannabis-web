@@ -42,6 +42,20 @@ import type { TerpeneAxis, TerpeneVector } from "./terpene-types";
 export { TERPENE_AXES, VECTOR_VERSION };
 export type { TerpeneAxis, TerpeneVector };
 
+/**
+ * Canonical terpene axes for the customer fingerprint. Order matters —
+ * downstream code (lib/cousin-finder.ts, components/TerpeneRadarChart.tsx)
+ * relies on these indices when iterating the 7-element vector. Adding a
+ * new axis is a BREAKING change for cached vectors; bump VECTOR_VERSION.
+ *
+ * Why these 7? They cover ~95% of dispensary-shelf terpene mass per
+ * Confident Cannabis aggregate panel data. Ocimene is intentionally
+ * omitted from the customer-visible axes (low shelf presence, would
+ * register as ~0 for nearly every customer) — keeps the radar legible.
+ */
+// (TERPENE_AXES + TerpeneAxis + VECTOR_VERSION + TerpeneVector live in
+// ./terpene-types and are re-exported above.)
+
 /** A strain in the customer's tasted history, with their rating (1-5) and a purchase weight. */
 export type RatedStrain = {
   strainSlug: string;
