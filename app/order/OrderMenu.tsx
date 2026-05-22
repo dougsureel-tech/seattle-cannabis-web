@@ -17,6 +17,7 @@ import { fetchClosureStatus, type ClosureStatus } from "@/lib/closure-status";
 import { eligibleRedemptionTiers, applyRedemptionTier, type RedemptionTier } from "@/lib/loyalty-redemption";
 import { BRAND_LOGOS_AVAILABLE } from "@/lib/brand-logos-available";
 import { getCategoryPlaceholderPhoto } from "@/lib/category-placeholder-photos";
+import { matchProductPhoto } from "@/lib/product-photos-available";
 
 // Map a product to a running deal it qualifies for. Mirror of the
 // helper in greenlife-web — keep in sync. Stem-match against the
@@ -1258,7 +1259,14 @@ export function OrderMenu({
                           {/* Image */}
                           <div className="relative w-full h-44 overflow-hidden bg-stone-100">
                             <ProductImage
-                              src={product.imageUrl}
+                              src={
+                                product.imageUrl ??
+                                matchProductPhoto(
+                                  product.name,
+                                  product.brand,
+                                  product.category,
+                                )
+                              }
                               alt={product.name}
                               category={product.category}
                               brand={product.brand}
