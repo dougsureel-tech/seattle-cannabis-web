@@ -160,6 +160,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly" as const,
       priority: 0.6,
     })),
+    // Ambassador Program v0.2 — Phase F apply form + Phase G public
+    // leaderboard. Per PLAN_AMBASSADOR_V0_2_INFLUENCER_REACH_2026_05_23.md
+    // §3 Phase F + Phase G. Sister of greenlife-web same-push.
+    {
+      url: `${STORE.website}/community/ambassador/apply`,
+      lastModified: STATIC_LASTMOD,
+      changeFrequency: "weekly",
+      priority: 0.7,
+    },
+    {
+      url: `${STORE.website}/community/ambassadors`,
+      lastModified: STATIC_LASTMOD,
+      changeFrequency: "daily",
+      priority: 0.65,
+    },
     { url: `${STORE.website}/blog`, lastModified: STATIC_LASTMOD, changeFrequency: "weekly", priority: 0.8 },
     { url: `${STORE.website}/about`, lastModified: STATIC_LASTMOD, changeFrequency: "monthly", priority: 0.6 },
     { url: `${STORE.website}/visit`, lastModified: STATIC_LASTMOD, changeFrequency: "weekly", priority: 0.85 },
