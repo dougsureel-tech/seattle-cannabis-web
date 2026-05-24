@@ -513,7 +513,7 @@ function ApplyForm() {
                   <option value="other">Something else</option>
                 </select>
               </Field>
-              <Field label="Availability" hint="Full-time, part-time, weekends, etc.">
+              <Field label="Availability" hint="Tell us which days + which shifts — opens and closes are when we're tightest.">
                 <input
                   type="text"
                   value={availability}
@@ -627,7 +627,7 @@ function ApplyForm() {
                 References <span className="text-red-600">*</span>
               </p>
               <p className="text-[11px] text-stone-400 mb-3">
-                First reference required. Add up to 3 — past managers preferred.
+                Past managers land best — coworkers and shift leads work too. One required, up to three.
               </p>
               <div className="space-y-3">
                 {refs.map((r, i) => (

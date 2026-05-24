@@ -3,6 +3,8 @@
 // comes from Vercel automatically on every deploy and is the authoritative
 // "did my push actually land" signal.
 
+// 32.785 — 🗣 **Sister-port of GLW v41.485 — 5 form helper-text rewrites across 3 forms.** Same shape as GLW: ApplyForm DL helper + Followers label restructure + apply/page.tsx Availability + References hints + vendor-access reassurance. SCC Availability uses store-agnostic 'opens and closes are when we're tightest' (no hardcoded hours — Seattle hours differ + future-proofing). Polish ship.
+//
 // 32.765 — 🗣 **Sister-port of GLW v41.465 — menu search/zero-state copy polish.** Same shape as GLW: `OrderMenu.tsx:914` 'Menu coming soon' → 'Menu's down for a sec' + recovery framing. `OrderMenu.tsx:1534` search-miss → drops hedge-question, inlines phone as `tel:` anchor. Customer drop-off polish.
 //
 // 32.745 — 🗣 **Sister-port of GLW v41.445 — 5 error/empty/validation copy fixes + 1 dead-code line.** Same shape as GLW: `ApplyForm.tsx` DL helper + age attestation + network catch + submit button + dead `setStatus` line removed. `FeedbackFormClient.tsx` network catch. Customer-facing copy polish.
@@ -947,7 +949,7 @@
 // 29.045 — 🩺 `emailFromAtRisk` health check updated to recognize apex-direct as SAFE. Sister glw v37.665 same-push. Pre-fix the check at `lib/email.ts:129` returned `true` whenever RESEND_FROM resolved to the bare apex `seattlecannabis.co` — predates the apex-SPF-includes-Resend change shipped via the cannabis-stack apex-direct migration 2026-05-19 PM. Now uses VERIFIED_HOSTS set containing `seattlecannabis.co` + `send.seattlecannabis.co` — returns `false` for either, `true` for anything else (typo / wrong domain). Apex SPF confirmed via `dig TXT seattlecannabis.co` → `v=spf1 include:_spf.resend.com include:spf.protection.outlook.com -all`. DMARC `aspf=r adkim=r` (relaxed alignment) so apex-direct passes SPF+DMARC at receiving clients. Comment block updated + maintenance contract flagged. typecheck CLEAN.
 //
 // 29.545 — 🏷️ **6 more displayName backfills — fills the last shouty/legal-suffix gaps on producers with consumer-recognized short names (sister glw v38.185).** Continues the 5-ship displayName arc from v29.405→v29.505. Adds: agro-couture → "Agro Couture" (title-case from shouty DB) · ceres → "Ceres" · northwest-cannabis-solutions → "Northwest Cannabis Solutions" (title-case from shouty DB; NWCS has no consumer-facing short brand so keep full name) · kokua-services → "Kokua" (drop corporate "Services" suffix, customer reads the sub-name) · ceres-435011 → "Ceres" (variant slug parity with canonical) · agro-couture-slab-mechanix → "Agro Couture" (variant slug parity with canonical). 28 brand entries total now use the displayName 3-layer fallback (carousel + breadcrumb + meta + alt). NWCS has a BRAND_OVERRIDES boutique page so the h1 hierarchy is unchanged — displayName lands on Top Brands carousel + breadcrumb + OG card + alt-text only. Sister glw v38.185 ships byte-identical lib/brand-copy.ts. WAC clean (no efficacy / medical / superlative claims in any new display string). typecheck CLEAN.
-export const BUILD_VERSION = "32.765";
+export const BUILD_VERSION = "32.785";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ||
