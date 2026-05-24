@@ -3,6 +3,8 @@
 // comes from Vercel automatically on every deploy and is the authoritative
 // "did my push actually land" signal.
 
+// 32.725 — 🗣 **Sister-port of GLW v41.425 — brand-voice polish (3 lockstep fixes).** `about:330` + `visit:405` 'Heroes 30% off' → 'We support local heroes' with discount mechanic moved to body. `about:154` 'Every product…chosen deliberately' → direct shape 'We try everything before it hits the shelf. What we don't like, we don't carry.' Per brand-voice.md 'transactional, not relational' Heroes-framing rule + Direct-voice rule. Polish ship.
+//
 // 32.705 — 🪪 **Sister-port of GLW v41.405 — `app/apply/page.tsx` references list now uses `key={r.id}` instead of `key={i}`.** Reference type gained client-only `id: string` (generated via `crypto.randomUUID()`; never serialized to /api/applications). Bug-prevention polish (subtle stale-state class on insert/delete mid-array).
 //
 // 32.685 — 🛡 **Sister-port of GLW v41.385 — 6 public-form inputs/textareas across `app/apply/page.tsx` + `app/order/OrderMenu.tsx` gained `maxLength`.** Same bounds as GLW (apply availability=120, coverLetter=3000, ref-name=80, ref-relationship=80, ref-phone=20, ref-email=254. order notes=2000.) Defense-in-depth at the form layer prevents 100MB payloads hitting the wire. SCC's existing personality-prompt textareas (`productPitch`=500, `recoveryStory`=1000) already had maxLength — unchanged. Polish ship, zero visual change.
@@ -941,7 +943,7 @@
 // 29.045 — 🩺 `emailFromAtRisk` health check updated to recognize apex-direct as SAFE. Sister glw v37.665 same-push. Pre-fix the check at `lib/email.ts:129` returned `true` whenever RESEND_FROM resolved to the bare apex `seattlecannabis.co` — predates the apex-SPF-includes-Resend change shipped via the cannabis-stack apex-direct migration 2026-05-19 PM. Now uses VERIFIED_HOSTS set containing `seattlecannabis.co` + `send.seattlecannabis.co` — returns `false` for either, `true` for anything else (typo / wrong domain). Apex SPF confirmed via `dig TXT seattlecannabis.co` → `v=spf1 include:_spf.resend.com include:spf.protection.outlook.com -all`. DMARC `aspf=r adkim=r` (relaxed alignment) so apex-direct passes SPF+DMARC at receiving clients. Comment block updated + maintenance contract flagged. typecheck CLEAN.
 //
 // 29.545 — 🏷️ **6 more displayName backfills — fills the last shouty/legal-suffix gaps on producers with consumer-recognized short names (sister glw v38.185).** Continues the 5-ship displayName arc from v29.405→v29.505. Adds: agro-couture → "Agro Couture" (title-case from shouty DB) · ceres → "Ceres" · northwest-cannabis-solutions → "Northwest Cannabis Solutions" (title-case from shouty DB; NWCS has no consumer-facing short brand so keep full name) · kokua-services → "Kokua" (drop corporate "Services" suffix, customer reads the sub-name) · ceres-435011 → "Ceres" (variant slug parity with canonical) · agro-couture-slab-mechanix → "Agro Couture" (variant slug parity with canonical). 28 brand entries total now use the displayName 3-layer fallback (carousel + breadcrumb + meta + alt). NWCS has a BRAND_OVERRIDES boutique page so the h1 hierarchy is unchanged — displayName lands on Top Brands carousel + breadcrumb + OG card + alt-text only. Sister glw v38.185 ships byte-identical lib/brand-copy.ts. WAC clean (no efficacy / medical / superlative claims in any new display string). typecheck CLEAN.
-export const BUILD_VERSION = "32.705";
+export const BUILD_VERSION = "32.725";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ||
