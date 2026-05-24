@@ -178,6 +178,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${STORE.website}/blog`, lastModified: STATIC_LASTMOD, changeFrequency: "weekly", priority: 0.8 },
     { url: `${STORE.website}/about`, lastModified: STATIC_LASTMOD, changeFrequency: "monthly", priority: 0.6 },
     { url: `${STORE.website}/visit`, lastModified: STATIC_LASTMOD, changeFrequency: "weekly", priority: 0.85 },
+    // /visit/from-seatac — traveler-side high-intent landing page for
+    // SeaTac arrivals. Per SEO_CONTENT_DRAFTS_2026_05_09 Tier-1 Draft 8.
+    // Static page (force-static); changeFrequency monthly because Light
+    // Rail directions / drive-time copy doesn't turn over.
+    {
+      url: `${STORE.website}/visit/from-seatac`,
+      lastModified: STATIC_LASTMOD,
+      changeFrequency: "monthly",
+      priority: 0.75,
+    },
     // v27.005 — priority demoted 0.6 → 0.5 to match the spec'd "static
     // support page" tier (/faq, /accessibility, /contact, /careers, /press).
     { url: `${STORE.website}/contact`, lastModified: STATIC_LASTMOD, changeFrequency: "yearly", priority: 0.5 },
