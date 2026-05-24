@@ -50,7 +50,11 @@ function walk(dir) {
     const p = join(dir, entry);
     const s = statSync(p);
     if (s.isDirectory()) {
-      if (entry === "node_modules" || entry === ".next" || entry === ".git" || entry === "scripts") continue;
+      // Skip __tests__ — test files quote the literal pattern in docstrings
+      // to anchor the gate's contract, and the regex matches inside comments.
+      // Same self-trip-defense the BUILD_VERSION gate uses (line-anchored).
+      // Sister-port of GLW v41.245-followup.
+      if (entry === "node_modules" || entry === ".next" || entry === ".git" || entry === "scripts" || entry === "__tests__") continue;
       out.push(...walk(p));
     } else if (s.isFile() && (p.endsWith(".ts") || p.endsWith(".tsx"))) {
       out.push(p);

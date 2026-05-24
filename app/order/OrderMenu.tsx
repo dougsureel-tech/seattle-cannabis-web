@@ -1738,6 +1738,7 @@ export function OrderMenu({
                         <Image
                           src={m.photoSrc}
                           alt=""
+                          aria-hidden
                           width={28}
                           height={28}
                           className="w-7 h-7 rounded-full object-cover border border-white/25"
