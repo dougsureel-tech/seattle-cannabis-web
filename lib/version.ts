@@ -3,6 +3,8 @@
 // comes from Vercel automatically on every deploy and is the authoritative
 // "did my push actually land" signal.
 
+// 32.285 — 🎯 **NEW pin tests for `scripts/check-redirect-shadow.mjs` (10 pins) — sister glw v40.985.** 38th cannabis-web marathon-port ship. Byte-identical lockstep with greenlife-web. Anchors Next.js-redirects-run-BEFORE-routing doctrine (GW v2.88.05 6-hour incident). Pins extractRedirectSources + wildcard/path-param skip + EXEMPT empty-default + 2-shape fix recipe. 10/10 green. Marathon-port: 38/50 SCC gates pinned.
+//
 // 32.265 — 🎯 **NEW pin tests for `scripts/check-product-photos-manifest.mjs` (10 pins) — sister glw v40.965.** 37th cannabis-web marathon-port ship. Byte-identical lockstep with greenlife-web. Anchors product-photos manifest lockstep doctrine (sister of check-brand-logos-manifest). Pins both drift directions + asymmetric severity + empty-manifest defensive fail + 3-format extension filter. 10/10 green. Marathon-port: 37/50 SCC gates pinned.
 //
 // 32.245 — 🎯 **NEW pin tests for `scripts/check-please-hedge.mjs` (10 pins) — sister glw v40.945.** 36th cannabis-web marathon-port ship. Byte-identical lockstep with greenlife-web. Anchors brand-voice "What we never do" doctrine (3 sweep ships v4.565 + v18.605 + v27.305). Pins 8 high-confidence verbs + 3 EXEMPT_PREFIXES + narrow-scope WAC exemption + LOAD-BEARING self-trip defense. 10/10 green. Marathon-port: 36/50 SCC gates pinned.
@@ -895,7 +897,7 @@
 // 29.045 — 🩺 `emailFromAtRisk` health check updated to recognize apex-direct as SAFE. Sister glw v37.665 same-push. Pre-fix the check at `lib/email.ts:129` returned `true` whenever RESEND_FROM resolved to the bare apex `seattlecannabis.co` — predates the apex-SPF-includes-Resend change shipped via the cannabis-stack apex-direct migration 2026-05-19 PM. Now uses VERIFIED_HOSTS set containing `seattlecannabis.co` + `send.seattlecannabis.co` — returns `false` for either, `true` for anything else (typo / wrong domain). Apex SPF confirmed via `dig TXT seattlecannabis.co` → `v=spf1 include:_spf.resend.com include:spf.protection.outlook.com -all`. DMARC `aspf=r adkim=r` (relaxed alignment) so apex-direct passes SPF+DMARC at receiving clients. Comment block updated + maintenance contract flagged. typecheck CLEAN.
 //
 // 29.545 — 🏷️ **6 more displayName backfills — fills the last shouty/legal-suffix gaps on producers with consumer-recognized short names (sister glw v38.185).** Continues the 5-ship displayName arc from v29.405→v29.505. Adds: agro-couture → "Agro Couture" (title-case from shouty DB) · ceres → "Ceres" · northwest-cannabis-solutions → "Northwest Cannabis Solutions" (title-case from shouty DB; NWCS has no consumer-facing short brand so keep full name) · kokua-services → "Kokua" (drop corporate "Services" suffix, customer reads the sub-name) · ceres-435011 → "Ceres" (variant slug parity with canonical) · agro-couture-slab-mechanix → "Agro Couture" (variant slug parity with canonical). 28 brand entries total now use the displayName 3-layer fallback (carousel + breadcrumb + meta + alt). NWCS has a BRAND_OVERRIDES boutique page so the h1 hierarchy is unchanged — displayName lands on Top Brands carousel + breadcrumb + OG card + alt-text only. Sister glw v38.185 ships byte-identical lib/brand-copy.ts. WAC clean (no efficacy / medical / superlative claims in any new display string). typecheck CLEAN.
-export const BUILD_VERSION = "32.265";
+export const BUILD_VERSION = "32.285";
 
 export const BUILD_SHA = (
   process.env.VERCEL_GIT_COMMIT_SHA ||
