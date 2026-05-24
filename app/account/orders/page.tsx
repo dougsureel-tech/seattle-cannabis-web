@@ -239,7 +239,7 @@ export default async function OrderHistoryPage() {
                           <a
                             href={STORE.googleMapsUrl}
                             target="_blank"
-                            rel="noopener"
+                            rel="noopener noreferrer"
                             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-indigo-200 hover:border-indigo-300 text-indigo-800 text-xs font-semibold transition-colors"
                           >
                             <svg
