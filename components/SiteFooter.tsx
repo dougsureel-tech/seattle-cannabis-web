@@ -83,7 +83,7 @@ export function SiteFooter() {
               <div className="text-white font-bold text-base leading-tight">{STORE.name}</div>
               <div className="text-indigo-400/70 text-xs mt-0.5">{STORE.tagline}</div>
               <div className="text-fuchsia-300/70 text-[10px] mt-1 font-semibold uppercase tracking-[0.14em]">
-                16+ yrs · Rainier Valley&apos;s longest-running
+                16+ yrs in Rainier Valley · cash only · 21+ with valid ID
               </div>
             </div>
           </div>
@@ -246,7 +246,7 @@ export function SiteFooter() {
             to a real page (neighborhoods pulled from NEAR_TOWNS SSoT,
             sorted by drive time). */}
         <div className="space-y-3">
-          <h2 className="text-white font-semibold text-xs uppercase tracking-widest">Towns we serve</h2>
+          <h2 className="text-white font-semibold text-xs uppercase tracking-widest">Around the neighborhood</h2>
           <ul className="space-y-2">
             {FOOTER_NEAR_TOWNS.map((town) => (
               <li key={town.slug}>
@@ -330,7 +330,7 @@ export function SiteFooter() {
       <div className="border-t border-indigo-900/60 py-5 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-indigo-500/70">
           <p>
-            © {new Date().getFullYear()} {STORE.name}. All rights reserved. Must be 21+ to purchase.
+            © {new Date().getFullYear()} {STORE.name} · Rainier Valley · 21+ with valid ID
           </p>
           <p className="flex items-center gap-3">
             <span>Licensed WA Cannabis Retailer</span>
