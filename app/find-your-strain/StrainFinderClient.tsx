@@ -140,6 +140,7 @@ export function StrainFinderClient() {
           strain_type: finalAnswers.strain || null,
           category: finalAnswers.form || null,
         }),
+        signal: AbortSignal.timeout(10000),
       });
       if (res.ok) {
         setCaptureState("success");

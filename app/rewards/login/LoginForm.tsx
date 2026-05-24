@@ -32,6 +32,7 @@ export function LoginForm() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ phone: digits }),
+        signal: AbortSignal.timeout(10000),
       });
       const data = (await res.json()) as { ok?: boolean; error?: string; demoCode?: string };
       if (!res.ok) {

@@ -344,6 +344,7 @@ function ApplyForm() {
       const res = await fetch(API_URL, {
         method: "POST",
         body: fd,
+        signal: AbortSignal.timeout(30000),
       });
 
       if (res.ok) {
