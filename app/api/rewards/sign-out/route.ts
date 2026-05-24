@@ -25,7 +25,10 @@ function siteOrigin(): string {
   if (!env || env.includes(".vercel.app")) return FALLBACK;
   try {
     if (new URL(env).hostname !== "www.seattlecannabis.co") return FALLBACK;
-  } catch {
+  } catch (err) {
+    console.warn(
+      `[rewards/sign-out] NEXT_PUBLIC_SITE_URL parse failed, using canonical fallback err=${err instanceof Error ? err.name : "unknown"}`,
+    );
     return FALLBACK;
   }
   return env;
