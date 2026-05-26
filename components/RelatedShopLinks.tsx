@@ -18,8 +18,8 @@ import { BRAND_COPY } from "@/lib/brand-copy";
 
 const BRAND_PICK_COUNT = 5;
 const STRAIN_TYPES = [
-  { slug: "sativa", label: "Sativa", blurb: "Energizing, daytime, often higher THC." },
-  { slug: "indica", label: "Indica", blurb: "Body-relaxing, often nighttime." },
+  { slug: "sativa", label: "Sativa", blurb: "Head-forward, daytime-leaning, often higher THC." },
+  { slug: "indica", label: "Indica", blurb: "Body-heavy, evening-leaning." },
   { slug: "hybrid", label: "Hybrid", blurb: "Crosses — can lean either way." },
 ] as const;
 
