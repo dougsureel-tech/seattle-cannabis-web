@@ -78,7 +78,7 @@ export const STRAINS: Record<string, Strain> = {
     cbdRange: "<1%",
     effects: ["Uplifted", "Relaxed", "Creative", "Happy"],
     terpenes: [
-      { name: "Myrcene", note: "earthy, mild sedative — the body-loose side" },
+      { name: "Myrcene", note: "earthy, body-heavy — the body-loose side" },
       { name: "Pinene", note: "fresh pine — sharp, focusing" },
       { name: "Caryophyllene", note: "peppery, warm woody" },
     ],
@@ -198,7 +198,7 @@ export const STRAINS: Record<string, Strain> = {
     intro:
       "Gelato is the parent (or grandparent) of half the modern hybrid market. Bay Area genetics, sweet and " +
       "creamy, balanced head + body. Most numbered Gelato cuts (33, 41, 45) are slight variations on the same " +
-      "theme — uplifted but not racey, relaxed but not sedative. Easy to like.",
+      "theme — uplifted but not racey, relaxed but not heavy. Easy to like.",
     lineage: "Sunset Sherbet × Thin Mint GSC",
     parents: ["sunset-sherbet", "thin-mint-gsc"],
     thcRange: "20–25%",
@@ -292,7 +292,7 @@ export const STRAINS: Record<string, Strain> = {
       },
       {
         q: "What terpenes are in OG Kush?",
-        a: "The dominant terpenes in OG Kush are Limonene (citrus zest, bright and mood-lifting on the nose), Myrcene (earthy, mango-like, with a mild body-heavy quality), and Caryophyllene (peppery and warm, spicy on the back end). The blend is what gives the strain its specific nose and the character customers report on the exhale.",
+        a: "The dominant terpenes in OG Kush are Limonene (citrus zest, bright and citrus-forward on the nose), Myrcene (earthy, mango-like, with a mild body-heavy quality), and Caryophyllene (peppery and warm, spicy on the back end). The blend is what gives the strain its specific nose and the character customers report on the exhale.",
       },
     ],
     lineageAlternates: [
@@ -914,7 +914,7 @@ export const STRAINS: Record<string, Strain> = {
       },
       {
         q: "What terpenes are in MAC?",
-        a: "The dominant terpenes in MAC are Limonene (citrus zest, bright and mood-lifting on the nose), Caryophyllene (peppery and warm, spicy on the back end), and Pinene (sharp pine, fresh and focusing). The blend is what gives the strain its specific nose and the character customers report on the exhale.",
+        a: "The dominant terpenes in MAC are Limonene (citrus zest, bright and citrus-forward on the nose), Caryophyllene (peppery and warm, spicy on the back end), and Pinene (sharp pine, fresh and focusing). The blend is what gives the strain its specific nose and the character customers report on the exhale.",
       },
     ],
     verification: {
@@ -3080,7 +3080,7 @@ export const STRAINS: Record<string, Strain> = {
       },
       {
         q: "What terpenes are in Ice Cream Cake?",
-        a: "The dominant terpenes in Ice Cream Cake are Limonene (citrus zest, bright and mood-lifting on the nose), Caryophyllene (peppery and warm, spicy on the back end), and Linalool (floral lavender, soft and floral on the nose). The blend is what gives the strain its specific nose and the character customers report on the exhale.",
+        a: "The dominant terpenes in Ice Cream Cake are Limonene (citrus zest, bright and citrus-forward on the nose), Caryophyllene (peppery and warm, spicy on the back end), and Linalool (floral lavender, soft and floral on the nose). The blend is what gives the strain its specific nose and the character customers report on the exhale.",
       },
     ],
     verification: {
@@ -3227,7 +3227,7 @@ export const STRAINS: Record<string, Strain> = {
     effects: ["Relaxed", "Sleepy", "Euphoric", "Happy"],
     terpenes: [
       { name: "Caryophyllene", note: "peppery, warm base" },
-      { name: "Myrcene", note: "earthy, sedative" },
+      { name: "Myrcene", note: "earthy, body-heavy" },
       { name: "Limonene", note: "citrus-sweet top" },
     ],
     flavor: ["Diesel", "Sweet earth", "Skunk"],
@@ -3283,7 +3283,7 @@ export const STRAINS: Record<string, Strain> = {
     cbdRange: "<1%",
     effects: ["Relaxed", "Sleepy", "Happy", "Euphoric"],
     terpenes: [
-      { name: "Myrcene", note: "earthy, sedative" },
+      { name: "Myrcene", note: "earthy, body-heavy" },
       { name: "Pinene", note: "fresh pine" },
       { name: "Caryophyllene", note: "peppery, mellow" },
     ],
@@ -3366,7 +3366,7 @@ export const STRAINS: Record<string, Strain> = {
       },
       {
         q: "What terpenes are in Banana Kush?",
-        a: "The dominant terpenes in Banana Kush are Limonene (citrus zest, bright and mood-lifting on the nose), Caryophyllene (peppery and warm, spicy on the back end), and Myrcene (earthy, mango-like, with a mild body-heavy quality). The blend is what gives the strain its specific nose and the character customers report on the exhale.",
+        a: "The dominant terpenes in Banana Kush are Limonene (citrus zest, bright and citrus-forward on the nose), Caryophyllene (peppery and warm, spicy on the back end), and Myrcene (earthy, mango-like, with a mild body-heavy quality). The blend is what gives the strain its specific nose and the character customers report on the exhale.",
       },
     ],
     verification: {
@@ -5148,7 +5148,7 @@ export const STRAINS: Record<string, Strain> = {
       },
       {
         q: "What terpenes are in Apples and Bananas?",
-        a: "The dominant terpenes in Apples and Bananas are Limonene (citrus zest, bright and mood-lifting on the nose), Caryophyllene (peppery and warm, spicy on the back end), and Myrcene (earthy, mango-like, with a mild body-heavy quality). The blend is what gives the strain its specific nose and the character customers report on the exhale.",
+        a: "The dominant terpenes in Apples and Bananas are Limonene (citrus zest, bright and citrus-forward on the nose), Caryophyllene (peppery and warm, spicy on the back end), and Myrcene (earthy, mango-like, with a mild body-heavy quality). The blend is what gives the strain its specific nose and the character customers report on the exhale.",
       },
     ],
     verification: {
@@ -5977,7 +5977,7 @@ export const STRAINS: Record<string, Strain> = {
       },
       {
         q: "What terpenes are in Banana OG?",
-        a: "The dominant terpenes in Banana OG are Limonene (citrus zest, bright and mood-lifting on the nose), Caryophyllene (peppery and warm, spicy on the back end), and Myrcene (earthy, mango-like, with a mild body-heavy quality). The blend is what gives the strain its specific nose and the character customers report on the exhale.",
+        a: "The dominant terpenes in Banana OG are Limonene (citrus zest, bright and citrus-forward on the nose), Caryophyllene (peppery and warm, spicy on the back end), and Myrcene (earthy, mango-like, with a mild body-heavy quality). The blend is what gives the strain its specific nose and the character customers report on the exhale.",
       },
     ],
     verification: {
@@ -6171,8 +6171,8 @@ export const STRAINS: Record<string, Strain> = {
     tagline: "GMO × Mendo Breath — savory funk, heavy late-night indica.",
     intro:
       "Garlic Breath is a ThugPug Genetics cross of GMO × Mendo Breath — heavy indica with a savory-garlic-funk " +
-      "aroma that’s closer to roasted onion than to candy. Body-heavy, slow-build, gets sedative as the session " +
-      "goes on. Customers who already like GMO or Garlic Cookies reach for this.",
+      "aroma that’s closer to roasted onion than to candy. Body-heavy, slow-build, deepens through the session. " +
+      "Customers who already like GMO or Garlic Cookies reach for this.",
     lineage: "GMO × Mendo Breath",
     parents: ["gmo-cookies", "mendo-breath"],
     thcRange: "22–28%",
@@ -6548,7 +6548,7 @@ export const STRAINS: Record<string, Strain> = {
       },
       {
         q: "What terpenes are in Peanut Butter Breath?",
-        a: "The dominant terpenes in Peanut Butter Breath are Limonene (citrus zest, bright and mood-lifting on the nose), Caryophyllene (peppery and warm, spicy on the back end), and Pinene (sharp pine, fresh and focusing). The blend is what gives the strain its specific nose and the character customers report on the exhale.",
+        a: "The dominant terpenes in Peanut Butter Breath are Limonene (citrus zest, bright and citrus-forward on the nose), Caryophyllene (peppery and warm, spicy on the back end), and Pinene (sharp pine, fresh and focusing). The blend is what gives the strain its specific nose and the character customers report on the exhale.",
       },
     ],
     verification: {
@@ -7415,7 +7415,7 @@ export const STRAINS: Record<string, Strain> = {
       },
       {
         q: "What terpenes are in Apple Tartz?",
-        a: "The dominant terpenes in Apple Tartz are Myrcene (earthy, mango-like, with a mild body-heavy quality), Pinene (sharp pine, fresh and focusing), and Limonene (citrus zest, bright and mood-lifting on the nose). The blend is what gives the strain its specific nose and the character customers report on the exhale.",
+        a: "The dominant terpenes in Apple Tartz are Myrcene (earthy, mango-like, with a mild body-heavy quality), Pinene (sharp pine, fresh and focusing), and Limonene (citrus zest, bright and citrus-forward on the nose). The blend is what gives the strain its specific nose and the character customers report on the exhale.",
       },
     ],
     verification: {
@@ -8008,7 +8008,7 @@ export const STRAINS: Record<string, Strain> = {
     tagline: "Symbiotic — GMO × Purple Punch, savory-grape hybrid.",
     intro:
       "Modified Grapes is a Symbiotic Genetics cross of GMO × Purple Punch — balanced hybrid with a savory-and-sweet " +
-      "grape-honey aroma. Lighter than GMO alone, sweeter than Purple Punch alone. Calming effect, fairly mellow. " +
+      "grape-honey aroma. Lighter than GMO alone, sweeter than Purple Punch alone. Body-leaning, fairly mellow. " +
       "Modern Symbiotic shelf addition.",
     lineage: "GMO × Purple Punch",
     parents: ["gmo-cookies", "purple-punch"],
@@ -8065,8 +8065,8 @@ export const STRAINS: Record<string, Strain> = {
     tagline: "Cookies and Cream × Secret Weapon — campfire-s’mores hybrid.",
     intro:
       "Oreoz is a Cookies and Cream × Secret Weapon cross — balanced hybrid with a sweet chocolate-diesel-s’mores " +
-      "aroma. Calming effect, long-lasting, suited for evening use. Customers reach for it for the unusual " +
-      "chocolatey flavor and the steady relaxed landing.",
+      "aroma. Body-leaning, long-lasting, suited for evening use. Customers reach for it for the unusual " +
+      "chocolatey flavor and the steady body landing.",
     lineage: "Cookies and Cream × Secret Weapon",
     parents: ["cookies-and-cream", null],
     thcRange: "18–24%",
@@ -8237,7 +8237,7 @@ export const STRAINS: Record<string, Strain> = {
     intro:
       "Runtz Muffin is a Runtz × Orange Punch cross — balanced hybrid with a sweet candy-citrus aroma and a " +
       "tingly relaxed effect. Lighter than its Runtz parent on the body, with a brighter citrus top from the " +
-      "Orange Punch side. Calming overall, good late-afternoon pick.",
+      "Orange Punch side. Body-leaning overall, good late-afternoon pick.",
     lineage: "Runtz × Orange Punch",
     parents: ["runtz", null],
     thcRange: "20–26%",
@@ -8635,7 +8635,7 @@ export const STRAINS: Record<string, Strain> = {
     tagline: "Deo Farms — Rainbow Sherbet × Pink Guava, soap-floral hybrid.",
     intro:
       "Zoap is a Deo Farms cross of Rainbow Sherbet × Pink Guava — balanced hybrid with a floral soap-and-sweet " +
-      "aroma. Calming effect with a giggly head. Sister strain to RS11 (both Deo Farms / Pink Guava lineage). " +
+      "aroma. Body-leaning with a giggly head. Sister strain to RS11 (both Deo Farms / Pink Guava lineage). " +
       "Modern California shelf hybrid.",
     lineage: "Rainbow Sherbet × Pink Guava",
     parents: [null, null],
@@ -9745,7 +9745,7 @@ export const STRAINS: Record<string, Strain> = {
       },
       {
         q: "What terpenes are in Honey Bun?",
-        a: "The dominant terpenes in Honey Bun are Limonene (citrus zest, bright and mood-lifting on the nose), Caryophyllene (peppery and warm, spicy on the back end), and Pinene (sharp pine, fresh and focusing). The blend is what gives the strain its specific nose and the character customers report on the exhale.",
+        a: "The dominant terpenes in Honey Bun are Limonene (citrus zest, bright and citrus-forward on the nose), Caryophyllene (peppery and warm, spicy on the back end), and Pinene (sharp pine, fresh and focusing). The blend is what gives the strain its specific nose and the character customers report on the exhale.",
       },
     ],
     verification: {
@@ -9859,7 +9859,7 @@ export const STRAINS: Record<string, Strain> = {
       },
       {
         q: "What terpenes are in Black Cherry Gelato?",
-        a: "The dominant terpenes in Black Cherry Gelato are Pinene (sharp pine, fresh and focusing), Limonene (citrus zest, bright and mood-lifting on the nose), and Humulene (earthy and hop-like, similar to fresh hops). The blend is what gives the strain its specific nose and the character customers report on the exhale.",
+        a: "The dominant terpenes in Black Cherry Gelato are Pinene (sharp pine, fresh and focusing), Limonene (citrus zest, bright and citrus-forward on the nose), and Humulene (earthy and hop-like, similar to fresh hops). The blend is what gives the strain its specific nose and the character customers report on the exhale.",
       },
     ],
     verification: {
@@ -11030,7 +11030,7 @@ export const STRAINS: Record<string, Strain> = {
       },
       {
         q: "What terpenes are in Goji OG?",
-        a: "The dominant terpenes in Goji OG are Myrcene (earthy, mango-like, with a mild body-heavy quality), Caryophyllene (peppery and warm, spicy on the back end), and Limonene (citrus zest, bright and mood-lifting on the nose). The blend is what gives the strain its specific nose and the character customers report on the exhale.",
+        a: "The dominant terpenes in Goji OG are Myrcene (earthy, mango-like, with a mild body-heavy quality), Caryophyllene (peppery and warm, spicy on the back end), and Limonene (citrus zest, bright and citrus-forward on the nose). The blend is what gives the strain its specific nose and the character customers report on the exhale.",
       },
     ],
     verification: {
@@ -12998,7 +12998,7 @@ export const STRAINS: Record<string, Strain> = {
       },
       {
         q: "What terpenes are in Black Banana?",
-        a: "The dominant terpenes in Black Banana are Limonene (citrus zest, bright and mood-lifting on the nose), Caryophyllene (peppery and warm, spicy on the back end), and Myrcene (earthy, mango-like, with a mild body-heavy quality). The blend is what gives the strain its specific nose and the character customers report on the exhale.",
+        a: "The dominant terpenes in Black Banana are Limonene (citrus zest, bright and citrus-forward on the nose), Caryophyllene (peppery and warm, spicy on the back end), and Myrcene (earthy, mango-like, with a mild body-heavy quality). The blend is what gives the strain its specific nose and the character customers report on the exhale.",
       },
     ],
     verification: {
@@ -13394,7 +13394,7 @@ export const STRAINS: Record<string, Strain> = {
       },
       {
         q: "What terpenes are in Hawaiian Snow?",
-        a: "The dominant terpenes in Hawaiian Snow are Terpinolene (fruity and piney, with a fresh herbal edge), Pinene (sharp pine, fresh and focusing), and Limonene (citrus zest, bright and mood-lifting on the nose). The blend is what gives the strain its specific nose and the character customers report on the exhale.",
+        a: "The dominant terpenes in Hawaiian Snow are Terpinolene (fruity and piney, with a fresh herbal edge), Pinene (sharp pine, fresh and focusing), and Limonene (citrus zest, bright and citrus-forward on the nose). The blend is what gives the strain its specific nose and the character customers report on the exhale.",
       },
     ],
     verification: {
@@ -13682,7 +13682,7 @@ export const STRAINS: Record<string, Strain> = {
       },
       {
         q: "What terpenes are in Chocolope?",
-        a: "The dominant terpenes in Chocolope are Caryophyllene (peppery and warm, spicy on the back end), Limonene (citrus zest, bright and mood-lifting on the nose), and Myrcene (earthy, mango-like, with a mild body-heavy quality). The blend is what gives the strain its specific nose and the character customers report on the exhale.",
+        a: "The dominant terpenes in Chocolope are Caryophyllene (peppery and warm, spicy on the back end), Limonene (citrus zest, bright and citrus-forward on the nose), and Myrcene (earthy, mango-like, with a mild body-heavy quality). The blend is what gives the strain its specific nose and the character customers report on the exhale.",
       },
     ],
     verification: {

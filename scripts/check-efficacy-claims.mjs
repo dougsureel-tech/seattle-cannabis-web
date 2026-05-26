@@ -56,6 +56,22 @@ const EXEMPT_PREFIXES = [
   "lib/version.ts",
 ];
 
+// Line-level exemptions for bare-adjective patterns only.
+// Use these for lines where the adjective appears in:
+//   (a) a quoted customer voice fragment (the shop is modeling a customer inquiry, not making a claim)
+//   (b) a historical-attribution statement ("growers noticed X") where the shop is describing
+//       industry history, not asserting an effect.
+// Each entry is a substring that uniquely identifies the line.
+const BARE_ADJECTIVE_LINE_EXEMPTIONS = [
+  // posts.ts: "The Indica vs. Sativa: Mostly Marketing" post — historical-attribution framing.
+  // "Old-school growers noticed indica-leaning genetics often produced relaxing, body-focused effects"
+  // The shop is describing what growers observed historically, not making its own efficacy claim.
+  "indica-leaning genetics often produced relaxing",
+  // posts.ts: customer voice in a modeled example question — not a shop claim.
+  // "I'm new to cannabis, want a relaxing evening, prefer not to feel anxious"
+  "want a relaxing evening, prefer not to feel anxious",
+];
+
 function walk(dir, out = []) {
   let entries;
   try {
@@ -144,6 +160,65 @@ const PATTERNS = [
   { rx: /\banalgesic\b/gi, rule: "pharmacological descriptor" },
   // Senior-vs-Wisdom doctrine
   { rx: /\bSenior\s+discount\b/g, rule: "Senior→Wisdom rename (Doug 2026-05 dignity)" },
+
+  // ── Bare-adjective pharmacological-effect class ──────────────────────────
+  // v33.005 extension: the patterns above require a causation-verb frame
+  // ("tends toward", "often", "associated with") to fire. Bare adjectives
+  // like "mood-lifting", "body-relaxing", "sedating" used as standalone
+  // descriptors in prose ALSO assert a predictable effect — they just omit
+  // the framing verb. This block catches that class.
+  //
+  // ALLOWLIST — a line is exempt when it matches any of these:
+  //   1. Preference-framing wrapper: "people who pick X", "customers reach for",
+  //      "tends to show up in", "tends to be a" — effect is reported, not claimed.
+  //   2. The adjective appears inside a quoted customer voice fragment (the line
+  //      starts with a › or " or is clearly a customer Q being modeled, e.g.
+  //      "I want a relaxing evening" in a sample-question list).
+  //   3. Short tag-array context: line length < 25 chars (catches ["Sleepy","Relaxed"]
+  //      effects[] arrays that are WAC-OK as short tag lists, not prose claims).
+  //   4. Code comment context: the gate's stripComments() call above already
+  //      strips // and /* */ before this block runs — so comment exemption is
+  //      automatic and does not need a separate allowlist entry here.
+  //   5. Self-pin: this script file itself (EXEMPT_PREFIXES includes "scripts/").
+  //
+  // Fix recipe: reframe to experiential/preference language.
+  //   mood-lifting     → citrus-forward / bright on the nose
+  //   body-relaxing    → body-heavy
+  //   sedating         → body-heavy (prose) / body-leaning
+  //   calming (effect) → body-leaning
+  //   calming (aroma)  → soft and floral
+  //   uplifting        → head-forward
+  //   relaxing         → body-leaning / evening-leaning
+  //   energizing       → daytime-leaning / head-forward
+  {
+    rx: /\b(?:mood-lifting|body-relaxing)\b/gi,
+    rule: "bare-adjective pharmacological-effect claim (compound form)",
+  },
+  {
+    rx: /\b(?:sedating|sedative)\b/gi,
+    rule: "bare-adjective pharmacological-effect claim (sedating)",
+    minContextLength: 25,
+  },
+  {
+    rx: /\bcalming\b/gi,
+    rule: "bare-adjective pharmacological-effect claim (calming)",
+    minContextLength: 25,
+  },
+  {
+    rx: /\buplifting\b/gi,
+    rule: "bare-adjective pharmacological-effect claim (uplifting)",
+    minContextLength: 25,
+  },
+  {
+    rx: /\benergizing\b/gi,
+    rule: "bare-adjective pharmacological-effect claim (energizing)",
+    minContextLength: 25,
+  },
+  {
+    rx: /\brelaxing\b/gi,
+    rule: "bare-adjective pharmacological-effect claim (relaxing)",
+    minContextLength: 25,
+  },
 ];
 
 const offenders = [];
@@ -162,7 +237,17 @@ for (const dir of SCAN_DIRS) {
     const lines = stripped.split("\n");
     for (let i = 0; i < lines.length; i += 1) {
       const line = lines[i];
-      for (const { rx, rule } of PATTERNS) {
+      for (const { rx, rule, minContextLength } of PATTERNS) {
+        // Skip bare-adjective patterns on short lines (tag-array exemption).
+        if (minContextLength !== undefined && line.trim().length < minContextLength) continue;
+        // Skip bare-adjective patterns on lines matching known-safe contexts
+        // (historical attribution / customer voice). Non-bare-adjective patterns
+        // (the original causation-verb class) are always checked regardless.
+        if (
+          minContextLength !== undefined &&
+          BARE_ADJECTIVE_LINE_EXEMPTIONS.some((substr) => line.includes(substr))
+        )
+          continue;
         rx.lastIndex = 0;
         let m;
         while ((m = rx.exec(line)) !== null) {
