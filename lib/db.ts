@@ -1626,3 +1626,66 @@ export const getStrainMatchedProducts = cache(async (
 
   return rankStrainMatches(scored, { limit: opts.limit });
 });
+
+// ─── Pick of the Week (Ship 0.2 of Strain Tree autonomous arc) ────────
+// Operator-curated row from inv-App's /admin/curation/pick-of-week. Public
+// hero rail reads the latest week_of for THIS store (sea). Flag-gated on
+// the reader side via PICK_OF_THE_WEEK_ENABLED — when OFF, the page-level
+// component returns null and the section unmounts entirely.
+// Sister-byte-identical to glw v41.965; only diff is store_id='sea'.
+
+export type StrainPickOfWeek = {
+  strainName: string;
+  strainSlug: string;
+  editorialNote: string;
+  budtenderName: string;
+  weekOf: string; // YYYY-MM-DD
+};
+
+export const getCurrentStrainPickOfWeek = cache(async (): Promise<StrainPickOfWeek | null> => {
+  if ((process.env.PICK_OF_THE_WEEK_ENABLED ?? "").toLowerCase() !== "true") {
+    return null;
+  }
+
+  const sql = getClient();
+  try {
+    // scc-web is the Seattle public site → store_id='sea'.
+    const rows = await sql`
+      SELECT
+        s.name AS strain_name,
+        s.slug AS strain_slug,
+        p.editorial_note AS editorial_note,
+        p.budtender_name AS budtender_name,
+        p.week_of::text AS week_of
+      FROM strain_picks_of_the_week p
+      INNER JOIN strains s ON s.id = p.strain_id
+      WHERE p.store_id = 'sea'
+        AND p.week_of <= CURRENT_DATE
+      ORDER BY p.week_of DESC
+      LIMIT 1
+    `;
+    if (!rows || rows.length === 0) return null;
+    const r = rows[0] as {
+      strain_name: string;
+      strain_slug: string;
+      editorial_note: string;
+      budtender_name: string;
+      week_of: string;
+    };
+    return {
+      strainName: r.strain_name,
+      strainSlug: r.strain_slug,
+      editorialNote: r.editorial_note,
+      budtenderName: r.budtender_name,
+      weekOf: r.week_of,
+    };
+  } catch (err) {
+    // Defensive: missing table / Neon hiccup MUST NOT 500 the homepage.
+    // PII guard: err.name only (Drizzle echoes bound params in err.message).
+    // eslint-disable-next-line no-console
+    console.error(
+      `[strain-pick-of-week] read failed err=${err instanceof Error ? err.name : "unknown"}`,
+    );
+    return null;
+  }
+});

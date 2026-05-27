@@ -23,6 +23,7 @@ import { LoyaltyArc } from "@/components/LoyaltyArc";
 import { AppOnlyDealsFilter } from "@/components/AppOnlyDealsFilter";
 import { RecentlyViewedAutoStrip } from "@/components/RecentlyViewedAutoStrip";
 import { HeroBackground } from "@/components/HeroBackground";
+import { StrainPickOfWeek } from "@/components/StrainPickOfWeek";
 import { NeighborhoodMap } from "@/components/NeighborhoodMap";
 import { NEIGHBORHOODS } from "@/lib/neighborhoods";
 import { safeJsonLd } from "@/lib/json-ld-safe";
@@ -241,6 +242,10 @@ export default async function HomePage() {
           <VendorAdSlot slot="homepage_top" loading="eager" />
         </div>
       </section>
+      {/* ─── Pick of the Week (Ship 0.2 Strain Tree arc) ──────────────── */}
+      {/* Async Server Component. Returns null when flag-OFF OR no pick    */}
+      {/* published → entire <section> unmounts (comms-expert spec).        */}
+      <StrainPickOfWeek />
       {/* ─── Hero ─────────────────────────────────────────────────────────── */}
       {/* bg-gradient on the section is the static fallback that paints
           identically to HeroBackground's Layer 1; the component then renders
