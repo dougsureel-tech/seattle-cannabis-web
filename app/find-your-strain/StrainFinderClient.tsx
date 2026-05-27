@@ -103,10 +103,15 @@ export function StrainFinderClient() {
   function buildOrderUrl(final: Record<StepKey, string>): string {
     const params = new URLSearchParams();
     if (final.vibe) params.set("vibe", final.vibe);
-    if (final.form) params.set("category", final.form);
+    // URL contract for /find-your-strain/result is `?form=`. Legacy
+    // `?category=` still accepted server-side by parseQuizTokens. Sister glw.
+    if (final.form) params.set("form", final.form);
     if (final.strain) params.set("strain", final.strain);
-    // /order proxies to /menu (proxy.ts 307); skip the hop. Sister glw.
-    return params.toString() ? `/menu?${params}` : "/menu";
+    // ROUTE TO THE RESULT PAGE — captures the customer's answers BEFORE the
+    // /menu hop. Previously routed straight to /menu where iHJ Boost silently
+    // stripped every query param. Result page renders 3-5 strain cards
+    // matched to the answers.
+    return params.toString() ? `/find-your-strain/result?${params}` : "/find-your-strain/result";
   }
 
   function redirectToOrder(final: Record<StepKey, string>) {
