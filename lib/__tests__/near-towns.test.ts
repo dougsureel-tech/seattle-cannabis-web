@@ -118,3 +118,36 @@ describe("getTown helper", () => {
     );
   });
 });
+
+describe("NEAR_TOWNS — Tier-1 growth coverage (Doug-directive 2026-05-27)", () => {
+  // Local-SEO expert recommended these three 5-min-drive-time
+  // neighborhoods as the highest-leverage organic-search targets
+  // (vs. the wrong-direction Bellevue/Kirkland trade-area pages).
+  // Pin them so a corpus refactor doesn't silently drop one — they
+  // ALL must keep shipping with cityCopy for the substantive-body
+  // tier per Generative-SEO expert's "thin-content" flag.
+  test("columbia-city, beacon-hill, mt-baker all present", () => {
+    const slugs = new Set(NEAR_TOWNS.map((t) => t.slug));
+    assert.ok(slugs.has("columbia-city"), "columbia-city is Tier-1 (5-min drive, light rail)");
+    assert.ok(slugs.has("beacon-hill"), "beacon-hill is Tier-1 (transit corridor)");
+    assert.ok(slugs.has("mt-baker"), "mt-baker is Tier-1 (light rail)");
+  });
+
+  test("Tier-1 neighborhoods all have substantive cityCopy (>=400 chars)", () => {
+    // Generative-search expert: "the existing /visit/from-* pages are
+    // 'thin' (only LocalBusiness + Breadcrumb + Article schema, no FAQ).
+    // Make the /near/<area> pages substantive: 400+ words body." This
+    // pin enforces the body-depth floor for the three Tier-1 picks so
+    // a future edit doesn't silently regress one to whyStop-only.
+    const tier1 = ["columbia-city", "beacon-hill", "mt-baker"];
+    for (const slug of tier1) {
+      const t = getTown(slug);
+      assert.ok(t, `${slug} should exist in NEAR_TOWNS`);
+      assert.ok(t.cityCopy, `${slug} should have cityCopy for substantive-body tier`);
+      assert.ok(
+        t.cityCopy.length >= 400,
+        `${slug} cityCopy is only ${t.cityCopy?.length ?? 0} chars — Tier-1 floor is 400+`,
+      );
+    }
+  });
+});

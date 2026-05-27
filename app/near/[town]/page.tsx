@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { STORE } from "@/lib/store";
 import { NEAR_TOWNS, getTown } from "@/lib/near-towns";
 import { safeJsonLd } from "@/lib/json-ld-safe";
+import { VendorAdSlot } from "@/components/VendorAdSlot";
 
 // /near/<area> — Seattle-neighborhood landing pages. Each maps to a
 // NEAR_TOWNS entry; static + force-static, content data-driven from
@@ -326,6 +327,30 @@ export default async function NearTownPage({
         </div>
       </section>
 
+      {/* ── VENDOR AD SLOT ─────────────────────────────────────────────
+          `near_page_top` — admin-curated vendor or house ad rendered
+          below the hero (H1 + breadcrumb live above), above the body
+          content. Tier-1 growth wire-in per Doug-directive 2026-05-27:
+          /near/<neighborhood> pages are the first-impression surface
+          for customers arriving via "<neighborhood> dispensary" organic
+          search; vendor/cross-store ad rotation here surfaces the
+          highest-leverage promo in the highest-attention slot. Renders
+          NOTHING when no active ad is targeting this slot — the page
+          collapses cleanly. Slot enum SSoT: inv-App
+          `apps/staff/src/lib/vendor-ads.ts` v428.5625 + sister
+          greenlife-web port. data-slot attribute exposed for the
+          public-site smoke test to grep on. Markup intentionally light
+          (no eyebrow / no border) so a "missing ad" state doesn't
+          leave visual residue.
+      */}
+      <section
+        className="max-w-5xl mx-auto px-4 sm:px-6 -mt-6 sm:-mt-8 mb-6 sm:mb-8 relative z-10"
+        aria-label="Featured promo"
+        data-slot="near_page_top"
+      >
+        <VendorAdSlot slot="near_page_top" limit={1} loading="eager" />
+      </section>
+
       {/* ── STAT TILES ──────────────────────────────────────────────────
           Three tiles below the hero — drive time / transit / open-
           daily hours. Bigger numbers, white cards on stone bg (visible
@@ -335,7 +360,7 @@ export default async function NearTownPage({
           page in Seattle, where transit is a real alternative to a
           drive). Sister glw v33.805 stat-tile band.
       */}
-      <section className="max-w-5xl mx-auto px-4 sm:px-6 -mt-6 sm:-mt-8 mb-10 sm:mb-14 relative z-10">
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-10 sm:mb-14 relative z-10">
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
           <div className="rounded-2xl bg-white border border-stone-200 shadow-sm px-4 sm:px-5 py-4">
             <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.14em] text-indigo-700 mb-1.5">

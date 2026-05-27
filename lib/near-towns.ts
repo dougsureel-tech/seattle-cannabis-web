@@ -97,6 +97,12 @@ export const NEAR_TOWNS: readonly NearArea[] = [
     whyStop:
       "Mt Baker is a quick south-on-Rainier drive — we're past Franklin High School and Hillman City. Mt Baker locals coming home from work in SODO or downtown swing through on the way home.",
     notableNeighbors: ["Beacon Hill", "Columbia City", "Rainier Valley"],
+    cityCopy: [
+      "Mt Baker to our door is about 10 minutes — south on Rainier Ave the whole way, past Franklin High School, through Hillman City, and you're at 7266 Rainier Ave S. Free parking out front. From Mt Baker Light Rail station it's the 7 bus southbound for roughly 20 minutes door to door, or a 25-minute walk down Rainier on a dry day.",
+      "Who shows up from Mt Baker: the SODO-and-downtown commuter wave swinging through on the way home from work, weekend lake-loop walkers continuing the route south after the Mt Baker Boulevard segment, Franklin High families on errand chains, and the Light-Rail crowd using Mt Baker as the transfer point for trips deeper into the Rainier Valley. The 7 bus runs every 15 minutes either direction on this stretch.",
+      "Mt Baker and Rainier Valley share Rainier Ave as the spine of the south end — same arterial, two adjacent neighborhoods. Most Mt Baker regulars pair us with a Columbia City farmers-market run on Wednesdays, a Tutta Bella stop in Hillman City, or a grocery loop at PCC. Cash only at the counter, ATM in the lobby, ID checked at the door per WAC. 21 and up.",
+      "We've been on Rainier Ave S since 2018 — in cannabis since 2010, pre-I-502 medical-collective days in lower Queen Anne, before the south end's current shape. Order online before you head down Rainier and we'll have it pulled and bagged at the counter; the live menu has whatever's on the shelf today. Walk in and ask if you'd rather — that's what the budtenders are here for.",
+    ].join("\n\n"),
   },
   {
     slug: "othello",
