@@ -7,6 +7,7 @@ import { fetchClosureStatus } from "@/lib/closure-status";
 import { ClosureBanner } from "@/components/ClosureBanner";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { safeJsonLd } from "@/lib/json-ld-safe";
+import { buildVisitFaqJsonLd, type FaqEntry } from "@/lib/visit-faq-jsonld";
 
 // "Driving over from another neighborhood?" card grid below the
 // directions section — closes SEO Fix 1 by giving the highest-intent
@@ -70,6 +71,53 @@ const breadcrumbSchema = {
   ],
 };
 
+// FAQPage JSON-LD — pre-visit Q&A from the visible page copy (hours,
+// parking, ID, cash, ATM, Light Rail). WSLCB-filtered downstream. Per
+// SEO_AUDIT_AUTONOMOUS_WINS_2026_05_26 Tech-SEO #5 Part A. Answers stay
+// in factual / what-to-bring lane — NO efficacy / medical phrasing.
+const VISIT_FAQS: readonly FaqEntry[] = [
+  {
+    question: `What are the hours at ${STORE.name}?`,
+    answer: `${STORE.name} is open every day of the year, including holidays — 8 AM to 11 PM daily. Pickup orders cut off 15 minutes before close.`,
+  },
+  {
+    question: `Where is ${STORE.name} located?`,
+    answer: `${STORE.address.full}. In the heart of Rainier Valley on Rainier Ave South, with Othello Light Rail Station 5 minutes north on foot.`,
+  },
+  {
+    question: "Is there parking?",
+    answer:
+      "Yes — free dedicated parking on-site, plus the ADA-accessible entrance has no curb step. The Othello Light Rail Station is also a 5-minute walk for transit arrivals.",
+  },
+  {
+    question: "How do I get there on Light Rail?",
+    answer:
+      "Othello Station on the 1 Line is the closest. From the station, walk 5 minutes north up Rainier Ave South to 7266 Rainier Ave S. The 1 Line runs every 8-15 minutes from downtown Seattle and SeaTac airport.",
+  },
+  {
+    question: "What ID do I need to bring?",
+    answer:
+      "A valid 21+ government photo ID. Washington driver's license, out-of-state license, US passport, US passport card, military ID, Tribal ID, or international passport. Expired IDs do not work. Photos of IDs do not work.",
+  },
+  {
+    question: "Do you take credit or debit cards?",
+    answer:
+      "Cash only at the till. Cannabis is federally illegal, so the major card networks won't process for Washington dispensaries — every shop in the state is cash-only. There's an ATM in our lobby with a typical $3 surcharge if you forget.",
+  },
+  {
+    question: "Do you have an ATM on-site?",
+    answer:
+      "Yes — in the lobby, $3 surcharge typical. If you forgot to stop at the bank, no judgment.",
+  },
+  {
+    question: "Can I order ahead online?",
+    answer:
+      "Yes — browse the live menu at /menu and place a pickup order. Last online order is 15 minutes before close so staff can stage the bag. Same products in the case either way.",
+  },
+];
+
+const visitFaqSchema = buildVisitFaqJsonLd("/visit", VISIT_FAQS);
+
 const PARKING_NEARBY = [
   "Free dedicated parking on-site",
   "Othello Light Rail Station — 5 min walk",
@@ -122,6 +170,10 @@ export default async function VisitPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(visitFaqSchema) }}
       />
 
       <Breadcrumb items={[{ label: "Visit" }]} />

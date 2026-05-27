@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { STORE } from "@/lib/store";
 import { safeJsonLd } from "@/lib/json-ld-safe";
 import { Breadcrumb } from "@/components/Breadcrumb";
+import { buildVisitFaqJsonLd, type FaqEntry } from "@/lib/visit-faq-jsonld";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -26,12 +27,48 @@ const contactSchema = {
   },
 };
 
+// FAQPage JSON-LD — contact-class Q&A from the visible page (how to call,
+// email, find us, hours). WSLCB-filtered downstream. Per SEO_AUDIT_
+// AUTONOMOUS_WINS_2026_05_26 Tech-SEO #5 Part A. Sister of /visit's
+// FAQ payload; distinct content (here = how to reach, /visit = how to
+// plan a visit). No efficacy / medical phrasing.
+const CONTACT_FAQS: readonly FaqEntry[] = [
+  {
+    question: `What is the phone number for ${STORE.name}?`,
+    answer: `Our phone number is ${STORE.phone}. Staff can answer pickup, hours, or directions questions during open hours. For online orders, browse the live menu at /menu.`,
+  },
+  {
+    question: `How do I email ${STORE.name}?`,
+    answer: `Email us at ${STORE.email}. Same inbox the team checks daily. For order-status questions, the fastest answer is usually a call during open hours.`,
+  },
+  {
+    question: `Where is ${STORE.name} located?`,
+    answer: `${STORE.address.full}. In the heart of Rainier Valley on Rainier Ave South, 5 minutes north of Othello Light Rail Station on foot.`,
+  },
+  {
+    question: "What are your hours?",
+    answer:
+      "Open daily 8 AM to 11 PM — every day of the year including holidays. Pickup orders cut off 15 minutes before close.",
+  },
+  {
+    question: "Are you on social media?",
+    answer:
+      "Yes — Instagram and Facebook. The Instagram is the more-active feed for drop announcements and weekly deals. Links on this page.",
+  },
+];
+
+const contactFaqSchema = buildVisitFaqJsonLd("/contact", CONTACT_FAQS);
+
 export default function ContactPage() {
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd(contactSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(contactFaqSchema) }}
       />
       <Breadcrumb items={[{ label: "Contact" }]} />
       {/* Hero — gradient bookend matching homepage / visit / about / footer. */}
