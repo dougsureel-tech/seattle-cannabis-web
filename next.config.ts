@@ -359,14 +359,30 @@ const nextConfig: NextConfig = {
       { source: "/pickup", destination: "/menu", permanent: true },
       { source: "/preroll", destination: "/menu", permanent: true },
 
-      // Legacy loyalty bookmarks → /rewards (canonical customer portal —
-      // OTP-gated on /api/rewards/request-code → /api/rewards/verify-code,
-      // session-cookie issues a 30-day Rewards session). Pre-fix /loyalty
-      // 404'd; legacy bookmarks from the SpringBig era hit a dead URL.
-      // Caught by /loop saturation grind 2026-05-09 customer-flow smoke
-      // test. Sister glw same wave (which routes /loyalty → /account
-      // since glw doesn't have a /rewards portal).
-      { source: "/loyalty", destination: "/rewards", permanent: true },
+      // Legacy loyalty bookmarks → brapp (the canonical loyalty PWA at
+      // brapp.seattlecannabis.co/rewards). Pre-fix /loyalty 404'd; legacy
+      // bookmarks from the SpringBig era hit a dead URL. Caught by /loop
+      // saturation grind 2026-05-09 customer-flow smoke test. Sister glw
+      // routes /loyalty → /account (Clerk-managed).
+      //
+      // 2026-05-28 (Doug-directive): destination flattened from /rewards
+      // → brapp.seattlecannabis.co/rewards directly to avoid a 2-hop
+      // chain (was: /loyalty → /rewards → brapp). The cross-domain bounce
+      // is allowed here because brapp.seattlecannabis.co is the same
+      // canonical second-level domain (subdomain, not off-domain).
+      { source: "/loyalty", destination: "https://brapp.seattlecannabis.co/rewards", permanent: true },
+
+      // Canonical /rewards now lives on the brapp loyalty PWA per Doug
+      // 2026-05-28 directive ("redirect www.seattlecannabis.co/rewards →
+      // brapp.seattlecannabis.co/rewards so customers typing the URL
+      // aren't stranded"). Local app/rewards/* tree intentionally left
+      // in place pending broader-scope cleanup decision — these redirects
+      // shadow it and the redirect-shadow gate EXEMPT list (below) carries
+      // documented rationale. Path suffix preserved so deep-links
+      // (/rewards/dashboard, /rewards/redeem, /rewards/history) all land
+      // on the brapp equivalent.
+      { source: "/rewards", destination: "https://brapp.seattlecannabis.co/rewards", permanent: true },
+      { source: "/rewards/:path*", destination: "https://brapp.seattlecannabis.co/rewards/:path*", permanent: true },
 
       // Auth-URL alias normalization. Clerk uses `/sign-in` + `/sign-up`
       // (hyphenated). The unhyphenated forms + `/login` are the most
@@ -405,12 +421,14 @@ const nextConfig: NextConfig = {
       { source: "/age-verify", destination: "/", permanent: true },
       { source: "/21", destination: "/", permanent: true },
       { source: "/verify", destination: "/", permanent: true },
-      // Email/SMS preferences live in /rewards on scc (OTP-gated portal,
-      // unlike glw which uses Clerk-managed /account):
-      { source: "/preferences", destination: "/rewards", permanent: true },
-      { source: "/optout", destination: "/rewards", permanent: true },
-      { source: "/opt-out", destination: "/rewards", permanent: true },
-      { source: "/unsubscribe", destination: "/rewards", permanent: true },
+      // Email/SMS preferences live on the brapp loyalty PWA (canonical
+      // customer surface as of 2026-05-28 Doug-directive). Sister glw uses
+      // Clerk-managed /account. Flattened to brapp URL to avoid a 2-hop
+      // chain via the local /rewards redirect.
+      { source: "/preferences", destination: "https://brapp.seattlecannabis.co/rewards", permanent: true },
+      { source: "/optout", destination: "https://brapp.seattlecannabis.co/rewards", permanent: true },
+      { source: "/opt-out", destination: "https://brapp.seattlecannabis.co/rewards", permanent: true },
+      { source: "/unsubscribe", destination: "https://brapp.seattlecannabis.co/rewards", permanent: true },
 
       // Round-3 legacy alias sweep (caught by /loop saturation grind
       // 2026-05-09 wide-path probe round 3). Sister glw v9.605.
@@ -449,20 +467,23 @@ const nextConfig: NextConfig = {
       { source: "/marijuana", destination: "/", permanent: true },
       { source: "/cannabis", destination: "/", permanent: true },
       { source: "/dispensary", destination: "/", permanent: true },
-      // PWA install flow happens via the customer rewards portal on scc:
-      { source: "/app", destination: "/rewards", permanent: true },
-      { source: "/download", destination: "/rewards", permanent: true },
-      { source: "/install", destination: "/rewards", permanent: true },
+      // PWA install flow happens via the brapp loyalty portal
+      // (brapp.seattlecannabis.co/rewards — the canonical loyalty PWA per
+      // 2026-05-28 Doug-directive).
+      { source: "/app", destination: "https://brapp.seattlecannabis.co/rewards", permanent: true },
+      { source: "/download", destination: "https://brapp.seattlecannabis.co/rewards", permanent: true },
+      { source: "/install", destination: "https://brapp.seattlecannabis.co/rewards", permanent: true },
       // Deal-page aliases:
       { source: "/happy-hour", destination: "/deals", permanent: true },
       { source: "/daily-deal", destination: "/deals", permanent: true },
       { source: "/daily-deals", destination: "/deals", permanent: true },
       { source: "/early-bird", destination: "/deals", permanent: true },
-      // Loyalty-program aliases (scc uses /rewards — OTP portal):
-      { source: "/points", destination: "/rewards", permanent: true },
-      { source: "/rewards-program", destination: "/rewards", permanent: true },
-      { source: "/member", destination: "/rewards", permanent: true },
-      { source: "/membership", destination: "/rewards", permanent: true },
+      // Loyalty-program aliases — flow to the brapp loyalty PWA (canonical
+      // customer surface as of 2026-05-28 Doug-directive).
+      { source: "/points", destination: "https://brapp.seattlecannabis.co/rewards", permanent: true },
+      { source: "/rewards-program", destination: "https://brapp.seattlecannabis.co/rewards", permanent: true },
+      { source: "/member", destination: "https://brapp.seattlecannabis.co/rewards", permanent: true },
+      { source: "/membership", destination: "https://brapp.seattlecannabis.co/rewards", permanent: true },
       // Form-submission post-redirect aliases:
       { source: "/success", destination: "/", permanent: true },
       { source: "/confirmed", destination: "/", permanent: true },

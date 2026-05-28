@@ -39,7 +39,17 @@ const WARN_ONLY = process.argv.includes("--warn");
 
 // Source paths we deliberately allow to shadow real pages. Empty by default —
 // add only with documented rationale.
-const EXEMPT = new Set([]);
+const EXEMPT = new Set([
+  // 2026-05-28 (Doug-directive): /rewards now redirects to the brapp
+  // loyalty PWA (brapp.seattlecannabis.co/rewards — canonical customer
+  // surface). The local app/rewards/* tree is intentionally left in
+  // place pending a broader cleanup decision (it carries an old OTP-flow
+  // implementation that competed with brapp's). The redirect SHADOWS the
+  // page intentionally; new requests get the 308 to brapp before Next.js
+  // routes to app/rewards/page.tsx. Remove this exemption when the
+  // app/rewards/* tree is deleted in a follow-up cleanup.
+  "/rewards",
+]);
 
 function extractRedirectSources(text) {
   // Match `source: "/whatever"` — captures the path.
