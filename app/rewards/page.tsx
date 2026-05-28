@@ -1,118 +1,111 @@
-// /rewards — landing page for Seattle Cannabis Co loyalty PWA.
-//
-// Replaces SpringBig as the customer-facing loyalty surface (Track B per
-// /CODE/Green Life/PLAN_SPRINGBIG_CUTOVER_5_25.md). When a returning
-// customer hits this URL with a valid `scc_rewards_session` cookie they
-// jump straight to /rewards/dashboard. Cold visitors land here, click
-// the CTA, and start the phone-OTP flow at /rewards/login.
-//
-// Auth: phone-OTP via locally-managed `/api/rewards/request-code` +
-// `/api/rewards/verify-code` routes (Twilio SMS + loyalty_otp_codes
-// table on Seattle Neon). 6-digit code, 10-min TTL, single-use,
-// hashed-at-rest. Session cookie name `scc_rewards_session` (HMAC
-// signed, 30-day TTL, HttpOnly + Secure + SameSite=lax). Read helper
-// at `lib/rewards-session.ts` (`readRewardsSession` + `REWARDS_COOKIE_NAME`).
-//
-// Surfaces post-auth:
-//   - /rewards/dashboard — first name + last initial, points, tier,
-//     progress bar, lifetime visits/spend, nav cards to redeem + history
-//   - /rewards/history — last 25 completed transactions with earned/
-//     redeemed/promo chips per row
-//   - /rewards/redeem — affordable + unaffordable tiers from
-//     `lib/redemption-tiers`; redemption itself happens at the register
-//     (Apple guideline 1.4.3 / Google Play marijuana policy ban — PWA
-//     cannot complete the cannabis transaction)
-//   - /rewards (this page) — landing for cold visitors only
-//
-// Add-to-Home-Screen banner mounts on /rewards/dashboard (one component
-// at AddToHomeScreen.tsx; iOS-Safari + Chrome-Android branches both
-// handled). Auto-hides if installed or dismissed (localStorage key).
-
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import Link from "next/link";
-import { readRewardsSession, REWARDS_COOKIE_NAME } from "@/lib/rewards-session";
+import { STORE } from "@/lib/store";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
-export const dynamic = "force-dynamic";
+// /rewards — public-site interstitial.
+//
+// Per EXPERT_NEXT_STEPS_CUSTOMER_JOURNEY_2026_05_28.md (Path 4 / top
+// next-ship recommendation): prior to 2026-05-28 PM, `next.config.ts`
+// redirected `/rewards` → `brapp.seattlecannabis.co/rewards` per Doug's
+// 2026-05-28 morning directive. That brapp page carries the OPERATOR
+// app chrome ("Sync · Restock · Training · Reference · Reorder" nav),
+// so customers tapping the footer "Rewards" link landed inside the
+// staff dashboard. The auditor called this the "most jarring finding"
+// of the customer-journey audit.
+//
+// The exact-match `/rewards` redirect was removed (sub-path redirect
+// `/rewards/:path*` still sends OTP-flow + transaction surfaces to
+// brapp where they belong). This page renders a short orientation:
+// short blurb + two CTAs (Sign in → brapp loyalty PWA · Browse strains
+// → /strains) + a three-bullet "what you'll find when signed in" rail.
+//
+// Scope-narrow on purpose. NO auth fetch, NO loyalty math, NO data
+// reads — pure HTML placeholder. The real loyalty balance + order
+// history live on brapp.seattlecannabis.co/rewards (the canonical
+// customer-facing loyalty PWA per Doug's 2026-05-28 directive). When
+// customers want to transact they go to /menu.
+//
+// WSLCB posture: no effect language, no medical framing, no points
+// math claims (sidesteps check-loyalty-math-drift gate). Voice rubric:
+// direct shop voice ("Sign in to see your balance" / "Browse strains"),
+// no template-warmth softeners ("give us a call" / "drop us a line").
+//
+// Sister-port byte-near-identical with greenlife-web/app/rewards/
+// page.tsx — only divergence is the brand color (scc indigo vs glw
+// emerald) and the "Sign in" CTA destination (scc points to the brapp
+// loyalty PWA per Doug's 2026-05-28 directive; glw uses Clerk
+// /sign-in because glw has a Clerk-managed /account flow).
+//
+// Note: the local app/rewards/{dashboard,redeem,history,login,verify}
+// sub-tree is still shadowed by the `/rewards/:path*` redirect in
+// next.config.ts (brapp owns those surfaces). Broader cleanup of the
+// shadowed sub-tree is a separate ship.
+
+const BRAPP_REWARDS_URL = "https://brapp.seattlecannabis.co/rewards";
+
 export const metadata: Metadata = {
-  title: "Rewards — your points balance",
-  description:
-    "Seattle Cannabis Co rewards. Sign in with your phone to see your points balance, tier, and lifetime stats.",
-  // follow:false matches sister /rewards/* pages (login/verify/dashboard/redeem/
-  // history/balance) — every linked sub-page is itself noindex, so following
-  // them wastes Google's crawl budget. Tightens to consistency with the
-  // 6 sibling pages that all use { index: false, follow: false }.
-  robots: { index: false, follow: false },
+  title: "Account & rewards",
+  description: `Sign in to ${STORE.name} to view your loyalty balance, order history, and saved strain preferences. 21+.`,
+  alternates: { canonical: "/rewards" },
 };
 
-// Migration-banner sunset. Seattle cutover lands ~2026-06-25 per
-// /CODE/Green Life/PLAN_SPRINGBIG_CUTOVER_5_25.md Track B; +3 weeks
-// margin covers any straggling balance reconciliations. After this
-// date the "we're moving loyalty over" banner becomes a false claim
-// (customers would think the system is still unstable and may not
-// trust the displayed balance), so it auto-hides.
-const MIGRATION_BANNER_SUNSET = new Date("2026-07-15T00:00:00-07:00");
-
-export default async function RewardsLandingPage() {
-  // If they already have a session, jump straight to the dashboard.
-  const cookieStore = await cookies();
-  const session = readRewardsSession(cookieStore.get(REWARDS_COOKIE_NAME)?.value);
-  if (session) redirect("/rewards/dashboard");
-
-  const showMigrationBanner = new Date() < MIGRATION_BANNER_SUNSET;
-
+export default function RewardsInterstitialPage() {
   return (
-    <div className="min-h-[70vh] bg-white">
-      <div className="max-w-md mx-auto px-4 sm:px-6 py-10 sm:py-14">
-        <div className="space-y-2 text-center">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-indigo-50 text-indigo-700 px-3 py-1 text-xs font-bold tracking-wide uppercase">
-            Loyalty
-          </span>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-stone-900 leading-tight">
-            Your points, on your phone.
-          </h1>
-          <p className="text-stone-500 text-sm sm:text-base">
-            Sign in with the number you give us at the register. Same
-            balance, no app to install.
-          </p>
-        </div>
+    <div className="max-w-2xl mx-auto px-4 sm:px-6 py-10 sm:py-14 space-y-8">
+      <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Account & rewards" }]} />
 
-        <div className="mt-8 sm:mt-10 rounded-3xl bg-gradient-to-br from-indigo-700 to-indigo-900 text-white p-7 sm:p-8 shadow-lg shadow-indigo-900/30 text-center space-y-4">
-          <p className="text-sm text-indigo-100">
-            We&apos;ll text you a 6-digit code so it&apos;s really you.
-          </p>
-          <Link
-            href="/rewards/login"
-            className="block w-full rounded-2xl bg-white hover:bg-stone-50 text-indigo-800 font-bold py-3.5 text-base transition-all hover:-translate-y-0.5"
-          >
-            Sign in with phone →
-          </Link>
-        </div>
+      <header className="space-y-3 text-center sm:text-left">
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-indigo-50 text-indigo-700 px-3 py-1 text-xs font-bold tracking-wide uppercase">
+          Your account
+        </span>
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-stone-900 leading-tight">
+          Account &amp; rewards
+        </h1>
+        <p className="text-stone-600 text-base sm:text-lg leading-relaxed">
+          Your loyalty balance and order history live in your account. Sign in to
+          view rewards, recent orders, and the strains you&apos;ve saved.
+        </p>
+      </header>
 
-        {showMigrationBanner && (
-          <div className="mt-6 rounded-2xl bg-amber-50 border border-amber-200 px-4 py-3 text-xs text-amber-900 leading-relaxed">
-            <strong className="font-bold">Heads up:</strong> we&apos;re moving
-            loyalty over from our old system. If your balance looks off,
-            give us a few days — every point is preserved and will show up
-            here.
-          </div>
-        )}
-
-        <div className="mt-8 space-y-3 text-sm text-center">
-          <Link
-            href="/account/sign-in"
-            className="block w-full rounded-2xl border border-stone-200 bg-white hover:border-indigo-300 hover:shadow-sm px-5 py-3.5 font-semibold text-stone-700 transition-all"
-          >
-            Have an account with email?{" "}
-            <span className="text-indigo-700">Sign in here →</span>
-          </Link>
-          <p className="text-xs text-stone-400 px-4">
-            Order history, ready-for-pickup alerts, and one-tap re-orders
-            live in your full account.
-          </p>
-        </div>
+      <div className="flex flex-col sm:flex-row gap-3">
+        <Link
+          href={BRAPP_REWARDS_URL}
+          className="inline-flex items-center justify-center gap-2 rounded-2xl bg-indigo-700 hover:bg-indigo-600 px-6 py-3.5 text-base font-bold text-white transition-all hover:-translate-y-0.5 shadow-md shadow-indigo-900/20 focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:outline-none"
+        >
+          Sign in →
+        </Link>
+        <Link
+          href="/strains"
+          className="inline-flex items-center justify-center gap-2 rounded-2xl border border-stone-300 bg-white hover:border-indigo-400 hover:bg-indigo-50 px-6 py-3.5 text-base font-semibold text-stone-700 transition-all focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:outline-none"
+        >
+          Browse strains
+        </Link>
       </div>
+
+      <section className="rounded-2xl border border-stone-200 bg-stone-50 px-5 sm:px-6 py-5 sm:py-6">
+        <h2 className="text-sm font-bold uppercase tracking-wider text-stone-500 mb-3">
+          What you&apos;ll find when signed in
+        </h2>
+        <ul className="space-y-2.5 text-sm sm:text-base text-stone-700">
+          <li className="flex items-start gap-2.5">
+            <span className="text-indigo-700 mt-0.5" aria-hidden="true">·</span>
+            <span>Your loyalty balance and tier</span>
+          </li>
+          <li className="flex items-start gap-2.5">
+            <span className="text-indigo-700 mt-0.5" aria-hidden="true">·</span>
+            <span>Order history and pickup status</span>
+          </li>
+          <li className="flex items-start gap-2.5">
+            <span className="text-indigo-700 mt-0.5" aria-hidden="true">·</span>
+            <span>Saved strain preferences for faster reorders</span>
+          </li>
+        </ul>
+      </section>
+
+      <p className="text-xs text-stone-500 text-center sm:text-left">
+        21+. Loyalty redemption applies at the counter at the time of pickup.
+      </p>
     </div>
   );
 }

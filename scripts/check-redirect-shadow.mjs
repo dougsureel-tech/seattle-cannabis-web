@@ -39,17 +39,20 @@ const WARN_ONLY = process.argv.includes("--warn");
 
 // Source paths we deliberately allow to shadow real pages. Empty by default —
 // add only with documented rationale.
-const EXEMPT = new Set([
-  // 2026-05-28 (Doug-directive): /rewards now redirects to the brapp
-  // loyalty PWA (brapp.seattlecannabis.co/rewards — canonical customer
-  // surface). The local app/rewards/* tree is intentionally left in
-  // place pending a broader cleanup decision (it carries an old OTP-flow
-  // implementation that competed with brapp's). The redirect SHADOWS the
-  // page intentionally; new requests get the 308 to brapp before Next.js
-  // routes to app/rewards/page.tsx. Remove this exemption when the
-  // app/rewards/* tree is deleted in a follow-up cleanup.
-  "/rewards",
-]);
+//
+// 2026-05-28 PM: `/rewards` exemption REMOVED. Per
+// `EXPERT_NEXT_STEPS_CUSTOMER_JOURNEY_2026_05_28.md` the prior 308 to
+// brapp.seattlecannabis.co/rewards leaked operator-app chrome to
+// customers tapping the footer "Rewards" link. The exact-match
+// /rewards redirect was killed in `next.config.ts` and the local
+// `app/rewards/page.tsx` was replaced with a public-site interstitial
+// (sign-in CTA + browse-strains CTA). Sub-path redirect
+// `/rewards/:path*` → brapp persists for OTP-flow + transaction
+// surfaces but is path-glob (carries `:`) so the gate skips it
+// naturally — no exemption needed. Resolves the v33.545 pre-existing
+// test failure at lib/__tests__/check-redirect-shadow.test.ts:107
+// which pins `EXEMPT = new Set([])` (empty by default).
+const EXEMPT = new Set([]);
 
 function extractRedirectSources(text) {
   // Match `source: "/whatever"` — captures the path.

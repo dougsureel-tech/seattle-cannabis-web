@@ -372,16 +372,24 @@ const nextConfig: NextConfig = {
       // canonical second-level domain (subdomain, not off-domain).
       { source: "/loyalty", destination: "https://brapp.seattlecannabis.co/rewards", permanent: true },
 
-      // Canonical /rewards now lives on the brapp loyalty PWA per Doug
-      // 2026-05-28 directive ("redirect www.seattlecannabis.co/rewards →
-      // brapp.seattlecannabis.co/rewards so customers typing the URL
-      // aren't stranded"). Local app/rewards/* tree intentionally left
-      // in place pending broader-scope cleanup decision — these redirects
-      // shadow it and the redirect-shadow gate EXEMPT list (below) carries
-      // documented rationale. Path suffix preserved so deep-links
-      // (/rewards/dashboard, /rewards/redeem, /rewards/history) all land
-      // on the brapp equivalent.
-      { source: "/rewards", destination: "https://brapp.seattlecannabis.co/rewards", permanent: true },
+      // /rewards exact-match no longer redirects (2026-05-28 PM update).
+      // Per `EXPERT_NEXT_STEPS_CUSTOMER_JOURNEY_2026_05_28.md`: the prior
+      // 308 to brapp.seattlecannabis.co/rewards dropped customers
+      // tapping the footer "Rewards" link straight into the OPERATOR app
+      // chrome ("Sync · Restock · Training · Reference · Reorder" nav),
+      // which was the auditor's "most jarring finding." /rewards now
+      // renders a public interstitial at app/rewards/page.tsx — short
+      // orientation + 2 CTAs (Sign in → brapp loyalty PWA · Browse
+      // strains → /strains). Sub-path redirects (line below) still send
+      // /rewards/dashboard, /rewards/redeem, /rewards/history,
+      // /rewards/login, /rewards/verify to brapp because those carry
+      // the OTP-flow + transaction surface that brapp owns; the local
+      // app/rewards/* sub-tree stays shadowed by `/rewards/:path*` for
+      // now (broader cleanup separate). The redirect-shadow gate
+      // (scripts/check-redirect-shadow.mjs) skips `:path*` sources so
+      // the EXEMPT escape hatch is no longer needed and has been
+      // cleared (resolves the v33.545 pre-existing test failure at
+      // lib/__tests__/check-redirect-shadow.test.ts:107).
       { source: "/rewards/:path*", destination: "https://brapp.seattlecannabis.co/rewards/:path*", permanent: true },
 
       // Auth-URL alias normalization. Clerk uses `/sign-in` + `/sign-up`
