@@ -99,7 +99,11 @@ export function SiteFooter() {
             >
               {STORE.phone}
             </a>
-            <a href={`mailto:${STORE.email}`} className="block hover:text-white transition-colors text-xs">
+            <a
+              href={`mailto:${STORE.email}`}
+              aria-label={`Email ${STORE.name} at ${STORE.email}`}
+              className="block hover:text-white transition-colors text-xs"
+            >
               {STORE.email}
             </a>
           </address>
@@ -318,9 +322,11 @@ export function SiteFooter() {
           Visiting Wenatchee? Our friends at{" "}
           <a
             href="https://www.greenlifecannabis.com"
+            target="_blank"
+            rel="noopener noreferrer"
             className="font-semibold text-indigo-200 underline-offset-4 hover:underline hover:text-white transition-colors"
           >
-            Green Life Cannabis
+            Green Life Cannabis ↗
           </a>{" "}
           — Wenatchee Valley, in the same building since 2014.
         </p>
