@@ -241,6 +241,20 @@ export default async function QuizResultPage({
               Browse the live menu →
             </Link>
           </div>
+          {/* When the match strategy is unconstrained (fuzzy fallback), surface a phone
+              backup so the customer has a third option besides re-run/browse. */}
+          {result.strategy === "unconstrained" && (
+            <p className="mt-4 text-xs text-stone-500">
+              Or call us at{" "}
+              <a
+                href={`tel:${STORE.phoneTel}`}
+                className="font-semibold text-indigo-800 underline decoration-stone-300 hover:decoration-indigo-700"
+              >
+                {STORE.phone}
+              </a>{" "}
+              and a budtender can talk through what you're after.
+            </p>
+          )}
         </div>
       </section>
 
