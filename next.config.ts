@@ -390,7 +390,12 @@ const nextConfig: NextConfig = {
       // the EXEMPT escape hatch is no longer needed and has been
       // cleared (resolves the v33.545 pre-existing test failure at
       // lib/__tests__/check-redirect-shadow.test.ts:107).
-      { source: "/rewards/:path*", destination: "https://brapp.seattlecannabis.co/rewards/:path*", permanent: true },
+      // `:path+` requires AT LEAST ONE segment after `/rewards/` so the
+      // bare `/rewards` URL hits app/rewards/page.tsx (the interstitial)
+      // instead of matching here as zero-segments and 308'ing to brapp
+      // with a trailing slash. Lived 2026-05-28 PT — v33.665 first
+      // deploy still 308'd because `:path*` matched zero segments.
+      { source: "/rewards/:path+", destination: "https://brapp.seattlecannabis.co/rewards/:path+", permanent: true },
 
       // Auth-URL alias normalization. Clerk uses `/sign-in` + `/sign-up`
       // (hyphenated). The unhyphenated forms + `/login` are the most
