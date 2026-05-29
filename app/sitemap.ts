@@ -188,6 +188,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly",
       priority: 0.75,
     },
+    // /visit/from-bellevue + /visit/from-kirkland — east-side commuter
+    // landing pages. Pages shipped v33.145 (sha 9b9f348, 2026-05-26)
+    // under SEO_AUDIT_AUTONOMOUS_WINS_2026_05_26 Tech-SEO #3 cross-stack
+    // parity scope — but their sitemap entries were not added at the
+    // same time, so Google never had a crawl signal pointing at them.
+    // Closes the discoverability gap. Static (force-static);
+    // changeFrequency monthly (drive-time + hours copy doesn't turn
+    // over). Priority 0.75 mirrors from-seatac.
+    {
+      url: `${STORE.website}/visit/from-bellevue`,
+      lastModified: STATIC_LASTMOD,
+      changeFrequency: "monthly",
+      priority: 0.75,
+    },
+    {
+      url: `${STORE.website}/visit/from-kirkland`,
+      lastModified: STATIC_LASTMOD,
+      changeFrequency: "monthly",
+      priority: 0.75,
+    },
     // v27.005 — priority demoted 0.6 → 0.5 to match the spec'd "static
     // support page" tier (/faq, /accessibility, /contact, /careers, /press).
     { url: `${STORE.website}/contact`, lastModified: STATIC_LASTMOD, changeFrequency: "yearly", priority: 0.5 },
