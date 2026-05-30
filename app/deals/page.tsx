@@ -275,7 +275,7 @@ export default async function DealsPage({ searchParams }: Props) {
                         href={`/deals/${d.id}`}
                         className="hover:text-indigo-800 transition-colors"
                       >
-                        {d.name}
+                        {d.displayName}
                       </Link>
                     </h2>
                     {isFirst && (
