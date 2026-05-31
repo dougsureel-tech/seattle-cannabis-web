@@ -4,6 +4,7 @@ import { getMenuProducts, getPickupEta, getActiveDeals } from "@/lib/db";
 import { STORE, getOrderingStatus, todayCloseLabel, DEFAULT_OG_IMAGE } from "@/lib/store";
 import { fetchClosureStatus } from "@/lib/closure-status";
 import { getLoyaltyByClerkId, getMedicalStatusByClerkId } from "@/lib/portal";
+import { fetchProductFlags } from "@/lib/budtender-picks";
 import { ClosureBanner } from "@/components/ClosureBanner";
 import { MenuActiveDealsStrip } from "@/components/MenuActiveDealsStrip";
 import { OrderMenu } from "../order/OrderMenu";
@@ -71,12 +72,17 @@ function minToLabel(min: number): string {
 }
 
 export default async function MenuPreviewPage() {
-  const [products, eta, { userId }, activeDeals, closure] = await Promise.all([
+  // Customer Engagement Layer Ship 2 — fetch Budtender's Pick + New
+  // This Week badge data alongside menu products (5-min ISR window per
+  // `lib/budtender-picks.ts`). Defensive: empty Map on any failure so a
+  // brapp outage doesn't tank the page render.
+  const [products, eta, { userId }, activeDeals, closure, productFlags] = await Promise.all([
     getMenuProducts().catch(() => []),
     getPickupEta().catch(() => ({ depth: 0, label: "Usually ready in under 10 min" })),
     auth().catch(() => ({ userId: null as string | null })),
     getActiveDeals({ includeAppOnly: true }).catch(() => []),
     fetchClosureStatus({ revalidate: 60 }).catch(() => ({ isClosed: false, reason: null })),
+    fetchProductFlags(),
   ]);
   const status = getOrderingStatus();
   const signedIn = !!userId;
@@ -162,7 +168,7 @@ export default async function MenuPreviewPage() {
             MENU_PREVIEW_DIAL_IN_AUDIT §5. Sister glw same-push. */}
         <MenuActiveDealsStrip deals={activeDeals} treasureChestCount={0} />
       </div>
-      <OrderMenu products={products} signedIn={signedIn} activeDeals={activeDeals} initialLoyalty={initialLoyalty} dohVerified={dohVerified} />
+      <OrderMenu products={products} signedIn={signedIn} activeDeals={activeDeals} initialLoyalty={initialLoyalty} dohVerified={dohVerified} productFlags={productFlags} />
     </>
   );
 }
