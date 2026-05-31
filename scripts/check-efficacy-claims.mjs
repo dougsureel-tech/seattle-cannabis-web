@@ -70,6 +70,15 @@ const BARE_ADJECTIVE_LINE_EXEMPTIONS = [
   // posts.ts: customer voice in a modeled example question — not a shop claim.
   // "I'm new to cannabis, want a relaxing evening, prefer not to feel anxious"
   "want a relaxing evening, prefer not to feel anxious",
+  // pdp-helpers.ts (v34.045 PDP preview surface): EFFECT_CHIP_LIBRARY
+  // keyword arrays. These are MATCH KEYWORDS scanned against existing
+  // product notes, NOT customer-facing claim copy. The library comment
+  // explicitly anchors WAC 314-55-155 preference-context register; the
+  // chips render as preference labels (the shop is not claiming an
+  // effect — the chip surfaces what other customers have said). Pre-
+  // existing rescue surfaced 2026-05-30 during FAQ ship v34.105.
+  `{ label: "Relaxing", keywords: ["relax"`,
+  `{ label: "Energizing", keywords: ["energ"`,
 ];
 
 function walk(dir, out = []) {
