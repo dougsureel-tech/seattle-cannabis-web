@@ -86,7 +86,11 @@ export const BRAND_LOGOS_AVAILABLE: ReadonlySet<string> = new Set([
   "harmony-farms",
   "hazee",
   "hellavated",
-  "hemparillo",
+  // hemparillo REMOVED 2026-05-30 (Austin /menu-preview QA item #9):
+  // the on-disk PNG was actually a Happy Apple wordmark (wrong brand
+  // asset). Both the file and this slug entry were removed in the
+  // same commit so the manifest/disk lockstep gate stays green. Add
+  // back when a real Hemparillo logo asset is sourced.
   "heylo-cannabis",
   "hustler-s-ambition",
   "high-tide",
