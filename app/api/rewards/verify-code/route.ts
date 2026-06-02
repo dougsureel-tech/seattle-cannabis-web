@@ -139,14 +139,14 @@ export async function POST(req: NextRequest) {
   // Pull the most recent unconsumed-unexpired row for this phone. Hot
   // path uses the (phone, consumed_at, expires_at) composite index.
   const rows = (await sql`
-    SELECT id, code_hash, attempts
+    SELECT id, code_hash
     FROM loyalty_otp_codes
     WHERE phone = ${phoneE164}
       AND consumed_at IS NULL
       AND expires_at > NOW()
     ORDER BY created_at DESC
     LIMIT 1
-  `) as unknown as Array<{ id: string; code_hash: string; attempts: number }>;
+  `) as unknown as Array<{ id: string; code_hash: string }>;
 
   if (rows.length === 0) {
     return NextResponse.json(
@@ -157,13 +157,39 @@ export async function POST(req: NextRequest) {
 
   const row = rows[0];
 
-  if (row.attempts >= MAX_ATTEMPTS) {
-    // Mark consumed so this row can't be retried; force the customer
-    // to request a fresh code.
+  // Atomically claim one attempt against THIS code row BEFORE comparing.
+  // The prior shape read `attempts` in the SELECT above, then did a
+  // separate increment on mismatch — a check-then-act TOCTOU race: N
+  // concurrent requests all read attempts < MAX before any increment
+  // landed, so a burst (trivial to fire once the in-memory per-IP limiter
+  // is evaded by lambda cold-starts / spreading across instances) could
+  // get far more than MAX_ATTEMPTS guesses against one 6-digit code. This
+  // conditional UPDATE is atomic in Postgres: each concurrent request
+  // claims a distinct attempt number, and once `attempts` hits
+  // MAX_ATTEMPTS the WHERE stops matching — so AT MOST MAX_ATTEMPTS hash
+  // comparisons can ever run for a given code, regardless of concurrency
+  // or how many instances the attacker spreads across. This per-row
+  // atomic cap (NOT the in-memory IP limiter, which is now purely a
+  // DB-load-DoS guard) is the real brute-force defense. A separate
+  // per-phone cap is unnecessary on top of it: verify only ever targets
+  // the most-recent row (LIMIT 1 above), and minting more rows requires
+  // request-code — itself 5/hr/IP AND it SMSes the victim on each call.
+  const claim = (await sql`
+    UPDATE loyalty_otp_codes
+    SET attempts = attempts + 1
+    WHERE id = ${row.id}
+      AND consumed_at IS NULL
+      AND attempts < ${MAX_ATTEMPTS}
+    RETURNING attempts
+  `) as unknown as Array<{ attempts: number }>;
+
+  if (claim.length === 0) {
+    // Exhausted (or consumed) by the time we tried to claim — mark it
+    // consumed so it can't be retried and force a fresh code. Idempotent.
     await sql`
       UPDATE loyalty_otp_codes
       SET consumed_at = NOW()
-      WHERE id = ${row.id}
+      WHERE id = ${row.id} AND consumed_at IS NULL
     `;
     return NextResponse.json(
       { error: "Too many attempts. Request a new code." },
@@ -186,11 +212,9 @@ export async function POST(req: NextRequest) {
     timingSafeEqual(suppliedBuf, storedBuf);
 
   if (!ok) {
-    await sql`
-      UPDATE loyalty_otp_codes
-      SET attempts = attempts + 1
-      WHERE id = ${row.id}
-    `;
+    // Attempt already counted by the atomic claim above — do NOT increment
+    // again here. The prior shape double-counted on mismatch, silently
+    // halving the legit retry budget (a wrong guess burned 2 of MAX_ATTEMPTS).
     return NextResponse.json(
       { error: "Code is invalid or expired. Request a new one." },
       { status: 401 },
