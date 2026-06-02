@@ -1203,12 +1203,13 @@ export default async function HomePage() {
                         if (productPhotoPath) {
                           return (
                             <div role="img" aria-label={p.name} className="relative w-full h-full overflow-hidden">
-                              {/* eslint-disable-next-line @next/next/no-img-element */}
-                              <img
+                              <Image
                                 src={productPhotoPath}
                                 alt={p.name}
+                                fill
                                 loading="lazy"
-                                className="w-full h-full object-contain p-2"
+                                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                                className="object-contain p-2"
                               />
                             </div>
                           );
@@ -1222,12 +1223,13 @@ export default async function HomePage() {
                         if (placeholderPath) {
                           return (
                             <div role="img" aria-label={p.name} className="relative w-full h-full overflow-hidden">
-                              {/* eslint-disable-next-line @next/next/no-img-element */}
-                              <img
+                              <Image
                                 src={placeholderPath}
                                 alt={p.name}
+                                fill
                                 loading="lazy"
-                                className="w-full h-full object-cover"
+                                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                                className="object-cover"
                               />
                               <div
                                 className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/40 via-black/10 to-transparent pointer-events-none"
@@ -1365,12 +1367,13 @@ export default async function HomePage() {
                         if (productPhotoPath) {
                           return (
                             <div role="img" aria-label={p.name} className="relative w-full h-full overflow-hidden">
-                              {/* eslint-disable-next-line @next/next/no-img-element */}
-                              <img
+                              <Image
                                 src={productPhotoPath}
                                 alt={p.name}
+                                fill
                                 loading="lazy"
-                                className="w-full h-full object-contain p-2"
+                                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                                className="object-contain p-2"
                               />
                             </div>
                           );
@@ -1384,12 +1387,13 @@ export default async function HomePage() {
                         if (placeholderPath) {
                           return (
                             <div role="img" aria-label={p.name} className="relative w-full h-full overflow-hidden">
-                              {/* eslint-disable-next-line @next/next/no-img-element */}
-                              <img
+                              <Image
                                 src={placeholderPath}
                                 alt={p.name}
+                                fill
                                 loading="lazy"
-                                className="w-full h-full object-cover"
+                                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                                className="object-cover"
                               />
                               <div
                                 className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/40 via-black/10 to-transparent pointer-events-none"
