@@ -188,6 +188,17 @@ export function SiteHeader() {
                 dark/hero pages, primary on light pages. The site's most-tapped
                 CTA on every page now wears the consistent brand gradient. */}
             <Link
+              href="/sign-up"
+              title="20% off your first order"
+              className={`hidden lg:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-extrabold transition-all duration-200 hover:-translate-y-0.5 ${
+                dark
+                  ? "bg-violet-400/15 text-violet-200 border border-violet-400/40 hover:bg-violet-400/25"
+                  : "bg-indigo-100 text-indigo-800 border border-indigo-300 hover:bg-indigo-200"
+              }`}
+            >
+              <span aria-hidden="true">✨</span>20% off 1st order
+            </Link>
+            <Link
               href={withAttr("/menu", "header", "order-now")}
               className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-200 animate-gradient bg-[length:200%_auto] hover:-translate-y-0.5 ${
                 dark
@@ -331,9 +342,14 @@ export function SiteHeader() {
           <Link
             href="/sign-up"
             onClick={() => setOpen(false)}
-            className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-50 border border-indigo-200 text-indigo-800 text-sm font-bold hover:bg-indigo-100 transition-all"
+            className="flex flex-col items-center justify-center gap-0.5 px-4 py-3 rounded-xl bg-indigo-100 border-2 border-indigo-300 text-indigo-900 hover:bg-indigo-200 transition-all"
           >
-            <span aria-hidden="true">✨ </span>Create Account · 20% off first order
+            <span className="text-lg font-extrabold leading-tight">
+              <span aria-hidden="true">✨ </span>20% OFF your first order
+            </span>
+            <span className="text-xs font-semibold text-indigo-700">
+              Create a free account to claim
+            </span>
           </Link>
           {/* Mobile drawer Order Now — same gradient treatment as the
               header desktop button so the brand mark is consistent. */}
