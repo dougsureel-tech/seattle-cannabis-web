@@ -1860,7 +1860,9 @@ export const getStrainMatchedProducts = cache(async (
     strain_type: string | null; thc_pct: number | null; cbd_pct: number | null;
     unit_price: number | null; image_url: string | null; effects: string | null;
     terpenes: string | null; is_new: boolean; is_doh_compliant: boolean;
-  }>).map((r) => ({
+  }>)
+    .filter((r) => !isEmployeeSampleProduct(r.name, r.category))
+    .map((r) => ({
     id: r.id, name: r.name, brand: r.brand, category: r.category,
     strainType: r.strain_type, thcPct: r.thc_pct, cbdPct: r.cbd_pct,
     unitPrice: r.unit_price, imageUrl: r.image_url, effects: r.effects,
