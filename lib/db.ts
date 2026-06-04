@@ -5,6 +5,7 @@ import { scoreProduct, rankStrainMatches, type ScoredProduct } from "./strain-ma
 import type { Strain, LineageGraph } from "./strains";
 import { safeProductImageUrl } from "./banned-logo-url";
 import { withFloorFallback } from "./inventory-floor";
+import { isEmployeeSampleProduct } from "./sample-product-filter";
 
 export type VendorBrand = {
   id: string;
@@ -151,9 +152,12 @@ export async function getMenuProducts(): Promise<MenuProduct[]> {
   // Doug-gated flip per the mid-day product-disappearance risk he flagged
   // on the board. Default OFF preserves current customer-facing behavior.
   const filterMenuReady = process.env.MENU_READY_FILTER_ENABLED === "true";
-  const filtered = filterMenuReady
+  const menuReadyRows = filterMenuReady
     ? rows.filter((r) => r.menu_ready_at !== null)
     : rows;
+  const filtered = menuReadyRows.filter(
+    (r) => !isEmployeeSampleProduct(r.name as string | null, r.category as string | null),
+  );
   return filtered.map((r) => ({
     id: r.id as string,
     name: r.name as string,
@@ -253,7 +257,9 @@ export async function getProductsByIds(ids: string[]): Promise<MenuProduct[]> {
         AND li.qty > 0
     `,
   );
-  return rows.map((r) => ({
+  return rows
+    .filter((r) => !isEmployeeSampleProduct(r.name as string | null, r.category as string | null))
+    .map((r) => ({
     id: r.id as string,
     name: r.name as string,
     brand: (r.brand ?? null) as string | null,
@@ -447,7 +453,9 @@ export async function getFeaturedProducts(limit = 8): Promise<MenuProduct[]> {
     LIMIT ${limit}
   `;
   if (curated.length > 0) {
-    return curated.map((r) => ({
+    return curated
+      .filter((r) => !isEmployeeSampleProduct(r.name as string | null, r.category as string | null))
+      .map((r) => ({
       id: r.id as string,
       name: r.name as string,
       brand: (r.brand ?? null) as string | null,
@@ -527,21 +535,23 @@ export async function getFeaturedProducts(limit = 8): Promise<MenuProduct[]> {
       LIMIT ${limit}
     `,
   );
-  const mapped = rows.map((r) => ({
-    id: r.id as string,
-    name: r.name as string,
-    brand: (r.brand ?? null) as string | null,
-    category: (r.category ?? null) as string | null,
-    strainType: (r.strain_type ?? null) as string | null,
-    thcPct: (r.thc_pct ?? null) as number | null,
-    cbdPct: (r.cbd_pct ?? null) as number | null,
-    unitPrice: (r.unit_price ?? null) as number | null,
-    imageUrl: safeProductImageUrl(r.image_url as string | null | undefined),
-    effects: (r.effects ?? null) as string | null,
-    terpenes: (r.terpenes ?? null) as string | null,
-    isNew: false,
-    isDohCompliant: Boolean(r.is_doh_compliant),
-  }));
+  const mapped = rows
+    .filter((r) => !isEmployeeSampleProduct(r.name as string | null, r.category as string | null))
+    .map((r) => ({
+      id: r.id as string,
+      name: r.name as string,
+      brand: (r.brand ?? null) as string | null,
+      category: (r.category ?? null) as string | null,
+      strainType: (r.strain_type ?? null) as string | null,
+      thcPct: (r.thc_pct ?? null) as number | null,
+      cbdPct: (r.cbd_pct ?? null) as number | null,
+      unitPrice: (r.unit_price ?? null) as number | null,
+      imageUrl: safeProductImageUrl(r.image_url as string | null | undefined),
+      effects: (r.effects ?? null) as string | null,
+      terpenes: (r.terpenes ?? null) as string | null,
+      isNew: false,
+      isDohCompliant: Boolean(r.is_doh_compliant),
+    }));
   if (mapped.length < 4) {
     // Two-bucket: floor-only — featured fallback also customer-facing.
     const fallback = await withFloorFallback(
@@ -602,21 +612,23 @@ export async function getFeaturedProducts(limit = 8): Promise<MenuProduct[]> {
         LIMIT ${limit}
       `,
     );
-    return fallback.map((r) => ({
-      id: r.id as string,
-      name: r.name as string,
-      brand: (r.brand ?? null) as string | null,
-      category: (r.category ?? null) as string | null,
-      strainType: (r.strain_type ?? null) as string | null,
-      thcPct: (r.thc_pct ?? null) as number | null,
-      cbdPct: (r.cbd_pct ?? null) as number | null,
-      unitPrice: (r.unit_price ?? null) as number | null,
-      imageUrl: safeProductImageUrl(r.image_url as string | null | undefined),
-      effects: (r.effects ?? null) as string | null,
-      terpenes: (r.terpenes ?? null) as string | null,
-      isNew: false,
-      isDohCompliant: Boolean(r.is_doh_compliant),
-    }));
+    return fallback
+      .filter((r) => !isEmployeeSampleProduct(r.name as string | null, r.category as string | null))
+      .map((r) => ({
+        id: r.id as string,
+        name: r.name as string,
+        brand: (r.brand ?? null) as string | null,
+        category: (r.category ?? null) as string | null,
+        strainType: (r.strain_type ?? null) as string | null,
+        thcPct: (r.thc_pct ?? null) as number | null,
+        cbdPct: (r.cbd_pct ?? null) as number | null,
+        unitPrice: (r.unit_price ?? null) as number | null,
+        imageUrl: safeProductImageUrl(r.image_url as string | null | undefined),
+        effects: (r.effects ?? null) as string | null,
+        terpenes: (r.terpenes ?? null) as string | null,
+        isNew: false,
+        isDohCompliant: Boolean(r.is_doh_compliant),
+      }));
   }
   return mapped;
 }
@@ -854,7 +866,9 @@ export async function getJustInProducts(limit = 12): Promise<MenuProduct[]> {
       LIMIT ${limit}
     `,
   );
-  return rows.map((r) => ({
+  return rows
+    .filter((r) => !isEmployeeSampleProduct(r.name as string | null, r.category as string | null))
+    .map((r) => ({
     id: r.id as string,
     name: r.name as string,
     brand: (r.brand ?? null) as string | null,
@@ -942,7 +956,9 @@ export async function getTreasureChestProducts(limit = 60): Promise<MenuProduct[
       LIMIT ${limit}
     `,
   );
-  return rows.map((r) => ({
+  return rows
+    .filter((r) => !isEmployeeSampleProduct(r.name as string | null, r.category as string | null))
+    .map((r) => ({
     id: r.id as string,
     name: r.name as string,
     brand: (r.brand ?? null) as string | null,
@@ -1161,7 +1177,9 @@ export async function getCategoryPreviewProducts(
       LIMIT ${limit}
     `,
   );
-  return rows.map((r) => ({
+  return rows
+    .filter((r) => !isEmployeeSampleProduct(r.name as string | null, r.category as string | null))
+    .map((r) => ({
     id: r.id as string,
     name: r.name as string,
     brand: (r.brand ?? null) as string | null,
@@ -1695,7 +1713,7 @@ export async function getBrandProducts(vendorId: string) {
       ORDER BY p.category NULLS LAST, p.brand NULLS LAST, p.name
     `,
   );
-  return rows as Array<{
+  return (rows as Array<{
     id: string;
     name: string;
     brand: string | null;
@@ -1707,7 +1725,7 @@ export async function getBrandProducts(vendorId: string) {
     image_url: string | null;
     effects: string | null;
     terpenes: string | null;
-  }>;
+  }>).filter((r) => !isEmployeeSampleProduct(r.name, r.category));
 }
 // ─── Strain↔menu integration ──────────────────────────────────────────────
 //
