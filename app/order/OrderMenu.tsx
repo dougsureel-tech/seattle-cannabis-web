@@ -1333,6 +1333,7 @@ export function OrderMenu({
 
               {(strainFilter || brandFilter || priceTier !== "all" || thcTier !== "all" || sortBy !== "default") && (
                 <button type="button"
+                  aria-label="Clear all filters"
                   onClick={() => {
                     setStrainFilter(null);
                     setBrandFilter(null);
