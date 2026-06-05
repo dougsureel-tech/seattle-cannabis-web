@@ -83,6 +83,8 @@ export function RecentlyViewedAutoStrip({ accent = "indigo" }: { accent?: "green
                         fill
                         sizes="(max-width: 640px) 128px, 144px"
                         className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        loading="lazy"
+                        decoding="async"
                       />
                     );
                   }

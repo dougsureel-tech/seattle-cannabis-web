@@ -318,11 +318,11 @@ export function StrainFinderClient() {
               id="capture-headline"
               className="text-2xl sm:text-3xl font-bold tracking-tight text-stone-900"
             >
-              Get your match emailed + a first-visit deal
+              Want your match emailed?
             </h2>
             <p className="text-sm text-stone-600">
-              We&rsquo;ll send your match + a first-visit deal. Reply STOP to
-              unsubscribe.
+              Drop your email — we&rsquo;ll send your picks and you&rsquo;re in
+              the system for next time. Reply STOP anytime.
             </p>
           </div>
 
@@ -354,8 +354,8 @@ export function StrainFinderClient() {
               {captureState === "submitting"
                 ? "Sending…"
                 : captureState === "success"
-                  ? "Sent — loading your matches…"
-                  : "Send it"}
+                  ? "On its way — loading your picks…"
+                  : "Email my picks"}
             </button>
 
             {captureError && (
