@@ -96,7 +96,7 @@ export async function AnnouncementBar() {
       <span className="hidden sm:block opacity-40">|</span>
       <a
         href={STORE.shopUrl}
-        className="opacity-75 hover:opacity-100 transition-opacity hidden sm:block font-semibold"
+        className="opacity-90 sm:opacity-75 hover:opacity-100 transition-opacity font-semibold"
       >
         Order Online — Save 20% ↗
       </a>
