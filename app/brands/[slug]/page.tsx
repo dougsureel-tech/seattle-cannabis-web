@@ -6,6 +6,7 @@ import { getBrandBySlug, getBrandProducts, getActiveBrands, getActiveDeals } fro
 import { effectivePriceFor, findDealForProduct, ONLINE_DISCOUNT_PCT } from "@/lib/online-pricing";
 import { getBrandCopy } from "@/lib/brand-copy";
 import { withAttr } from "@/lib/attribution";
+import { menuLink } from "@/lib/menu-routing";
 import { isBannedLogoUrl } from "@/lib/banned-logo-url";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { getProductPlaceholderGradient } from "@/lib/product-placeholder";
@@ -571,7 +572,7 @@ export default async function BrandPage({ params }: Props) {
             <div className="text-4xl" aria-hidden="true">🌿</div>
             <p className="text-stone-500 font-medium">No products currently in stock</p>
             <a
-              href={withAttr(`${STORE.shopUrl}?brand=${slug}`, "brand", slug)}
+              href={withAttr(menuLink(`${STORE.shopUrl}?brand=${slug}`), "brand", slug)}
               className="text-sm text-indigo-700 font-semibold hover:underline"
             >
               Browse full menu →
