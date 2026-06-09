@@ -25,6 +25,7 @@ import { RecentlyViewedAutoStrip } from "@/components/RecentlyViewedAutoStrip";
 import { HeroBackground } from "@/components/HeroBackground";
 import { StrainPickOfWeek } from "@/components/StrainPickOfWeek";
 import { NeighborhoodMap } from "@/components/NeighborhoodMap";
+import { NATIVE_MENU_LIVE } from "@/lib/menu-routing";
 import { NEIGHBORHOODS } from "@/lib/neighborhoods";
 import { safeJsonLd } from "@/lib/json-ld-safe";
 import { NEAR_TOWNS } from "@/lib/near-towns";
@@ -245,7 +246,10 @@ export default async function HomePage() {
       {/* ─── Pick of the Week (Ship 0.2 Strain Tree arc) ──────────────── */}
       {/* Async Server Component. Returns null when flag-OFF OR no pick    */}
       {/* published → entire <section> unmounts (comms-expert spec).        */}
-      <StrainPickOfWeek />
+      {/* INTERIM (iHeartJane era): hidden until the native menu is live —  */}
+      {/* a single-strain spotlight invites a scoped click iHJ can't honor. */}
+      {/* Flip NEXT_PUBLIC_NATIVE_MENU_LIVE=true at launch to restore.      */}
+      {NATIVE_MENU_LIVE && <StrainPickOfWeek />}
       {/* ─── Hero ─────────────────────────────────────────────────────────── */}
       {/* bg-gradient on the section is the static fallback that paints
           identically to HeroBackground's Layer 1; the component then renders
@@ -587,8 +591,11 @@ export default async function HomePage() {
       {/* ─── Recently-viewed auto-strip — returning visitors get a fast-lane
             back to products they were looking at. Hidden when empty (no
             localStorage history) so it doesn't take page real-estate from
-            first-timers. Indigo accent matches the Seattle theme. */}
-      <RecentlyViewedAutoStrip accent="indigo" />
+            first-timers. Indigo accent matches the Seattle theme.
+            INTERIM (iHeartJane era): hidden until the native menu is live —
+            "jump back to that product" is a scoped promise iHJ can't honor.
+            Flip NEXT_PUBLIC_NATIVE_MENU_LIVE=true at launch to restore. */}
+      {NATIVE_MENU_LIVE && <RecentlyViewedAutoStrip accent="indigo" />}
 
       {/* ─── Why Customers Love Us — value-prop card grid mirroring the
             Wenatchee pattern, with Seattle-specific differentiators. Sits
@@ -908,7 +915,12 @@ export default async function HomePage() {
           outside the SEO_STRAIN_WAVE-current set; this homepage link drives
           customer-side discoverability + builds internal-link signal Google
           activates when the wave bumps. Two CTAs: primary library browse,
-          secondary 3-question quiz. WAC 314-55-155 STRICT — no effect claims. */}
+          secondary 3-question quiz. WAC 314-55-155 STRICT — no effect claims.
+          INTERIM (iHeartJane era): the library + "find your strain" quiz steer
+          customers toward scoped product discovery iHJ can't fulfill, so this
+          whole callout is hidden until the native menu is live. Flip
+          NEXT_PUBLIC_NATIVE_MENU_LIVE=true at launch to restore. */}
+      {NATIVE_MENU_LIVE && (
       <section className="bg-stone-50 border-b border-stone-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
           <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-6 items-center">
@@ -939,6 +951,7 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ─── Where you headed? — pick-the-trip vibe section. Seward Park is
               literally next door (Lake Washington swim spot, ~5 min walk).
@@ -1157,8 +1170,13 @@ export default async function HomePage() {
       {/* Auto-derived from inventory_snapshots first_seen ≤ 7d. Mirror of
           greenlife-web v3.260. Distinct from the curated /admin/marketing/featured
           surface — that's "hot picks", this is "what's new". CTA links to /menu
-          (the iHeartJane Boost embed in prod), safe distinct from /order tree dev. */}
-      {justIn.length > 0 && (
+          (the iHeartJane Boost embed in prod), safe distinct from /order tree dev.
+          INTERIM (iHeartJane era): a product grid of specific items reads as a
+          shoppable surface, but each card just lands on the unfiltered iHJ menu —
+          which is exactly the "leads me to products I can't order" confusion. Hide
+          the rail until the native menu honors product links. Flip
+          NEXT_PUBLIC_NATIVE_MENU_LIVE=true at launch to restore. */}
+      {NATIVE_MENU_LIVE && justIn.length > 0 && (
         <section className="py-10 sm:py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <div className="flex items-end justify-between mb-8 gap-4">
