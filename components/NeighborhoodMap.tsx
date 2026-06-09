@@ -27,6 +27,16 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { NEIGHBORHOODS, SHOP_PIN, directionsUrl, type Neighborhood } from "@/lib/neighborhoods";
 import { dealForNeighborhood, type NeighborhoodDeal } from "@/lib/neighborhood-deals";
+import { NATIVE_MENU_LIVE } from "@/lib/menu-routing";
+
+// iHeartJane interim: neighborhood deal-of-the-day surfaces (pins, sidebar
+// pills, popovers, mobile cards, the "Deal today" legend) point at scoped
+// products the embedded Boost menu can't fulfill. While the native menu is
+// off, every deal lookup short-circuits to null so the map keeps its
+// standalone value (drive times, the Link, directions) without advertising
+// deals customers can't reach. Flip NEXT_PUBLIC_NATIVE_MENU_LIVE=true to restore.
+const dealForNeighborhoodGated = (id: string): NeighborhoodDeal | null =>
+  NATIVE_MENU_LIVE ? dealForNeighborhood(id) : null;
 
 // Approximate Light Rail station coordinates on the 0–100 stylized canvas.
 // Mt Baker → Columbia City → Othello matches the actual N-S Link sequence
@@ -66,7 +76,7 @@ export function NeighborhoodMap({ destinationAddress, fallbackDealShort }: Props
   const dealMap = useMemo(() => {
     const m = new Map<string, NeighborhoodDeal | null>();
     for (const n of NEIGHBORHOODS) {
-      m.set(n.id, dealForNeighborhood(n.id));
+      m.set(n.id, dealForNeighborhoodGated(n.id));
     }
     return m;
   }, []);
@@ -112,7 +122,7 @@ export function NeighborhoodMap({ destinationAddress, fallbackDealShort }: Props
   }
 
   const activeNeighborhood = active ? NEIGHBORHOODS.find((n) => n.id === active) : null;
-  const activeDeal = active ? dealForNeighborhood(active) : null;
+  const activeDeal = active ? dealForNeighborhoodGated(active) : null;
 
   return (
     <section
@@ -132,7 +142,7 @@ export function NeighborhoodMap({ destinationAddress, fallbackDealShort }: Props
           </h2>
           <p className="text-stone-600 mt-3 text-base max-w-2xl mx-auto leading-relaxed">
             Rainier Valley to Rainier Beach, Beacon Hill to Seward Park — tap your spot to see
-            drive time, the Link, and what&apos;s good at the counter today.
+            drive time, the Link, and directions to the shop.
           </p>
         </div>
 
@@ -172,7 +182,7 @@ export function NeighborhoodMap({ destinationAddress, fallbackDealShort }: Props
                 <Legend swatch="bg-fuchsia-400" label="Our shop" />
                 <Legend swatch="bg-indigo-300" label="Neighborhood" />
                 <Legend swatch="bg-indigo-200" label="Light Rail" />
-                <Legend swatch="bg-amber-400" label="Deal today" />
+                {NATIVE_MENU_LIVE && <Legend swatch="bg-amber-400" label="Deal today" />}
               </div>
             </div>
 
@@ -254,7 +264,7 @@ export function NeighborhoodMap({ destinationAddress, fallbackDealShort }: Props
         {/* Mobile: stacked card list (no SVG). Same data, same CTAs. */}
         <ul className="sm:hidden space-y-3">
           {NEIGHBORHOODS.map((n) => {
-            const deal = dealForNeighborhood(n.id);
+            const deal = dealForNeighborhoodGated(n.id);
             return (
               <li
                 key={n.id}
@@ -468,7 +478,7 @@ function MapSvg({
           neighborhood={n}
           isActive={active === n.id}
           onActivate={onActivate}
-          hasDeal={dealForNeighborhood(n.id) !== null}
+          hasDeal={dealForNeighborhoodGated(n.id) !== null}
           enterDelayMs={reduceMotion ? 0 : i * 50}
         />
       ))}

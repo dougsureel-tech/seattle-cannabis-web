@@ -8,6 +8,7 @@ import { getStrainsInCurrentWave } from "@/lib/strains";
 import { STRAIN_FAMILIES } from "@/lib/strain-families";
 import { LEARN_HUB_TOPICS } from "@/lib/learn-hub";
 import { isBannedLogoUrl } from "@/lib/banned-logo-url";
+import { NATIVE_MENU_LIVE } from "@/lib/menu-routing";
 import { BRIEF_LIBRARY } from "@/lib/ambassador-briefs";
 
 // Revalidate every 30 minutes at CDN edge — sitemap pulls from DB
@@ -55,11 +56,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // /order REMOVED from sitemap — proxy.ts 307-redirects /order/* → /menu.
     // Listing redirected URLs wastes Google crawl budget. Restore when
     // proxy redirect is removed. Sister glw v7.665. (v8.805)
-    { url: `${STORE.website}/deals`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
-    // /treasure-chest = clearance-lane surface (v5.045). Was missing from
-    // the sitemap → Google never indexed it. Daily changeFrequency since
-    // products move in/out as inventory turns. Sister: glw v4.825.
-    { url: `${STORE.website}/treasure-chest`, lastModified: new Date(), changeFrequency: "daily", priority: 0.7 },
+    // iHeartJane interim: /deals + /treasure-chest dead-end on the Boost
+    // embed (deep-links don't resolve), so stop advertising them in the
+    // sitemap while NATIVE_MENU_LIVE is off. The 301→/ redirects stay in
+    // next.config.ts to preserve indexed-URL equity; we just don't invite
+    // fresh crawls. Restore both entries when the native menu ships.
+    ...(NATIVE_MENU_LIVE
+      ? ([
+          { url: `${STORE.website}/deals`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
+          { url: `${STORE.website}/treasure-chest`, lastModified: new Date(), changeFrequency: "daily", priority: 0.7 },
+        ] as const)
+      : []),
     { url: `${STORE.website}/find-your-strain`, lastModified: STATIC_LASTMOD, changeFrequency: "weekly", priority: 0.8 },
     // /strains directory + 4 per-type landing pages — SEO audit Tier-1
     // long-tail intent capture ("indica strains Seattle", "sativa
@@ -300,12 +307,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // 404s on expired ones and Google penalizes sitemaps with dead URLs.
   // lastModified = endDate when present so search engines see a stable
   // signal per deal rather than every-page-changes-every-day noise.
-  const dealPages: MetadataRoute.Sitemap = deals.map((d) => ({
-    url: `${STORE.website}/deals/${d.id}`,
-    lastModified: d.endDate ? new Date(d.endDate) : new Date(),
-    changeFrequency: "daily" as const,
-    priority: 0.85,
-  }));
+  // Per-deal deep pages suppressed while NATIVE_MENU_LIVE is off — same
+  // iHeartJane-interim reason as the /deals + /treasure-chest entries above.
+  const dealPages: MetadataRoute.Sitemap = NATIVE_MENU_LIVE
+    ? deals.map((d) => ({
+        url: `${STORE.website}/deals/${d.id}`,
+        lastModified: d.endDate ? new Date(d.endDate) : new Date(),
+        changeFrequency: "daily" as const,
+        priority: 0.85,
+      }))
+    : [];
 
   // /near/<area> service-area landing pages — sister of glw v7.305.
   // Static, neighborhood-data driven from `lib/near-towns.ts`. Detail-page

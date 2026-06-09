@@ -4,6 +4,7 @@ import { NEAR_TOWNS } from "@/lib/near-towns";
 import { BUILD_VERSION, BUILD_SHA } from "@/lib/version";
 import { PrimaryCTA } from "./PrimaryCTA";
 import { withAttr } from "@/lib/attribution";
+import { NATIVE_MENU_LIVE } from "@/lib/menu-routing";
 import { FeedbackModalTrigger } from "@/components/FeedbackModalTrigger";
 
 // Customer Engagement Layer Ship 4 — public-site `/feedback` modal entry.
@@ -233,7 +234,9 @@ export function SiteFooter() {
               // /order proxies to /menu (proxy.ts 307). iHJ Boost cart
               // is inline at /menu. Sister glw same-fix.
               { href: "/menu", label: "Order for Pickup" },
-              { href: "/deals", label: "Deals & Specials" },
+              // iHeartJane interim: /deals dead-ends on the Boost embed, so
+              // drop the footer entry until NATIVE_MENU_LIVE flips back on.
+              ...(NATIVE_MENU_LIVE ? [{ href: "/deals", label: "Deals & Specials" }] : []),
               { href: "/heroes", label: "Heroes Discount" },
               { href: "/rewards", label: "Rewards" },
               { href: "/find-your-strain", label: "Find your strain" },

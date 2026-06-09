@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { STORE, DEFAULT_OG_IMAGE} from "@/lib/store";
 import { withAttr } from "@/lib/attribution";
+import { NATIVE_MENU_LIVE } from "@/lib/menu-routing";
 import { safeJsonLd } from "@/lib/json-ld-safe";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { TIERS } from "@/lib/loyalty-tiers";
@@ -114,7 +115,7 @@ const FAQS: { q: string; a: string; tag?: string; rich?: ReactNode }[] = [
     // "Wisdom" not "Senior" per Doug 2026-05 dignity-rename doctrine —
     // build-gate enforced.
     q: "Do you offer any special discounts?",
-    a: `Yes — we run several. (1) Heroes service discount: 30% off for active military, veterans, first responders (police, fire, EMS), healthcare workers, and K-12 teachers. (2) First-visit online order: 20% off when you place your first pickup order through our menu. (3) Loyalty rewards: every purchase earns points that redeem on a sliding ladder up to 30% off. (4) Daily deals: a rotating mix of category, brand, and storewide specials at ${STORE.website}/deals. Ask in-store about additional Wisdom and morning specials. Discounts don't combine — you always get the biggest one that applies. Heroes details + how to verify: ${STORE.website}/heroes.`,
+    a: `Yes — we run several. (1) Heroes service discount: 30% off for active military, veterans, first responders (police, fire, EMS), healthcare workers, and K-12 teachers. (2) First-visit online order: 20% off when you place your first pickup order through our menu. (3) Loyalty rewards: every purchase earns points that redeem on a sliding ladder up to 30% off. (4) Daily deals: a rotating mix of category, brand, and storewide specials${NATIVE_MENU_LIVE ? ` at ${STORE.website}/deals` : " — ask a budtender for what's live today"}. Ask in-store about additional Wisdom and morning specials. Discounts don't combine — you always get the biggest one that applies. Heroes details + how to verify: ${STORE.website}/heroes.`,
     rich: (
       <div className="space-y-4">
         <p>Yes — we run several. Discounts don&rsquo;t combine; you always get the biggest one that applies.</p>
@@ -158,7 +159,11 @@ const FAQS: { q: string; a: string; tag?: string; rich?: ReactNode }[] = [
             </div>
             <p className="mt-1 text-stone-600">
               A rotating mix of category, brand, vendor-day, and storewide specials.{" "}
-              <Link href="/deals" className="font-semibold text-indigo-800 underline decoration-indigo-300 underline-offset-2 hover:decoration-indigo-600">See today&rsquo;s deals →</Link>
+              {NATIVE_MENU_LIVE ? (
+                <Link href="/deals" className="font-semibold text-indigo-800 underline decoration-indigo-300 underline-offset-2 hover:decoration-indigo-600">See today&rsquo;s deals →</Link>
+              ) : (
+                <span className="text-stone-500">Ask a budtender for what&rsquo;s live today.</span>
+              )}
             </p>
           </li>
           <li className="rounded-xl border border-stone-200 bg-stone-50 p-4">
@@ -248,7 +253,7 @@ const FAQS: { q: string; a: string; tag?: string; rich?: ReactNode }[] = [
   {
     tag: "Rewards",
     q: "Do you offer deals or loyalty rewards?",
-    a: `Yes. Today's deals are at ${STORE.website}/deals — usually a rotating mix of % off categories, brand spotlights, vendor-day pricing, and weekly recurring specials. Loyalty is built in: every purchase earns points, and points redeem on a sliding ladder — 50pt for 5% off, 100pt for 10%, on up to 30% off at 300-400pt (redeemable when you're not also using a promo; best discount applies — discounts don't combine). Tiers (Visitor → Regular → Local → Family) unlock automatically as you visit; the higher you go, the bigger the perks. Sign up at ${STORE.website}/sign-up — first-time online orders qualify for 20% off.`,
+    a: `Yes. ${NATIVE_MENU_LIVE ? `Today's deals are at ${STORE.website}/deals — usually` : "We run daily specials —"} a rotating mix of % off categories, brand spotlights, vendor-day pricing, and weekly recurring specials${NATIVE_MENU_LIVE ? "" : "; ask a budtender for what's live today"}. Loyalty is built in: every purchase earns points, and points redeem on a sliding ladder — 50pt for 5% off, 100pt for 10%, on up to 30% off at 300-400pt (redeemable when you're not also using a promo; best discount applies — discounts don't combine). Tiers (Visitor → Regular → Local → Family) unlock automatically as you visit; the higher you go, the bigger the perks. Sign up at ${STORE.website}/sign-up — first-time online orders qualify for 20% off.`,
     // Austin #16 — visual loyalty tier ladder + points-redeem ladder so
     // customers can see at a glance what unlocks at each step. Tiers are
     // sourced from lib/loyalty-tiers.ts (SSoT) so the ladder can't drift
@@ -256,7 +261,12 @@ const FAQS: { q: string; a: string; tag?: string; rich?: ReactNode }[] = [
     rich: (
       <div className="space-y-5">
         <p>
-          <Link href="/deals" className="font-semibold text-indigo-800 underline decoration-indigo-300 underline-offset-2 hover:decoration-indigo-600">Today&rsquo;s deals →</Link> are a rotating mix of category, brand, vendor-day, and storewide specials. Loyalty is built in: every purchase earns points, and tiers unlock automatically as you visit.
+          {NATIVE_MENU_LIVE ? (
+            <><Link href="/deals" className="font-semibold text-indigo-800 underline decoration-indigo-300 underline-offset-2 hover:decoration-indigo-600">Today&rsquo;s deals →</Link> are a rotating mix of category, brand, vendor-day, and storewide specials.</>
+          ) : (
+            <>Daily deals are a rotating mix of category, brand, vendor-day, and storewide specials — ask a budtender for what&rsquo;s live today.</>
+          )}{" "}
+          Loyalty is built in: every purchase earns points, and tiers unlock automatically as you visit.
         </p>
 
         <div>
