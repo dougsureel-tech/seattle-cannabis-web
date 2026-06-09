@@ -25,7 +25,7 @@ import { RecentlyViewedAutoStrip } from "@/components/RecentlyViewedAutoStrip";
 import { HeroBackground } from "@/components/HeroBackground";
 import { StrainPickOfWeek } from "@/components/StrainPickOfWeek";
 import { NeighborhoodMap } from "@/components/NeighborhoodMap";
-import { NATIVE_MENU_LIVE } from "@/lib/menu-routing";
+import { NATIVE_MENU_LIVE, menuLink } from "@/lib/menu-routing";
 import { NEIGHBORHOODS } from "@/lib/neighborhoods";
 import { safeJsonLd } from "@/lib/json-ld-safe";
 import { NEAR_TOWNS } from "@/lib/near-towns";
@@ -118,7 +118,7 @@ const CATEGORIES = [
     icon: "🌿",
     label: "Flower",
     desc: "Indoor, outdoor & greenhouse",
-    href: "/menu",
+    href: menuLink("/menu?category=flower"),
     color: "from-green-600 to-emerald-800",
     glow: "hover:shadow-emerald-700/40",
   },
@@ -126,7 +126,7 @@ const CATEGORIES = [
     icon: "🍬",
     label: "Edibles",
     desc: "Gummies, chocolates & more",
-    href: "/menu",
+    href: menuLink("/menu?category=edibles"),
     color: "from-pink-400 to-rose-600",
     glow: "hover:shadow-rose-600/40",
   },
@@ -134,7 +134,7 @@ const CATEGORIES = [
     icon: "💨",
     label: "Vapes",
     desc: "Carts & all-in-ones",
-    href: "/menu",
+    href: menuLink("/menu?category=vapes"),
     color: "from-indigo-500 to-blue-800",
     glow: "hover:shadow-blue-700/40",
   },
@@ -142,7 +142,7 @@ const CATEGORIES = [
     icon: "💎",
     label: "Concentrates",
     desc: "Wax, live resin & rosin",
-    href: "/menu",
+    href: menuLink("/menu?category=concentrates"),
     color: "from-amber-400 to-orange-600",
     glow: "hover:shadow-orange-600/40",
   },
@@ -150,7 +150,7 @@ const CATEGORIES = [
     icon: "🫙",
     label: "Pre-Rolls",
     desc: "Singles & multi-packs",
-    href: "/menu",
+    href: menuLink("/menu?category=pre-rolls"),
     color: "from-orange-500 to-red-700",
     glow: "hover:shadow-red-700/40",
   },
@@ -158,7 +158,7 @@ const CATEGORIES = [
     icon: "🧪",
     label: "Tinctures",
     desc: "Measured drops & capsules",
-    href: "/menu",
+    href: menuLink("/menu?category=tinctures"),
     color: "from-indigo-500 to-violet-700",
     glow: "hover:shadow-violet-700/40",
   },
