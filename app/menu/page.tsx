@@ -13,6 +13,7 @@ import { ClosureBanner } from "@/components/ClosureBanner";
 import { VendorAdSlot } from "@/components/VendorAdSlot";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { safeJsonLd } from "@/lib/json-ld-safe";
+import { NATIVE_MENU_LIVE } from "@/lib/menu-routing";
 
 // /menu = iHeartJane Jane Boost (iframeless) embed. Customer stays on
 // seattlecannabis.co — the Boost JS module hydrates the menu inline.
@@ -210,11 +211,17 @@ export default async function MenuPage() {
           is empty (no skeleton, no placeholder — empty is worse than the
           iframe alone). Pure additive: <JaneMenu> below renders
           unchanged regardless. */}
-      <MenuTopDealsRail deals={deals} />
+      {/* iHeartJane interim: deals rails point to items the embedded Boost menu
+          can't fulfill (confuses customers). Hidden until the native menu
+          launches — flip NEXT_PUBLIC_NATIVE_MENU_LIVE=true to restore. The
+          JaneMenu embed below is untouched. */}
+      {NATIVE_MENU_LIVE && <MenuTopDealsRail deals={deals} />}
       <JaneMenu storeId={IHEARTJANE_STORE_ID} embedConfigId={IHEARTJANE_EMBED_CONFIG_ID} />
-      <MenuActiveDealsStrip deals={deals} treasureChestCount={treasureChestCount} />
+      {NATIVE_MENU_LIVE && (
+        <MenuActiveDealsStrip deals={deals} treasureChestCount={treasureChestCount} />
+      )}
       <AppOnlyDealsFilter />
-      <MenuFallback featuredDeal={featuredDeal} />
+      <MenuFallback featuredDeal={NATIVE_MENU_LIVE ? featuredDeal : null} />
       {/* Get involved — cross-links to /community + /community/ambassador.
           Sister to /community hub cross-link section (v31.405). /menu is
           the highest-traffic public surface; adding a small ambassador +

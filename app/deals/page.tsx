@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { NATIVE_MENU_LIVE } from "@/lib/menu-routing";
 import { STORE } from "@/lib/store";
 import { getActiveDeals } from "@/lib/db";
 import { DealArt } from "@/components/DealArt";
@@ -57,6 +59,8 @@ function normalizeCat(cat: string | null): FilterCat | "all" {
 }
 
 export default async function DealsPage({ searchParams }: Props) {
+  // iHeartJane interim — deals point to items the embedded Boost menu can't fulfill (confuses customers). Hidden until the native menu launches; flip NEXT_PUBLIC_NATIVE_MENU_LIVE=true to restore (code stays intact).
+  if (!NATIVE_MENU_LIVE) redirect("/");
   const sp = await searchParams;
   const activeFilter = normalizeCat(sp.cat ?? null);
   // PWA-install detection — cookie set by /api/track-install on first

@@ -585,7 +585,7 @@ export default async function HomePage() {
             seam (data-neighborhood + localStorage.sc_last_neighborhood). */}
       <NeighborhoodMap
         destinationAddress={STORE.address.full}
-        fallbackDealShort={deals[0]?.short ?? null}
+        fallbackDealShort={NATIVE_MENU_LIVE ? (deals[0]?.short ?? null) : null}
       />
 
       {/* ─── Recently-viewed auto-strip — returning visitors get a fast-lane
@@ -788,7 +788,10 @@ export default async function HomePage() {
             sees "20% off Flower today" alongside "what's good?", instead
             of needing to dig into /deals. */}
       <AppOnlyDealsFilter />
-      {deals.length > 0 && (
+      {/* iHeartJane interim: deals point to items the embedded Boost menu can't
+          fulfill (confuses customers). Hidden until the native menu launches —
+          flip NEXT_PUBLIC_NATIVE_MENU_LIVE=true to restore. */}
+      {NATIVE_MENU_LIVE && deals.length > 0 && (
         <section className="bg-gradient-to-b from-amber-50/70 via-white to-white border-b border-stone-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
             <div className="flex items-end justify-between gap-3 mb-5 flex-wrap">
