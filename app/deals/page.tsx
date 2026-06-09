@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { NATIVE_MENU_LIVE } from "@/lib/menu-routing";
-import { STORE } from "@/lib/store";
+import { STORE, STORE_TZ, isOpenNow, nextOpenLabel, minutesUntilClose } from "@/lib/store";
 import { getActiveDeals } from "@/lib/db";
+import { DealCountdown } from "@/components/DealCountdown";
+import { computeDealCountdown } from "@/lib/deal-countdown";
 import { DealArt } from "@/components/DealArt";
 import { matchDealVendor } from "@/lib/deal-vendor-match";
 import { withAttr } from "@/lib/attribution";
@@ -41,14 +43,11 @@ export const metadata: Metadata = {
   },
 };
 
-function fmtEndDate(iso: string | null): string {
-  if (!iso) return "Ongoing";
-  const d = new Date(`${iso}T12:00:00`);
-  return d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
-}
-
 type Props = { searchParams: Promise<{ cat?: string }> };
 
+// Order matters — these are the chip labels in render order. "All" first
+// so the default state always reads as "showing everything." Categories
+// derived from the deal.appliesTo bucket labels we set in /admin/deals.
 const FILTER_CATS = ["flower", "pre-rolls", "vapes", "concentrates", "edibles", "beverages"] as const;
 type FilterCat = (typeof FILTER_CATS)[number];
 
@@ -75,6 +74,8 @@ export default async function DealsPage({ searchParams }: Props) {
       ? allDeals
       : allDeals.filter((d) => normalizeCat(d.appliesTo) === activeFilter);
 
+  // Per-category counts — drives the chip badges so customers know which
+  // filters have content vs which would land them on an empty state.
   const catCounts: Record<FilterCat | "all", number> = {
     all: allDeals.length,
     flower: 0,
@@ -88,6 +89,16 @@ export default async function DealsPage({ searchParams }: Props) {
     const c = normalizeCat(d.appliesTo);
     if (c !== "all") catCounts[c] += 1;
   }
+
+  const open = isOpenNow();
+  const statusLabel = nextOpenLabel();
+  const today = new Date().toLocaleDateString("en-US", {
+    weekday: "long",
+    timeZone: STORE_TZ,
+  });
+  const todayHours = STORE.hours.find((h) => h.day === today);
+  const minsLeft = minutesUntilClose();
+  const closingSoon = minsLeft != null && minsLeft <= 90 && minsLeft > 0;
 
   // SEO: Each deal becomes a SpecialAnnouncement so AI engines and Google's
   // local-pack carry the promo text verbatim. Limited-time deals win here.
@@ -137,27 +148,207 @@ export default async function DealsPage({ searchParams }: Props) {
         <VendorAdSlot slot="deals_page_top" />
       </div>
 
-      <section className="relative overflow-hidden bg-gradient-to-br from-indigo-700 via-indigo-800 to-indigo-900 text-white">
+      {/* ─── Hero ─────────────────────────────────────────────────────────── */}
+      {/* Mirrors homepage hero: indigo-950 base + radial indigo glow + DEALS
+          eyebrow + 6xl headline. Right-side card carries the live deals
+          counter and store hours / closes-in urgency; collapses into a thin
+          status bar on mobile. Sister of greenlife-web deals hero. */}
+      <section className="relative bg-indigo-950 text-white overflow-hidden">
         <div
-          className="absolute inset-0 opacity-10"
+          className="absolute inset-0 opacity-[0.04]"
           style={{
-            backgroundImage: "radial-gradient(circle, #fff 1.5px, transparent 1.5px)",
-            backgroundSize: "32px 32px",
+            backgroundImage: "radial-gradient(circle, #fff 1px, transparent 1px)",
+            backgroundSize: "28px 28px",
           }}
         />
-        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 py-16 sm:py-20 text-center">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-indigo-200">Today&apos;s deals</p>
-          <h1 className="mt-3 text-4xl sm:text-5xl font-extrabold tracking-tight">
-            What&apos;s on sale right now.
-          </h1>
-          <p className="mt-3 text-indigo-100/80 max-w-md mx-auto">
-            Pulled from our live menu. Within WAC 314-55-155 — percent-off and dollar-off only, never
-            below cost.
-          </p>
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage:
+              "radial-gradient(ellipse 70% 80% at 15% 50%, #312e8144, transparent), radial-gradient(ellipse 50% 60% at 90% 20%, #4f46e522, transparent)",
+          }}
+        />
+        <div
+          className="absolute top-0 right-0 w-[600px] h-[600px] opacity-10 translate-x-1/4 -translate-y-1/4 pointer-events-none"
+          style={{ background: "radial-gradient(circle, #818cf8, transparent 70%)" }}
+        />
+
+        <div className="relative max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 py-14 sm:py-20 lg:py-24">
+          <div className="flex flex-col lg:flex-row lg:items-center gap-10 lg:gap-16">
+            {/* Left: hero copy */}
+            <div className="flex-1 space-y-6">
+              <div className="flex items-center gap-3 flex-wrap">
+                <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.22em] text-indigo-300/80">
+                  <span
+                    className="w-1.5 h-1.5 rounded-full bg-rose-400 shadow-[0_0_6px_#fb7185] animate-pulse"
+                    aria-hidden
+                  />
+                  Deals
+                </span>
+                <span className="text-indigo-400/60 text-xs font-medium uppercase tracking-widest">
+                  {STORE.address.city}, WA
+                </span>
+              </div>
+
+              <div>
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.05] tracking-tight">
+                  Today&apos;s Deals at{" "}
+                  <span className="text-indigo-300">{STORE.name}</span>
+                </h1>
+                <p className="text-indigo-100/70 text-base sm:text-lg leading-relaxed max-w-xl mt-5">
+                  Best deal applies · cash only · 21+ ID required. Pulled from the live menu —
+                  within WAC 314-55-155, percent-off and dollar-off only, never below cost.
+                </p>
+              </div>
+
+              {/* Mobile-only status strip — collapses the right-side info card
+                  onto a single bar above the deal list on small screens. Has
+                  to live here (left column on desktop, full-width on mobile)
+                  so it sits between the headline and the deal list when the
+                  layout stacks. Hidden on lg+ where the right card takes over. */}
+              <div className="lg:hidden flex flex-wrap items-center gap-2 text-xs">
+                <span
+                  className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full font-bold border ${
+                    open
+                      ? "bg-green-400/15 border-green-400/30 text-green-300"
+                      : "bg-red-400/15 border-red-400/30 text-red-300"
+                  }`}
+                >
+                  <span
+                    className={`w-1.5 h-1.5 rounded-full ${open ? "bg-green-400 animate-pulse" : "bg-red-400"}`}
+                    aria-hidden
+                  />
+                  {open ? "Open Now" : "Closed"}
+                  {todayHours && (
+                    <span className="opacity-70 font-normal">
+                      {" "}
+                      · {todayHours.open}–{todayHours.close}
+                    </span>
+                  )}
+                </span>
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full font-bold bg-amber-300/10 border border-amber-300/30 text-amber-200">
+                  <span aria-hidden>🎟️</span>
+                  {deals.length} deal{deals.length === 1 ? "" : "s"} running right now
+                </span>
+                {closingSoon && (
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full font-bold bg-rose-300/10 border border-rose-300/30 text-rose-200">
+                    Closes in {minsLeft} min
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Right: live deals + hours card. Desktop-only so the mobile
+                strip above doesn't double up. 360px wide, same visual weight
+                as the homepage hero card so stores feel coherent across
+                routes. */}
+            <div className="hidden lg:block shrink-0">
+              <div
+                className="rounded-3xl border border-white/15 p-7 w-[360px] space-y-5"
+                style={{ background: "rgba(255,255,255,0.07)", backdropFilter: "blur(14px)" }}
+              >
+                {/* Deals counter — the headline number for this page. */}
+                <div>
+                  <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-indigo-300/80">
+                    Live now
+                  </div>
+                  <div className="mt-1.5 flex items-baseline gap-2">
+                    <span className="text-5xl font-extrabold text-white tabular-nums leading-none">
+                      {deals.length}
+                    </span>
+                    <span className="text-white/70 text-sm font-semibold">
+                      deal{deals.length === 1 ? "" : "s"} running right now
+                    </span>
+                  </div>
+                </div>
+
+                <div className="h-px bg-white/10" />
+
+                {/* Live status — same pattern as homepage hero, kept minimal
+                    here so the deal counter stays the headline. */}
+                <div className="flex items-center gap-3">
+                  <span
+                    className={`w-3.5 h-3.5 rounded-full shrink-0 ${
+                      open
+                        ? "bg-green-400 shadow-[0_0_10px_#4ade80] animate-pulse"
+                        : "bg-red-400"
+                    }`}
+                    aria-hidden
+                  />
+                  <div>
+                    <div className="text-white font-extrabold text-sm leading-tight">
+                      {open ? "Open Now" : "Closed"}
+                      {statusLabel && (
+                        <span className="text-indigo-200/80 font-semibold">
+                          {" · "}
+                          {statusLabel}
+                        </span>
+                      )}
+                    </div>
+                    {todayHours && (
+                      <div className="text-indigo-300/70 text-[11px] mt-0.5">
+                        Today {todayHours.open} – {todayHours.close}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Closes-in-Xh urgency block — only appears when the store
+                    is within 90 minutes of close. Keeps customers on the
+                    deals page from missing the window. */}
+                {closingSoon && (
+                  <div className="rounded-xl bg-rose-500/15 border border-rose-400/30 px-3.5 py-3 text-rose-100">
+                    <div className="text-[10px] font-bold uppercase tracking-widest text-rose-200">
+                      Closing soon
+                    </div>
+                    <div className="text-base font-extrabold mt-0.5">
+                      {minsLeft} min until close
+                    </div>
+                    <div className="text-[11px] text-rose-200/80 mt-1 leading-snug">
+                      Last online order is 15 min before close. Cash on you, ID ready, swing by.
+                    </div>
+                  </div>
+                )}
+
+                <div className="h-px bg-white/10" />
+
+                {/* Loyalty + cash + ID quick-reference. Same chip style as
+                    homepage hero card so the cross-page feel is unified. */}
+                <div className="grid grid-cols-2 gap-y-2.5 gap-x-3">
+                  {[
+                    { icon: "🎁", text: "Earn points" },
+                    { icon: "💵", text: "Cash only" },
+                    { icon: "🪪", text: "21+ Required" },
+                    { icon: "🅿️", text: "Free Parking" },
+                  ].map(({ icon, text }) => (
+                    <div key={text} className="flex items-center gap-2 text-white/65 text-xs">
+                      <span className="text-base leading-none">{icon}</span>
+                      {text}
+                    </div>
+                  ))}
+                </div>
+
+                <a
+                  href={STORE.googleMapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-white text-sm font-bold transition-all"
+                >
+                  Get Directions ↗
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
+
+        {/* Bottom fade into the card list. Same gradient as the homepage hero
+            so the section transition reads as one continuous surface. */}
+        <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-stone-50 to-transparent" />
       </section>
 
       {/* ─── Category filter chips ────────────────────────────────────────── */}
+      {/* Only render chips if we actually have multiple categories on tap.
+          Otherwise the row is decoration without value. */}
       {allDeals.length > 1 && (
         <section className="border-b border-stone-200 bg-white sticky top-0 z-20 backdrop-blur-md bg-white/90 pt-[env(safe-area-inset-top)]">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-2 overflow-x-auto scrollbar-none">
@@ -198,6 +389,7 @@ export default async function DealsPage({ searchParams }: Props) {
         </section>
       )}
 
+      {/* ─── Deal list / empty state ──────────────────────────────────────── */}
       {deals.length === 0 ? (
         <section className="max-w-2xl mx-auto px-4 sm:px-6 py-16">
           {/* Empty state — calm, not apologetic. Filter-aware: when a
@@ -222,9 +414,6 @@ export default async function DealsPage({ searchParams }: Props) {
                 >
                   See all deals →
                 </Link>
-                <p className="text-xs text-stone-500 mt-5">
-                  Cash only · 21+ with valid ID · {STORE.address.full}
-                </p>
               </>
             ) : (
               <>
@@ -241,18 +430,23 @@ export default async function DealsPage({ searchParams }: Props) {
                 >
                   Browse the menu →
                 </Link>
-                <p className="text-xs text-stone-500 mt-5">
-                  Cash only · 21+ with valid ID · {STORE.address.full}
-                </p>
               </>
             )}
+            <p className="text-xs text-stone-500 mt-5">
+              Cash only · 21+ with valid ID · {STORE.address.full}
+            </p>
           </div>
         </section>
       ) : (
         <section className="max-w-3xl mx-auto px-4 sm:px-6 py-12 space-y-5">
           {deals.map((d, i) => {
             const vendor = matchDealVendor(d.name, d.description);
+            const initial = computeDealCountdown(d.endDate);
             const isFirst = i === 0;
+            // CTA target: per `feedback_customer_ctas_point_to_menu_only.md`,
+            // the View on menu primary always points at /menu (Boost embed).
+            // The deal title remains a Link to the per-deal deep page so SMS
+            // shares still hit a focused landing.
             return (
               <article
                 key={d.id}
@@ -263,8 +457,9 @@ export default async function DealsPage({ searchParams }: Props) {
                 }`}
               >
                 {/* Wide bud-art hero strip — vendor photo + logo card when
-                    we recognize the brand, category-themed gradient when
-                    we don't. Mirrors the dialed-in /brands/[slug] pages. */}
+                    we recognize the brand, category-themed gradient when we
+                    don't. Mirrors the visual language of the dialed-in
+                    /brands/[slug] pages so the surface feels coherent. */}
                 <DealArt
                   vendor={vendor}
                   appliesTo={d.appliesTo}
@@ -273,40 +468,43 @@ export default async function DealsPage({ searchParams }: Props) {
                 />
 
                 <div className="p-5 sm:p-6">
-                  <div className="flex items-baseline gap-3 flex-wrap">
-                    <h2 className="text-xl sm:text-2xl font-extrabold text-stone-900 tracking-tight leading-tight">
-                      <Link
-                        href={`/deals/${d.id}`}
-                        className="hover:text-indigo-800 transition-colors"
-                      >
-                        {d.displayName}
-                      </Link>
-                    </h2>
+                  <div className="flex items-center gap-2 flex-wrap">
                     {isFirst && (
                       <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-indigo-600 text-white uppercase tracking-wide">
                         Ending Soonest
                       </span>
                     )}
+                    <DealCountdown
+                      endDate={d.endDate}
+                      initialLabel={initial.label}
+                      initialUrgent={initial.urgent}
+                    />
                   </div>
 
-                  <p className="mt-2 text-stone-600 text-sm leading-relaxed">
-                    {d.description ?? d.short}
-                  </p>
+                  <h2 className="mt-2 text-xl sm:text-2xl font-extrabold text-stone-900 tracking-tight leading-tight">
+                    <Link
+                      href={`/deals/${d.id}`}
+                      className="hover:text-indigo-800 transition-colors"
+                    >
+                      {d.displayName}
+                    </Link>
+                  </h2>
 
-                  <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
-                    <span className="text-stone-500">
-                      Ends:{" "}
-                      <span className="font-semibold text-stone-700">{fmtEndDate(d.endDate)}</span>
-                    </span>
+                  {d.description && (
+                    <p className="mt-2 text-stone-600 text-sm leading-relaxed">
+                      {d.description}
+                    </p>
+                  )}
+
+                  {/* Qualifier badges. Per no-stacking policy (Doug 2026-05-07)
+                      we don't promise loyalty stacks with the deal — best
+                      discount applies and that's that. */}
+                  <div className="mt-3 flex flex-wrap items-center gap-1.5 text-[11px]">
                     {d.appliesTo && d.appliesTo !== "all" && (
-                      <span className="text-stone-500 capitalize">
-                        On:{" "}
-                        <span className="font-semibold text-stone-700">{d.appliesTo}</span>
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md font-semibold bg-stone-50 text-stone-700 ring-1 ring-stone-200 capitalize">
+                        {d.appliesTo}
                       </span>
                     )}
-                  </div>
-
-                  <div className="mt-3 flex flex-wrap items-center gap-1.5 text-[11px]">
                     {vendor && (
                       <Link
                         href={withAttr(`/brands/${vendor.slug}`, "deals-card", `${d.id}-vendor`)}
@@ -328,7 +526,7 @@ export default async function DealsPage({ searchParams }: Props) {
                       href={`/deals/${d.id}`}
                       className="text-sm font-semibold text-indigo-800 hover:text-indigo-600 transition-colors"
                     >
-                      Deal details →
+                      Deal details
                     </Link>
                   </div>
                 </div>
@@ -336,12 +534,15 @@ export default async function DealsPage({ searchParams }: Props) {
             );
           })}
 
+          {/* Footer CTA — single source of "go shop" so the page funnels
+              cleanly into the menu Boost embed. Cash + ID reminder kept here
+              instead of repeated on every card. */}
           <div className="pt-6 text-center">
             <Link
               href="/menu"
-              className="inline-flex items-center gap-1.5 px-6 py-3 rounded-xl bg-indigo-700 hover:bg-indigo-600 text-white font-bold transition-colors shadow-sm"
+              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-indigo-800 hover:bg-indigo-700 text-white font-bold text-base transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
             >
-              Order for pickup →
+              Browse the full menu →
             </Link>
             <p className="text-xs text-stone-500 mt-3">
               Cash only · 21+ with valid ID · {STORE.name}, {STORE.address.full}
