@@ -34,6 +34,11 @@ export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 const MAX_PER_IP_PER_HOUR = 5;
+// Per-PHONE cap is independent of the per-IP cap: the IP cap can't stop a
+// distributed / IP-rotating attacker from flooding ONE victim's number with
+// paid Twilio SMS (toll fraud + harassment). 5/hr is generous for a real
+// owner's retries, tight enough to kill an SMS-bomb.
+const MAX_PER_PHONE_PER_HOUR = 5;
 const TTL_MINUTES = 10;
 
 function clientIp(req: NextRequest): string {
@@ -102,6 +107,23 @@ export async function POST(req: NextRequest) {
   `) as unknown as Array<{ recent: number }>;
   const recent = rateRows[0]?.recent ?? 0;
   if (recent >= MAX_PER_IP_PER_HOUR) {
+    return NextResponse.json(
+      { error: "Too many code requests. Please try again in an hour." },
+      { status: 429 },
+    );
+  }
+
+  // Per-phone cap (toll-fraud / SMS-bomb defense). Counts any phone that
+  // requested codes recently — not customer status — so it leaks nothing the
+  // enumeration-safe posture documented at the top of this file doesn't
+  // already. Same generic 429 message as the per-IP path.
+  const phoneRateRows = (await sql`
+    SELECT COUNT(*)::int AS recent
+    FROM loyalty_otp_codes
+    WHERE phone = ${phoneE164}
+      AND created_at > NOW() - INTERVAL '1 hour'
+  `) as unknown as Array<{ recent: number }>;
+  if ((phoneRateRows[0]?.recent ?? 0) >= MAX_PER_PHONE_PER_HOUR) {
     return NextResponse.json(
       { error: "Too many code requests. Please try again in an hour." },
       { status: 429 },
