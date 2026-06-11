@@ -3,14 +3,19 @@ import { STORE } from "@/lib/store";
 import { STRAINS } from "@/lib/strains";
 import {
   STRAIN_FAMILIES,
-  FAMILY_SLUGS,
   getFamily,
   getStrainsInFamily,
 } from "@/lib/strain-families";
 
 // Per-route OG card for /strains/families/<family>. Sister of the
 // /strains/[slug] OG generator — type-color-coded by the anchor strain.
-// Pre-bakes all 10 family cards at build time via generateImageMetadata.
+//
+// One image per dynamic route, keyed off `params.family` below. Next
+// serves it at the bare /strains/families/<family>/opengraph-image URL —
+// the URL the page metadata advertises. (Removed generateImageMetadata,
+// which is for emitting MULTIPLE images per route: returning { id: slug }
+// appended the id as a path segment so the image lived at
+// /opengraph-image/<id> while <head> pointed at the bare URL → 404.)
 //
 // WAC 314-55-155: text strictly descriptive.
 // SCC variant — SCC brand mark + Rainier Valley tenure footer.
@@ -18,10 +23,6 @@ import {
 export const alt = `${STORE.name} — Strain Family Album`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-
-export function generateImageMetadata() {
-  return FAMILY_SLUGS.map((slug) => ({ id: slug }));
-}
 
 type TypeTheme = {
   bg: string;
