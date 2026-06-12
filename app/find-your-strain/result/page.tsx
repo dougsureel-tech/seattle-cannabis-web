@@ -40,7 +40,7 @@ export const dynamic = "force-dynamic"; // search params drive every render
 
 export const metadata: Metadata = {
   title: { absolute: `Your strain matches — ${STORE.name}` },
-  description: `Strain matches from your 3-question quiz at ${STORE.name}. Pick a strain, read up, then check the live menu for what's on the shelf right now.`,
+  description: `Strain matches from your 3-question quiz at ${STORE.name} Pick a strain, read up, then check the live menu for what's on the shelf right now.`,
   alternates: { canonical: "/find-your-strain/result" },
   robots: {
     index: false,
